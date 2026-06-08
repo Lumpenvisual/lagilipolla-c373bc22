@@ -1,25 +1,10 @@
 // Date/time helpers. Matches are stored in UTC; participants are in ET (EDT = UTC-4 during June).
 const ET_OFFSET_HOURS = -4;
 
-type FmtLang = "es" | "en" | "fr";
+type FmtLang = "es";
 
 const MONTHS: Record<FmtLang, string[]> = {
-  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-  fr: [
-    "janv.",
-    "févr.",
-    "mars",
-    "avr.",
-    "mai",
-    "juin",
-    "juil.",
-    "août",
-    "sept.",
-    "oct.",
-    "nov.",
-    "déc.",
-  ],
 };
 
 // Module-level current language, kept in sync by the i18n provider via setFormatLang().
@@ -30,7 +15,7 @@ export function setFormatLang(lang: FmtLang): void {
 }
 
 function months(): string[] {
-  return MONTHS[currentLang] ?? MONTHS.en;
+  return MONTHS[currentLang] ?? MONTHS.es;
 }
 
 function toET(date: Date): Date {
