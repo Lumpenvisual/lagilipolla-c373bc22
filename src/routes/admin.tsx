@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus } from "lucide-react";
+import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus, FlaskConical, AlertTriangle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useTournamentState } from "@/hooks/usePolla";
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "pagos" | "resultados" | "listas";
+type Tab = "pagos" | "resultados" | "listas" | "demo";
 
 function AdminPage() {
   const router = useRouter();
@@ -42,6 +42,7 @@ function AdminPage() {
     { key: "pagos", label: "Pagos", icon: Users },
     { key: "resultados", label: "Resultados", icon: ClipboardList },
     { key: "listas", label: "Listas", icon: ListPlus },
+    { key: "demo", label: "Demo", icon: FlaskConical },
   ];
 
   return (
@@ -64,6 +65,7 @@ function AdminPage() {
         {tab === "pagos" && <PagosTab />}
         {tab === "resultados" && <ResultadosTab />}
         {tab === "listas" && <ListasTab />}
+        {tab === "demo" && <DemoTab />}
       </div>
     </main>
   );
