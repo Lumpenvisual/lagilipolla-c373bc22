@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus, FlaskConical, AlertTriangle } from "lucide-react";
+import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus, FlaskConical, AlertTriangle, FileSpreadsheet, Database } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useTournamentState } from "@/hooks/usePolla";
@@ -11,13 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { POLLA, fmtCOP, GROUP_KEYS, slotOptions, type SpecialPlayer, type TournamentState } from "@/lib/polla";
+import { DownloadButton } from "@/components/DownloadButton";
+import { generateLeaderboardXlsx, generateParticipantesXlsx, generateBackupXlsx } from "@/lib/reports.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · LA GILIPOLLA 2026" }] }),
   component: AdminPage,
 });
 
-type Tab = "pagos" | "resultados" | "listas" | "demo";
+type Tab = "pagos" | "resultados" | "listas" | "reportes" | "demo";
 
 function AdminPage() {
   const router = useRouter();
@@ -42,6 +44,7 @@ function AdminPage() {
     { key: "pagos", label: "Pagos", icon: Users },
     { key: "resultados", label: "Resultados", icon: ClipboardList },
     { key: "listas", label: "Listas", icon: ListPlus },
+    { key: "reportes", label: "Reportes", icon: FileSpreadsheet },
     { key: "demo", label: "Demo", icon: FlaskConical },
   ];
 
@@ -65,6 +68,7 @@ function AdminPage() {
         {tab === "pagos" && <PagosTab />}
         {tab === "resultados" && <ResultadosTab />}
         {tab === "listas" && <ListasTab />}
+        {tab === "reportes" && <ReportesTab />}
         {tab === "demo" && <DemoTab />}
       </div>
     </main>
