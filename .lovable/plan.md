@@ -1,190 +1,136 @@
-## Rostizada al plan v2 (qué seguía mal)
+# Reportes, Backup y Comprobante PDF Profesional
 
-1. **Tomé la planilla como verdad absoluta.** Es una planilla de un bar; el dueño rellenó "candidatos" donde la FIFA tiene "Ganador Repechaje X". Lo verifiqué contra el sorteo oficial del 5 dic 2025 (FIFA + olympics.com + FCF) y **6 grupos tienen un equipo que aún no existe** (se decide en repechajes de marzo 2026):
+Extiende el plan anterior con un comprobante PDF estilo "boleta oficial" para usuarios, hardening de seguridad, eliminación de deuda técnica y validación end-to-end.
 
-   | Grupo | Equipo en la planilla | Realidad oficial |
-   |---|---|---|
-   | A · Rep. Checa | Candidato | Ganador UEFA Play-off D (Denmark / Czechia / Ireland / N. Macedonia) |
-   | B · Bosnia-Herzegovina | Candidato | Ganador UEFA Play-off A (Italy / Wales / Bosnia / N. Ireland) |
-   | D · Turquía | Candidato | Ganador UEFA Play-off C (Türkiye / Slovakia / Kosovo / Romania) |
-   | F · Suecia | Candidato | Ganador UEFA Play-off B (Ukraine / Poland / Albania / Sweden) |
-   | I · Irak | Candidato | Ganador FIFA Play-off 2 (Iraq / Bolivia / Suriname) |
-   | K · Congo | Candidato | Ganador FIFA Play-off 1 (DR Congo / Jamaica / N. Caledonia) |
+## 1. Comprobante PDF profesional para usuarios (`/dashboard`)
 
-   Si yo guardo "Bosnia-Herzegovina" como el equipo del grupo B y termina ganando Italia, **toda la apuesta de ese grupo queda inconsistente**. Mi v2 no contemplaba esto.
+Inspirado en boletas de pollas serias (Polla Gol, FIFA Fantasy, Yahoo Pick'em, ESPN Tournament Challenge) y comprobantes de apuestas regulados (Sportium, Codere):
 
-2. **Leí mal el bloque "COLOMBIA – GRUPO K".** Pensé que eran "los 3 partidos de Colombia". Son los **6 cruces del Grupo K completo** (cada equipo juega 3 partidos = 6 partidos en total). El calendario oficial FIFA solo tiene los **3 partidos reales de Colombia**:
-   - 17 jun – **Uzbekistán vs Colombia** (Azteca, CDMX)  
-   - 23 jun – **Colombia vs Ganador PO-1 FIFA** (Chivas, Guadalajara)  
-   - 27 jun – **Colombia vs Portugal** (Hard Rock, Miami)
-   
-   Los otros 3 (Portugal vs Congo, Portugal vs Uzbekistán, Uzbekistán vs Congo) son los cruces del grupo que también juegan los otros equipos. La planilla los lista todos: hay que **respetar los 6**, pero usar fechas/sedes oficiales y nombrar correctamente al equipo PO-1.
+**Estructura del PDF (1–2 páginas A4):**
+- **Membrete superior** con tricolor colombiano (banda amarilla / azul / roja), logo "LA GILIPOLLA 2026", subtítulo "Bar El Guanábano · Mundial FIFA 2026".
+- **Bloque del participante**: nombre, email, fecha y hora de emisión (zona COT), número de planilla, **código de comprobante** (hash corto SHA-256 truncado de `participant_id + updated_at`), **QR** que enlaza a una URL pública de verificación `/verificar/{codigo}` (read-only).
+- **Bloque "Pronósticos"**:
+  - Tabla de 12 grupos (A–L): clasificados 1° y 2° con banderas (emoji unicode, sin assets externos).
+  - Tabla de 6 partidos del Grupo K (Colombia destacada).
+  - Selecciones especiales: goleador y arquero.
+- **Bloque "Estado del torneo" (si ya hay resultados)**: comparación pick vs oficial + puntos.
+- **Pie de página** con: monto pagado ($100.000 COP), reglas resumidas, disclaimer ("Este documento es un comprobante informativo. La planilla oficial es la registrada en el sistema con marca de tiempo {updated_at}."), número de página.
 
-3. **Local vs visitante invertidos.** La planilla escribe "Colombia vs Uzbekistán" pero el oficial es "Uzbekistán vs Colombia" (Colombia es visitante). Si guardo mal, todos los marcadores exactos quedan invertidos. Esto rompe el scoring silenciosamente. Hay que cargar **exactamente como FIFA**.
+**Botón en `/dashboard`:** "📄 Descargar comprobante (PDF)" — un solo clic, descarga directa, sin pasos intermedios.
 
-4. **Goleador / Mejor arquero como texto libre** → pesadilla de tildes y variantes ("Mbappe" / "Mbappé" / "K. Mbappé"). Solución: el admin define una lista de candidatos y el jugador escoge de un combobox. Comparación por `id`, no por string.
+**Generación:**
+- Librería: **`pdfkit`** (pure-JS, edge-compatible) + **`qrcode`** para el QR. Descartado `puppeteer`/`playwright` (incompatibles con Workers) y `pdfmake` (más pesado).
+- Server function `generateComprobantePDF` con `requireSupabaseAuth`, devuelve `{ filename, base64 }`. Cliente convierte a Blob y dispara descarga.
+- Fuentes: Helvetica embebida en pdfkit (sin dependencia de red).
 
-5. **Plan v2 era oscuro+dorado genérico.** No tiene nada de colombiano. La paleta debe ser bandera (amarillo, azul, rojo) + acentos cafeteros, sobre fondo oscuro de bar. Tipografía con personalidad (display bold para títulos, sans clara para datos).
+**Ruta pública de verificación** (`src/routes/verificar.$codigo.tsx`):
+- Server route lee `participants + picks` por código (sin exponer email), muestra: nombre, fecha de emisión, hash, "✓ Comprobante válido" o "✗ Modificado posteriormente".
+- Permite a otros usuarios validar la autenticidad del comprobante.
 
-6. **Currency formatting.** `Intl.NumberFormat('es-CO', { currency: 'COP' })` produce "$ 100.000" con espacio molesto. Mejor `"$" + n.toLocaleString("es-CO")` → `"$100.000"`.
+## 2. Reportes Excel (admin + usuario) — del plan anterior
 
-## Plan v3 (definitivo)
+Mismos botones que el plan previo:
+- Usuario: planilla en Excel (complementa al PDF).
+- Admin pestaña "Reportes": leaderboard, participantes/pagos, todas las planillas, estado del torneo.
+- Librería: `exceljs`.
 
-### Modelo de datos (single‑contest, con repechajes)
+## 3. Backup y restauración (admin)
 
-```text
-tournament_state                 -- singleton id=1
-  groups          jsonb          -- {A:{teams:[{id,nombre,po?:"UEFA-D"|null}], pos1:id|null, pos2:id|null}, ...}
-  group_matches   jsonb          -- 6 por grupo (todos los cruces), con fecha/sede/local/visitante, gh, ga
-                                  -- pero la UI solo expone los del grupo K (planilla) — el resto se reserva para v2
-  goleadores      jsonb          -- [{id,nombre,seleccion}, ...] lista del admin
-  arqueros        jsonb          -- idem
-  goleador_id     text|null      -- resultado oficial
-  arquero_id      text|null      -- resultado oficial
-  deadline        timestamptz    -- 2026-06-11 17:00 COT
-  cuota_cop       int            -- 100000
+- Botón "Descargar backup completo" → `.xlsx` con una hoja por tabla.
+- Botón "Restaurar desde backup" → upload + doble confirmación + auto-backup previo antes de aplicar.
+- Transacción SQL con rollback ante cualquier error.
 
-picks
-  participant_id  uuid pk
-  groups          jsonb          -- {A:{pos1:id,pos2:id}, ...}
-  group_k_matches jsonb          -- 6 marcadores
-  goleador_id     text|null
-  arquero_id      text|null
-  puntos_grupos / partidos / especiales / total
-```
+## 4. Hardening de seguridad
 
-Cada equipo dentro de `teams[]` lleva `po: "UEFA-D"` cuando todavía no se sabe quién es. La UI muestra:
-- Si `po` está definido y no hay equipo real cargado → "Ganador Repechaje UEFA D" (más una lista de candidatos como hint).
-- Una vez el admin carga el equipo ganador, se reemplaza el nombre y se marca como confirmado.
+**A. Lock server-side del deadline** (riesgo identificado en la revisión técnica)
+- Nueva columna `tournament_state.picks_locked_at TIMESTAMPTZ` (default `2026-06-11 15:00:00+00`, equivalente a 10:00 COT).
+- Trigger `BEFORE INSERT OR UPDATE ON public.picks` que rechaza si `now() >= picks_locked_at` y el usuario no es admin.
+- Botón admin "Cerrar/Reabrir planillas" en pestaña Resultados.
 
-### Datos verificados a sembrar
+**B. Rate-limiting básico de generación**
+- Tabla `report_audit (user_id, kind, created_at)` con índice por `(user_id, created_at)`.
+- ServerFn de PDF/Excel rechaza si hay >10 descargas del mismo usuario en los últimos 60 s. Previene abuso (los PDFs consumen CPU del Worker).
 
-**12 grupos (oficiales del sorteo 5 dic 2025):**
-```
-A: México, Sudáfrica, Corea del Sur, Ganador UEFA-D
-B: Canadá, Ganador UEFA-A, Qatar, Suiza
-C: Brasil, Marruecos, Haití, Escocia
-D: EE.UU., Paraguay, Australia, Ganador UEFA-C
-E: Alemania, Curazao, Costa de Marfil, Ecuador
-F: Países Bajos, Japón, Ganador UEFA-B, Túnez
-G: Bélgica, Egipto, Irán, Nueva Zelanda
-H: España, Cabo Verde, Arabia Saudita, Uruguay
-I: Francia, Senegal, Ganador FIFA-2, Noruega
-J: Argentina, Argelia, Austria, Jordania
-K: Portugal, Ganador FIFA-1, Uzbekistán, Colombia
-L: Inglaterra, Croacia, Ghana, Panamá
-```
+**C. Auditoría de cambios admin**
+- Tabla `admin_audit (admin_id, action, payload JSONB, created_at)`.
+- Trigger en `tournament_state`, `picks` (cuando lo modifica admin), `participants.estado_pago` que registra el cambio.
+- Vista en `/admin` → pestaña "Auditoría" para ver historial.
 
-**6 partidos del Grupo K (en orden de la planilla, fechas oficiales FIFA):**
+**D. RLS de la nueva tabla `report_audit`**
+- Solo `service_role` puede leer/escribir. Usuario nunca la ve.
 
-| # | Fecha | Local | Visitante | Sede |
-|---|---|---|---|---|
-| 1 | 17 jun 21:00 COT | Uzbekistán | Colombia | Estadio Azteca · CDMX |
-| 2 | 17 jun (12m → mediodía local) | Portugal | Ganador FIFA-1 | (sede oficial cuando FIFA publique) |
-| 3 | 23 jun | Colombia | Ganador FIFA-1 | Estadio Akron · Guadalajara |
-| 4 | 23 jun | Portugal | Uzbekistán | (sede oficial) |
-| 5 | 27 jun 18:30 COT | Colombia | Portugal | Hard Rock Stadium · Miami |
-| 6 | 27 jun | Uzbekistán | Ganador FIFA-1 | (sede oficial) |
+**E. CAPTCHA en signup**
+- Activar **Cloudflare Turnstile** en `src/routes/registro.tsx`. Componente oficial, gratis, sin tracking. Validación server-side antes de crear el participante.
 
-> Nota: la planilla escribe "Colombia vs Uzbekistán" pero el oficial es **Uzbekistán vs Colombia**. Guardamos como FIFA y la UI muestra `local · marcador · visitante` en ese orden. En la pantalla mostramos también una nota "(Colombia juega de visitante)" para que el jugador no se confunda.
+**F. Validación reforzada de inputs**
+- Zod schemas en todos los serverFn que reciben datos del cliente (picks, admin updates, restore).
+- Length limits, regex de email, validación de UUIDs.
 
-**Candidatos a goleador/arquero (admin puede editar):**
-Lista inicial con favoritos: Mbappé, Haaland, Vinícius Jr, Lautaro Martínez, Harry Kane, Lamine Yamal, Cristiano Ronaldo, Messi (goleadores). Courtois, Donnarumma, Alisson, Emiliano Martínez, Maignan, Vicario, Sommer (arqueros). El admin puede agregar/quitar antes y durante el mundial.
+## 5. Limpieza de deuda técnica
 
-### Reglas de puntaje (idénticas a la planilla)
+Detectada en el árbol del proyecto (vestigios del modelo previo "concursos"):
+- **Eliminar** componentes huérfanos: `src/components/ConcursoGrid.tsx`, `ModalidadCard.tsx`, `ModalidadRules.tsx`, `PredictionCard.tsx`, `ScoringExample.tsx`, `LanguageSwitcher.tsx`.
+- **Eliminar** hooks/libs: `src/hooks/useConcursos.ts`, `src/hooks/useData.ts`, `src/lib/concursos.ts`, `src/lib/autopredict.functions.ts`, `src/lib/matchStatus.ts`, `src/lib/prizes.ts`, `src/lib/flags.ts` (reemplazado por emoji).
+- **Eliminar** tests obsoletos: `__tests__/concursos.test.ts`, `prizes.test.ts`, `matchStatus.test.ts`.
+- **Eliminar** funciones SQL obsoletas vía migración: `seed_demo_data`, `reset_demo_data`, `selftest_concursos`, `generate_concursos`, `get_concursos_overview`, `get_concurso_leaderboard`, `get_concurso_matches`, `get_participant_predictions`, `get_leaderboard`, `calc_points`.
+- **Eliminar** tablas obsoletas: `concursos`, `inscripciones`, `matches`, `predictions`, `demo_seed` (después de confirmación; backup previo automático).
+- **Limpiar** metadata SEO en `__root.tsx`: textos repetidos ("Polla Mundialista" duplicado) y referencias a "$20 CAD" que ya no aplican.
+- **Eliminar** `LanguageProvider` de `__root.tsx` si no se usa (la app es solo español).
 
-Sin cambios respecto al v2 — quedan los bloques de grupos / partidos / especiales con la misma lógica.
+## 6. Validación end-to-end y usabilidad
 
-### Look colombiano
+**Pruebas E2E manuales (vía session replay + invoke-server-function):**
+1. Registro nuevo → login → completar planilla → guardar → descargar PDF → descargar Excel.
+2. Verificar QR del PDF abriendo `/verificar/{codigo}`.
+3. Admin: aprobar pago → ver participante en leaderboard → descargar todos los reportes → generar backup → simular restore.
+4. Intentar guardar pick después del deadline → debe fallar con mensaje claro.
+5. Intentar descargar 15 PDFs seguidos → debe rate-limitar a partir del #11.
+6. Logout → intentar acceder a `/verificar/{codigo}` sin auth → debe funcionar (público).
+7. Logout → intentar acceder a `/dashboard` → debe redirigir a `/login`.
 
-**Paleta (tokens en `src/styles.css`):**
-```text
---bg          oklch(0.18 0.03 245)   /* azul noche profundo - "noche en el bar" */
---bg-elev     oklch(0.22 0.04 250)
---primary     oklch(0.85 0.18 95)    /* amarillo bandera #FCD116 */
---primary-ink oklch(0.20 0.05 250)   /* texto sobre amarillo */
---azul        oklch(0.42 0.18 260)   /* azul bandera #003893 */
---rojo        oklch(0.58 0.22 28)    /* rojo bandera #CE1126 */
---cafe        oklch(0.45 0.08 60)    /* café cafetero, para borders sutiles */
---gold        oklch(0.78 0.15 88)    /* amarillo más cálido para acentos */
---gradient-bandera linear-gradient(135deg, var(--primary) 0%, var(--azul) 50%, var(--rojo) 100%)
---gradient-tropical linear-gradient(135deg, var(--primary), var(--gold))
-```
+**Mejoras de usabilidad:**
+- Skeleton loaders mientras carga el PDF (puede tardar 1–2 s).
+- Toast con progreso: "Generando comprobante…" → "✓ Listo, descargando…".
+- Botón de PDF prominente, con icono, en la parte superior del dashboard.
+- En móvil: PDF se abre en nueva pestaña (no descarga directa, mejor UX iOS).
+- Mensaje claro si el participante no tiene pago aprobado: "Completa tu pago para descargar el comprobante".
+- Vista previa del PDF en modal antes de descargar (opcional, con `<iframe>` y blob URL).
 
-**Uso semántico:**
-- Hero: fondo azul noche con franja superior amarilla delgada (banderita); título principal en amarillo con sombra; subtítulo blanco.
-- CTAs primarios: amarillo con tipografía oscura (alta legibilidad, "primary" puro).
-- Estados / acentos: azul para info, rojo para destructivo/cerrado, amarillo para activo.
-- Tarjetas de grupo: borde sutil café/azul, header con cinta amarilla cuando el jugador completó el pick.
-- Tabla líder: top 3 con destellos amarillo→rojo (medallas tropicales).
-- "Polla del bar": detalle de cinta diagonal estilo sello "ENTREGA HASTA 11 JUN 2026" como en la planilla original.
+## Detalles técnicos
 
-**Tipografía:**
-- Display: **Bebas Neue** (mayúsculas, presencia tipo cartel de bar/cancha) para títulos.
-- Texto: **Inter** o **Manrope** para datos, tablas y formularios.
+**Archivos nuevos**
+- `src/lib/reports.functions.ts` — serverFns Excel + PDF + backup + restore.
+- `src/lib/reports.server.ts` — builders pdfkit + exceljs.
+- `src/lib/audit.functions.ts` — lectura de auditoría admin.
+- `src/components/DownloadButton.tsx` — botón reutilizable.
+- `src/components/PdfPreviewModal.tsx` — preview opcional.
+- `src/routes/verificar.$codigo.tsx` — página pública de verificación.
+- Edición `src/routes/dashboard.tsx`, `src/routes/admin.tsx`, `src/routes/registro.tsx`, `src/routes/__root.tsx`.
 
-**Detalles temáticos sin caer en cliché:**
-- Sutiles patrones de hojas de café como `ambient-blob` muy tenue en hero.
-- Iconografía: cinta tricolor en separadores. Banderita pequeña al lado del nombre "Colombia" en tablas.
-- Sonidos NO (no se piden).
+**Dependencias a instalar**
+- `exceljs`, `pdfkit`, `qrcode` (y `@types/pdfkit`, `@types/qrcode`).
+- `@marsidev/react-turnstile` para CAPTCHA.
 
-### UI — qué se elimina, qué se mantiene
+**Migraciones SQL**
+1. `add_picks_lock` — columna + trigger de deadline.
+2. `audit_tables` — `report_audit`, `admin_audit` + triggers + RLS.
+3. `cleanup_legacy` — drop funciones/tablas obsoletas (DESTRUCTIVA, requiere confirmación del usuario; precedida de backup automático).
 
-**Eliminar:** rutas `/jugar`, `/jugar/$modalidad`, `/concursos`, `/concursos/$id`, `/predictions`. Componentes `ModalidadCard`, `ConcursoGrid`, `ModalidadRules`, `PredictionCard`. `LanguageSwitcher`. Sección "Modos" del landing. Tablas viejas (`concursos`, `inscripciones`, `predictions`, `matches`) quedan huérfanas y se eliminan en una segunda iteración cuando nada las importe.
+**Naming y formato**
+- PDF: `gilipolla-comprobante-{nombre-slug}-{YYYYMMDD-HHmm}.pdf`
+- Tamaño objetivo del PDF: <300 KB.
+- Tiempo objetivo de generación: <2 s en P95.
 
-**Mantener / nuevo:**
-- `/` — Hero "LA GILIPOLLA 2026 · Bar El Guanábano · $100.000 COP", countdown al 11 jun 2026 17:00 COT, CTA "Inscribirme", explicación corta de cómo se juega, footer con sede.
-- `/registro` — nombre + celular + email + clave; ya guarda celular en `participants`.
-- `/login` — sin toggle organizador visible.
-- `/dashboard` — estado de pago + botón "Llenar planilla" (si aprobado).
-- `/planilla` **(nueva, una sola pantalla)** con 3 bloques:
-  1. **Primera ronda** — grilla 4×3 de tarjetas (12 grupos). Cada tarjeta lista los 4 equipos; el jugador marca 1º y 2º (radios o select). Pinta cinta amarilla cuando el grupo está completo.
-  2. **Grupo K – Apuesta con resultados** — 6 filas: fecha · local · `[input]` · `[input]` · visitante. Indicador visual cuando Colombia juega.
-  3. **Especiales** — Goleador (combobox de candidatos) + Mejor arquero (combobox).
-  - Botón "Guardar planilla" único. Bloqueo de edición tras deadline o cuando ya hay resultado oficial.
-- `/reglas` — La imagen original de la planilla + las 3 tablas de scoring tipográficas, con la paleta tricolor.
-- `/leaderboard` — Tabla pública: posición · nombre · puntos totales · desglose (grupos/partidos/especiales). Top 3 destacados.
-- `/admin` — tres pestañas: **Pagos** (aprobar/rechazar), **Resultados** (cargar 1º/2º de cada grupo, marcadores de los 6 partidos del K, goleador, arquero, además de poder resolver los repechajes cuando se jueguen), **Listas** (editar candidatos a goleador/arquero).
+## Orden de implementación (fases)
 
-**Navbar final:** Inicio · Planilla (solo si aprobado) · Tabla · Reglas · Dashboard · Admin · Salir.
+1. **Fase A — Limpieza de deuda técnica** (drops SQL + delete archivos). Reduce superficie de bugs antes de añadir features.
+2. **Fase B — Reportes Excel** (usuario + admin).
+3. **Fase C — Comprobante PDF + ruta de verificación**.
+4. **Fase D — Hardening de seguridad** (lock deadline, rate-limit, auditoría, Turnstile).
+5. **Fase E — Backup y restore** (con auto-backup previo al restore).
+6. **Fase F — Validación E2E** y ajustes finales de usabilidad.
 
-### Lógica de repechajes (clave para no romper)
-
-Cuando el admin resuelve un repechaje:
-1. Va a Admin → Resultados → "Resolver Repechaje UEFA-D" → selecciona el equipo ganador.
-2. Se actualiza `tournament_state.groups.A.teams[3].nombre = "Italia"` (o el que sea).
-3. Si algún jugador tenía a "Italia" como pos1/pos2 (en la lista de candidatos), su pick sigue válido. Si tenía a otro candidato, no acertó.
-4. Mismo flujo para los partidos: el partido "Portugal vs Ganador FIFA-1" se renombra a "Portugal vs Jamaica" (o el ganador).
-
-Antes del repechaje, en la planilla del jugador, cuando un equipo es PO, se muestra como **"Ganador Repechaje UEFA-D"** con un tooltip listando candidatos. El jugador puede aún elegir un candidato específico desde el dropdown (su pick = id del candidato). Si su candidato termina sin ganar el PO, su pick no puede coincidir con el ganador → 0 pts en ese grupo, fair play.
-
-### Constantes
-
-```ts
-// src/lib/polla.ts
-export const POLLA = {
-  titulo: "LA GILIPOLLA 2026",
-  sede: "Bar El Guanábano",
-  cuotaCOP: 100_000,
-  deadline: new Date("2026-06-11T17:00:00-05:00"),
-  mundialStart: new Date("2026-06-11T18:00:00-05:00"),
-  mundialEnd: new Date("2026-07-19T20:00:00-05:00"),
-};
-export const fmtCOP = (n: number) => "$" + n.toLocaleString("es-CO");
-```
-
-### Entregables (3 movimientos)
-
-1. **Backend único + semilla verificada.** Migración con `tournament_state` + `picks`, RLS, triggers de recálculo, función SQL `recalc_all_picks()`, y semilla con los 12 grupos exactos del sorteo oficial (incluyendo los 6 PO winners marcados como tales) y los 6 partidos del Grupo K con fechas/sedes oficiales y orden local/visitante correcto.
-2. **UI única con paleta colombiana.** Tokens nuevos en `styles.css`, fuentes (Bebas Neue + Inter), landing + navbar + dashboard + planilla + leaderboard + reglas adaptados. Borrar archivos modalidad/concursos.
-3. **Admin completo.** Pantalla con 3 pestañas (Pagos / Resultados / Listas) + resolver repechajes + recalcular puntos.
-
-### Lo que no se hace y por qué
-
-- **No** se integra pasarela de pagos (se paga al bar; admin marca aprobado).
-- **No** se traduce a inglés (polla colombiana).
-- **No** se permite editar cuota en runtime (constante).
-- **No** se borran tablas viejas en esta iteración (limpieza posterior).
-- **No** se exponen los otros 24 partidos del grupo (los de A–J y L) en la planilla v1; la apuesta de marcador se limita a los 6 del Grupo K como en la imagen.
-
-¿Apruebas v3 y empiezo a construir?
+## Fuera de alcance
+- Backup automático programado (requiere pg_cron + bucket dedicado, lo agrego después si se necesita).
+- Firma digital criptográfica del PDF (PAdES) — el hash + QR + página de verificación cubren el caso de uso real.
+- Multi-idioma (la app es solo español).

@@ -14,141 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
-      concursos: {
+      admin_audit: {
         Row: {
-          alcance: Json
-          created_at: string
-          cuota: number
-          deadline: string | null
-          estado: string
-          id: string
-          modalidad: string
-          nombre: string
-          updated_at: string
-        }
-        Insert: {
-          alcance?: Json
-          created_at?: string
-          cuota?: number
-          deadline?: string | null
-          estado?: string
-          id?: string
-          modalidad: string
-          nombre: string
-          updated_at?: string
-        }
-        Update: {
-          alcance?: Json
-          created_at?: string
-          cuota?: number
-          deadline?: string | null
-          estado?: string
-          id?: string
-          modalidad?: string
-          nombre?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      demo_seed: {
-        Row: {
+          action: string
+          admin_id: string | null
           created_at: string
           id: string
-          kind: string
-          ref_id: string
+          payload: Json | null
         }
         Insert: {
+          action: string
+          admin_id?: string | null
           created_at?: string
           id?: string
-          kind: string
-          ref_id: string
+          payload?: Json | null
         }
         Update: {
+          action?: string
+          admin_id?: string | null
           created_at?: string
           id?: string
-          kind?: string
-          ref_id?: string
-        }
-        Relationships: []
-      }
-      inscripciones: {
-        Row: {
-          concurso_id: string
-          estado_pago: string
-          id: string
-          joined_at: string
-          participant_id: string
-        }
-        Insert: {
-          concurso_id: string
-          estado_pago?: string
-          id?: string
-          joined_at?: string
-          participant_id: string
-        }
-        Update: {
-          concurso_id?: string
-          estado_pago?: string
-          id?: string
-          joined_at?: string
-          participant_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "inscripciones_concurso_id_fkey"
-            columns: ["concurso_id"]
-            isOneToOne: false
-            referencedRelation: "concursos"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "inscripciones_participant_id_fkey"
-            columns: ["participant_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      matches: {
-        Row: {
-          equipo_local: string
-          equipo_visitante: string
-          estadio: string
-          fase: string
-          goles_local: number | null
-          goles_visitante: number | null
-          grupo: string
-          id: number
-          jornada: number
-          kickoff_time: string
-          numero_partido: number
-        }
-        Insert: {
-          equipo_local: string
-          equipo_visitante: string
-          estadio: string
-          fase?: string
-          goles_local?: number | null
-          goles_visitante?: number | null
-          grupo: string
-          id?: number
-          jornada: number
-          kickoff_time: string
-          numero_partido: number
-        }
-        Update: {
-          equipo_local?: string
-          equipo_visitante?: string
-          estadio?: string
-          fase?: string
-          goles_local?: number | null
-          goles_visitante?: number | null
-          grupo?: string
-          id?: number
-          jornada?: number
-          kickoff_time?: string
-          numero_partido?: number
+          payload?: Json | null
         }
         Relationships: []
       }
@@ -229,51 +115,6 @@ export type Database = {
           },
         ]
       }
-      predictions: {
-        Row: {
-          goles_local_pred: number | null
-          goles_visitante_pred: number | null
-          id: string
-          match_id: number
-          participant_id: string
-          puntos_obtenidos: number
-          submitted_at: string
-        }
-        Insert: {
-          goles_local_pred?: number | null
-          goles_visitante_pred?: number | null
-          id?: string
-          match_id: number
-          participant_id: string
-          puntos_obtenidos?: number
-          submitted_at?: string
-        }
-        Update: {
-          goles_local_pred?: number | null
-          goles_visitante_pred?: number | null
-          id?: string
-          match_id?: number
-          participant_id?: string
-          puntos_obtenidos?: number
-          submitted_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "predictions_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "predictions_participant_id_fkey"
-            columns: ["participant_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       tournament_state: {
         Row: {
           arquero_id: string | null
@@ -285,6 +126,7 @@ export type Database = {
           group_k_matches: Json
           groups: Json
           id: number
+          picks_locked_at: string
           updated_at: string
         }
         Insert: {
@@ -297,6 +139,7 @@ export type Database = {
           group_k_matches?: Json
           groups?: Json
           id?: number
+          picks_locked_at?: string
           updated_at?: string
         }
         Update: {
@@ -309,6 +152,7 @@ export type Database = {
           group_k_matches?: Json
           groups?: Json
           id?: number
+          picks_locked_at?: string
           updated_at?: string
         }
         Relationships: []
@@ -337,83 +181,19 @@ export type Database = {
     }
     Functions: {
       calc_pick_points: { Args: { _pick_id: string }; Returns: undefined }
-      generate_concursos: {
-        Args: { _include_partidos?: boolean }
-        Returns: number
+      comprobante_code: {
+        Args: { _pid: string; _updated_at: string }
+        Returns: string
       }
-      get_concurso_leaderboard: {
-        Args: { _concurso_id: string }
+      get_comprobante_public: {
+        Args: { _code: string }
         Returns: {
-          exactos: number
-          ganadores: number
+          codigo: string
+          estado_pago: string
           nombre: string
           participant_id: string
-          posicion: number
-          total_puntos: number
-        }[]
-      }
-      get_concurso_matches: {
-        Args: { _concurso_id: string }
-        Returns: {
-          equipo_local: string
-          equipo_visitante: string
-          estadio: string
-          fase: string
-          goles_local: number | null
-          goles_visitante: number | null
-          grupo: string
-          id: number
-          jornada: number
-          kickoff_time: string
-          numero_partido: number
-        }[]
-        SetofOptions: {
-          from: "*"
-          to: "matches"
-          isOneToOne: false
-          isSetofReturn: true
-        }
-      }
-      get_concursos_overview: {
-        Args: never
-        Returns: {
-          alcance: Json
-          cuota: number
-          deadline: string
-          estado: string
-          id: string
-          jugadores: number
-          modalidad: string
-          nombre: string
-          partidos: number
-        }[]
-      }
-      get_leaderboard: {
-        Args: never
-        Returns: {
-          exactos: number
-          ganadores: number
-          nombre: string
-          participant_id: string
-          posicion: number
-          total_puntos: number
-        }[]
-      }
-      get_participant_predictions: {
-        Args: { _participant_id: string }
-        Returns: {
-          equipo_local: string
-          equipo_visitante: string
-          goles_local: number
-          goles_local_pred: number
-          goles_visitante: number
-          goles_visitante_pred: number
-          grupo: string
-          jornada: number
-          kickoff_time: string
-          match_id: number
-          numero_partido: number
-          puntos_obtenidos: number
+          puntos_total: number
+          updated_at: string
         }[]
       }
       get_polla_leaderboard: {
@@ -436,25 +216,8 @@ export type Database = {
         Returns: boolean
       }
       recalc_all_picks: { Args: never; Returns: number }
-      reset_demo_data: { Args: never; Returns: Json }
       reset_polla_demo: { Args: never; Returns: Json }
-      seed_demo_data: {
-        Args: {
-          _include_partidos?: boolean
-          _players?: number
-          _result_pct?: number
-        }
-        Returns: Json
-      }
       seed_polla_demo: { Args: never; Returns: Json }
-      selftest_concursos: {
-        Args: never
-        Returns: {
-          check_name: string
-          detail: string
-          passed: boolean
-        }[]
-      }
     }
     Enums: {
       app_role: "admin" | "user"
