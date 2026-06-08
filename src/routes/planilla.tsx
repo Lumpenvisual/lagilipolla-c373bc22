@@ -8,7 +8,15 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { POLLA, GROUP_KEYS, slotOptions, fmtFecha, type GroupKey, type PickGroups, type PickMatches } from "@/lib/polla";
+import {
+  POLLA,
+  GROUP_KEYS,
+  slotOptions,
+  fmtFecha,
+  type GroupKey,
+  type PickGroups,
+  type PickMatches,
+} from "@/lib/polla";
 
 export const Route = createFileRoute("/planilla")({
   head: () => ({ meta: [{ title: "Planilla · LA GILIPOLLA 2026" }] }),
@@ -44,31 +52,51 @@ function Planilla() {
   const locked = useMemo(() => Date.now() > POLLA.deadline.getTime(), []);
 
   if (loading || tsLoading || pickLoading) {
-    return <main className="flex min-h-[60vh] items-center justify-center"><Loader2 className="size-6 animate-spin text-muted-foreground" /></main>;
+    return (
+      <main className="flex min-h-[60vh] items-center justify-center">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      </main>
+    );
   }
-  if (!user) { router.navigate({ to: "/login" }); return null; }
+  if (!user) {
+    router.navigate({ to: "/login" });
+    return null;
+  }
   if (!participant || participant.estado_pago !== "aprobado") {
     return (
       <main className="mx-auto max-w-md px-4 py-16">
         <Card className="border-gold/40 bg-gold/5 p-8 text-center card-shadow">
           <p className="text-sm text-muted-foreground">Aún no tienes el pago aprobado.</p>
-          <Button className="mt-4" asChild><Link to="/dashboard">Ir a mi cuenta</Link></Button>
+          <Button className="mt-4" asChild>
+            <Link to="/dashboard">Ir a mi cuenta</Link>
+          </Button>
         </Card>
       </main>
     );
   }
   if (!ts) return null;
 
-  const completedGroups = GROUP_KEYS.filter((k) => groups[k]?.pos1 && groups[k]?.pos2 && groups[k]?.pos1 !== groups[k]?.pos2).length;
+  const completedGroups = GROUP_KEYS.filter(
+    (k) => groups[k]?.pos1 && groups[k]?.pos2 && groups[k]?.pos1 !== groups[k]?.pos2,
+  ).length;
   const completedMatches = ts.group_k_matches.filter((m) => {
-    const p = matches[m.id]; return p && p.gh != null && p.ga != null;
+    const p = matches[m.id];
+    return p && p.gh != null && p.ga != null;
   }).length;
   const completedEsp = (goleador ? 1 : 0) + (arquero ? 1 : 0);
 
   const submit = async () => {
-    if (locked) { toast.error("La planilla está cerrada."); return; }
+    if (locked) {
+      toast.error("La planilla está cerrada.");
+      return;
+    }
     try {
-      await save.mutateAsync({ groups, group_k_matches: matches, goleador_id: goleador, arquero_id: arquero });
+      await save.mutateAsync({
+        groups,
+        group_k_matches: matches,
+        goleador_id: goleador,
+        arquero_id: arquero,
+      });
       toast.success("Planilla guardada");
     } catch (e) {
       toast.error("No se pudo guardar: " + (e instanceof Error ? e.message : "error"));
@@ -76,18 +104,26 @@ function Planilla() {
   };
 
   const setGroup = (k: GroupKey, field: "pos1" | "pos2", v: string) => {
-    setGroups((g) => ({ ...g, [k]: { pos1: g[k]?.pos1 ?? null, pos2: g[k]?.pos2 ?? null, [field]: v || null } }));
+    setGroups((g) => ({
+      ...g,
+      [k]: { pos1: g[k]?.pos1 ?? null, pos2: g[k]?.pos2 ?? null, [field]: v || null },
+    }));
   };
   const setMatch = (id: string, field: "gh" | "ga", v: string) => {
     const n = v === "" ? null : Math.max(0, Math.min(20, parseInt(v, 10) || 0));
-    setMatches((m) => ({ ...m, [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n } }));
+    setMatches((m) => ({
+      ...m,
+      [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
+    }));
   };
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
       <h1 className="mt-3 font-display text-4xl">📝 Mi planilla</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.</p>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.
+      </p>
 
       {locked && (
         <Card className="mt-4 border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
@@ -109,29 +145,55 @@ function Planilla() {
             const sel = groups[key] ?? { pos1: null, pos2: null };
             const complete = sel.pos1 && sel.pos2 && sel.pos1 !== sel.pos2;
             return (
-              <Card key={key} className={`border-border bg-card p-4 card-shadow ${complete ? "ring-1 ring-gold/40" : ""}`}>
+              <Card
+                key={key}
+                className={`border-border bg-card p-4 card-shadow ${complete ? "ring-1 ring-gold/40" : ""}`}
+              >
                 <div className="flex items-center justify-between">
                   <h3 className="font-display text-xl">Grupo {key}</h3>
                   {complete && <CheckCircle2 className="size-4 text-gold" />}
                 </div>
                 <ul className="mt-2 mb-3 space-y-0.5 text-xs text-muted-foreground">
-                  {g.teams.map((t) => <li key={t.id}>{t.po ? "🟡 " : "· "}{t.nombre}</li>)}
+                  {g.teams.map((t) => (
+                    <li key={t.id}>
+                      {t.po ? "🟡 " : "· "}
+                      {t.nombre}
+                    </li>
+                  ))}
                 </ul>
                 <div className="space-y-2">
                   <div>
                     <Label className="text-[11px] uppercase text-muted-foreground">1° lugar</Label>
-                    <select disabled={locked} value={sel.pos1 ?? ""} onChange={(e) => setGroup(key, "pos1", e.target.value)}
-                      className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm">
+                    <select
+                      disabled={locked}
+                      value={sel.pos1 ?? ""}
+                      onChange={(e) => setGroup(key, "pos1", e.target.value)}
+                      className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
+                    >
                       <option value="">—</option>
-                      {opts.map((o) => <option key={o.id} value={o.id}>{o.label}{o.isCandidate ? " (candidato)" : ""}</option>)}
+                      {opts.map((o) => (
+                        <option key={o.id} value={o.id}>
+                          {o.label}
+                          {o.isCandidate ? " (candidato)" : ""}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
                     <Label className="text-[11px] uppercase text-muted-foreground">2° lugar</Label>
-                    <select disabled={locked} value={sel.pos2 ?? ""} onChange={(e) => setGroup(key, "pos2", e.target.value)}
-                      className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm">
+                    <select
+                      disabled={locked}
+                      value={sel.pos2 ?? ""}
+                      onChange={(e) => setGroup(key, "pos2", e.target.value)}
+                      className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
+                    >
                       <option value="">—</option>
-                      {opts.map((o) => <option key={o.id} value={o.id}>{o.label}{o.isCandidate ? " (candidato)" : ""}</option>)}
+                      {opts.map((o) => (
+                        <option key={o.id} value={o.id}>
+                          {o.label}
+                          {o.isCandidate ? " (candidato)" : ""}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -147,7 +209,9 @@ function Planilla() {
           <h2 className="font-display text-2xl text-info">Grupo K · Marcadores 🇨🇴</h2>
           <span className="text-xs text-muted-foreground">{completedMatches} / 6 partidos</span>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">Predice el resultado exacto. Si Colombia juega de visitante, va a la derecha.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Predice el resultado exacto. Si Colombia juega de visitante, va a la derecha.
+        </p>
         <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
           {ts.group_k_matches.map((m) => {
             const lTeam = ts.groups.K.teams.find((t) => t.id === m.local);
@@ -157,16 +221,39 @@ function Planilla() {
             const colombia = m.local === "COL" || m.visitante === "COL";
             const p = matches[m.id] ?? { gh: null, ga: null };
             return (
-              <div key={m.id} className={`grid grid-cols-1 gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center ${colombia ? "bg-gold/5" : ""}`}>
+              <div
+                key={m.id}
+                className={`grid grid-cols-1 gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center ${colombia ? "bg-gold/5" : ""}`}
+              >
                 <div className="text-xs text-muted-foreground">
-                  <div className="inline-flex items-center gap-1.5"><Calendar className="size-3" /> {fmtFecha(m.fecha)}</div>
-                  <div className="inline-flex items-center gap-1.5 ml-2"><MapPin className="size-3" /> {m.sede}</div>
+                  <div className="inline-flex items-center gap-1.5">
+                    <Calendar className="size-3" /> {fmtFecha(m.fecha)}
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 ml-2">
+                    <MapPin className="size-3" /> {m.sede}
+                  </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 sm:col-start-1 sm:row-start-2">
                   <span className="flex-1 text-right text-sm font-medium">{lName}</span>
-                  <Input type="number" min={0} max={20} disabled={locked} value={p.gh ?? ""} onChange={(e) => setMatch(m.id, "gh", e.target.value)} className="h-9 w-14 text-center" />
+                  <Input
+                    type="number"
+                    min={0}
+                    max={20}
+                    disabled={locked}
+                    value={p.gh ?? ""}
+                    onChange={(e) => setMatch(m.id, "gh", e.target.value)}
+                    className="h-9 w-14 text-center"
+                  />
                   <span className="text-muted-foreground">–</span>
-                  <Input type="number" min={0} max={20} disabled={locked} value={p.ga ?? ""} onChange={(e) => setMatch(m.id, "ga", e.target.value)} className="h-9 w-14 text-center" />
+                  <Input
+                    type="number"
+                    min={0}
+                    max={20}
+                    disabled={locked}
+                    value={p.ga ?? ""}
+                    onChange={(e) => setMatch(m.id, "ga", e.target.value)}
+                    className="h-9 w-14 text-center"
+                  />
                   <span className="flex-1 text-sm font-medium">{vName}</span>
                 </div>
               </div>
@@ -183,27 +270,55 @@ function Planilla() {
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <Card className="border-border bg-card p-5 card-shadow">
-            <Label className="text-xs uppercase text-muted-foreground">⚽ Goleador del Mundial</Label>
-            <select disabled={locked} value={goleador ?? ""} onChange={(e) => setGoleador(e.target.value || null)}
-              className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+            <Label className="text-xs uppercase text-muted-foreground">
+              ⚽ Goleador del Mundial
+            </Label>
+            <select
+              disabled={locked}
+              value={goleador ?? ""}
+              onChange={(e) => setGoleador(e.target.value || null)}
+              className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
               <option value="">— Selecciona —</option>
-              {ts.goleadores.map((p) => <option key={p.id} value={p.id}>{p.nombre} · {p.seleccion}</option>)}
+              {ts.goleadores.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre} · {p.seleccion}
+                </option>
+              ))}
             </select>
           </Card>
           <Card className="border-border bg-card p-5 card-shadow">
             <Label className="text-xs uppercase text-muted-foreground">🧤 Mejor arquero</Label>
-            <select disabled={locked} value={arquero ?? ""} onChange={(e) => setArquero(e.target.value || null)}
-              className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+            <select
+              disabled={locked}
+              value={arquero ?? ""}
+              onChange={(e) => setArquero(e.target.value || null)}
+              className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
               <option value="">— Selecciona —</option>
-              {ts.arqueros.map((p) => <option key={p.id} value={p.id}>{p.nombre} · {p.seleccion}</option>)}
+              {ts.arqueros.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre} · {p.seleccion}
+                </option>
+              ))}
             </select>
           </Card>
         </div>
       </section>
 
       <div className="sticky bottom-4 mt-10 flex justify-center">
-        <Button onClick={submit} disabled={locked || save.isPending} variant="hero" size="lg" className="h-12 px-10 text-base uppercase tracking-wider shadow-2xl">
-          {save.isPending ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Save className="mr-2 size-4" />}
+        <Button
+          onClick={submit}
+          disabled={locked || save.isPending}
+          variant="hero"
+          size="lg"
+          className="h-12 px-10 text-base uppercase tracking-wider shadow-2xl"
+        >
+          {save.isPending ? (
+            <Loader2 className="mr-2 size-4 animate-spin" />
+          ) : (
+            <Save className="mr-2 size-4" />
+          )}
           Guardar planilla
         </Button>
       </div>

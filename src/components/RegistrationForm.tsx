@@ -132,7 +132,11 @@ export function RegistrationForm() {
         </div>
 
         <label className="flex items-start gap-3 text-sm text-muted-foreground">
-          <Checkbox checked={accepted} onCheckedChange={(v) => setAccepted(v === true)} className="mt-0.5" />
+          <Checkbox
+            checked={accepted}
+            onCheckedChange={(v) => setAccepted(v === true)}
+            className="mt-0.5"
+          />
           <span>{t("reg.accept")}</span>
         </label>
 

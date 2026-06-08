@@ -22,7 +22,11 @@ function Dashboard() {
   const { user, participant, isAdmin, loading, signOut } = useAuth();
 
   if (loading) {
-    return <Centered><Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" /></Centered>;
+    return (
+      <Centered>
+        <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />
+      </Centered>
+    );
   }
 
   if (!user) {
@@ -30,7 +34,9 @@ function Dashboard() {
       <Centered>
         <Card className="w-full border-border bg-card p-8 text-center card-shadow">
           <p>Debes iniciar sesión.</p>
-          <Button className="mt-4" onClick={() => router.navigate({ to: "/login" })}>Iniciar sesión</Button>
+          <Button className="mt-4" onClick={() => router.navigate({ to: "/login" })}>
+            Iniciar sesión
+          </Button>
         </Card>
       </Centered>
     );
@@ -43,7 +49,9 @@ function Dashboard() {
           <div className="text-4xl">🛠️</div>
           <h1 className="mt-3 font-display text-2xl">Modo organizador</h1>
           <p className="mt-2 text-sm text-muted-foreground">Estás logueado como admin del bar.</p>
-          <Button variant="hero" className="mt-6" onClick={() => router.navigate({ to: "/admin" })}>Ir al admin</Button>
+          <Button variant="hero" className="mt-6" onClick={() => router.navigate({ to: "/admin" })}>
+            Ir al admin
+          </Button>
         </Card>
       </Centered>
     );
@@ -58,9 +66,17 @@ function Dashboard() {
           <div className="text-4xl">⏳</div>
           <h1 className="mt-3 font-display text-2xl">Pago pendiente</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Acércate a {POLLA.sede} y paga tu cuota de <span className="text-gold font-semibold">{fmtCOP(POLLA.cuotaCOP)} COP</span>. Cuando el admin marque tu pago, podrás llenar tu planilla.
+            Acércate a {POLLA.sede} y paga tu cuota de{" "}
+            <span className="text-gold font-semibold">{fmtCOP(POLLA.cuotaCOP)} COP</span>. Cuando el
+            admin marque tu pago, podrás llenar tu planilla.
           </p>
-          <Button variant="secondary" className="mt-6" onClick={() => signOut().then(() => router.navigate({ to: "/" }))}>Cerrar sesión</Button>
+          <Button
+            variant="secondary"
+            className="mt-6"
+            onClick={() => signOut().then(() => router.navigate({ to: "/" }))}
+          >
+            Cerrar sesión
+          </Button>
         </Card>
       </Centered>
     );
@@ -73,7 +89,13 @@ function Dashboard() {
           <div className="text-4xl">❌</div>
           <h1 className="mt-3 font-display text-2xl">Pago rechazado</h1>
           <p className="mt-2 text-sm text-muted-foreground">Habla con el admin en {POLLA.sede}.</p>
-          <Button variant="secondary" className="mt-6" onClick={() => signOut().then(() => router.navigate({ to: "/" }))}>Cerrar sesión</Button>
+          <Button
+            variant="secondary"
+            className="mt-6"
+            onClick={() => signOut().then(() => router.navigate({ to: "/" }))}
+          >
+            Cerrar sesión
+          </Button>
         </Card>
       </Centered>
     );
@@ -91,7 +113,9 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-4xl">Hola, <span className="gold-gradient-text">{nombre}</span></h1>
+      <h1 className="mt-3 font-display text-4xl">
+        Hola, <span className="gold-gradient-text">{nombre}</span>
+      </h1>
       <p className="mt-1 text-sm text-muted-foreground">Bienvenido a LA GILIPOLLA 2026.</p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -101,7 +125,9 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
         </Card>
         <Card className="border-border bg-card p-5 card-shadow">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Planilla</p>
-          <p className={`mt-1 font-display text-2xl ${planillaCompleta ? "text-success" : "text-gold"}`}>
+          <p
+            className={`mt-1 font-display text-2xl ${planillaCompleta ? "text-success" : "text-gold"}`}
+          >
             {planillaCompleta ? "Completa" : pick ? "En curso" : "Sin llenar"}
           </p>
         </Card>
@@ -118,25 +144,48 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
           </div>
           <div>
             <p className="font-display text-xl">Tu planilla</p>
-            <p className="text-sm text-muted-foreground">{planillaCompleta ? "Puedes editarla hasta el cierre." : "Llénala antes del 11 de junio."}</p>
+            <p className="text-sm text-muted-foreground">
+              {planillaCompleta
+                ? "Puedes editarla hasta el cierre."
+                : "Llénala antes del 11 de junio."}
+            </p>
           </div>
         </div>
         <Button asChild variant="hero">
-          <Link to="/planilla">{planillaCompleta ? "Editar planilla" : "Llenar planilla"} <ArrowRight className="size-4" /></Link>
+          <Link to="/planilla">
+            {planillaCompleta ? "Editar planilla" : "Llenar planilla"}{" "}
+            <ArrowRight className="size-4" />
+          </Link>
         </Button>
       </Card>
 
       <div className="mt-6 flex justify-center">
-        <Button asChild variant="secondary"><Link to="/leaderboard">Ver la tabla <ArrowRight className="size-4" /></Link></Button>
+        <Button asChild variant="secondary">
+          <Link to="/leaderboard">
+            Ver la tabla <ArrowRight className="size-4" />
+          </Link>
+        </Button>
       </div>
 
       {planillaCompleta && (
         <Card className="mt-6 border-info/30 bg-card p-5 card-shadow">
           <p className="font-display text-lg">📄 Comprobantes</p>
-          <p className="mt-1 text-sm text-muted-foreground">Descarga tu planilla como PDF profesional o como Excel. El PDF incluye un código QR para verificarlo.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Descarga tu planilla como PDF profesional o como Excel. El PDF incluye un código QR para
+            verificarlo.
+          </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <DownloadButton fn={generateComprobantePDF} label="Descargar comprobante PDF" variant="hero" icon={<FileText className="mr-2 size-4" />} />
-            <DownloadButton fn={generateMyPlanillaXlsx} label="Descargar planilla Excel" icon={<FileSpreadsheet className="mr-2 size-4" />} />
+            <DownloadButton
+              fn={generateComprobantePDF}
+              label="Descargar comprobante PDF"
+              variant="hero"
+              icon={<FileText className="mr-2 size-4" />}
+            />
+            <DownloadButton
+              fn={generateMyPlanillaXlsx}
+              label="Descargar planilla Excel"
+              icon={<FileSpreadsheet className="mr-2 size-4" />}
+            />
           </div>
         </Card>
       )}

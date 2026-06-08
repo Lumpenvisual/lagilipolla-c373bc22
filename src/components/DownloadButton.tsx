@@ -14,14 +14,14 @@ export function DownloadButton({
   icon,
   className,
 }: {
-  fn: (...args: any[]) => Promise<FnResult>;
+  fn: () => Promise<FnResult>;
   label: string;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
   icon?: React.ReactNode;
   className?: string;
 }) {
-  const run = useServerFn(fn as any);
+  const run = useServerFn(fn);
   const [busy, setBusy] = useState(false);
 
   const click = async () => {
@@ -51,7 +51,11 @@ export function DownloadButton({
 
   return (
     <Button variant={variant} size={size} onClick={click} disabled={busy} className={className}>
-      {busy ? <Loader2 className="mr-2 size-4 animate-spin" /> : icon ?? <Download className="mr-2 size-4" />}
+      {busy ? (
+        <Loader2 className="mr-2 size-4 animate-spin" />
+      ) : (
+        (icon ?? <Download className="mr-2 size-4" />)
+      )}
       {label}
     </Button>
   );

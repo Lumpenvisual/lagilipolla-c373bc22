@@ -9,7 +9,7 @@ export const POLLA = {
 
 export const fmtCOP = (n: number): string => "$" + (n ?? 0).toLocaleString("es-CO");
 
-export const GROUP_KEYS = ["A","B","C","D","E","F","G","H","I","J","K","L"] as const;
+export const GROUP_KEYS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] as const;
 export type GroupKey = (typeof GROUP_KEYS)[number];
 
 export type TeamCandidate = { id: string; n: string };
@@ -45,6 +45,7 @@ export type TournamentState = {
   deadline: string;
   cuota_cop: number;
   updated_at: string;
+  picks_locked_at?: string | null;
 };
 
 export type PickGroups = Partial<Record<GroupKey, { pos1: string | null; pos2: string | null }>>;

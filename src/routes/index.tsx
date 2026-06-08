@@ -10,7 +10,10 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "LA GILIPOLLA 2026 · Bar El Guanábano" },
-      { name: "description", content: `Polla del Mundial 2026 · cuota ${fmtCOP(POLLA.cuotaCOP)} COP · Bar El Guanábano.` },
+      {
+        name: "description",
+        content: `Polla del Mundial 2026 · cuota ${fmtCOP(POLLA.cuotaCOP)} COP · Bar El Guanábano.`,
+      },
     ],
   }),
   component: Landing,
@@ -36,10 +39,14 @@ function useCountdown(target: Date) {
 function Unit({ v, label, accent }: { v: number; label: string; accent?: boolean }) {
   return (
     <div className="flex flex-col items-center">
-      <div className={`glass-card flex h-20 w-16 items-center justify-center rounded-xl font-display text-3xl tabular-nums sm:h-28 sm:w-24 sm:text-5xl ${accent ? "text-destructive" : "text-gold"}`}>
+      <div
+        className={`glass-card flex h-20 w-16 items-center justify-center rounded-xl font-display text-3xl tabular-nums sm:h-28 sm:w-24 sm:text-5xl ${accent ? "text-destructive" : "text-gold"}`}
+      >
         {v.toString().padStart(2, "0")}
       </div>
-      <span className="mt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="mt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+        {label}
+      </span>
     </div>
   );
 }
@@ -69,12 +76,18 @@ function Landing() {
             <span className="ml-2 text-foreground">2026</span>
           </h1>
           <p className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5"><MapPin className="size-4" /> {POLLA.sede}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <MapPin className="size-4" /> {POLLA.sede}
+            </span>
             <span className="text-border">·</span>
-            <span className="inline-flex items-center gap-1.5 font-semibold text-gold"><Coins className="size-4" /> {fmtCOP(POLLA.cuotaCOP)} COP</span>
+            <span className="inline-flex items-center gap-1.5 font-semibold text-gold">
+              <Coins className="size-4" /> {fmtCOP(POLLA.cuotaCOP)} COP
+            </span>
           </p>
 
-          <p className="mt-8 text-[11px] uppercase tracking-[0.4em] text-muted-foreground">Cierre de inscripciones</p>
+          <p className="mt-8 text-[11px] uppercase tracking-[0.4em] text-muted-foreground">
+            Cierre de inscripciones
+          </p>
           {cd.done ? (
             <p className="mt-2 font-display text-3xl text-destructive">¡INSCRIPCIONES CERRADAS!</p>
           ) : (
@@ -92,20 +105,46 @@ function Landing() {
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             {!user ? (
               <>
-                <Button asChild variant="hero" size="lg" className="h-12 px-10 text-base uppercase tracking-wider">
-                  <Link to="/registro">Inscribirme <ArrowRight className="size-4" /></Link>
+                <Button
+                  asChild
+                  variant="hero"
+                  size="lg"
+                  className="h-12 px-10 text-base uppercase tracking-wider"
+                >
+                  <Link to="/registro">
+                    Inscribirme <ArrowRight className="size-4" />
+                  </Link>
                 </Button>
-                <Button asChild variant="secondary" size="lg" className="h-12 px-10 text-base uppercase tracking-wider">
+                <Button
+                  asChild
+                  variant="secondary"
+                  size="lg"
+                  className="h-12 px-10 text-base uppercase tracking-wider"
+                >
                   <Link to="/login">Ya estoy inscrito</Link>
                 </Button>
               </>
             ) : approved ? (
-              <Button asChild variant="hero" size="lg" className="h-12 px-10 text-base uppercase tracking-wider">
-                <Link to="/planilla">Llenar mi planilla <ArrowRight className="size-4" /></Link>
+              <Button
+                asChild
+                variant="hero"
+                size="lg"
+                className="h-12 px-10 text-base uppercase tracking-wider"
+              >
+                <Link to="/planilla">
+                  Llenar mi planilla <ArrowRight className="size-4" />
+                </Link>
               </Button>
             ) : (
-              <Button asChild variant="hero" size="lg" className="h-12 px-10 text-base uppercase tracking-wider">
-                <Link to="/dashboard">Mi cuenta <ArrowRight className="size-4" /></Link>
+              <Button
+                asChild
+                variant="hero"
+                size="lg"
+                className="h-12 px-10 text-base uppercase tracking-wider"
+              >
+                <Link to="/dashboard">
+                  Mi cuenta <ArrowRight className="size-4" />
+                </Link>
               </Button>
             )}
           </div>
@@ -113,26 +152,39 @@ function Landing() {
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-16">
-        <h2 className="text-center font-display text-3xl tracking-wide sm:text-4xl">Cómo se juega</h2>
+        <h2 className="text-center font-display text-3xl tracking-wide sm:text-4xl">
+          Cómo se juega
+        </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <Card className="border-border bg-card p-6 card-shadow">
             <div className="text-3xl">1️⃣</div>
             <h3 className="mt-3 font-display text-xl">Pagas tu cuota</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{fmtCOP(POLLA.cuotaCOP)} COP en el bar. El admin aprueba tu inscripción.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {fmtCOP(POLLA.cuotaCOP)} COP en el bar. El admin aprueba tu inscripción.
+            </p>
           </Card>
           <Card className="border-border bg-card p-6 card-shadow">
             <div className="text-3xl">2️⃣</div>
             <h3 className="mt-3 font-display text-xl">Llenas la planilla</h3>
-            <p className="mt-2 text-sm text-muted-foreground">12 grupos · 6 partidos del Grupo K · goleador y arquero. Antes del 11 de junio.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              12 grupos · 6 partidos del Grupo K · goleador y arquero. Antes del 11 de junio.
+            </p>
           </Card>
           <Card className="border-border bg-card p-6 card-shadow">
             <div className="text-3xl">3️⃣</div>
             <h3 className="mt-3 font-display text-xl">Sumas puntos</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Cada acierto suma. La tabla se actualiza después de cada partido. El que más puntos: gana.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Cada acierto suma. La tabla se actualiza después de cada partido. El que más puntos:
+              gana.
+            </p>
           </Card>
         </div>
         <div className="mt-8 text-center">
-          <Button asChild variant="secondary"><Link to="/reglas">Ver reglas completas <ArrowRight className="size-4" /></Link></Button>
+          <Button asChild variant="secondary">
+            <Link to="/reglas">
+              Ver reglas completas <ArrowRight className="size-4" />
+            </Link>
+          </Button>
         </div>
       </section>
 

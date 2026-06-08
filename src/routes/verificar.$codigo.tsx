@@ -35,10 +35,17 @@ function VerifyPage() {
         <Card className="mt-8 border-success/40 bg-success/5 p-8 text-center card-shadow">
           <CheckCircle2 className="mx-auto size-12 text-success" />
           <h2 className="mt-3 font-display text-2xl text-success">Comprobante válido</h2>
-          <p className="mt-3 text-sm">Participante: <strong>{data.nombre}</strong></p>
+          <p className="mt-3 text-sm">
+            Participante: <strong>{data.nombre}</strong>
+          </p>
           <p className="mt-1 text-xs text-muted-foreground">Estado de pago: {data.estado_pago}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Última actualización: {new Date(data.updated_at).toLocaleString("es-CO", { timeZone: "America/Bogota" })} COT</p>
-          <p className="mt-3 text-sm">Puntos: <span className="font-display text-xl text-gold">{data.puntos_total}</span></p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Última actualización:{" "}
+            {new Date(data.updated_at).toLocaleString("es-CO", { timeZone: "America/Bogota" })} COT
+          </p>
+          <p className="mt-3 text-sm">
+            Puntos: <span className="font-display text-xl text-gold">{data.puntos_total}</span>
+          </p>
         </Card>
       )}
 
@@ -46,12 +53,17 @@ function VerifyPage() {
         <Card className="mt-8 border-destructive/40 bg-destructive/5 p-8 text-center card-shadow">
           <XCircle className="mx-auto size-12 text-destructive" />
           <h2 className="mt-3 font-display text-2xl text-destructive">No válido</h2>
-          <p className="mt-2 text-sm text-muted-foreground">El código no coincide con ningún comprobante actual. Esto puede ocurrir si la planilla fue modificada después de generar el PDF.</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            El código no coincide con ningún comprobante actual. Esto puede ocurrir si la planilla
+            fue modificada después de generar el PDF.
+          </p>
         </Card>
       )}
 
       <div className="mt-6 text-center">
-        <Button asChild variant="secondary"><Link to="/">Volver al inicio</Link></Button>
+        <Button asChild variant="secondary">
+          <Link to="/">Volver al inicio</Link>
+        </Button>
       </div>
     </main>
   );

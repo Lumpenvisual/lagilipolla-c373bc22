@@ -3,7 +3,15 @@ import { countdownTo, type Countdown as CD } from "@/lib/format";
 import { TOURNAMENT_START_UTC } from "@/lib/constants";
 import { useT } from "@/lib/i18n";
 
-function Unit({ value, label, accent = false }: { value: number; label: string; accent?: boolean }) {
+function Unit({
+  value,
+  label,
+  accent = false,
+}: {
+  value: number;
+  label: string;
+  accent?: boolean;
+}) {
   const text = value.toString().padStart(2, "0");
   return (
     <div className="flex flex-col items-center">

@@ -50,11 +50,7 @@ function LoginPage() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : t("login.genericError");
       toast.error(
-        msg.includes("Invalid login")
-          ? orgMode
-            ? t("login.badOrg")
-            : t("login.badUser")
-          : msg,
+        msg.includes("Invalid login") ? (orgMode ? t("login.badOrg") : t("login.badUser")) : msg,
       );
     } finally {
       setLoading(false);
@@ -73,18 +69,36 @@ function LoginPage() {
             <>
               <div className="space-y-2">
                 <Label htmlFor="email">{t("login.email")}</Label>
-                <Input id="email" type="email" value={orgEmail} onChange={(e) => setOrgEmail(e.target.value)} placeholder="tu@email.com" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={orgEmail}
+                  onChange={(e) => setOrgEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="pass">{t("login.password")}</Label>
-                <Input id="pass" type="password" value={orgPass} onChange={(e) => setOrgPass(e.target.value)} placeholder="••••••••" />
+                <Input
+                  id="pass"
+                  type="password"
+                  value={orgPass}
+                  onChange={(e) => setOrgPass(e.target.value)}
+                  placeholder="••••••••"
+                />
               </div>
             </>
           ) : (
             <>
               <div className="space-y-2">
                 <Label htmlFor="alias">{t("login.alias")}</Label>
-                <Input id="alias" value={alias} onChange={(e) => setAlias(e.target.value)} placeholder={t("login.aliasPh")} maxLength={24} />
+                <Input
+                  id="alias"
+                  value={alias}
+                  onChange={(e) => setAlias(e.target.value)}
+                  placeholder={t("login.aliasPh")}
+                  maxLength={24}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="pin">{t("login.pin")}</Label>

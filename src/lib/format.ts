@@ -6,7 +6,20 @@ type FmtLang = "es" | "en" | "fr";
 const MONTHS: Record<FmtLang, string[]> = {
   en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-  fr: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
+  fr: [
+    "janv.",
+    "févr.",
+    "mars",
+    "avr.",
+    "mai",
+    "juin",
+    "juil.",
+    "août",
+    "sept.",
+    "oct.",
+    "nov.",
+    "déc.",
+  ],
 };
 
 // Module-level current language, kept in sync by the i18n provider via setFormatLang().
@@ -60,7 +73,13 @@ export function hoursUntil(iso: string, now: number = Date.now()): number {
   return (new Date(iso).getTime() - now) / (1000 * 60 * 60);
 }
 
-export type Countdown = { days: number; hours: number; minutes: number; seconds: number; done: boolean };
+export type Countdown = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  done: boolean;
+};
 
 export function countdownTo(targetIso: string, now: number = Date.now()): Countdown {
   const diff = new Date(targetIso).getTime() - now;

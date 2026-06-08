@@ -21,9 +21,7 @@ function isLang(v: unknown): v is Lang {
 
 function interpolate(str: string, vars?: Record<string, string | number>): string {
   if (!vars) return str;
-  return str.replace(/\{(\w+)\}/g, (_, k) =>
-    vars[k] != null ? String(vars[k]) : `{${k}}`,
-  );
+  return str.replace(/\{(\w+)\}/g, (_, k) => (vars[k] != null ? String(vars[k]) : `{${k}}`));
 }
 
 export type TFunc = (key: string, vars?: Record<string, string | number>) => string;

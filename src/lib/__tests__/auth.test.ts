@@ -22,13 +22,11 @@ describe("PIN → password derivation", () => {
 });
 
 describe("ALIAS_RE validation", () => {
-  it.each(["Ab", "Rafa Castro", "user_1.2-3", "a".repeat(24)])(
-    "accepts valid alias %s",
-    (a) => expect(ALIAS_RE.test(a)).toBe(true),
+  it.each(["Ab", "Rafa Castro", "user_1.2-3", "a".repeat(24)])("accepts valid alias %s", (a) =>
+    expect(ALIAS_RE.test(a)).toBe(true),
   );
-  it.each(["a", "", "a".repeat(25), "bad@alias", "emoji😀"])(
-    "rejects invalid alias %s",
-    (a) => expect(ALIAS_RE.test(a)).toBe(false),
+  it.each(["a", "", "a".repeat(25), "bad@alias", "emoji😀"])("rejects invalid alias %s", (a) =>
+    expect(ALIAS_RE.test(a)).toBe(false),
   );
 });
 

@@ -150,18 +150,22 @@ export const translations: Record<Lang, Dict> = {
     "detail.matches.tapToPredict": "Toca un partido para registrar tu pronóstico.",
     "detail.matches.loginHint": "Inicia sesión e inscríbete para pronosticar estos partidos.",
     "detail.matches.joinHint": "Inscríbete en el concurso para poder pronosticar.",
-    "detail.matches.pendingHint": "Tu pago está pendiente. Cuando el organizador lo apruebe, podrás pronosticar.",
+    "detail.matches.pendingHint":
+      "Tu pago está pendiente. Cuando el organizador lo apruebe, podrás pronosticar.",
     "detail.matches.tbaHint": "Los pronósticos se habilitarán cuando se definan los equipos.",
     "detail.matches.yourPick": "Tu pronóstico: {l}–{v}",
     "detail.joinPrompt.title": "¿Quieres jugar este concurso?",
-    "detail.joinPrompt.desc": "Para pronosticar «{match}» primero debes inscribirte. La cuota es {fee} y el organizador confirmará tu pago.",
+    "detail.joinPrompt.desc":
+      "Para pronosticar «{match}» primero debes inscribirte. La cuota es {fee} y el organizador confirmará tu pago.",
     "detail.joinPrompt.confirm": "Sí, inscribirme · {fee}",
     "detail.joinPrompt.cancel": "Ahora no",
     "detail.joinPrompt.loginTitle": "Inicia sesión para jugar",
-    "detail.joinPrompt.loginDesc": "Crea tu cuenta o inicia sesión para inscribirte en «{match}» y empezar a pronosticar.",
+    "detail.joinPrompt.loginDesc":
+      "Crea tu cuenta o inicia sesión para inscribirte en «{match}» y empezar a pronosticar.",
     "detail.joinPrompt.login": "Iniciar sesión",
     "detail.joinPrompt.pendingTitle": "Tu pago está en revisión",
-    "detail.joinPrompt.pendingDesc": "Ya estás inscrito en este concurso. En cuanto el organizador apruebe tu pago de {fee}, podrás pronosticar «{match}».",
+    "detail.joinPrompt.pendingDesc":
+      "Ya estás inscrito en este concurso. En cuanto el organizador apruebe tu pago de {fee}, podrás pronosticar «{match}».",
     "detail.joinPrompt.ok": "Entendido",
     "detail.joinPrompt.tba": "Los equipos de este partido aún no están definidos. Vuelve pronto.",
 
@@ -214,7 +218,8 @@ export const translations: Record<Lang, Dict> = {
     "dash.meta.title": "Mi panel — Polla Mundial 2026",
     "dash.mustLogin": "Debes iniciar sesión.",
     "dash.org.title": "Acceso de organizador",
-    "dash.org.body": "Entraste como organizador. Desde el panel puedes autorizar pagos y cargar resultados.",
+    "dash.org.body":
+      "Entraste como organizador. Desde el panel puedes autorizar pagos y cargar resultados.",
     "dash.org.cta": "Ir al panel de administración",
     "dash.pending.title": "Pago en verificación",
     "dash.pending.body": "Tu pago está siendo verificado. Volverás en breve.",
@@ -254,7 +259,8 @@ export const translations: Record<Lang, Dict> = {
     "pred.defaultContest": "Concurso",
     "pred.progress": "Progreso",
     "pred.ai.title": "Autopredicción con IA",
-    "pred.ai.subtitle": "La IA analizará las estadísticas de los equipos y completará {n} partido(s) por ti.",
+    "pred.ai.subtitle":
+      "La IA analizará las estadísticas de los equipos y completará {n} partido(s) por ti.",
     "pred.ai.none": "No hay partidos abiertos para autocompletar ahora mismo.",
     "pred.ai.cta": "Autopredecir con IA",
     "pred.ai.running": "Analizando partidos…",
@@ -267,8 +273,10 @@ export const translations: Record<Lang, Dict> = {
     "pred.importantTitle": "Importante:",
     "pred.important":
       "ingresa el marcador y pulsa Guardar. Una vez guardado, el pronóstico no se puede editar.",
-    "pred.tbaNote_one": "{n} partido con equipos por definir se podrá pronosticar cuando se conozcan los clasificados.",
-    "pred.tbaNote_other": "{n} partidos con equipos por definir se podrán pronosticar cuando se conozcan los clasificados.",
+    "pred.tbaNote_one":
+      "{n} partido con equipos por definir se podrá pronosticar cuando se conozcan los clasificados.",
+    "pred.tbaNote_other":
+      "{n} partidos con equipos por definir se podrán pronosticar cuando se conozcan los clasificados.",
     "pred.soon_one": "Tienes {n} partido que se juega pronto — ¡Pronostica antes del kickoff!",
     "pred.soon_other": "Tienes {n} partidos que se juegan pronto — ¡Pronostica antes del kickoff!",
     "pred.jornada": "Jornada {n}",
@@ -341,7 +349,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.confirm.approveBody": "{name} podrá pronosticar los 72 partidos.",
     "admin.confirm.rejectBody": "{name} no podrá acceder a los pronósticos.",
     "admin.detail.summary": "{pred} pronósticos · {pts} pts · {exact} exactos",
-    "admin.detail.notApproved": "Este participante no está aprobado, por lo que no tiene pronósticos disponibles.",
+    "admin.detail.notApproved":
+      "Este participante no está aprobado, por lo que no tiene pronósticos disponibles.",
     "admin.detail.col.partido": "Partido",
     "admin.detail.col.pronostico": "Pronóstico",
     "admin.detail.col.resultado": "Resultado",
@@ -363,7 +372,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.sum.prizeTitle": "Distribución de premios proyectada",
     "admin.sum.noApproved": "Aún no hay participantes aprobados.",
     "admin.con.autoTitle": "Generación automática",
-    "admin.con.autoDesc": "Crea los concursos por día, por fase y el Mundial completo. Es idempotente: no duplica.",
+    "admin.con.autoDesc":
+      "Crea los concursos por día, por fase y el Mundial completo. Es idempotente: no duplica.",
     "admin.con.generate": "Generar concursos",
     "admin.con.includePartidos": "+ Incluir por partido",
     "admin.con.genError": "No se pudieron generar los concursos.",
@@ -387,7 +397,8 @@ export const translations: Record<Lang, Dict> = {
     // ---------- Admin · Consola demo ----------
     "admin.nav.demo": "Datos demo",
     "admin.demo.title": "Consola de datos demo",
-    "admin.demo.desc": "Genera datos ficticios para probar todas las modalidades de extremo a extremo: jugadores, inscripciones, pronósticos y marcadores inventados.",
+    "admin.demo.desc":
+      "Genera datos ficticios para probar todas las modalidades de extremo a extremo: jugadores, inscripciones, pronósticos y marcadores inventados.",
     "admin.demo.paramsTitle": "Parámetros",
     "admin.demo.players": "Jugadores demo",
     "admin.demo.resultPct": "% de partidos con resultado",
@@ -401,7 +412,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.demo.console": "Consola",
     "admin.demo.logEmpty": "Sin actividad todavía. Ejecuta una acción para ver el resultado.",
     "admin.demo.resetTitle": "Borrar todos los datos demo",
-    "admin.demo.resetBody": "Se eliminarán los jugadores demo, sus inscripciones y pronósticos, y se revertirán los marcadores inventados. Esta acción no se puede deshacer.",
+    "admin.demo.resetBody":
+      "Se eliminarán los jugadores demo, sus inscripciones y pronósticos, y se revertirán los marcadores inventados. Esta acción no se puede deshacer.",
     "admin.demo.runSeed": "Generación de datos demo",
     "admin.demo.runReset": "Borrado de datos demo",
     "admin.demo.outPlayers": "jugadores",
@@ -434,11 +446,13 @@ export const translations: Record<Lang, Dict> = {
     "reglas.ins.li2b": "Concursos",
     "reglas.ins.li2c": ". La cuota se muestra en cada concurso (puede variar según la modalidad).",
     "reglas.ins.li3a": "Paga la cuota de cada concurso por e-Transfer a",
-    "reglas.ins.li3c": "o en efectivo al organizador. Incluye tu alias en el mensaje para identificar tu pago.",
+    "reglas.ins.li3c":
+      "o en efectivo al organizador. Incluye tu alias en el mensaje para identificar tu pago.",
     "reglas.ins.li4a": "El organizador marca tu pago como",
     "reglas.ins.li4b": "aprobado",
     "reglas.ins.li4c": ". Solo entonces apareces en la tabla de ese concurso y optas a su premio.",
-    "reglas.ins.li5": "Cada concurso cierra su inscripción al iniciar el primer partido de su alcance (su fecha de cierre se indica en el concurso).",
+    "reglas.ins.li5":
+      "Cada concurso cierra su inscripción al iniciar el primer partido de su alcance (su fecha de cierre se indica en el concurso).",
     "reglas.pro.title": "Pronósticos",
     "reglas.pro.li1a": "Pronosticas el",
     "reglas.pro.li1b": "marcador exacto",
@@ -454,7 +468,8 @@ export const translations: Record<Lang, Dict> = {
     "reglas.pro.li5a": "Solo los participantes con pago",
     "reglas.pro.li5b": "aprobado",
     "reglas.pro.li5c": "pueden guardar pronósticos.",
-    "reglas.pro.li6": "Los partidos de eliminatorias con equipos “Por definir” se podrán pronosticar cuando se conozcan los clasificados.",
+    "reglas.pro.li6":
+      "Los partidos de eliminatorias con equipos “Por definir” se podrán pronosticar cuando se conozcan los clasificados.",
     "reglas.pts.title": "Sistema de Puntos",
     "reglas.pts.intro": "El mismo sistema de puntos aplica en todos los concursos:",
     "reglas.pts.exact": "Marcador exacto",
@@ -463,7 +478,8 @@ export const translations: Record<Lang, Dict> = {
     "reglas.pts.resultDesc": "Acertaste quién ganó o el empate, pero no el marcador exacto",
     "reglas.pts.miss": "Fallo",
     "reglas.pts.missDesc": "No acertaste ni el resultado ni el marcador",
-    "reglas.pts.example1": "Ejemplo: Si pronosticaste Brasil 2-1 Croacia y el resultado fue Brasil 2-1 Croacia, obtienes",
+    "reglas.pts.example1":
+      "Ejemplo: Si pronosticaste Brasil 2-1 Croacia y el resultado fue Brasil 2-1 Croacia, obtienes",
     "reglas.pts.example2": "3 puntos",
     "reglas.pts.example3": ". Si el resultado fue Brasil 1-0 Croacia, obtienes",
     "reglas.pts.example4": "1 punto",
@@ -477,9 +493,11 @@ export const translations: Record<Lang, Dict> = {
     "reglas.prizes.p2": "2° lugar",
     "reglas.prizes.p3": "3° lugar",
     "reglas.prizes.p4": "4° lugar",
-    "reglas.prizes.tie": "En caso de empates en puntos, el pozo se redistribuye según las reglas de desempate descritas abajo.",
+    "reglas.prizes.tie":
+      "En caso de empates en puntos, el pozo se redistribuye según las reglas de desempate descritas abajo.",
     "reglas.tie.title": "Desempates",
-    "reglas.tie.intro": "En caso de empate en puntos entre participantes, se aplican estos criterios en orden:",
+    "reglas.tie.intro":
+      "En caso de empate en puntos entre participantes, se aplican estos criterios en orden:",
     "reglas.tie.li1": "Mayor cantidad de marcadores exactos",
     "reglas.tie.li1b": "(3 puntos).",
     "reglas.tie.li2a": "Si persiste el empate, los participantes empatados",
@@ -488,17 +506,23 @@ export const translations: Record<Lang, Dict> = {
     "reglas.tie.exBody":
       "Si dos personas empatan en 1° lugar (mismos puntos y mismos exactos), se reparten el 60% + 25% = 85% entre ambas (42.5% cada una). El 3° lugar recibe el 10% y el 4° el 5%.",
     "reglas.gen.title": "Reglas Generales",
-    "reglas.gen.li1": "Puedes inscribirte en tantos concursos como quieras; cada uno se paga y se premia por separado.",
-    "reglas.gen.li2": "El marcador de un partido es el mismo en todos tus concursos: lo capturas una vez.",
-    "reglas.gen.li3": "El organizador tiene la facultad de resolver cualquier situación no prevista en estas reglas, y sus decisiones son finales e inapelables.",
-    "reglas.gen.li4": "Al inscribirte, aceptas cumplir con todas las reglas y el pago de la cuota del concurso.",
+    "reglas.gen.li1":
+      "Puedes inscribirte en tantos concursos como quieras; cada uno se paga y se premia por separado.",
+    "reglas.gen.li2":
+      "El marcador de un partido es el mismo en todos tus concursos: lo capturas una vez.",
+    "reglas.gen.li3":
+      "El organizador tiene la facultad de resolver cualquier situación no prevista en estas reglas, y sus decisiones son finales e inapelables.",
+    "reglas.gen.li4":
+      "Al inscribirte, aceptas cumplir con todas las reglas y el pago de la cuota del concurso.",
     "reglas.cal.title": "Calendario Importante",
     "reglas.cal.li1a": "11 de junio de 2026:",
     "reglas.cal.li1b": "Inicio del Mundial FIFA 2026 (primer partido de la fase de grupos).",
     "reglas.cal.li2a": "Cierre de cada concurso:",
-    "reglas.cal.li2b": "al iniciar el primer partido de su alcance. Después de esa hora no se admiten inscripciones para ese concurso.",
+    "reglas.cal.li2b":
+      "al iniciar el primer partido de su alcance. Después de esa hora no se admiten inscripciones para ese concurso.",
     "reglas.cal.li3a": "Durante el torneo:",
-    "reglas.cal.li3b": "cada marcador se puede guardar hasta el kickoff de su partido; una vez guardado no se edita.",
+    "reglas.cal.li3b":
+      "cada marcador se puede guardar hasta el kickoff de su partido; una vez guardado no se edita.",
     "reglas.cal.li4a": "Al cerrar un concurso:",
     "reglas.cal.li4b": "se calculan los puntos y se determina su tabla y la distribución del pozo.",
     "reglas.footer.viewContests": "Ver concursos",
@@ -524,11 +548,13 @@ export const translations: Record<Lang, Dict> = {
     "home.hero.viewAll": "Ver todos los concursos",
     "home.modes.eyebrow": "4 formas de jugar",
     "home.modes.title": "Elige tu nivel de juego",
-    "home.modes.subtitle": "Desde un solo partido hasta el Mundial completo. Cada modalidad por separado, sin mezclar.",
+    "home.modes.subtitle":
+      "Desde un solo partido hasta el Mundial completo. Cada modalidad por separado, sin mezclar.",
     "home.scoringNote": "Mismo sistema de puntos en todas las modalidades.",
 
     "play.meta.title": "Empieza a jugar — Polla Mundial 2026",
-    "play.meta.desc": "Elige cuánto te quieres comprometer y te llevamos a los concursos ideales para ti.",
+    "play.meta.desc":
+      "Elige cuánto te quieres comprometer y te llevamos a los concursos ideales para ti.",
     "play.eyebrow": "Empecemos",
     "play.title": "¿Cuánto te quieres comprometer?",
     "play.subtitle": "Elige tu estilo de juego. Podrás cambiar de modalidad cuando quieras.",
@@ -714,18 +740,22 @@ export const translations: Record<Lang, Dict> = {
     "detail.matches.tapToPredict": "Tap a match to enter your prediction.",
     "detail.matches.loginHint": "Sign in and enroll to predict these matches.",
     "detail.matches.joinHint": "Enroll in the contest to start predicting.",
-    "detail.matches.pendingHint": "Your payment is pending. Once the organizer approves it, you can predict.",
+    "detail.matches.pendingHint":
+      "Your payment is pending. Once the organizer approves it, you can predict.",
     "detail.matches.tbaHint": "Predictions unlock once the teams are confirmed.",
     "detail.matches.yourPick": "Your pick: {l}–{v}",
     "detail.joinPrompt.title": "Want to play this contest?",
-    "detail.joinPrompt.desc": "To predict “{match}” you first need to enroll. The fee is {fee} and the organizer will confirm your payment.",
+    "detail.joinPrompt.desc":
+      "To predict “{match}” you first need to enroll. The fee is {fee} and the organizer will confirm your payment.",
     "detail.joinPrompt.confirm": "Yes, enroll me · {fee}",
     "detail.joinPrompt.cancel": "Not now",
     "detail.joinPrompt.loginTitle": "Sign in to play",
-    "detail.joinPrompt.loginDesc": "Create an account or sign in to enroll in “{match}” and start predicting.",
+    "detail.joinPrompt.loginDesc":
+      "Create an account or sign in to enroll in “{match}” and start predicting.",
     "detail.joinPrompt.login": "Sign in",
     "detail.joinPrompt.pendingTitle": "Your payment is under review",
-    "detail.joinPrompt.pendingDesc": "You are already enrolled in this contest. Once the organizer approves your {fee} payment, you can predict “{match}”.",
+    "detail.joinPrompt.pendingDesc":
+      "You are already enrolled in this contest. Once the organizer approves your {fee} payment, you can predict “{match}”.",
     "detail.joinPrompt.ok": "Got it",
     "detail.joinPrompt.tba": "The teams for this match aren't defined yet. Check back soon.",
 
@@ -775,7 +805,8 @@ export const translations: Record<Lang, Dict> = {
     "dash.meta.title": "My dashboard — World Cup Pool 2026",
     "dash.mustLogin": "You must sign in.",
     "dash.org.title": "Organizer access",
-    "dash.org.body": "You signed in as the organizer. From the panel you can approve payments and enter results.",
+    "dash.org.body":
+      "You signed in as the organizer. From the panel you can approve payments and enter results.",
     "dash.org.cta": "Go to the admin panel",
     "dash.pending.title": "Payment under review",
     "dash.pending.body": "Your payment is being verified. Check back shortly.",
@@ -827,8 +858,10 @@ export const translations: Record<Lang, Dict> = {
     "pred.importantTitle": "Important:",
     "pred.important":
       "enter the score and press Save. Once saved, the prediction cannot be edited.",
-    "pred.tbaNote_one": "{n} match with teams to be defined can be predicted once the qualified teams are known.",
-    "pred.tbaNote_other": "{n} matches with teams to be defined can be predicted once the qualified teams are known.",
+    "pred.tbaNote_one":
+      "{n} match with teams to be defined can be predicted once the qualified teams are known.",
+    "pred.tbaNote_other":
+      "{n} matches with teams to be defined can be predicted once the qualified teams are known.",
     "pred.soon_one": "You have {n} match starting soon — Predict before kickoff!",
     "pred.soon_other": "You have {n} matches starting soon — Predict before kickoff!",
     "pred.jornada": "Round {n}",
@@ -897,7 +930,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.confirm.approveBody": "{name} will be able to predict all 72 matches.",
     "admin.confirm.rejectBody": "{name} won't be able to access predictions.",
     "admin.detail.summary": "{pred} predictions · {pts} pts · {exact} exact",
-    "admin.detail.notApproved": "This participant is not approved, so no predictions are available.",
+    "admin.detail.notApproved":
+      "This participant is not approved, so no predictions are available.",
     "admin.detail.col.partido": "Match",
     "admin.detail.col.pronostico": "Prediction",
     "admin.detail.col.resultado": "Result",
@@ -919,7 +953,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.sum.prizeTitle": "Projected prize distribution",
     "admin.sum.noApproved": "No approved participants yet.",
     "admin.con.autoTitle": "Automatic generation",
-    "admin.con.autoDesc": "Creates the match-day, stage and full World Cup contests. Idempotent: no duplicates.",
+    "admin.con.autoDesc":
+      "Creates the match-day, stage and full World Cup contests. Idempotent: no duplicates.",
     "admin.con.generate": "Generate contests",
     "admin.con.includePartidos": "+ Include single match",
     "admin.con.genError": "The contests could not be generated.",
@@ -943,7 +978,8 @@ export const translations: Record<Lang, Dict> = {
     // ---------- Admin · Demo console ----------
     "admin.nav.demo": "Demo data",
     "admin.demo.title": "Demo data console",
-    "admin.demo.desc": "Generate fake data to test every mode end to end: players, registrations, predictions and invented scores.",
+    "admin.demo.desc":
+      "Generate fake data to test every mode end to end: players, registrations, predictions and invented scores.",
     "admin.demo.paramsTitle": "Parameters",
     "admin.demo.players": "Demo players",
     "admin.demo.resultPct": "% of matches with a result",
@@ -957,7 +993,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.demo.console": "Console",
     "admin.demo.logEmpty": "No activity yet. Run an action to see the output.",
     "admin.demo.resetTitle": "Clear all demo data",
-    "admin.demo.resetBody": "This removes demo players, their registrations and predictions, and reverts invented scores. This cannot be undone.",
+    "admin.demo.resetBody":
+      "This removes demo players, their registrations and predictions, and reverts invented scores. This cannot be undone.",
     "admin.demo.runSeed": "Demo data generation",
     "admin.demo.runReset": "Demo data reset",
     "admin.demo.outPlayers": "players",
@@ -989,11 +1026,14 @@ export const translations: Record<Lang, Dict> = {
     "reglas.ins.li2b": "Contests",
     "reglas.ins.li2c": "page. The fee is shown on each contest (it may vary by mode).",
     "reglas.ins.li3a": "Pay each contest fee by e-Transfer to",
-    "reglas.ins.li3c": "or in cash to the organizer. Include your alias in the message to identify your payment.",
+    "reglas.ins.li3c":
+      "or in cash to the organizer. Include your alias in the message to identify your payment.",
     "reglas.ins.li4a": "The organizer marks your payment as",
     "reglas.ins.li4b": "approved",
-    "reglas.ins.li4c": ". Only then do you appear in that contest's standings and qualify for its prize.",
-    "reglas.ins.li5": "Each contest closes registration when the first match in its scope kicks off (its closing time is shown on the contest).",
+    "reglas.ins.li4c":
+      ". Only then do you appear in that contest's standings and qualify for its prize.",
+    "reglas.ins.li5":
+      "Each contest closes registration when the first match in its scope kicks off (its closing time is shown on the contest).",
     "reglas.pro.title": "Predictions",
     "reglas.pro.li1a": "You predict the",
     "reglas.pro.li1b": "exact score",
@@ -1009,7 +1049,8 @@ export const translations: Record<Lang, Dict> = {
     "reglas.pro.li5a": "Only participants with an",
     "reglas.pro.li5b": "approved",
     "reglas.pro.li5c": "payment can save predictions.",
-    "reglas.pro.li6": "Knockout matches with “TBD” teams can be predicted once the qualified teams are known.",
+    "reglas.pro.li6":
+      "Knockout matches with “TBD” teams can be predicted once the qualified teams are known.",
     "reglas.pts.title": "Scoring System",
     "reglas.pts.intro": "The same scoring system applies in every contest:",
     "reglas.pts.exact": "Exact score",
@@ -1018,7 +1059,8 @@ export const translations: Record<Lang, Dict> = {
     "reglas.pts.resultDesc": "You got who won or the draw, but not the exact score",
     "reglas.pts.miss": "Miss",
     "reglas.pts.missDesc": "You got neither the outcome nor the score",
-    "reglas.pts.example1": "Example: If you predicted Brazil 2-1 Croatia and the result was Brazil 2-1 Croatia, you get",
+    "reglas.pts.example1":
+      "Example: If you predicted Brazil 2-1 Croatia and the result was Brazil 2-1 Croatia, you get",
     "reglas.pts.example2": "3 points",
     "reglas.pts.example3": ". If the result was Brazil 1-0 Croatia, you get",
     "reglas.pts.example4": "1 point",
@@ -1032,9 +1074,11 @@ export const translations: Record<Lang, Dict> = {
     "reglas.prizes.p2": "2nd place",
     "reglas.prizes.p3": "3rd place",
     "reglas.prizes.p4": "4th place",
-    "reglas.prizes.tie": "In case of points ties, the pot is redistributed according to the tiebreaker rules below.",
+    "reglas.prizes.tie":
+      "In case of points ties, the pot is redistributed according to the tiebreaker rules below.",
     "reglas.tie.title": "Tiebreakers",
-    "reglas.tie.intro": "In case of a points tie between participants, these criteria apply in order:",
+    "reglas.tie.intro":
+      "In case of a points tie between participants, these criteria apply in order:",
     "reglas.tie.li1": "Most exact scores",
     "reglas.tie.li1b": "(3 points).",
     "reglas.tie.li2a": "If the tie persists, the tied participants",
@@ -1043,19 +1087,24 @@ export const translations: Record<Lang, Dict> = {
     "reglas.tie.exBody":
       "If two people tie for 1st place (same points and same exact scores), they split 60% + 25% = 85% between them (42.5% each). 3rd place gets 10% and 4th gets 5%.",
     "reglas.gen.title": "General Rules",
-    "reglas.gen.li1": "You can enroll in as many contests as you like; each is paid and awarded separately.",
+    "reglas.gen.li1":
+      "You can enroll in as many contests as you like; each is paid and awarded separately.",
     "reglas.gen.li2": "A match's score is the same across all your contests: you capture it once.",
-    "reglas.gen.li3": "The organizer may resolve any situation not covered by these rules, and their decisions are final.",
+    "reglas.gen.li3":
+      "The organizer may resolve any situation not covered by these rules, and their decisions are final.",
     "reglas.gen.li4": "By enrolling, you agree to follow all the rules and pay the contest fee.",
     "reglas.cal.title": "Important Schedule",
     "reglas.cal.li1a": "June 11, 2026:",
     "reglas.cal.li1b": "FIFA World Cup 2026 kickoff (first group-stage match).",
     "reglas.cal.li2a": "Each contest's close:",
-    "reglas.cal.li2b": "when the first match in its scope kicks off. After that time no entries are accepted for that contest.",
+    "reglas.cal.li2b":
+      "when the first match in its scope kicks off. After that time no entries are accepted for that contest.",
     "reglas.cal.li3a": "During the tournament:",
-    "reglas.cal.li3b": "each score can be saved up to its match's kickoff; once saved it cannot be edited.",
+    "reglas.cal.li3b":
+      "each score can be saved up to its match's kickoff; once saved it cannot be edited.",
     "reglas.cal.li4a": "When a contest closes:",
-    "reglas.cal.li4b": "points are calculated and its standings and pot distribution are determined.",
+    "reglas.cal.li4b":
+      "points are calculated and its standings and pot distribution are determined.",
     "reglas.footer.viewContests": "View contests",
     "reglas.footer.home": "Back home",
 
@@ -1063,7 +1112,8 @@ export const translations: Record<Lang, Dict> = {
     "err.404.body": "The page you're looking for doesn't exist or has been moved.",
     "err.404.home": "Go home",
     "err.boundary.title": "This page didn't load",
-    "err.boundary.body": "Something went wrong on our end. You can try refreshing or head back home.",
+    "err.boundary.body":
+      "Something went wrong on our end. You can try refreshing or head back home.",
     "err.boundary.retry": "Try again",
     "err.boundary.home": "Go home",
 
@@ -1078,11 +1128,13 @@ export const translations: Record<Lang, Dict> = {
     "home.hero.viewAll": "View all contests",
     "home.modes.eyebrow": "4 ways to play",
     "home.modes.title": "Choose your level",
-    "home.modes.subtitle": "From a single match to the full World Cup. Each mode on its own, never mixed.",
+    "home.modes.subtitle":
+      "From a single match to the full World Cup. Each mode on its own, never mixed.",
     "home.scoringNote": "Same scoring system across every mode.",
 
     "play.meta.title": "Start playing — World Cup Pool 2026",
-    "play.meta.desc": "Choose how much you want to commit and we'll take you to the contests made for you.",
+    "play.meta.desc":
+      "Choose how much you want to commit and we'll take you to the contests made for you.",
     "play.eyebrow": "Let's start",
     "play.title": "How much do you want to commit?",
     "play.subtitle": "Pick your playing style. You can switch modes anytime.",
@@ -1268,20 +1320,25 @@ export const translations: Record<Lang, Dict> = {
     "detail.matches.tapToPredict": "Touchez un match pour saisir votre pronostic.",
     "detail.matches.loginHint": "Connectez-vous et inscrivez-vous pour pronostiquer ces matchs.",
     "detail.matches.joinHint": "Inscrivez-vous au concours pour pouvoir pronostiquer.",
-    "detail.matches.pendingHint": "Votre paiement est en attente. Une fois approuvé par l'organisateur, vous pourrez pronostiquer.",
+    "detail.matches.pendingHint":
+      "Votre paiement est en attente. Une fois approuvé par l'organisateur, vous pourrez pronostiquer.",
     "detail.matches.tbaHint": "Les pronostics seront activés une fois les équipes définies.",
     "detail.matches.yourPick": "Votre pronostic : {l}–{v}",
     "detail.joinPrompt.title": "Envie de jouer ce concours ?",
-    "detail.joinPrompt.desc": "Pour pronostiquer « {match} », vous devez d'abord vous inscrire. Les frais sont de {fee} et l'organisateur confirmera votre paiement.",
+    "detail.joinPrompt.desc":
+      "Pour pronostiquer « {match} », vous devez d'abord vous inscrire. Les frais sont de {fee} et l'organisateur confirmera votre paiement.",
     "detail.joinPrompt.confirm": "Oui, m'inscrire · {fee}",
     "detail.joinPrompt.cancel": "Pas maintenant",
     "detail.joinPrompt.loginTitle": "Connectez-vous pour jouer",
-    "detail.joinPrompt.loginDesc": "Créez un compte ou connectez-vous pour vous inscrire à « {match} » et commencer à pronostiquer.",
+    "detail.joinPrompt.loginDesc":
+      "Créez un compte ou connectez-vous pour vous inscrire à « {match} » et commencer à pronostiquer.",
     "detail.joinPrompt.login": "Se connecter",
     "detail.joinPrompt.pendingTitle": "Votre paiement est en cours de vérification",
-    "detail.joinPrompt.pendingDesc": "Vous êtes déjà inscrit à ce concours. Dès que l'organisateur approuvera votre paiement de {fee}, vous pourrez pronostiquer « {match} ».",
+    "detail.joinPrompt.pendingDesc":
+      "Vous êtes déjà inscrit à ce concours. Dès que l'organisateur approuvera votre paiement de {fee}, vous pourrez pronostiquer « {match} ».",
     "detail.joinPrompt.ok": "Compris",
-    "detail.joinPrompt.tba": "Les équipes de ce match ne sont pas encore définies. Revenez bientôt.",
+    "detail.joinPrompt.tba":
+      "Les équipes de ce match ne sont pas encore définies. Revenez bientôt.",
 
     "login.meta.title": "Se connecter — Poule Coupe du monde 2026",
     "login.meta.desc": "Accédez à votre tableau de bord de la poule Coupe du monde FIFA 2026.",
@@ -1306,7 +1363,8 @@ export const translations: Record<Lang, Dict> = {
     "login.badUser": "Alias ou PIN incorrect.",
 
     "reg.title": "Inscrivez-vous",
-    "reg.subtitle": "Choisissez un alias et un PIN à 4 chiffres. C'est ainsi que vous accédez à vos pronostics.",
+    "reg.subtitle":
+      "Choisissez un alias et un PIN à 4 chiffres. C'est ainsi que vous accédez à vos pronostics.",
     "reg.alias": "Nom ou alias",
     "reg.aliasPh": "Votre alias",
     "reg.pin": "PIN (4 chiffres)",
@@ -1329,7 +1387,8 @@ export const translations: Record<Lang, Dict> = {
     "dash.meta.title": "Mon tableau de bord — Poule Coupe du monde 2026",
     "dash.mustLogin": "Vous devez vous connecter.",
     "dash.org.title": "Accès organisateur",
-    "dash.org.body": "Vous vous êtes connecté en tant qu'organisateur. Depuis le panneau, vous pouvez approuver les paiements et saisir les résultats.",
+    "dash.org.body":
+      "Vous vous êtes connecté en tant qu'organisateur. Depuis le panneau, vous pouvez approuver les paiements et saisir les résultats.",
     "dash.org.cta": "Aller au panneau d'administration",
     "dash.pending.title": "Paiement en cours de vérification",
     "dash.pending.body": "Votre paiement est en cours de vérification. Revenez bientôt.",
@@ -1368,7 +1427,8 @@ export const translations: Record<Lang, Dict> = {
     "pred.defaultContest": "Concours",
     "pred.progress": "Progression",
     "pred.ai.title": "Prédiction auto par IA",
-    "pred.ai.subtitle": "L'IA analysera les statistiques des équipes et remplira {n} match(s) pour vous.",
+    "pred.ai.subtitle":
+      "L'IA analysera les statistiques des équipes et remplira {n} match(s) pour vous.",
     "pred.ai.none": "Aucun match ouvert à remplir automatiquement pour le moment.",
     "pred.ai.cta": "Prédire avec l'IA",
     "pred.ai.running": "Analyse des matchs…",
@@ -1381,10 +1441,14 @@ export const translations: Record<Lang, Dict> = {
     "pred.importantTitle": "Important :",
     "pred.important":
       "saisissez le score et appuyez sur Enregistrer. Une fois enregistré, le pronostic ne peut plus être modifié.",
-    "pred.tbaNote_one": "{n} match avec des équipes à définir pourra être pronostiqué une fois les qualifiés connus.",
-    "pred.tbaNote_other": "{n} matchs avec des équipes à définir pourront être pronostiqués une fois les qualifiés connus.",
-    "pred.soon_one": "Vous avez {n} match qui commence bientôt — Pronostiquez avant le coup d'envoi !",
-    "pred.soon_other": "Vous avez {n} matchs qui commencent bientôt — Pronostiquez avant le coup d'envoi !",
+    "pred.tbaNote_one":
+      "{n} match avec des équipes à définir pourra être pronostiqué une fois les qualifiés connus.",
+    "pred.tbaNote_other":
+      "{n} matchs avec des équipes à définir pourront être pronostiqués une fois les qualifiés connus.",
+    "pred.soon_one":
+      "Vous avez {n} match qui commence bientôt — Pronostiquez avant le coup d'envoi !",
+    "pred.soon_other":
+      "Vous avez {n} matchs qui commencent bientôt — Pronostiquez avant le coup d'envoi !",
     "pred.jornada": "Journée {n}",
     "pred.empty": "Aucun match disponible à pronostiquer pour l'instant.",
     "pred.bar.predicted": "{n} pronostiqués",
@@ -1451,7 +1515,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.confirm.approveBody": "{name} pourra pronostiquer les 72 matchs.",
     "admin.confirm.rejectBody": "{name} ne pourra pas accéder aux pronostics.",
     "admin.detail.summary": "{pred} pronostics · {pts} pts · {exact} exacts",
-    "admin.detail.notApproved": "Ce participant n'est pas approuvé, aucun pronostic n'est donc disponible.",
+    "admin.detail.notApproved":
+      "Ce participant n'est pas approuvé, aucun pronostic n'est donc disponible.",
     "admin.detail.col.partido": "Match",
     "admin.detail.col.pronostico": "Pronostic",
     "admin.detail.col.resultado": "Résultat",
@@ -1473,7 +1538,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.sum.prizeTitle": "Distribution des prix projetée",
     "admin.sum.noApproved": "Pas encore de participants approuvés.",
     "admin.con.autoTitle": "Génération automatique",
-    "admin.con.autoDesc": "Crée les concours par journée, par phase et la Coupe du monde complète. Idempotent : pas de doublons.",
+    "admin.con.autoDesc":
+      "Crée les concours par journée, par phase et la Coupe du monde complète. Idempotent : pas de doublons.",
     "admin.con.generate": "Générer les concours",
     "admin.con.includePartidos": "+ Inclure par match",
     "admin.con.genError": "Les concours n'ont pas pu être générés.",
@@ -1497,7 +1563,8 @@ export const translations: Record<Lang, Dict> = {
     // ---------- Admin · Console démo ----------
     "admin.nav.demo": "Données démo",
     "admin.demo.title": "Console de données démo",
-    "admin.demo.desc": "Générez des données fictives pour tester tous les modes de bout en bout : joueurs, inscriptions, pronostics et scores inventés.",
+    "admin.demo.desc":
+      "Générez des données fictives pour tester tous les modes de bout en bout : joueurs, inscriptions, pronostics et scores inventés.",
     "admin.demo.paramsTitle": "Paramètres",
     "admin.demo.players": "Joueurs démo",
     "admin.demo.resultPct": "% de matchs avec résultat",
@@ -1507,11 +1574,14 @@ export const translations: Record<Lang, Dict> = {
     "admin.demo.reset": "Effacer les données démo",
     "admin.demo.resetting": "Effacement…",
     "admin.demo.error": "L'opération a échoué. Consultez la console.",
-    "admin.demo.warn": "N'affecte que les données marquées comme démo. Vos données réelles ne sont pas touchées.",
+    "admin.demo.warn":
+      "N'affecte que les données marquées comme démo. Vos données réelles ne sont pas touchées.",
     "admin.demo.console": "Console",
-    "admin.demo.logEmpty": "Aucune activité pour l'instant. Lancez une action pour voir le résultat.",
+    "admin.demo.logEmpty":
+      "Aucune activité pour l'instant. Lancez une action pour voir le résultat.",
     "admin.demo.resetTitle": "Effacer toutes les données démo",
-    "admin.demo.resetBody": "Cela supprime les joueurs démo, leurs inscriptions et pronostics, et annule les scores inventés. Action irréversible.",
+    "admin.demo.resetBody":
+      "Cela supprime les joueurs démo, leurs inscriptions et pronostics, et annule les scores inventés. Action irréversible.",
     "admin.demo.runSeed": "Génération de données démo",
     "admin.demo.runReset": "Réinitialisation des données démo",
     "admin.demo.outPlayers": "joueurs",
@@ -1531,8 +1601,10 @@ export const translations: Record<Lang, Dict> = {
     "reglas.mod.p1c":
       "et vous choisissez ceux où vous jouez. Vous pronostiquez le score de chaque match une seule fois, et ce score compte dans tous les concours auxquels vous êtes inscrit qui incluent ce match.",
     "reglas.mod.p2a": "Chaque concours a sa",
-    "reglas.mod.p2b": "propre mise, sa propre cagnotte, son propre classement et sa propre heure de clôture",
-    "reglas.mod.p2c": ". Les phases à élimination s'ouvrent une fois les équipes qualifiées connues.",
+    "reglas.mod.p2b":
+      "propre mise, sa propre cagnotte, son propre classement et sa propre heure de clôture",
+    "reglas.mod.p2c":
+      ". Les phases à élimination s'ouvrent une fois les équipes qualifiées connues.",
     "reglas.mod.cta": "Voir les concours disponibles",
     "reglas.ins.title": "Inscription et paiement",
     "reglas.ins.li1a": "Inscrivez-vous avec un",
@@ -1541,13 +1613,17 @@ export const translations: Record<Lang, Dict> = {
     "reglas.ins.li1d": "PIN à 4 chiffres",
     "reglas.ins.li2a": "Inscrivez-vous aux concours que vous voulez depuis la page",
     "reglas.ins.li2b": "Concours",
-    "reglas.ins.li2c": ". La mise est indiquée sur chaque concours (elle peut varier selon le mode).",
+    "reglas.ins.li2c":
+      ". La mise est indiquée sur chaque concours (elle peut varier selon le mode).",
     "reglas.ins.li3a": "Payez la mise de chaque concours par virement Interac à",
-    "reglas.ins.li3c": "ou en espèces à l'organisateur. Indiquez votre alias dans le message pour identifier votre paiement.",
+    "reglas.ins.li3c":
+      "ou en espèces à l'organisateur. Indiquez votre alias dans le message pour identifier votre paiement.",
     "reglas.ins.li4a": "L'organisateur marque votre paiement comme",
     "reglas.ins.li4b": "approuvé",
-    "reglas.ins.li4c": ". Ce n'est qu'alors que vous apparaissez au classement de ce concours et que vous pouvez gagner son prix.",
-    "reglas.ins.li5": "Chaque concours clôture les inscriptions au coup d'envoi du premier match de son périmètre (son heure de clôture est indiquée sur le concours).",
+    "reglas.ins.li4c":
+      ". Ce n'est qu'alors que vous apparaissez au classement de ce concours et que vous pouvez gagner son prix.",
+    "reglas.ins.li5":
+      "Chaque concours clôture les inscriptions au coup d'envoi du premier match de son périmètre (son heure de clôture est indiquée sur le concours).",
     "reglas.pro.title": "Pronostics",
     "reglas.pro.li1a": "Vous pronostiquez le",
     "reglas.pro.li1b": "score exact",
@@ -1563,16 +1639,19 @@ export const translations: Record<Lang, Dict> = {
     "reglas.pro.li5a": "Seuls les participants avec un paiement",
     "reglas.pro.li5b": "approuvé",
     "reglas.pro.li5c": "peuvent enregistrer des pronostics.",
-    "reglas.pro.li6": "Les matchs à élimination avec des équipes « À définir » pourront être pronostiqués une fois les qualifiés connus.",
+    "reglas.pro.li6":
+      "Les matchs à élimination avec des équipes « À définir » pourront être pronostiqués une fois les qualifiés connus.",
     "reglas.pts.title": "Système de points",
     "reglas.pts.intro": "Le même système de points s'applique dans tous les concours :",
     "reglas.pts.exact": "Score exact",
-    "reglas.pts.exactDesc": "Vous avez trouvé le résultat exact (ex. : vous avez pronostiqué 2-1 et le score est 2-1)",
+    "reglas.pts.exactDesc":
+      "Vous avez trouvé le résultat exact (ex. : vous avez pronostiqué 2-1 et le score est 2-1)",
     "reglas.pts.result": "Bon résultat",
     "reglas.pts.resultDesc": "Vous avez trouvé le vainqueur ou le nul, mais pas le score exact",
     "reglas.pts.miss": "Raté",
     "reglas.pts.missDesc": "Vous n'avez trouvé ni le résultat ni le score",
-    "reglas.pts.example1": "Exemple : si vous avez pronostiqué Brésil 2-1 Croatie et que le résultat est Brésil 2-1 Croatie, vous obtenez",
+    "reglas.pts.example1":
+      "Exemple : si vous avez pronostiqué Brésil 2-1 Croatie et que le résultat est Brésil 2-1 Croatie, vous obtenez",
     "reglas.pts.example2": "3 points",
     "reglas.pts.example3": ". Si le résultat est Brésil 1-0 Croatie, vous obtenez",
     "reglas.pts.example4": "1 point",
@@ -1586,9 +1665,11 @@ export const translations: Record<Lang, Dict> = {
     "reglas.prizes.p2": "2e place",
     "reglas.prizes.p3": "3e place",
     "reglas.prizes.p4": "4e place",
-    "reglas.prizes.tie": "En cas d'égalité de points, la cagnotte est redistribuée selon les règles de départage ci-dessous.",
+    "reglas.prizes.tie":
+      "En cas d'égalité de points, la cagnotte est redistribuée selon les règles de départage ci-dessous.",
     "reglas.tie.title": "Départages",
-    "reglas.tie.intro": "En cas d'égalité de points entre participants, ces critères s'appliquent dans l'ordre :",
+    "reglas.tie.intro":
+      "En cas d'égalité de points entre participants, ces critères s'appliquent dans l'ordre :",
     "reglas.tie.li1": "Plus grand nombre de scores exacts",
     "reglas.tie.li1b": "(3 points).",
     "reglas.tie.li2a": "Si l'égalité persiste, les participants à égalité",
@@ -1597,19 +1678,27 @@ export const translations: Record<Lang, Dict> = {
     "reglas.tie.exBody":
       "Si deux personnes sont à égalité à la 1re place (mêmes points et mêmes scores exacts), elles se partagent 60 % + 25 % = 85 % (42,5 % chacune). La 3e place reçoit 10 % et la 4e 5 %.",
     "reglas.gen.title": "Règles générales",
-    "reglas.gen.li1": "Vous pouvez vous inscrire à autant de concours que vous voulez ; chacun est payé et récompensé séparément.",
-    "reglas.gen.li2": "Le score d'un match est le même dans tous vos concours : vous le saisissez une fois.",
-    "reglas.gen.li3": "L'organisateur peut résoudre toute situation non prévue par ces règles, et ses décisions sont sans appel.",
-    "reglas.gen.li4": "En vous inscrivant, vous acceptez de respecter toutes les règles et de payer la mise du concours.",
+    "reglas.gen.li1":
+      "Vous pouvez vous inscrire à autant de concours que vous voulez ; chacun est payé et récompensé séparément.",
+    "reglas.gen.li2":
+      "Le score d'un match est le même dans tous vos concours : vous le saisissez une fois.",
+    "reglas.gen.li3":
+      "L'organisateur peut résoudre toute situation non prévue par ces règles, et ses décisions sont sans appel.",
+    "reglas.gen.li4":
+      "En vous inscrivant, vous acceptez de respecter toutes les règles et de payer la mise du concours.",
     "reglas.cal.title": "Calendrier important",
     "reglas.cal.li1a": "11 juin 2026 :",
-    "reglas.cal.li1b": "Coup d'envoi de la Coupe du monde FIFA 2026 (premier match de la phase de groupes).",
+    "reglas.cal.li1b":
+      "Coup d'envoi de la Coupe du monde FIFA 2026 (premier match de la phase de groupes).",
     "reglas.cal.li2a": "Clôture de chaque concours :",
-    "reglas.cal.li2b": "au coup d'envoi du premier match de son périmètre. Après cette heure, aucune inscription n'est acceptée pour ce concours.",
+    "reglas.cal.li2b":
+      "au coup d'envoi du premier match de son périmètre. Après cette heure, aucune inscription n'est acceptée pour ce concours.",
     "reglas.cal.li3a": "Pendant le tournoi :",
-    "reglas.cal.li3b": "chaque score peut être enregistré jusqu'au coup d'envoi de son match ; une fois enregistré, il ne peut plus être modifié.",
+    "reglas.cal.li3b":
+      "chaque score peut être enregistré jusqu'au coup d'envoi de son match ; une fois enregistré, il ne peut plus être modifié.",
     "reglas.cal.li4a": "À la clôture d'un concours :",
-    "reglas.cal.li4b": "les points sont calculés et son classement ainsi que la distribution de la cagnotte sont déterminés.",
+    "reglas.cal.li4b":
+      "les points sont calculés et son classement ainsi que la distribution de la cagnotte sont déterminés.",
     "reglas.footer.viewContests": "Voir les concours",
     "reglas.footer.home": "Retour à l'accueil",
 
@@ -1617,7 +1706,8 @@ export const translations: Record<Lang, Dict> = {
     "err.404.body": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "err.404.home": "Aller à l'accueil",
     "err.boundary.title": "Cette page ne s'est pas chargée",
-    "err.boundary.body": "Une erreur est survenue de notre côté. Vous pouvez actualiser ou revenir à l'accueil.",
+    "err.boundary.body":
+      "Une erreur est survenue de notre côté. Vous pouvez actualiser ou revenir à l'accueil.",
     "err.boundary.retry": "Réessayer",
     "err.boundary.home": "Aller à l'accueil",
 
@@ -1632,11 +1722,13 @@ export const translations: Record<Lang, Dict> = {
     "home.hero.viewAll": "Voir tous les concours",
     "home.modes.eyebrow": "4 façons de jouer",
     "home.modes.title": "Choisissez votre niveau",
-    "home.modes.subtitle": "D'un seul match à la Coupe du monde complète. Chaque mode séparément, sans mélange.",
+    "home.modes.subtitle":
+      "D'un seul match à la Coupe du monde complète. Chaque mode séparément, sans mélange.",
     "home.scoringNote": "Même système de points dans tous les modes.",
 
     "play.meta.title": "Commencer à jouer — Pool Coupe du monde 2026",
-    "play.meta.desc": "Choisissez votre niveau d'engagement et nous vous emmenons vers les concours faits pour vous.",
+    "play.meta.desc":
+      "Choisissez votre niveau d'engagement et nous vous emmenons vers les concours faits pour vous.",
     "play.eyebrow": "C'est parti",
     "play.title": "Quel est votre niveau d'engagement ?",
     "play.subtitle": "Choisissez votre style de jeu. Vous pourrez changer de mode à tout moment.",

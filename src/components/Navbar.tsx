@@ -13,17 +13,29 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
     "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary";
   return (
     <>
-      <Link to="/" className={linkCls} onClick={onNavigate}>Inicio</Link>
+      <Link to="/" className={linkCls} onClick={onNavigate}>
+        Inicio
+      </Link>
       {user && approved && (
-        <Link to="/planilla" className={linkCls} onClick={onNavigate}>Planilla</Link>
+        <Link to="/planilla" className={linkCls} onClick={onNavigate}>
+          Planilla
+        </Link>
       )}
-      <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>Tabla</Link>
-      <Link to="/reglas" className={linkCls} onClick={onNavigate}>Reglas</Link>
+      <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>
+        Tabla
+      </Link>
+      <Link to="/reglas" className={linkCls} onClick={onNavigate}>
+        Reglas
+      </Link>
       {user && (
-        <Link to="/dashboard" className={linkCls} onClick={onNavigate}>Mi cuenta</Link>
+        <Link to="/dashboard" className={linkCls} onClick={onNavigate}>
+          Mi cuenta
+        </Link>
       )}
       {isAdmin && (
-        <Link to="/admin" className={linkCls} onClick={onNavigate}>Admin</Link>
+        <Link to="/admin" className={linkCls} onClick={onNavigate}>
+          Admin
+        </Link>
       )}
     </>
   );
@@ -41,7 +53,7 @@ export function Navbar() {
     router.navigate({ to: "/" });
   };
 
-  const name = participant?.nombre ?? (isAdmin ? t("nav.organizador") : user?.email ?? "");
+  const name = participant?.nombre ?? (isAdmin ? t("nav.organizador") : (user?.email ?? ""));
   const initial = (name || "?").charAt(0).toUpperCase();
 
   return (
@@ -65,10 +77,19 @@ export function Navbar() {
                 </div>
                 <div className="flex flex-col leading-tight">
                   <span className="max-w-[160px] truncate text-sm text-foreground">{name}</span>
-                  {isAdmin && <span className="text-[10px] uppercase tracking-wide text-gold">{t("nav.organizador")}</span>}
+                  {isAdmin && (
+                    <span className="text-[10px] uppercase tracking-wide text-gold">
+                      {t("nav.organizador")}
+                    </span>
+                  )}
                 </div>
               </div>
-              <Button variant="ghost" size="icon" onClick={handleLogout} aria-label={t("nav.logout")}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                aria-label={t("nav.logout")}
+              >
                 <LogOut className="size-4" />
               </Button>
             </>
@@ -108,10 +129,20 @@ export function Navbar() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <Button asChild variant="hero" className="w-full" onClick={() => setOpen(false)}>
+                    <Button
+                      asChild
+                      variant="hero"
+                      className="w-full"
+                      onClick={() => setOpen(false)}
+                    >
                       <Link to="/registro">{t("nav.register")}</Link>
                     </Button>
-                    <Button asChild variant="secondary" className="w-full" onClick={() => setOpen(false)}>
+                    <Button
+                      asChild
+                      variant="secondary"
+                      className="w-full"
+                      onClick={() => setOpen(false)}
+                    >
                       <Link to="/login">{t("nav.login")}</Link>
                     </Button>
                   </div>

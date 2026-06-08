@@ -96,8 +96,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Polla Mundialista" },
       { property: "og:description", content: "Polla Mundialista" },
       { name: "twitter:description", content: "Polla Mundialista" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/892dba56-838b-4a7b-8565-cf92b086a782" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/892dba56-838b-4a7b-8565-cf92b086a782" },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/892dba56-838b-4a7b-8565-cf92b086a782",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/892dba56-838b-4a7b-8565-cf92b086a782",
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

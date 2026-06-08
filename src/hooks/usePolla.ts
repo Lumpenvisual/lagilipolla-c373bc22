@@ -37,20 +37,20 @@ export function useMyPick(participantId: string | null | undefined) {
 export function useSavePick(participantId: string | null | undefined) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: Pick<PickRow, "groups" | "group_k_matches" | "goleador_id" | "arquero_id">) => {
+    mutationFn: async (
+      input: Pick<PickRow, "groups" | "group_k_matches" | "goleador_id" | "arquero_id">,
+    ) => {
       if (!participantId) throw new Error("Sin participante");
-      const { error } = await supabase
-        .from("picks")
-        .upsert(
-          {
-            participant_id: participantId,
-            groups: input.groups,
-            group_k_matches: input.group_k_matches,
-            goleador_id: input.goleador_id,
-            arquero_id: input.arquero_id,
-          },
-          { onConflict: "participant_id" },
-        );
+      const { error } = await supabase.from("picks").upsert(
+        {
+          participant_id: participantId,
+          groups: input.groups,
+          group_k_matches: input.group_k_matches,
+          goleador_id: input.goleador_id,
+          arquero_id: input.arquero_id,
+        },
+        { onConflict: "participant_id" },
+      );
       if (error) throw error;
     },
     onSuccess: () => {
