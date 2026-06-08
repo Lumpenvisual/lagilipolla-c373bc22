@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ReglasRouteImport } from './routes/reglas'
 import { Route as RegistroRouteImport } from './routes/registro'
+import { Route as PlanillaRouteImport } from './routes/planilla'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -30,6 +31,11 @@ const ReglasRoute = ReglasRouteImport.update({
 const RegistroRoute = RegistroRouteImport.update({
   id: '/registro',
   path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanillaRoute = PlanillaRouteImport.update({
+  id: '/planilla',
+  path: '/planilla',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
+  '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
+  '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
+  '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/login'
+    | '/planilla'
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/login'
+    | '/planilla'
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/login'
+    | '/planilla'
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
+  PlanillaRoute: typeof PlanillaRoute
   RegistroRoute: typeof RegistroRoute
   ReglasRoute: typeof ReglasRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/registro'
       fullPath: '/registro'
       preLoaderRoute: typeof RegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planilla': {
+      id: '/planilla'
+      path: '/planilla'
+      fullPath: '/planilla'
+      preLoaderRoute: typeof PlanillaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
+  PlanillaRoute: PlanillaRoute,
   RegistroRoute: RegistroRoute,
   ReglasRoute: ReglasRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
