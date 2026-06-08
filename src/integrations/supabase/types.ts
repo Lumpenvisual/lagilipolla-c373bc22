@@ -154,6 +154,7 @@ export type Database = {
       }
       participants: {
         Row: {
+          celular: string | null
           email: string | null
           estado_pago: string
           id: string
@@ -162,6 +163,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          celular?: string | null
           email?: string | null
           estado_pago?: string
           id?: string
@@ -170,6 +172,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          celular?: string | null
           email?: string | null
           estado_pago?: string
           id?: string
@@ -178,6 +181,53 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      picks: {
+        Row: {
+          arquero_id: string | null
+          goleador_id: string | null
+          group_k_matches: Json
+          groups: Json
+          participant_id: string
+          puntos_especiales: number
+          puntos_grupos: number
+          puntos_partidos: number
+          puntos_total: number | null
+          updated_at: string
+        }
+        Insert: {
+          arquero_id?: string | null
+          goleador_id?: string | null
+          group_k_matches?: Json
+          groups?: Json
+          participant_id: string
+          puntos_especiales?: number
+          puntos_grupos?: number
+          puntos_partidos?: number
+          puntos_total?: number | null
+          updated_at?: string
+        }
+        Update: {
+          arquero_id?: string | null
+          goleador_id?: string | null
+          group_k_matches?: Json
+          groups?: Json
+          participant_id?: string
+          puntos_especiales?: number
+          puntos_grupos?: number
+          puntos_partidos?: number
+          puntos_total?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "picks_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: true
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       predictions: {
         Row: {
@@ -224,6 +274,45 @@ export type Database = {
           },
         ]
       }
+      tournament_state: {
+        Row: {
+          arquero_id: string | null
+          arqueros: Json
+          cuota_cop: number
+          deadline: string
+          goleador_id: string | null
+          goleadores: Json
+          group_k_matches: Json
+          groups: Json
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          arquero_id?: string | null
+          arqueros?: Json
+          cuota_cop?: number
+          deadline?: string
+          goleador_id?: string | null
+          goleadores?: Json
+          group_k_matches?: Json
+          groups?: Json
+          id?: number
+          updated_at?: string
+        }
+        Update: {
+          arquero_id?: string | null
+          arqueros?: Json
+          cuota_cop?: number
+          deadline?: string
+          goleador_id?: string | null
+          goleadores?: Json
+          group_k_matches?: Json
+          groups?: Json
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -247,6 +336,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calc_pick_points: { Args: { _pick_id: string }; Returns: undefined }
       generate_concursos: {
         Args: { _include_partidos?: boolean }
         Returns: number
@@ -326,6 +416,18 @@ export type Database = {
           puntos_obtenidos: number
         }[]
       }
+      get_polla_leaderboard: {
+        Args: never
+        Returns: {
+          nombre: string
+          participant_id: string
+          posicion: number
+          puntos_especiales: number
+          puntos_grupos: number
+          puntos_partidos: number
+          puntos_total: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -333,6 +435,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      recalc_all_picks: { Args: never; Returns: number }
       reset_demo_data: { Args: never; Returns: Json }
       seed_demo_data: {
         Args: {

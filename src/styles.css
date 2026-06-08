@@ -56,53 +56,64 @@
 :root {
   --radius: 0.75rem;
 
-  --background: #060e1a;
-  --foreground: #e0e8f0;
-  --card: #0c1e38;
-  --card-foreground: #e0e8f0;
-  --popover: #0c1e38;
-  --popover-foreground: #e0e8f0;
+  /* Colombian palette · "noche en el bar" */
+  --background: #0b1530;
+  --foreground: #f5ecd6;
+  --card: #142143;
+  --card-foreground: #f5ecd6;
+  --popover: #142143;
+  --popover-foreground: #f5ecd6;
 
-  --primary: #4cca72;
-  --primary-foreground: #04210f;
+  /* PRIMARY = amarillo bandera #FCD116 */
+  --primary: #fcd116;
+  --primary-foreground: #1a1200;
 
-  --secondary: #14294a;
-  --secondary-foreground: #e0e8f0;
+  --secondary: #1e2d54;
+  --secondary-foreground: #f5ecd6;
 
-  --muted: #0f2540;
-  --muted-foreground: #5a7a9a;
+  --muted: #182447;
+  --muted-foreground: #9aa8c8;
 
-  --accent: #4da6ff;
-  --accent-foreground: #04111f;
+  /* ACCENT = azul bandera #003893 (un poco más vivo para contraste) */
+  --accent: #2b55c8;
+  --accent-foreground: #ffffff;
 
-  --destructive: #ef4f5f;
+  /* DESTRUCTIVE = rojo bandera #CE1126 */
+  --destructive: #ce1126;
   --destructive-foreground: #ffffff;
 
-  --border: #1c3556;
-  --input: #16304f;
-  --ring: #4cca72;
+  --border: #25366b;
+  --input: #1d2c5a;
+  --ring: #fcd116;
 
-  --gold: #f0c040;
-  --gold-foreground: #1a1400;
-  --info: #4da6ff;
-  --info-foreground: #04111f;
-  --success: #4cca72;
+  /* Acentos cafeteros y tricolor */
+  --gold: #fcd116;
+  --gold-foreground: #1a1200;
+  --azul: #003893;
+  --rojo: #ce1126;
+  --cafe: #6b4423;
+  --info: #2b55c8;
+  --info-foreground: #ffffff;
+  --success: #1ea54d;
   --success-foreground: #04210f;
 
-  --gradient-gold: linear-gradient(135deg, #f7d774 0%, #f0c040 45%, #d99a1c 100%);
-  --gradient-pitch: radial-gradient(1200px 600px at 50% -10%, rgba(76, 202, 114, 0.16) 0%, transparent 60%);
-  --gradient-hero: linear-gradient(180deg, #0a1830 0%, #060e1a 100%);
-  --shadow-card: 0 18px 40px -24px rgba(0, 0, 0, 0.75);
-  --shadow-glow: 0 0 0 1px rgba(76, 202, 114, 0.25), 0 12px 40px -12px rgba(76, 202, 114, 0.35);
+  --gradient-gold: linear-gradient(135deg, #fff08a 0%, #fcd116 50%, #d99a1c 100%);
+  --gradient-bandera: linear-gradient(135deg, #fcd116 0%, #003893 55%, #ce1126 100%);
+  --gradient-tropical: linear-gradient(135deg, #fcd116 0%, #ff8a3d 100%);
+  --gradient-pitch: radial-gradient(1200px 700px at 50% -10%, rgba(252, 209, 22, 0.14) 0%, transparent 60%),
+                    radial-gradient(800px 500px at 90% 90%, rgba(206, 17, 38, 0.10) 0%, transparent 60%);
+  --gradient-hero: linear-gradient(180deg, #14245a 0%, #0b1530 100%);
+  --shadow-card: 0 18px 40px -24px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 0 1px rgba(252, 209, 22, 0.3), 0 14px 44px -10px rgba(252, 209, 22, 0.35);
 
-  --sidebar: #0a1832;
-  --sidebar-foreground: #e0e8f0;
-  --sidebar-primary: #4cca72;
-  --sidebar-primary-foreground: #04210f;
-  --sidebar-accent: #14294a;
-  --sidebar-accent-foreground: #e0e8f0;
-  --sidebar-border: #1c3556;
-  --sidebar-ring: #4cca72;
+  --sidebar: #101c40;
+  --sidebar-foreground: #f5ecd6;
+  --sidebar-primary: #fcd116;
+  --sidebar-primary-foreground: #1a1200;
+  --sidebar-accent: #1e2d54;
+  --sidebar-accent-foreground: #f5ecd6;
+  --sidebar-border: #25366b;
+  --sidebar-ring: #fcd116;
 }
 
 @layer base {
@@ -141,6 +152,18 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+  .bandera-gradient-text {
+    background: var(--gradient-bandera);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bandera-stripe {
+    background: linear-gradient(180deg, var(--gold) 0% 33.3%, var(--azul) 33.3% 66.6%, var(--rojo) 66.6% 100%);
+  }
+  .bandera-stripe-h {
+    background: linear-gradient(90deg, var(--gold) 0% 33.3%, var(--azul) 33.3% 66.6%, var(--rojo) 66.6% 100%);
   }
   .card-shadow {
     box-shadow: var(--shadow-card);
