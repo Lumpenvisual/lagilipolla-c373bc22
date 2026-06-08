@@ -321,9 +321,12 @@ export const generateLeaderboardXlsx = createServerFn({ method: "POST" })
       { header: "Partidos", key: "pp", width: 10 },
       { header: "Especiales", key: "pe", width: 12 },
       { header: "Total", key: "tot", width: 10 },
+      { header: "#5pt", key: "a5", width: 8 },
+      { header: "#3pt", key: "a3", width: 8 },
+      { header: "#2pt", key: "a2", width: 8 },
     ];
     for (const r of (lb ?? []) as any[]) {
-      ws.addRow({ pos: r.posicion, nombre: r.nombre, pg: r.puntos_grupos, pp: r.puntos_partidos, pe: r.puntos_especiales, tot: r.puntos_total });
+      ws.addRow({ pos: r.posicion, nombre: r.nombre, pg: r.puntos_grupos, pp: r.puntos_partidos, pe: r.puntos_especiales, tot: r.puntos_total, a5: r.aciertos_5, a3: r.aciertos_3, a2: r.aciertos_2 });
     }
     return {
       filename: `gilipolla-leaderboard-${nowStamp()}.xlsx`,
