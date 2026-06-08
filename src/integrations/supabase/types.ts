@@ -437,6 +437,7 @@ export type Database = {
       }
       recalc_all_picks: { Args: never; Returns: number }
       reset_demo_data: { Args: never; Returns: Json }
+      reset_polla_demo: { Args: never; Returns: Json }
       seed_demo_data: {
         Args: {
           _include_partidos?: boolean
@@ -445,6 +446,7 @@ export type Database = {
         }
         Returns: Json
       }
+      seed_polla_demo: { Args: never; Returns: Json }
       selftest_concursos: {
         Args: never
         Returns: {
