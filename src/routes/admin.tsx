@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus } from "lucide-react";
+import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus, FlaskConical, AlertTriangle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useTournamentState } from "@/hooks/usePolla";
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "pagos" | "resultados" | "listas";
+type Tab = "pagos" | "resultados" | "listas" | "demo";
 
 function AdminPage() {
   const router = useRouter();
@@ -42,6 +42,7 @@ function AdminPage() {
     { key: "pagos", label: "Pagos", icon: Users },
     { key: "resultados", label: "Resultados", icon: ClipboardList },
     { key: "listas", label: "Listas", icon: ListPlus },
+    { key: "demo", label: "Demo", icon: FlaskConical },
   ];
 
   return (
@@ -64,6 +65,7 @@ function AdminPage() {
         {tab === "pagos" && <PagosTab />}
         {tab === "resultados" && <ResultadosTab />}
         {tab === "listas" && <ListasTab />}
+        {tab === "demo" && <DemoTab />}
       </div>
     </main>
   );
@@ -315,5 +317,82 @@ function ListEditor({ title, items, setItems }: { title: string; items: SpecialP
         <Button onClick={add} size="sm"><Plus className="size-4" /></Button>
       </div>
     </Card>
+  );
+}
+
+/* ---------------- Demo ---------------- */
+function DemoTab() {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState<"seed" | "reset" | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
+
+  const seed = async () => {
+    setBusy("seed");
+    const { data, error } = await supabase.rpc("seed_polla_demo");
+    setBusy(null);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`Planillas demo generadas: ${(data as { picks_demo?: number })?.picks_demo ?? 0}`);
+    qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+    qc.invalidateQueries({ queryKey: ["admin-participants"] });
+  };
+
+  const reset = async () => {
+    setBusy("reset");
+    const { data, error } = await supabase.rpc("reset_polla_demo");
+    setBusy(null);
+    setConfirmReset(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`Demo borrada · ${(data as { auth_users?: number })?.auth_users ?? 0} usuarios eliminados`);
+    qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+    qc.invalidateQueries({ queryKey: ["admin-participants"] });
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card className="border-info/30 bg-card p-6 card-shadow">
+        <h2 className="font-display text-xl text-info">🧪 Cuentas de prueba</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Hay 6 usuarios demo creados (<code className="text-xs">demo1@gilipolla.co</code>… <code className="text-xs">demo6@gilipolla.co</code>, contraseña <code className="text-xs">Demo2026!</code>) marcados como <strong>[DEMO]</strong> y con pago aprobado.
+        </p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Admin: <code className="text-xs">admin@gilipolla.co</code> · contraseña <code className="text-xs">Guanabano2026!</code>
+        </p>
+        <Button onClick={seed} disabled={busy !== null} variant="hero" className="mt-4">
+          {busy === "seed" ? <Loader2 className="mr-2 size-4 animate-spin" /> : <FlaskConical className="mr-2 size-4" />}
+          Generar planillas aleatorias para los 6 demo
+        </Button>
+      </Card>
+
+      <Card className="border-destructive/40 bg-destructive/5 p-6 card-shadow">
+        <h2 className="font-display text-xl text-destructive">⚠️ Borrar toda la data demo</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Elimina los 6 usuarios <strong>[DEMO]</strong>, sus participantes y todas sus planillas. <strong>No</strong> afecta al admin ni a usuarios reales. Usa esto cuando vayas a iniciar la polla real.
+        </p>
+        {!confirmReset ? (
+          <Button onClick={() => setConfirmReset(true)} variant="destructive" className="mt-4" disabled={busy !== null}>
+            <Trash2 className="mr-2 size-4" /> Borrar datos demo
+          </Button>
+        ) : (
+          <div className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="mt-0.5 size-5 text-destructive" />
+              <div className="flex-1">
+                <p className="font-medium text-destructive">¿Estás 100% seguro?</p>
+                <p className="mt-1 text-sm text-muted-foreground">Esto borra <strong>de forma permanente</strong> a los 6 usuarios demo y sus planillas. No hay vuelta atrás.</p>
+                <div className="mt-3 flex gap-2">
+                  <Button onClick={reset} variant="destructive" disabled={busy !== null}>
+                    {busy === "reset" ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Trash2 className="mr-2 size-4" />}
+                    Sí, borrar todo
+                  </Button>
+                  <Button onClick={() => setConfirmReset(false)} variant="outline" disabled={busy !== null}>
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </Card>
+    </div>
   );
 }
