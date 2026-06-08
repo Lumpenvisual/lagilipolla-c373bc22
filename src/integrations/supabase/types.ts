@@ -70,6 +70,9 @@ export type Database = {
       }
       picks: {
         Row: {
+          aciertos_2: number
+          aciertos_3: number
+          aciertos_5: number
           arquero_id: string | null
           goleador_id: string | null
           group_k_matches: Json
@@ -82,6 +85,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          aciertos_2?: number
+          aciertos_3?: number
+          aciertos_5?: number
           arquero_id?: string | null
           goleador_id?: string | null
           group_k_matches?: Json
@@ -94,6 +100,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          aciertos_2?: number
+          aciertos_3?: number
+          aciertos_5?: number
           arquero_id?: string | null
           goleador_id?: string | null
           group_k_matches?: Json
@@ -199,6 +208,9 @@ export type Database = {
       get_polla_leaderboard: {
         Args: never
         Returns: {
+          aciertos_2: number
+          aciertos_3: number
+          aciertos_5: number
           nombre: string
           participant_id: string
           posicion: number
