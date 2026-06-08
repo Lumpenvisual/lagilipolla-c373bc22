@@ -1,0 +1,361 @@
+===== HOJA: Pollas FG (25x103) =====
+,,,,,GRUPO A,,,,,,,,,,,,GRUPO B,,,,,,,,,,,,GRUPO C,,,,,,,,,,,,GRUPO D,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Datos del forms,,,,Argentina vs Canada,,Perú vs Chile,,Perú vs Canada,,Chile vs Argentina,,Argentina vs Perú,,Canada vs Chile,,Ecuador vs Venezuela,,México vs Jamaica,,Ecuador vs Jamaica,,Venezuela vs Mexico,,México vs Ecuador,,Jamaica vs Venezuela,,Estados Unidos vs Bolivia,,Uruguay vs Panamá,,Panamá vs Estados Unidos,,Uruguay vs Bolivia,,Bolivia vs Panamá,,Estados Unidos vs Uruguay,,Colombia vs Paraguay,,Brasil vs Costa Rica,,Colombia vs Costa Rica,,Paraguay vs Brasil,,Brasil vs Colombia,,Costa Rica vs Paraguay,,Partido 25,,Partido 26,,Partido 27,,Partido 28,,Partido 29,,Partido 30,,Partido 31,,Partido 32,,Partido 33,,Partido 34,,Partido 35,,Partido 36,,Partido 37,,Partido 38,,Partido 39,,Partido 40,,Partido 41,,Partido 42,,Partido 43,,Partido 44,,Partido 45,,Partido 46,,Partido 47,,Partido 48,,,
+Nombre Apostador,Fecha recepción,Nombre real,Dirección de correo electrónico,Celular,Argentina,Canada,Perú,Chile,Perú,Canada,Chile,Argentina,Argentina,Perú,Canada,Chile,Ecuador,Venezuela,México,Jamaica,Ecuador,Jamaica,Venezuela,Mexico,México,Ecuador,Jamaica,Venezuela,Estados Unidos,Bolivia,Uruguay,Panamá,Panamá,Estados Unidos,Uruguay,Bolivia,Bolivia,Panamá,Estados Unidos,Uruguay,Colombia,Paraguay,Brasil,Costa Rica,Colombia,Costa Rica,Paraguay,Brasil,Brasil,Colombia,Costa Rica,Paraguay,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Goleador del torneo,Mejor Arquero
+José Ricardo,2024-06-12 00:00:00,,joser.alzate@gmail.com,3002713184,3,0,1,3,2,1,2,2,3,1,1,1,1,1,4,1,2,0,1,2,1,1,1,3,2,1,4,0,2,3,2,0,3,1,2,4,1,1,4,1,2,1,1,2,2,0,2,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Messi,Rochet
+Mauro Chef,2024-06-14 00:00:00,,mcuidador@gmail.com,(+1) 978 726 5457,3,1,2,1,1,0,1,3,2,0,0,2,2,1,2,1,2,0,1,2,1,0,2,1,2,0,3,0,1,2,3,0,0,0,2,1,2,0,4,0,2,0,1,3,1,1,0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Gabriel Jesus,Emiliano “El Dibu” Martínez 
+MiraLo,2024-06-18 00:00:00,Lore,miralorena@gmail.com,3007871025,3,0,1,1,1,0,0,1,2,0,1,2,2,1,1,1,1,0,1,1,0,2,0,1,2,0,3,0,1,1,4,0,0,1,0,1,2,1,3,1,2,0,0,2,1,1,1,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vinisios Brasil,Emi Martinez Argentina 
+Abriendo trocha,2024-06-20 00:00:00,"San, Gab",geoze35@gmail.com,3003560069,3,1,2,2,1,1,1,2,4,1,0,1,2,2,2,0,2,0,2,1,1,2,0,2,2,0,3,0,1,2,4,0,0,0,1,2,3,1,4,0,3,0,1,2,1,2,2,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Darwin Nuñez,Camilo Vargas
+Luchismo,2024-06-20 00:00:00,San,sandra.barrientos.daza@gmail.com,3014838135,3,0,1,1,2,1,1,3,4,0,1,1,2,1,2,1,2,0,2,2,1,2,0,2,4,0,3,0,0,3,3,0,0,0,1,3,3,0,3,0,3,1,0,2,1,2,0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"Luis - Luchito, te amamos- Díaz",Camilo Vargas
+Bossi,2024-06-20 00:00:00,Pascual,rabodeajip@gmail.com,3002267732,2,0,0,1,0,0,1,2,3,1,1,2,1,1,2,1,2,0,2,1,1,2,1,2,2,0,3,0,0,2,2,0,1,1,2,2,2,0,3,1,3,0,0,1,2,1,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Rodrygo Silva,Camilo Vargas
+Peluditos ⚽️,2024-06-20 00:00:00,David (sobrino john),davidjaramillog@hotmail.com,3175146211,2,0,1,2,0,1,1,2,3,0,0,1,2,1,2,1,2,0,1,1,0,1,1,2,2,0,3,0,1,3,2,0,1,2,1,2,2,0,3,0,3,1,0,3,1,2,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vinicius Junior,Alisson
+Team Ellie,2024-06-20 00:00:00,Daniela Bedoya,danielabedoyamartinez@gmail.com,3146050427,1,0,1,2,1,1,2,3,3,1,2,2,2,1,3,1,2,0,1,1,1,2,0,1,0,0,2,0,1,2,3,1,1,0,1,2,2,0,3,0,3,1,0,2,1,1,0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vinicius Jr,Emiliano Martínez
+Iñaki,2024-06-20 00:00:00,Cristina,varnecia@gmail.com,3006164079,2,1,2,1,1,1,2,2,2,1,2,3,1,3,3,1,3,2,1,1,3,2,2,3,2,0,3,1,1,2,3,0,1,1,1,3,2,0,2,0,2,1,1,2,1,2,2,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Darwin Nunez,Pedro Gallese
+Gilipolla JM,2024-06-20 00:00:00,Juan Montoya,juanmontoya.derecho@gmail.com,3002888020,3,0,2,1,2,1,1,3,3,1,2,1,2,1,2,0,2,1,2,1,1,2,1,2,2,0,2,0,1,2,2,0,0,1,1,2,2,0,2,0,2,0,1,2,1,1,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Messi,Emiliano Martinez
+Gilipolla LF,2024-06-20 00:00:00,Luis Fermin,luifernaranjo@gmail.com,3006520382,3,1,2,1,2,0,0,2,2,1,0,3,2,1,3,0,4,0,0,2,1,2,1,2,3,0,4,1,1,3,5,0,2,1,1,2,3,1,5,0,4,1,1,3,1,0,1,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Angel Di María,Ederson
+IRMA TANDO,2024-06-19 00:00:00,Patri,adri.patri74@gmail.com,3007069665,2,1,1,2,0,1,1,2,3,0,2,2,1,0,3,1,2,1,1,3,1,2,1,1,3,0,4,0,0,2,3,0,1,0,1,2,2,0,2,0,3,0,1,2,1,1,0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Darwin Muñoz,Camilo Vargas
+El Indómito Domado,2024-06-19 00:00:00,Rojo,,,2,0,1,3,1,2,2,1,3,0,0,3,3,1,1,2,3,1,1,2,1,3,2,2,3,0,4,0,1,2,4,0,1,2,1,3,3,0,3,0,3,0,0,3,3,1,1,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Darwin Núñez,Alisson Becker
+Paola Andrea Ramírez,,,paolaandrea@gmail.com,,2,0,1,1,2,1,1,2,2,1,1,2,2,2,1,0,2,0,0,1,1,1,0,2,2,0,3,1,0,2,2,1,1,1,1,2,2,1,2,1,2,0,1,2,1,1,1,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vinicius,--
+Susurro,2024-06-19 00:00:00,Clau,,3014296400,3,1,1,1,2,2,1,3,2,0,1,2,2,0,2,1,2,0,1,3,2,2,1,2,2,1,2,0,1,2,3,0,2,2,1,2,2,0,2,0,2,0,1,3,2,2,1,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Jhon Arias,Camilo Vargas
+El Cuculeito del Balón,2024-06-19 00:00:00,,alejo.salazar.g@gmail.com,,2,0,1,2,0,0,1,2,2,0,0,2,1,0,3,0,2,0,0,2,2,1,0,1,1,0,2,0,0,1,2,0,1,0,0,2,2,0,3,0,2,0,1,2,1,2,0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Vinicius Jr,Camilo Vargas
+MLS,2024-06-20 00:00:00,Abogangster ,,3148842297,1,0,1,1,1,0,1,3,2,0,0,1,2,1,1,0,2,0,1,2,2,2,0,2,3,0,4,0,1,3,3,0,1,1,1,3,2,0,4,0,3,1,0,3,1,2,0,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Darwin Nuñez,"Dibu ""Puto"" Martinez"
+Maritza Sanchez Hernandez,2024-06-20 00:00:00,,coloresmari@gmail.com,3015965705,3,2,1,2,2,2,0,2,4,2,1,1,4,1,1,3,2,2,3,1,1,1,3,2,1,1,5,2,2,1,3,1,3,2,0,3,3,1,2,0,2,1,1,5,1,1,4,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Darwin Nuñez,Alisson Becker
+Juan Esteban Vasquez Vera,2024-06-20 00:00:00,,juanestebanvasquez@gmail.com,,3,0,1,1,1,1,1,1,1,0,0,2,1,0,3,1,2,0,0,2,2,1,1,1,2,1,3,0,1,3,2,0,1,1,1,0,2,0,4,1,1,1,0,2,2,0,0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Álvarez (Arg),Emiliano Martinez
+MaderaDura,2024-06-20 00:00:00,Mona,,,3,1,2,4,1,2,0,2,5,1,0,0,1,1,2,3,2,1,1,2,1,2,1,1,2,0,3,0,1,1,3,1,1,1,0,2,3,1,4,0,2,1,1,3,2,2,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Miguel Angel,Becker
+John Jairo Jaramillo,2024-06-20 00:00:00,,,,3,0,0,2,0,1,1,2,3,0,0,1,2,2,2,0,2,0,1,0,1,1,0,2,2,1,3,0,0,2,3,1,1,1,2,2,3,1,3,1,4,1,1,2,1,2,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,John Cordoba Colombia,Dibu Martinez
+La Perripolla,2024-06-18 00:00:00,,lauracamres1803@gmail.com,3144629132,3,1,1,1,0,2,1,2,3,0,2,2,1,1,2,0,2,0,2,1,1,2,0,3,3,0,2,0,0,2,5,0,0,1,2,2,2,0,3,0,3,0,0,2,1,2,1,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Messi,Camilo Vargas
+
+===== HOJA: Ganadores Parciales (30x7) =====
+Nombre Apostador,Puntaje Parcial Fase de Grupos,Puntaje Parcial Octavos de Final ,Puntaje Cuartos de Final,Puntajes Semi Final,Puntajes Final,Puntaje Acumulado
+Paola Andrea Ramírez,57,,8,10,3,78
+MiraLo,57,,8,10,1,76
+IRMA TANDO,50,,5,7,4,66
+Abriendo trocha,52,,6,7,0,65
+Peluditos ⚽️,51,,4,5,4,64
+Mauro Chef,43,,8,7,4,62
+John Jairo Jaramillo,50,,6,5,0,61
+El Cuculeito del Balón,48,,6,3,3,60
+El Indómito Domado,43,,12,3,0,58
+Bossi,44,,5,8,1,58
+Gilipolla JM,48,,6,0,4,58
+MaderaDura,46,,5,3,3,57
+Team Ellie,41,,7,5,4,57
+La Perripolla,52,,4,0,0,56
+Iñaki,50,,4,2,0,56
+Susurro,42,,6,5,2,55
+José Ricardo,37,,11,4,3,55
+MLS,47,,4,2,0,53
+Luchismo,41,,4,5,1,51
+Gilipolla LF,39,,6,4,0,49
+Maritza Sanchez Hernandez,43,,3,3,0,49
+Juan Esteban Vasquez Vera,32,,6,5,2,45
+#REF!,,,,,,0
+#REF!,,,,,,0
+#REF!,,,,,,0
+#REF!,,,,,,0
+#REF!,,,,,,0
+#REF!,,,,,,0
+#REF!,,,,,,0
+
+===== HOJA: Resultados FG (52x17) =====
+,Fecha,,Goles,Goles,,GANADOR,Grupo A,,,,,,,,,
+A,2024-06-20 00:00:00,Argentina,2,0,Canada,Argentina,Pos,Selección,Pts,PJ,G,E,P,GF,GC,DG
+,2024-06-21 00:00:00,Perú,0,0,Chile,EMPATE,1,Argentina,9,3,3,0,0,5,0,5
+,2024-06-25 00:00:00,Perú,0,1,Canada,Canada,2,Perú,1,3,1,1,2,2,3,-1
+,2024-06-25 00:00:00,Chile,0,1,Argentina,Argentina,3,Chile,2,3,0,2,1,2,1,1
+,2024-06-29 00:00:00,Argentina,2,0,Perú,Argentina,4,Canada,4,3,2,2,0,1,0,1
+,2024-06-29 00:00:00,Canada,0,0,Chile,EMPATE,,,,,,,,,,
+,,,,,,,Grupo B,,,,,,,,,
+B,2024-06-22 00:00:00,Ecuador,1,2,Venezuela,Venezuela,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2024-06-22 00:00:00,México,1,0,Jamaica,México,1,México,4,3,1,1,1,4,3,1
+,2024-06-26 00:00:00,Ecuador,3,1,Jamaica,Ecuador,2,Ecuador,3,3,1,0,2,2,5,-3
+,2024-06-26 00:00:00,Venezuela,1,0,Mexico,Venezuela,3,Venezuela,6,3,2,0,1,5,3,2
+,2024-06-30 00:00:00,México,0,0,Ecuador,EMPATE,4,Jamaica,4,3,1,1,1,1,1,0
+,2024-06-30 00:00:00,Jamaica,0,3,Venezuela,Venezuela,,,,,,,,,,
+,,,,,,,Grupo C,,,,,,,,,
+C,2024-06-23 00:00:00,Estados Unidos,2,0,Bolivia,Estados Unidos,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2024-06-23 00:00:00,Uruguay,3,1,Panamá,Uruguay,1,Estados Unidos,9,3,3,0,0,7,2,5
+,2024-06-27 00:00:00,Panamá,2,1,Estados Unidos,Panamá,2,Uruguay,0,3,0,0,3,0,8,-8
+,2024-06-27 00:00:00,Uruguay,5,0,Bolivia,Uruguay,3,Panamá,6,3,2,0,1,5,3,2
+,2024-07-01 00:00:00,Bolivia,1,3,Panamá,Panamá,4,Bolivia,3,3,1,0,2,7,6,1
+,2024-07-01 00:00:00,Estados Unidos,0,1,Uruguay,Uruguay,,,,,,,,,,
+,,,,,,,Grupo D,,,,,,,,,
+D,2024-06-24 00:00:00,Colombia,2,1,Paraguay,Colombia,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2024-06-24 00:00:00,Brasil,0,0,Costa Rica,EMPATE,1,Brasil,,,,,,6,2,4
+,2024-06-28 00:00:00,Colombia,3,0,Costa Rica,Colombia,2,Colombia,,,,,,1,5,-4
+,2024-06-28 00:00:00,Paraguay ,1,4,Brasil,Brasil,3,Paraguay,,,,,,2,5,-3
+,2024-07-02 00:00:00,Brasil,1,1,Colombia,EMPATE,4,Costa Rica,,,,,,7,4,3
+,2024-07-02 00:00:00,Costa Rica,2,1,Paraguay,Costa Rica,,,,,,,,,,
+,,,,,,,Grupo E,,,,,,,,,
+E,,,,,,,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,,,,,,,1,,,,,,,0,0,0
+,,,,,,,2,,,,,,,0,0,0
+,,,,,,,3,,,,,,,0,0,0
+,,,,,,,4,,,,,,,0,0,0
+,,,,,,,Grupo F,,,,,,,,,
+F,,,,,,,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,,,,,,,1,,,,,,,0,0,0
+,,,,,,,2,,,,,,,0,0,0
+,,,,,,,3,,,,,,,0,0,0
+,,,,,,,4,,,,,,,0,0,0
+,,,,,,,Grupo G,,,,,,,,,
+G,,,,,,,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,,,,,,,1,,,,,,,0,0,0
+,,,,,,,2,,,,,,,0,0,0
+,,,,,,,3,,,,,,,0,0,0
+,,,,,,,4,,,,,,,0,0,0
+,,,,,,,Grupo H,,,,,,,,,
+H,,,,,,,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,,,,,,,1,,,,,,,0,0,0
+,,,,,,,2,,,,,,,0,0,0
+,,,,,,,3,,,,,,,0,0,0
+,,,,,,,4,,,,,,,0,0,0
+
+===== HOJA: Puntajes FG (25x98) =====
+,,GRUPO A,,,,,,,,,,,,GRUPO B,,,,,,,,,,,,GRUPO C,,,,,,,,,,,,GRUPO D,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,Argentina vs Canada,,Perú vs Chile,,Perú vs Canada,,Chile vs Argentina,,Argentina vs Perú,,Canada vs Chile,,Ecuador vs Venezuela,,México vs Jamaica,,Ecuador vs Jamaica,,Venezuela vs Mexico,,México vs Ecuador,,Jamaica vs Venezuela,,Estados Unidos vs Bolivia,,Uruguay vs Panamá,,Panamá vs Estados Unidos,,Uruguay vs Bolivia,,Bolivia vs Panamá,,Estados Unidos vs Uruguay,,Colombia vs Paraguay,,Brasil vs Costa Rica,,Colombia vs Costa Rica,,Paraguay vs Brasil,,Brasil vs Colombia,,Costa Rica vs Paraguay,,Partido 25,,Partido 26,,Partido 27,,Partido 28,,Partido 29,,Partido 30,,Partido 31,,Partido 32,,Partido 33,,Partido 34,,Partido 35,,Partido 36,,Partido 37,,Partido 38,,Partido 39,,Partido 40,,Partido 41,,Partido 42,,Partido 43,,Partido 44,,Partido 45,,Partido 46,,Partido 47,,Partido 48,
+Nombre Apostador,PUNTOS ,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos
+José Ricardo,37,Argentina,3,Chile,0,Perú,1,EMPATE,0,Argentina,2,EMPATE,2,EMPATE,1,México,2,Ecuador,2,Mexico,1,EMPATE,2,Venezuela,3,Estados Unidos,3,Uruguay,2,Estados Unidos,1,Uruguay,3,Bolivia,0,Uruguay,2,EMPATE,1,Brasil,0,Colombia,2,Brasil,3,Brasil,0,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Mauro Chef,43,Argentina,2,Perú,0,Perú,0,Argentina,2,Argentina,5,Chile,1,Ecuador,0,México,2,Ecuador,2,Mexico,1,México,1,Jamaica,0,Estados Unidos,5,Uruguay,3,Estados Unidos,0,Uruguay,3,EMPATE,0,Estados Unidos,1,Colombia,3,Brasil,1,Colombia,3,Brasil,3,EMPATE,5,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+MiraLo,57,Argentina,3,EMPATE,2,Perú,0,Argentina,5,Argentina,5,Chile,0,Ecuador,0,EMPATE,1,Ecuador,2,EMPATE,1,Ecuador,1,Venezuela,3,Estados Unidos,5,Uruguay,3,EMPATE,1,Uruguay,3,Panamá,2,Uruguay,5,Colombia,5,Brasil,0,Colombia,3,Brasil,2,EMPATE,5,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Abriendo trocha,52,Argentina,2,EMPATE,2,EMPATE,1,Argentina,2,Argentina,2,Chile,1,EMPATE,1,México,3,Ecuador,2,Venezuela,2,Ecuador,0,Venezuela,3,Estados Unidos,5,Uruguay,3,Estados Unidos,0,Uruguay,3,EMPATE,0,Uruguay,2,Colombia,3,Brasil,1,Colombia,5,Brasil,3,Colombia,1,Costa Rica,5,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Luchismo,41,Argentina,3,EMPATE,2,Perú,1,Argentina,2,Argentina,3,EMPATE,2,Ecuador,0,México,2,Ecuador,2,EMPATE,0,Ecuador,0,Venezuela,3,Estados Unidos,3,Uruguay,3,Estados Unidos,0,Uruguay,3,EMPATE,0,Uruguay,2,Colombia,2,Brasil,1,Colombia,3,Brasil,2,Colombia,1,Paraguay,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Bossi,44,Argentina,5,Chile,1,EMPATE,1,Argentina,2,Argentina,2,Chile,0,EMPATE,1,México,2,Ecuador,2,Venezuela,2,Ecuador,0,Venezuela,2,Estados Unidos,5,Uruguay,3,Estados Unidos,0,Uruguay,3,EMPATE,1,EMPATE,0,Colombia,3,Brasil,0,Colombia,5,Brasil,2,Brasil,1,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Peluditos ⚽️,51,Argentina,5,Chile,0,Canada,5,Argentina,2,Argentina,3,Chile,1,Ecuador,0,México,2,Ecuador,2,EMPATE,1,Ecuador,1,Venezuela,2,Estados Unidos,5,Uruguay,3,Estados Unidos,0,Uruguay,3,Panamá,3,Uruguay,2,Colombia,3,Brasil,1,Colombia,3,Brasil,2,Colombia,1,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Team Ellie,41,Argentina,3,Chile,0,EMPATE,1,Argentina,2,Argentina,2,EMPATE,2,Ecuador,0,México,2,Ecuador,2,EMPATE,1,Ecuador,0,Venezuela,3,EMPATE,1,Uruguay,2,Estados Unidos,0,Uruguay,2,Bolivia,1,Uruguay,2,Colombia,3,Brasil,1,Colombia,3,Brasil,2,EMPATE,5,Paraguay,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Iñaki,50,Argentina,3,Perú,0,EMPATE,1,EMPATE,0,Argentina,3,Chile,0,Venezuela,3,México,2,Ecuador,3,EMPATE,1,México,0,Venezuela,3,Estados Unidos,5,Uruguay,5,Estados Unidos,0,Uruguay,3,EMPATE,1,Uruguay,2,Colombia,3,Brasil,1,Colombia,2,Brasil,3,Colombia,1,Costa Rica,5,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Gilipolla JM,48,Argentina,3,Perú,0,Perú,1,Argentina,2,Argentina,2,Canada,0,Ecuador,0,México,3,Ecuador,3,Venezuela,2,Ecuador,0,Venezuela,2,Estados Unidos,5,Uruguay,2,Estados Unidos,0,Uruguay,3,Panamá,2,Uruguay,2,Colombia,3,Brasil,1,Colombia,3,Brasil,3,EMPATE,5,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Gilipolla LF,39,Argentina,2,Perú,0,Perú,0,Argentina,3,Argentina,3,Chile,1,Ecuador,0,México,3,Ecuador,2,Mexico,0,Ecuador,0,Venezuela,2,Estados Unidos,3,Uruguay,3,Estados Unidos,0,Uruguay,5,Bolivia,0,Uruguay,2,Colombia,3,Brasil,1,Colombia,2,Brasil,3,Brasil,1,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+IRMA TANDO,50,Argentina,3,Chile,0,Canada,5,Argentina,2,Argentina,3,EMPATE,2,Ecuador,1,México,2,Ecuador,3,Mexico,1,Ecuador,0,EMPATE,0,Estados Unidos,3,Uruguay,2,Estados Unidos,0,Uruguay,3,Bolivia,1,Uruguay,2,Colombia,3,Brasil,1,Colombia,5,Brasil,3,EMPATE,5,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+El Indómito Domado,43,Argentina,5,Chile,0,Canada,2,Chile,1,Argentina,3,Chile,1,Ecuador,0,Jamaica,1,Ecuador,5,Mexico,1,Ecuador,0,EMPATE,0,Estados Unidos,3,Uruguay,2,Estados Unidos,0,Uruguay,3,Panamá,3,Uruguay,2,Colombia,2,Brasil,1,Colombia,5,Brasil,2,Brasil,1,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Paola Andrea Ramírez,57,Argentina,5,EMPATE,2,Perú,1,Argentina,2,Argentina,3,Chile,0,EMPATE,1,México,5,Ecuador,2,Mexico,0,EMPATE,2,Venezuela,3,Estados Unidos,5,Uruguay,5,Estados Unidos,0,Uruguay,2,EMPATE,1,Uruguay,2,Colombia,5,Brasil,0,Colombia,3,Brasil,3,EMPATE,5,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Susurro,42,Argentina,2,EMPATE,2,EMPATE,0,Argentina,2,Argentina,5,Chile,0,Ecuador,0,México,2,Ecuador,2,Mexico,1,EMPATE,2,Venezuela,2,Estados Unidos,3,Uruguay,2,Estados Unidos,0,Uruguay,3,EMPATE,0,Uruguay,2,Colombia,3,Brasil,1,Colombia,3,Brasil,3,EMPATE,2,Paraguay,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+El Cuculeito del Balón,48,Argentina,5,Chile,0,EMPATE,1,Argentina,2,Argentina,5,Chile,1,Ecuador,1,México,3,Ecuador,2,Mexico,0,México,0,Venezuela,3,Estados Unidos,3,Uruguay,2,Estados Unidos,1,Uruguay,3,Bolivia,1,Uruguay,3,Colombia,3,Brasil,1,Colombia,3,Brasil,3,Colombia,1,Paraguay,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+MLS,47,Argentina,3,EMPATE,2,Perú,0,Argentina,2,Argentina,5,Chile,1,Ecuador,0,México,5,Ecuador,2,Mexico,1,EMPATE,2,Venezuela,3,Estados Unidos,3,Uruguay,2,Estados Unidos,0,Uruguay,3,EMPATE,1,Uruguay,2,Colombia,3,Brasil,1,Colombia,3,Brasil,2,Colombia,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Maritza Sanchez Hernandez,43,Argentina,2,Chile,0,EMPATE,0,Argentina,3,Argentina,2,EMPATE,2,Ecuador,0,Jamaica,1,EMPATE,0,Venezuela,2,EMPATE,2,Jamaica,0,EMPATE,0,Uruguay,2,Panamá,5,Uruguay,2,Bolivia,0,Uruguay,3,Colombia,3,Brasil,1,Colombia,2,Brasil,3,EMPATE,5,Costa Rica,3,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+Juan Esteban Vasquez Vera,32,Argentina,3,EMPATE,2,EMPATE,1,EMPATE,1,Argentina,3,Chile,1,Ecuador,1,México,2,Ecuador,2,Mexico,0,México,0,EMPATE,0,Estados Unidos,3,Uruguay,3,Estados Unidos,0,Uruguay,3,EMPATE,1,Estados Unidos,0,Colombia,3,Brasil,0,EMPATE,0,Brasil,2,Brasil,0,Paraguay,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+MaderaDura,46,Argentina,2,Chile,0,Canada,2,Argentina,3,Argentina,2,EMPATE,5,EMPATE,1,Jamaica,0,Ecuador,3,Mexico,1,Ecuador,0,EMPATE,0,Estados Unidos,5,Uruguay,3,EMPATE,1,Uruguay,2,EMPATE,1,Uruguay,3,Colombia,3,Brasil,1,Colombia,2,Brasil,3,EMPATE,2,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+John Jairo Jaramillo,50,Argentina,3,Chile,1,Canada,5,Argentina,2,Argentina,3,Chile,1,EMPATE,1,México,3,Ecuador,2,Venezuela,5,EMPATE,2,Venezuela,3,Estados Unidos,3,Uruguay,3,Estados Unidos,0,Uruguay,2,EMPATE,1,EMPATE,0,Colombia,3,Brasil,0,Colombia,2,Brasil,3,Colombia,1,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+La Perripolla,52,Argentina,2,EMPATE,2,Canada,3,Argentina,2,Argentina,3,EMPATE,2,EMPATE,1,México,3,Ecuador,2,Venezuela,2,Ecuador,0,Venezuela,5,Estados Unidos,3,Uruguay,2,Estados Unidos,0,Uruguay,5,Panamá,2,EMPATE,0,Colombia,3,Brasil,1,Colombia,5,Brasil,2,Colombia,1,EMPATE,1,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+
+===== HOJA: Pollas OF (2x19) =====
+,,,Partido 1,,Partido 2,,Partido 3,,Partido 4,,Partido 5,,Partido 6,,Partido 7,,Partido 8,
+Nombre Apostador,Marca temporal,Dirección de correo electrónico,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B
+
+===== HOJA: Resultados OF (9x4) =====
+Fecha,Equipo,Equipo,Ganador
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+,Equipo A,Equipo B,
+
+===== HOJA: Puntajes OF (31x18) =====
+,,Partido 1,,Partido 2,,Partido 3,,Partido 4,,Partido 5,,Partido 6,,Partido 7,,Partido 8,
+Nombre Apostador,Puntos Octavos de Final,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B,Equipo A,Equipo B
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0,EMPATE,0
+
+===== HOJA: Pollas CF (24x13) =====
+,Datos del forms,,,,Partido 1,,Partido 2,,Partido 3,,Partido 4,
+Nombre Apostador,Fecha recepción,Nombre real,Dirección de correo electrónico,Celular,Argentina,Ecuador,Venezuela ,Canada,Colombia,Panama,Uruguay,Brasil
+José Ricardo,,,,,2,1,1,1,3,0,1,1
+Mauro Chef,,,,,2,1,1,1,3,1,1,2
+MiraLo,,,,,1,1,2,0,3,0,1,2
+Abriendo trocha,,,,,2,1,2,1,3,1,1,1
+Luchismo,,,,,2,0,2,1,3,0,2,1
+Bossi,,,,,2,1,1,0,3,0,1,2
+Peluditos ⚽️,,,,,2,0,1,0,2,0,2,1
+Team Ellie,,,,,3,0,1,1,2,1,2,1
+Iñaki,,,,,2,1,2,1,2,1,2,1
+Gilipolla JM,,,,,-,-,-,-,-,-,-,-
+Gilipolla LF,,,,,-,-,2,1,3,0,2,1
+IRMA TANDO,,,,,2,0,2,1,3,1,1,1
+El Indómito Domado,,,,,1,1,1,1,3,1,1,2
+Paola Andrea Ramírez,,,,,3,2,1,1,4,0,2,1
+Susurro,,,,,2,2,2,2,2,1,2,1
+El Cuculeito del Balón,,,,,3,0,1,0,3,0,1,1
+MLS,,,,,2,1,3,1,3,1,3,2
+Maritza Sanchez Hernandez,,,,,2,0,2,1,1,1,2,2
+Juan Esteban Vasquez Vera,,,,,2,0,2,1,3,0,2,2
+MaderaDura,,,,,-,-,1,0,1,1,2,2
+John Jairo Jaramillo,,,,,4,1,2,1,4,1,2,2
+La Perripolla,,,,,2,0,2,1,3,0,2,1
+
+===== HOJA: Resultados CF (5x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2024-07-04 00:00:00,Argentina,1,1,Ecuador,EMPATE
+2024-07-05 00:00:00,Venezuela,1,1,Canadá,EMPATE
+2024-07-06 00:00:00,Colombia,5,0,Panamá,Colombia
+2024-07-06 00:00:00,Uruguay,0,0,Brasil,EMPATE
+
+===== HOJA: Puntajes CF (24x10) =====
+,,Partido 1,,Partido 2,,Partido 3,,Partido 4,
+Nombre Apostador,Puntaje Cuartos de Final,Ganador,Puntaje,Ganador,Puntaje,Ganador,Puntaje,Ganador,Puntaje
+José Ricardo,11,Argentina,1,EMPATE,5,Colombia,3,EMPATE,2
+Mauro Chef,8,Argentina,1,EMPATE,5,Colombia,2,Brasil,0
+MiraLo,8,EMPATE,5,Venezuela ,0,Colombia,3,Brasil,0
+Abriendo trocha,6,Argentina,1,Venezuela ,1,Colombia,2,EMPATE,2
+Luchismo,4,Argentina,0,Venezuela ,1,Colombia,3,Uruguay,0
+Bossi,5,Argentina,1,Venezuela ,1,Colombia,3,Brasil,0
+Peluditos ⚽️,4,Argentina,0,Venezuela ,1,Colombia,3,Uruguay,0
+Team Ellie,7,Argentina,0,EMPATE,5,Colombia,2,Uruguay,0
+Iñaki,4,Argentina,1,Venezuela ,1,Colombia,2,Uruguay,0
+Gilipolla JM,6,EMPATE,2,EMPATE,2,EMPATE,0,EMPATE,2
+Gilipolla LF,6,EMPATE,2,Venezuela ,1,Colombia,3,Uruguay,0
+IRMA TANDO,5,Argentina,0,Venezuela ,1,Colombia,2,EMPATE,2
+El Indómito Domado,12,EMPATE,5,EMPATE,5,Colombia,2,Brasil,0
+Paola Andrea Ramírez,8,Argentina,0,EMPATE,5,Colombia,3,Uruguay,0
+Susurro,6,EMPATE,2,EMPATE,2,Colombia,2,Uruguay,0
+El Cuculeito del Balón,6,Argentina,0,Venezuela ,1,Colombia,3,EMPATE,2
+MLS,4,Argentina,1,Venezuela ,1,Colombia,2,Uruguay,0
+Maritza Sanchez Hernandez,3,Argentina,0,Venezuela ,1,EMPATE,0,EMPATE,2
+Juan Esteban Vasquez Vera,6,Argentina,0,Venezuela ,1,Colombia,3,EMPATE,2
+MaderaDura,5,EMPATE,2,Venezuela ,1,EMPATE,0,EMPATE,2
+John Jairo Jaramillo,6,Argentina,1,Venezuela ,1,Colombia,2,EMPATE,2
+La Perripolla,4,Argentina,0,Venezuela ,1,Colombia,3,Uruguay,0
+
+===== HOJA: Pollas SF (24x7) =====
+,,,Partido 1,,Partido 2,
+Nombre Apostador,Marca temporal,Dirección de correo electrónico,Argentina,Canada,Uruguay,Colombia
+José Ricardo,,,3,0,1,1
+Mauro Chef,,,2,0,1,2
+MiraLo,,,2,0,0,1
+Abriendo trocha,,,2,0,1,2
+Luchismo,,,2,1,1,2
+Bossi,,,2,0,0,2
+Peluditos ⚽️,,,1,0,1,2
+Team Ellie,,,1,0,1,2
+Iñaki,,,1,1,1,2
+Gilipolla JM,,,-,-,-,-
+Gilipolla LF,,,3,1,1,2
+IRMA TANDO,,,2,0,1,3
+El Indómito Domado,,,5,0,3,2
+Paola Andrea Ramírez,,,2,0,0,1
+Susurro,,,3,1,0,2
+El Cuculeito del Balón,,,1,1,0,2
+MLS,,,1,1,1,2
+Maritza Sanchez Hernandez,,,2,2,2,4
+Juan Esteban Vasquez Vera,,,3,1,0,2
+MaderaDura,,,2,2,1,3
+John Jairo Jaramillo,,,2,1,1,2
+La Perripolla,,,1,1,2,2
+
+===== HOJA: Resultados SF (3x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2024-07-09 00:00:00,Argentina,2,0,Canada,Argentina
+2024-07-10 00:00:00,Uruguay,0,1,Colombia,Colombia
+
+===== HOJA: Puntajes SF (24x6) =====
+,,Partido 1,,Partido 2,
+Nombre Apostador,Puntaje SemiFinal,Ganador,Puntaje,Ganador,Puntaje
+José Ricardo,4,Argentina,3,EMPATE,1
+Mauro Chef,7,Argentina,5,Colombia,2
+MiraLo,10,Argentina,5,Colombia,5
+Abriendo trocha,7,Argentina,5,Colombia,2
+Luchismo,5,Argentina,3,Colombia,2
+Bossi,8,Argentina,5,Colombia,3
+Peluditos ⚽️,5,Argentina,3,Colombia,2
+Team Ellie,5,Argentina,3,Colombia,2
+Iñaki,2,EMPATE,0,Colombia,2
+Gilipolla JM,0,EMPATE,0,EMPATE,0
+Gilipolla LF,4,Argentina,2,Colombia,2
+IRMA TANDO,7,Argentina,5,Colombia,2
+El Indómito Domado,3,Argentina,3,Uruguay,0
+Paola Andrea Ramírez,10,Argentina,5,Colombia,5
+Susurro,5,Argentina,2,Colombia,3
+El Cuculeito del Balón,3,EMPATE,0,Colombia,3
+MLS,2,EMPATE,0,Colombia,2
+Maritza Sanchez Hernandez,3,EMPATE,1,Colombia,2
+Juan Esteban Vasquez Vera,5,Argentina,2,Colombia,3
+MaderaDura,3,EMPATE,1,Colombia,2
+John Jairo Jaramillo,5,Argentina,3,Colombia,2
+La Perripolla,0,EMPATE,0,EMPATE,0
+
+===== HOJA: Polla Final (24x7) =====
+,,,Partido 1,,Partido 2,
+Nombre Apostador,Marca temporal,Dirección de correo electrónico,Canadá,Uruguay,Argentina,Colombia
+José Ricardo,,,0,2,1,1
+Mauro Chef,,,-,-,-,-
+MiraLo,,,0,2,1,3
+Abriendo trocha,,,0,3,1,2
+Luchismo,,,1,2,1,2
+Bossi,,,0,1,0,2
+Peluditos ⚽️,,,-,-,-,-
+Team Ellie,,,-,-,-,-
+Iñaki,,,1,3,1,2
+Gilipolla JM,,,-,-,-,-
+Gilipolla LF,,,0,3,1,2
+IRMA TANDO,,,1,1,1,1
+El Indómito Domado,,,0,3,1,2
+Paola Andrea Ramírez,,,0,2,1,1
+Susurro,,,1,1,1,2
+El Cuculeito del Balón,,,0,0,0,1
+MLS,,,0,3,1,2
+Maritza Sanchez Hernandez,,,0,3,1,3
+Juan Esteban Vasquez Vera,,,0,2,0,1
+MaderaDura,,,1,2,1,1
+John Jairo Jaramillo,,,0,3,1,2
+La Perripolla,,,0,3,1,2
+
+===== HOJA: Resultados Final (3x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2024-07-13 00:00:00,Canadá ,2,2,Uruguay,EMPATE
+2024-07-14 00:00:00,Argentina,0,0,Colombia,EMPATE
+
+===== HOJA: Puntajes Final (24x6) =====
+,,Partido 1,,Partido 2,
+Nombre Apostador,Puntaje Parcial,Ganador,Puntaje,Ganador,Puntaje
+José Ricardo,3,Uruguay,1,EMPATE,2
+Mauro Chef,4,EMPATE,2,EMPATE,2
+MiraLo,1,Uruguay,1,Colombia,0
+Abriendo trocha,0,Uruguay,0,Colombia,0
+Luchismo,1,Uruguay,1,Colombia,0
+Bossi,1,Uruguay,0,Colombia,1
+Peluditos ⚽️,4,EMPATE,2,EMPATE,2
+Team Ellie,4,EMPATE,2,EMPATE,2
+Iñaki,0,Uruguay,0,Colombia,0
+Gilipolla JM,4,EMPATE,2,EMPATE,2
+Gilipolla LF,0,Uruguay,0,Colombia,0
+IRMA TANDO,4,EMPATE,2,EMPATE,2
+El Indómito Domado,0,Uruguay,0,Colombia,0
+Paola Andrea Ramírez,3,Uruguay,1,EMPATE,2
+Susurro,2,EMPATE,2,Colombia,0
+El Cuculeito del Balón,3,EMPATE,2,Colombia,1
+MLS,0,Uruguay,0,Colombia,0
+Maritza Sanchez Hernandez,0,Uruguay,0,Colombia,0
+Juan Esteban Vasquez Vera,2,Uruguay,1,Colombia,1
+MaderaDura,3,Uruguay,1,EMPATE,2
+John Jairo Jaramillo,0,Uruguay,0,Colombia,0
+La Perripolla,0,Uruguay,0,Colombia,0
+

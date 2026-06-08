@@ -1,0 +1,417 @@
+===== HOJA: Ganadores Parciales (30x7) =====
+Nombre,Puntaje Parcial Fase de Grupos,Puntaje Parcial Octavos de Final ,Puntaje Cuartos de Final,Puntajes Semi Final,Puntajes Final,Puntaje Acumulado
+Mauricio Perez (Mauro chef),92,19,6,7,,124
+El cuculeito del balon,92,15,6,3,,116
+TV y Novelas,82,24,6,5,,117
+Qatarsis 2.0,84,23,4,0,,111
+La Perripolla,81,19,8,3,,111
+Lolita,76,20,3,5,,104
+Luchismo,74,15,8,0,,97
+Ana Maria Corpas,79,15,6,3,,103
+Andres & Cia,77,15,3,2,,97
+Leonardo Valencia Valencia,73,18,3,3,,97
+Guanabano Indigente,72,16,8,5,,101
+Club Atletico Vodka Juniors,73,14,6,5,,98
+Emerson Alexis Gomez,69,17,7,0,,93
+Pascual,72,17,3,5,,97
+Juan Esteban Montoya Hincapie,70,13,9,3,,95
+Casa VIII,72,16,2,7,,97
+Las tejedoras,72,14,4,6,,96
+Cristina Valentina Echeverri- Las fieras,70,16,2,3,,91
+John Jaramillo-Diogenes Restrepo,68,10,8,3,,89
+Luis Fermin Naranjo Artehourtua,67,16,2,6,,91
+Marta Restrepo,75,7,2,3,,87
+Alejandro Botero,63,16,4,3,,86
+Pregunte por lo que no vea,66,11,6,4,,87
+Alex Garcia,64,16,2,2,,84
+Safiro y Acero,63,15,4,5,,87
+Los Betancruz,62,12,6,3,,83
+La qatarsis mundial,55,14,11,2,,82
+Qatarsis 1.0,59,18,4,1,,82
+Lore Mira,48,14,5,0,,67
+
+===== HOJA: Polla Final (27x7) =====
+,,,Argentina Vs Francia,,Croacia Vs Marruecos,
+Marca temporal,Dirección de correo electrónico,Nombre,Argentina,Francia,Croacia,Marruecos
+2022-12-16 12:09:49.943000,boterovillegas2001@gmail.com,Alejandro Botero ,3,1,1,3
+2022-12-16 12:25:35.272000,juandalr97@gmail.com,Marta Restrepo ,8,0,4,4
+2022-12-16 18:22:18.788000,andrea.giraldogarcia@gmail.com,Las Tejedoras,2,2,2,0
+2022-12-16 19:25:49.686000,miralorena@gmail.com,TV y Novelas ,1,0,1,2
+2022-12-16 19:35:08.294000,leonardo.valenciav@gmail.com,Leonardo Valencia ,2,2,3,2
+2022-12-16 19:51:30.119000,mcuidador@gmail.com,Mauricio Perez (Mauro chef),1,2,1,0
+2022-12-16 20:52:27.910000,vickastro8@gmail.com,CasaVIII,2,1,0,1
+2022-12-16 21:17:32.855000,miralorena@gmail.com,Lore Mira,2,1,1,1
+2022-12-16 21:43:49.374000,luisasanta@gmail.com,La Qatarsis mundial,2,2,1,2
+2022-12-16 22:49:01.996000,adri.patri74@gmail.com,Zafiro y Acero,3,1,0,2
+2022-12-16 23:15:28.167000,nanacorpas@gmail.com,Ana Maria Corpas ,1,2,2,1
+2022-12-16 23:24:40.859000,juanmanuelmontoya@hotmail.com,Cristina Valentina Echeverry-Las fieras,1,1,1,2
+2022-12-17 10:00:34.456000,luifernaranjo@gmail.com,Luis Fermin Naranjo Atehortua ,2,1,3,1
+2022-12-17 11:32:20.767000,davidjaramillog@hotmail.com,Vodka Juniors,2,2,2,1
+2022-12-17 11:35:43.777000,danielabedoyamartinez@gmail.com,Lolita,2,1,2,1
+,,Andres y Cia.,3,3,2,2
+,,Pregunte por lo que no vea,2,0,2,1
+,,Pascual,1,2,1,2
+,,El cuculeito del balon,2,1,2,0
+,,Qatarsis 1.0,1,3,2,1
+,,Qatarsis 2.0,2,2,0,1
+,,John Jaramillo-Diogenes Restrepo,3,1,1,2
+,,Luchismo,2,1,0,1
+,,Guanabano Indigente,2,1,1,1
+,,La Perripolla,3,2,2,0
+
+===== HOJA: Pollas Semifinal (38x7) =====
+,,,Argentina Vs Croacia,,Francia Vs Marruecos,
+Marca temporal,Dirección de correo electrónico,Nombre,Argentina,Croacia,Francia,Marruecos
+2022-12-12 20:46:56.545000,mcuidador@gmail.com,Mauricio Perez (Mauro chef),2,1,2,0
+2022-12-12 20:47:09.220000,leonardo.valenciav@gmail.com,Leonardo Valencia Valencia,1,1,2,1
+2022-12-12 20:47:56.428000,marespezazul@msn.com,Marta Restrepo,2,0,1,1
+2022-12-12 20:48:04.846000,diegojoseduquegomez@gmail.com,Emerson Alexis Gomez,1,2,0,1
+2022-12-12 20:49:50.667000,luisasanta@gmail.com,La qatarsis mundial,0,0,2,3
+2022-12-12 20:51:10.696000,miralorena@gmail.com,Lore Mira,1,2,0,2
+2022-12-12 20:53:10.001000,miralorena@gmail.com,TV y Novelas,1,1,2,0
+2022-12-12 20:53:50.122000,luifernaranjo@gmail.com,Luis Fermin Naranjo Artehourtua,3,1,2,1
+2022-12-12 20:59:14.252000,andrea.giraldogarcia@gmail.com,Las Tejedoras,1,0,1,0
+2022-12-12 21:13:35.951000,danielabedoyamartinez@gmail.com,Lolita,2,1,1,0
+2022-12-12 21:31:04.632000,anambetancurj2022@gmail.com,Los Betancruz,1,1,1,0
+2022-12-12 21:40:15.566000,hadadelanoche00@gmail.com,Qatarsis 1.0,1,2,0,0
+2022-12-12 21:40:59.270000,hadadelanoche00@gmail.com,Qatarsis 2.0,0,1,1,1
+2022-12-12 23:06:31.097000,Vickastro8@gmail.com,Casa VIII,2,1,2,0
+2022-12-12 23:12:54.047000,rabodeajip@hotmail.com,Pascual,1,2,2,0
+2022-12-12 23:42:45.064000,titancitouribe@gmail.com,El cuculeito del balon,1,1,1,0
+2022-12-12 23:55:39.551000,correavanegas25@gmail.com ,Andres & Cia,3,3,2,2
+2022-12-13 04:13:17.077000,boterovillegas2001@gmail.com,Alejandro Botero,1,1,2,1
+2022-12-13 08:13:34.301000,cristimesa26@gmail.com,pregunte por lo que no vea,3,1,0,0
+2022-12-13 08:40:40.110000,axlgarcia1984@gmail.com,Alex Garcia,1,2,3,1
+2022-12-13 09:12:30.591000,davidjaramillog@hotmail.com,Club Atletico Vodka Juniors,2,1,1,0
+2022-12-13 11:22:54.602000,juanmontoya.derecho@gmail.com,Juan Esteban Montoya Hincapie,2,0,1,2
+2022-12-13 16:34:15.222000,gilipollaguanabano@gmail.com,Safiro y Acero,2,1,1,2
+2022-12-13 16:35:05.257000,gilipollaguanbano@gmail.com,John Jaramillo-Diogenes Restrepo,2,0,0,1
+2022-12-13 16:36:05.357000,gilipollaguanbano@gmail.com,Luchismo,1,1,0,1
+2022-12-13 16:38:38.588000,gilipollaguanabano@gmail.com,Cristina Valentina Echeverri- Las fieras,1,2,2,1
+2022-12-13 16:39:40.472000,gilipollaguanabano@gmail.com,La Perripolla,1,1,2,1
+2022-12-13 16:40:50.189000,gilipollaguanabano@gmail.com,Ana Maria Corpas,1,2,3,0
+2022-12-13 16:45:08.154000,gilipollaguanabano@gmail.com,Guanabano Indigene,2,1,3,0
+,,Safiro y Acero,2,1,2,1
+,,John Jaramillo-Diogenes Restrepo,2,0,0,1
+,,Luchismo,1,1,0,1
+,,Cristina Valencia Echeverrri-Las fieras,1,2,2,1
+,,La Perripolla,1,1,2,1
+,,Ana María Corpas,1,2,3,0
+,,Guanabano Indigente,2,1,3,0
+
+===== HOJA: Pollas Cuartos de Final (31x11) =====
+,,,Croacia Vs Brasil,,Argentina Vs Paises Bajos,,Marruecos Vs Portugal,,Inglaterra Vs Francia,
+Marca temporal,Dirección de correo electrónico,Nombre,Croacia,Brasil,Argentina,Paises Bajos,Marruecos,Portugal,Inglaterra,Francia
+2022-12-08 12:55:23.956000,diegojoseduquegomez@gmail.com,Emerson Alexis Gomez,1,4,2,3,1,2,1,2
+2022-12-08 13:00:31.819000,davidjaramillog@hotmail.com,Club Atletico Vodka Juniors,1,2,2,1,0,3,1,2
+2022-12-08 13:05:32.799000,danielabedoyamartinez@gmail.com,Lolita,1,3,2,1,1,2,2,2
+2022-12-08 13:11:50.810000,juanmontoya.derecho@gmail.com,Juan Esteban Montoya Hincapie,1,1,2,0,2,1,1,2
+2022-12-08 13:15:15.261000,boterovillegas2001@gmail.com,Alejandro Botero,0,1,1,1,1,2,1,1
+2022-12-08 13:27:51.907000,luisasanta@gmail.com,La qatarsis mundial,1,5,2,2,1,3,1,2
+2022-12-08 13:31:02.819000,miralorena@gmail.com,Lore Mira,2,0,1,3,2,0,2,2
+2022-12-08 16:51:55.171000,cristimesa26@gmail.com,Pregunte por lo que no vea,1,2,2,1,3,2,0,2
+2022-12-08 17:54:42.174000,vickastro8@gmail.com,Casa VIII,1,3,2,1,0,2,2,2
+2022-12-08 18:36:22.550000,axlgarcia1984@gmail.com,Alex Garcia,1,3,1,0,1,2,2,2
+2022-12-08 19:19:28.143000,juandalr97@gmail.com,Marta Restrepo,1,3,5,0,1,1,2,2
+2022-12-08 19:26:00.344000,mcuidador@gmail.com,Mauricio Perez (Mauro chef),1,3,1,2,0,2,1,2
+2022-12-08 19:57:47.517000,rabodeajip@hotmail.com,Pascual,1,3,1,1,1,2,2,2
+2022-12-08 20:39:09.217000,miralorena@gmail.com,TV y Novelas,1,3,2,1,0,2,1,2
+2022-12-08 21:46:25.450000,nanacorpas@gmail.com,Ana Maria Corpas,1,2,2,2,1,3,3,1
+2022-12-08 22:05:24.129000,andrea.giraldogarcia@gmail.com,Las tejedoras,1,2,1,0,2,0,2,2
+2022-12-08 22:19:50.440000,correavanegas25@gmail.com ,Andres & Cia,2,3,1,1,1,3,2,2
+2022-12-08 22:22:24.315000,titancitouribe@gmail.com ,El cuculeito del balon,1,3,2,1,0,1,1,2
+2022-12-08 22:34:11.559000,anambetancurj2022@gmail.com,Los Betancruz,1,3,2,2,0,0,2,1
+2022-12-09 09:16:08.838000,luifernaranjo@gmail.com,Luis Fermin Naranjo Artehourtua,1,3,2,1,2,2,3,2
+,,John Jaramillo-Diogenes Restrepo,0,3,2,0,1,1,1,2
+,,Cristina Valentina Echeverri- Las fieras,2,3,1,2,0,1,2,2
+,,Leonardo Valencia Valencia,1,4,3,1,2,2,1,3
+,,Qatarsis 1.0,0,3,1,2,1,3,3,2
+,,Qatarsis 2.0,0,3,2,1,1,2,2,2
+,,La Perripolla,0,2,1,1,1,2,1,2
+,,Guanabano Indigente,1,3,2,2,1,1,2,3
+,,Safiro y Acero,0,2,1,0,1,2,2,3
+,,Luchismo,0,3,2,2,1,2,1,1
+
+===== HOJA: Pollas Octavos de Final (31x19) =====
+,,,1A Vs 2B,,1B Vs 2A,,1C Vs 2D,,1D Vs 2C,,1E Vs 2F,,1F Vs 2E,,1G Vs 2H,,1H Vs 2G,
+Marca temporal,Dirección de correo electrónico,Nombre,Paises Bajos,Estados Unidos,Inglaterra,Senegal,Argentina,Australia,Francia,Polonia,Japón,Croacia,Marruecos,España,Brasil,Corea del Sur,Portugal,Suiza
+2022-12-02 18:14:27.410000,boterovillegas2001@gmail.com,Alejandro Botero,1,0,2,1,1,0,2,1,3,1,2,2,3,1,1,0
+2022-12-02 18:25:31.931000,nanacorpas@gmail.com,Ana Maria Corpas,2,1,3,1,3,0,2,1,2,0,2,2,2,1,2,2
+2022-12-02 18:28:50.391000,juandalr97@gmail.com,Marta Restrepo,1,2,2,0,3,0,1,2,2,0,1,0,1,2,1,1
+2022-12-02 18:48:53.903000,axlgarcia1984@gmail.com,Alex Garcia,1,1,2,1,2,0,3,1,3,1,3,2,3,0,2,0
+2022-12-02 19:09:38.873000,miralorena@gmail.com,Lore Mira,2,1,2,2,2,0,1,1,2,1,0,2,3,0,2,1
+2022-12-02 19:13:22.895000,andrea.giraldogarcia@gmail.com,Las tejedoras,1,2,0,0,2,0,2,0,1,1,1,1,2,0,1,2
+2022-12-02 19:17:33.888000,diegojoseduquegomez@gmail.com,Emerson Alexis Gomez,2,1,2,1,2,0,2,1,2,0,1,0,3,0,2,1
+2022-12-02 19:57:26.942000,davidjaramillog@hotmail.com,Club Atletico Vodka Juniors,0,1,1,0,2,0,2,0,1,0,1,2,2,0,2,0
+2022-12-02 19:59:24.774000,juanmontoya.derecho@gmail.com,Juan Esteban Montoya Hincapie,2,1,2,1,2,0,2,0,2,1,1,2,2,0,1,2
+2022-12-02 20:01:14.131000,danielabedoyamartinez@gmail.com,Lolita,2,1,1,0,2,0,2,0,1,1,1,3,2,0,2,0
+2022-12-02 20:27:24.470000,mcuidador@gmail.com,Mauricio Perez (Mauro chef),2,0,1,0,2,1,3,0,2,1,0,2,2,0,2,0
+2022-12-02 21:05:56.357000,leonardo.valenciav@gmail.com,Leonardo Valencia Valencia,2,0,3,1,2,0,2,1,1,0,1,1,3,1,2,0
+2022-12-02 21:08:21.875000,miralorena@gmail.com,TV y Novelas,2,1,2,0,3,1,3,0,1,1,0,2,3,1,2,1
+2022-12-02 21:53:00.771000,victoriafiaz67@gmail.com,Casa VIII,1,2,2,1,2,0,3,1,1,2,0,2,2,1,1,1
+2022-12-02 22:37:17.853000,luifernaranjo@gmail.com,Luis Fermin Naranjo Artehourtua,2,1,2,0,2,0,1,0,1,2,1,2,3,0,1,0
+2022-12-02 23:05:41.018000,luisasanta@gmail.com,La qatarsis mundial,2,1,3,1,4,0,2,1,1,2,1,3,2,0,2,2
+2022-12-03 09:39:02.173000,cristimesa26@gmail.com,Pregunte por lo que no vea,2,1,1,1,2,0,1,0,1,2,2,3,2,0,2,2
+,lauracamersi803@gmail.com,La Perripolla,1,0,3,1,2,1,2,0,2,1,1,1,3,0,2,1
+,,John Jaramillo-Diogenes Restrepo,1,2,1,2,2,0,2,1,1,0,2,1,1,0,1,1
+,correavanegas25@gmail.com ,Andres & Cia,1,1,2,1,3,0,3,1,2,3,2,2,3,1,1,1
+,manuelmontoya@yahoo.com,Cristina Valentina Echeverri- Las fieras,2,1,3,1,4,0,3,0,0,1,1,2,2,1,1,1
+,piritadehierro@gmail.com,Safiro y Acero,2,1,3,0,3,1,2,2,2,1,2,1,2,1,1,3
+,Qatarsis 1.0,Qatarsis 1.0,2,1,3,0,2,0,3,0,1,2,2,2,2,0,1,2
+,Qatarsis 2.0,Qatarsis 2.0,2,0,1,0,2,1,3,1,1,1,2,1,3,0,1,1
+,sandra.barrientos@udea.edu.co,Guanabano Indigente,1,1,2,1,2,1,3,0,2,1,1,1,3,0,1,1
+,anambetancurj2022@gmail.com,Los Betancruz,1,3,1,0,2,0,3,0,2,0,1,1,2,0,0,0
+,,Luchismo,2,1,2,2,3,1,3,0,2,0,0,1,4,0,3,2
+,,Pascual,1,2,3,0,3,0,3,0,1,2,0,2,3,0,2,1
+,,El cuculeito del balon,2,0,2,1,2,0,2,0,0,1,0,2,2,0,1,0
+
+===== HOJA: Pollas Fase de Grupos (31x103) =====
+,,,Qatar vs Ecuador,,Senegal vs Paises Bajos,,Qatar vs Senegal,,Paises Bajos vs Ecuador,,Paises Bajos vs Qatar,,Ecuador vs Senegal,,Inglaterra vs Iran,,Estados Unidos vs Gales,,Inglaterra vs Estados Unidos,,Gales vs Iran,,Gales vs Inglaterra,,Iran vs Estados Unidos,,Argentina vs Arabia Saudita,,Mexico vs Polonia,,Argentina vs Mexico,,Polonia vs Arabia Saudita,,Polonia vs Argentina,,Arabia Saudita vs Mexico,,Francia vs Australia,,Dinamarca vs Tunez,,Francia vs Dinamarca,,Tunez vs Australia,,Tunez vs Francia,,Australia vs Dinamarca,,España vs Costa Rica,,Alemania vs Japon,,España vs Alemania,,Japón vs Costa Rica,,Japón vs España,,Costa Rica vs Alemania,,Belgica vs Canada,,Marruecos vs Croacia,,Belgica vs Marruecos,,Croacia vs Canada,,Croacia vs Belgica,,Canada vs Marruecos,,Brasil vs Serbia,,Suiza vs Camerun,,Brasil vs Suiza,,Camerun vs Serbia,,Camerun vs Brasil,,Serbia vs Suiza,,Portugal vs Ghana,,Uruguay vs Corea del Sur,,Portugal vs Uruguay,,Corea del Sur vs Ghana,,Corea del Sur vs Portugal,,Ghana vs Uruguay,,,,,
+Marca temporal,Dirección de correo electrónico,Seleccione el Grupo,Qatar,Ecuador,Senegal,Paises Bajos,Qatar,Senegal,Paises Bajos,Ecuador,Paises Bajos,Qatar,Ecuador,Senegal,Inglaterra,Iran,Estados Unidos,Gales,Inglaterra,Estados Unidos,Gales,Iran,Gales,Inglaterra,Iran,Estados Unidos,Argentina,Arabia Saudita,Mexico,Polonia,Argentina,Mexico,Polonia,Arabia Saudita,Polonia,Argentina,Arabia Saudita,Mexico,Francia,Australia,Dinamarca,Tunez,Francia,Dinamarca,Tunez,Australia,Tunez,Francia,Australia,Dinamarca,España,Costa Rica,Alemania,Japon,España,Alemania,Japon,Costa Rica,Japon,España,Costa Rica,Alemania,Belgica,Canada,Marruecos,Croacia,Belgica,Marruecos,Croacia,Canada,Croacia,Belgica,Canada,Marruecos,Brasil,Serbia,Suiza,Camerun,Brasil,Suiza,Camerun,Serbia,Camerun,Brasil,Serbia,Suiza,Portugal,Ghana,Uruguay,Corea del Sur,Portugal,Uruguay,Corea del Sur,Ghana,Corea del Sur,Portugal,Ghana,Uruguay,Nombre,Goleador del mundial,Valla menos vencida,Equipo más goleador
+2022-11-18 22:15:58.569000,mcuidador@gmail.com,Grupo H,1,0,0,2,0,1,2,0,2,1,1,1,2,0,1,1,2,0,2,1,0,2,0,1,2,0,1,1,2,0,1,0,1,2,0,2,3,0,2,0,2,1,0,1,0,3,1,2,2,0,2,0,1,2,1,1,0,2,0,3,1,0,1,2,2,0,2,1,0,1,0,2,2,0,1,1,2,1,2,0,1,2,0,1,2,0,1,0,1,0,0,1,0,2,1,0,Mauricio Perez (Mauro chef),Kylian Mbappe,Francia,Francia
+2022-11-19 12:15:23.192000,luisasanta@gmail.com,Grupo H,1,2,2,3,1,1,2,0,1,1,2,2,2,1,0,0,3,0,2,2,3,3,1,0,3,1,2,0,1,1,2,1,0,0,0,0,4,0,1,0,1,1,0,0,0,2,1,2,3,2,5,1,0,1,1,2,0,3,1,1,3,0,0,1,2,1,2,0,1,1,0,0,3,1,0,0,2,1,1,1,2,2,0,1,2,0,0,0,2,2,0,1,0,4,1,3,La qatarsis mundial,Kylian Mbappe,Argentina,Brasil
+2022-11-19 12:25:05.888000,rabodeajip@hotmail.com,Grupo H,1,1,0,2,1,2,2,0,3,1,1,1,3,0,2,0,1,0,0,0,1,2,0,1,3,0,1,1,2,0,2,1,0,1,0,2,2,0,1,0,2,2,2,1,1,3,0,1,2,0,2,0,2,1,1,1,1,2,0,3,2,1,1,1,2,0,2,2,2,2,2,1,2,0,1,1,3,0,1,2,1,3,2,0,2,1,0,0,3,1,1,1,1,2,1,1,Pascual,Neymar,Argentina,Brasil
+2022-11-19 20:48:43.760000,juanmontoya.derecho@gmail.com,Grupo H,0,2,1,3,0,1,2,1,3,0,2,1,3,1,2,1,2,1,1,1,1,2,0,2,4,0,1,0,2,0,2,0,1,3,1,2,2,1,2,0,2,2,1,1,1,2,1,2,2,1,2,0,2,1,1,1,0,1,1,3,2,0,1,2,2,1,1,1,1,2,1,1,1,1,1,1,2,0,2,1,1,1,2,1,2,1,2,1,1,2,1,2,1,2,0,1,Juan Esteban Montoya Hincapie,Lautaro Martínez,Bélgica,Argentina
+2022-11-19 12:25:06,diegojoseduquegomez@gmail.com,Grupo H,0,2,0,1,1,2,2,2,2,0,0,1,2,0,1,0,2,1,2,0,0,3,0,0,3,0,2,2,3,1,2,0,0,0,1,1,2,1,1,0,2,0,1,1,1,3,0,0,2,0,1,0,2,2,2,0,1,2,1,4,2,1,1,2,1,1,2,2,1,0,2,1,4,0,1,2,3,0,2,1,2,4,1,1,2,1,2,1,2,2,2,1,1,3,2,2,Emerson Alexis Gomez,Gabriel Badsa,Alemania,Brasil
+2022-11-19 12:25:06,cristimesa26@gmail.com,Grupo H,1,2,0,3,0,2,2,0,5,0,1,3,4,0,0,1,2,1,2,1,1,1,0,1,4,0,1,1,2,1,2,0,1,3,0,1,3,0,2,1,1,1,1,0,1,3,0,1,2,0,3,1,0,1,2,2,0,1,0,2,2,1,1,1,3,2,2,0,0,1,0,1,0,1,0,2,3,0,1,1,0,4,2,1,1,0,3,0,1,1,0,2,1,3,0,1,Pregunte por lo que no vea,Lionel Messi,Alemania,Argentina
+2022-11-19 12:25:06,vickastro8@gmail.com,Grupo H,0,1,1,2,0,2,1,0,3,0,1,1,3,0,2,1,2,0,1,0,1,2,1,3,4,0,1,0,2,1,2,0,1,3,0,3,2,0,1,0,2,1,1,1,0,1,0,0,2,1,2,1,0,1,1,0,1,2,0,3,2,0,0,1,1,0,1,0,2,2,0,1,4,0,0,2,3,0,2,1,1,3,0,0,2,0,1,0,2,1,1,1,0,3,0,1,Casa VIII,Lionel Messi,Alemania,Brasil
+2022-11-19 12:25:06,luisfernnaranjo@gmail.com,Grupo H,1,0,1,2,2,1,3,1,2,0,2,1,4,0,1,1,3,1,2,0,1,2,0,1,3,1,1,2,3,1,4,1,2,2,0,2,2,0,3,1,2,1,3,2,1,2,0,3,4,0,3,1,2,2,2,1,0,2,0,5,2,0,0,1,2,1,3,0,1,0,1,3,4,1,1,2,2,1,2,0,2,2,0,1,2,1,4,1,1,1,1,2,1,3,2,3,Luis Fermin Naranjo Artehourtua,Vinicius Jose,Alemania,Brasil
+2022-11-19 12:25:06,sandra.barrientos@udea.edu.co,Grupo H,1,1,0,2,0,2,3,1,2,1,2,1,3,0,1,1,2,1,2,0,1,1,0,3,4,0,1,2,3,0,4,0,1,2,0,2,2,0,1,0,1,1,1,0,0,1,0,2,3,0,2,0,0,1,2,0,0,3,0,1,3,0,0,2,3,1,3,0,0,1,0,2,2,0,1,0,3,0,1,2,0,4,1,0,4,0,3,1,2,1,0,1,0,2,0,3,Luchismo,Vinicius Jose,Brasil,Argentina
+2022-11-19 12:25:06,miralorena@gmail.com,Grupo H,2,0,2,1,1,1,3,2,1,2,2,1,0,1,0,1,2,0,2,1,0,2,2,1,3,0,2,1,2,1,1,3,2,2,1,3,2,1,3,1,3,3,1,2,0,3,1,4,2,3,3,0,0,2,1,0,0,0,1,3,3,0,4,1,2,1,0,1,1,2,2,2,4,2,2,0,2,0,0,0,2,2,1,2,3,1,3,0,1,1,1,2,2,3,1,2,Lore Mira,Neymar,Alemania,Brasil
+2022-11-19 12:25:06,boterovillegas2001@gmail.com,Grupo H,1,2,2,2,0,2,2,1,2,0,2,2,2,0,0,1,2,1,1,0,2,2,0,2,2,0,0,2,3,1,2,0,2,2,1,2,3,1,2,0,1,1,2,1,1,2,1,2,3,0,3,0,1,2,2,2,1,2,0,2,3,1,0,2,2,0,2,0,1,2,1,0,2,1,2,2,3,1,2,2,0,2,1,2,2,2,2,0,1,2,1,2,0,3,1,1,Alejandro Botero,Neymar,Inglaterra,Brasil
+2022-11-19 12:25:06,sandra.barrientos@udea.edu.co,Grupo H,1,1,0,2,1,1,1,2,2,0,2,1,2,0,2,0,2,1,0,0,1,3,0,3,3,0,2,1,1,0,0,1,0,3,0,2,1,0,3,0,1,2,1,1,0,2,0,2,2,2,2,1,2,2,0,1,2,3,0,3,1,0,0,1,1,0,2,1,1,1,1,1,1,0,2,1,2,1,0,2,0,3,0,1,3,1,2,1,2,2,1,0,1,2,0,2,Guanabano Indigente,Lautaro Martínez,Brasil,Argentina
+2022-11-19 12:25:06,piritadehierro@gmail.com,Grupo H,2,1,1,1,0,3,2,1,3,0,1,2,3,1,2,0,3,1,1,1,1,2,0,1,4,0,1,2,2,1,2,0,1,1,0,2,3,0,2,1,1,2,1,1,0,3,0,2,3,0,1,1,2,2,2,0,2,2,0,3,2,0,0,2,2,1,2,0,2,2,1,0,3,1,1,1,3,0,0,2,0,4,1,0,2,1,1,1,0,2,2,0,1,1,1,2,Safiro y Acero,Lionel Messi,Brasil,Brasil
+2022-11-19 12:25:06,marespezazul@msn.com,Grupo H,0,2,0,1,1,2,1,1,3,0,2,2,1,1,2,1,1,0,0,1,1,2,1,1,3,0,1,2,2,0,2,0,0,1,1,3,2,0,1,0,1,2,0,0,0,4,0,1,1,0,3,1,0,2,1,0,0,2,1,3,1,1,1,0,2,1,2,0,2,2,0,1,3,0,0,1,2,1,1,1,0,4,0,1,2,1,1,0,0,1,2,0,1,3,0,2,Marta Restrepo,Leonel Messi,Brasil,Brasil
+2022-11-19 12:25:06,axlgarcia1984@gmail.com,Grupo H,1,1,2,1,0,2,1,2,3,0,2,2,3,0,2,1,2,0,0,0,1,3,0,2,4,1,1,3,3,0,2,0,1,1,1,2,2,0,2,1,3,0,2,2,1,3,1,1,3,1,4,0,3,2,1,1,1,3,0,3,2,1,0,1,2,1,2,1,2,2,1,0,4,0,3,2,3,1,2,0,1,2,0,2,2,0,2,0,1,2,1,1,0,2,1,2,Alex Garcia,Henry Kane,Argentina,Brasil
+2022-11-19 12:25:06,Victor Agudelo,Grupo H,0,2,1,3,1,0,1,0,3,0,1,0,3,1,2,1,2,1,1,0,1,3,1,2,4,0,1,2,2,0,1,0,0,3,0,1,3,1,2,1,1,2,1,0,1,3,0,2,2,0,3,1,1,2,1,0,1,2,0,3,1,0,1,2,1,0,2,1,1,1,1,0,3,1,0,1,3,0,2,1,0,2,1,0,2,1,2,1,2,1,2,0,0,2,0,2,John Jaramillo-Diogenes Restrepo,Julian Alvarez,Argentina,Brasil
+2022-11-19 12:25:06,anambetancurj2022@gmail.com,Grupo H,0,2,2,3,1,2,2,2,1,1,2,0,3,0,2,1,2,0,1,1,1,3,1,1,4,0,1,2,3,2,2,1,0,3,1,2,3,1,2,1,3,2,1,0,2,3,2,2,3,1,2,0,2,2,1,0,1,3,0,2,2,1,1,2,2,0,2,1,1,2,2,1,3,0,0,1,2,1,1,1,0,2,1,2,3,1,2,0,1,2,2,4,1,2,1,3,Los Betancruz,Lionel Messi,Argentina,Argentina
+2022-11-19 12:25:06,correavanegas25@gmail.com,Grupo H,0,2,1,2,1,1,2,1,2,0,0,0,3,0,1,3,2,0,2,0,1,1,0,1,3,0,1,1,3,0,2,0,1,2,0,1,4,0,2,0,1,0,0,0,0,3,1,1,2,0,3,1,2,3,2,1,1,1,0,2,3,0,0,2,2,0,2,1,1,1,0,0,3,0,0,1,2,1,1,1,1,3,1,2,2,1,2,2,0,0,1,1,1,2,0,2,Andres & Cia,Vinicius Jose,Inglaterra,Brasil
+2022-11-19 12:25:06,andrea.giraldogarcia@gmail.com,Grupo H,2,2,1,1,1,2,1,1,2,1,2,1,2,1,2,1,2,0,1,1,0,1,1,2,3,0,1,2,2,1,1,0,0,3,1,2,3,1,2,1,2,0,1,1,0,2,1,2,2,0,1,1,2,3,1,1,1,2,0,2,0,1,1,2,0,1,2,2,2,1,0,2,3,0,1,1,2,0,2,1,1,3,2,0,2,0,1,1,1,1,1,2,2,2,0,1,Las tejedoras,Julian Alvarez,Brasil,Argentina
+2022-11-19 12:25:06,Qatarsis 1.0,Grupo H,1,2,1,3,2,2,2,0,4,0,2,1,5,1,2,2,3,1,1,2,2,3,2,2,2,0,2,1,2,2,2,1,2,2,1,2,2,0,3,1,1,2,2,1,1,3,0,2,2,2,3,1,1,3,1,2,1,3,1,2,3,0,1,3,3,2,4,0,3,3,0,2,4,1,2,2,3,0,1,3,0,3,3,1,2,0,1,2,1,2,2,2,1,2,1,2,Qatarsis 1.0,Vinicius Jose,Brasil,Brasil
+2022-11-19 12:25:06,Qatarsis 2.0,Grupo H,0,2,0,2,1,1,3,0,2,0,1,0,3,1,0,2,2,0,1,0,2,3,0,2,3,0,2,0,3,1,2,0,1,2,1,3,4,0,1,2,2,0,0,0,0,3,0,2,2,1,3,0,1,1,0,2,1,3,0,2,3,0,1,2,2,1,2,0,2,2,0,1,3,0,2,1,2,0,1,1,0,4,2,0,3,0,2,1,2,2,1,1,1,3,0,2,Qatarsis 2.0,Vinicius Jose,Brasil,Brasil
+2022-11-19 12:25:06,miralorena@gmail.com,Grupo H,0,1,0,3,1,2,2,2,2,0,2,0,3,0,1,1,2,0,0,0,0,4,0,1,2,0,1,1,1,0,1,0,1,2,2,2,2,0,3,1,0,0,0,1,1,3,1,2,2,0,2,1,2,2,1,0,0,3,0,3,2,0,0,2,2,0,2,1,1,1,1,0,2,1,1,1,2,0,2,0,1,2,2,1,2,1,1,0,1,1,0,1,1,3,1,2,TV y Novelas,Neymar,Brasil,Brasil
+2022-11-19 12:25:06,alejo.salazar.g@gmail.com,Grupo H,1,1,1,2,0,2,2,1,3,0,1,1,3,0,1,0,1,0,1,1,0,2,0,2,3,0,0,1,2,0,1,0,0,1,0,1,2,0,1,0,1,0,0,1,0,3,0,1,2,0,2,0,1,2,0,1,1,3,0,2,2,0,0,2,2,0,1,0,0,0,1,1,2,0,2,0,1,0,0,2,0,3,0,1,1,0,1,0,1,0,0,1,0,1,0,1,El cuculeito del balon,Kylian Mbappe,Portugal,Argentina
+2022-11-19 12:25:06,manuelmontoya@yahoo.com,Grupo H,2,1,0,3,1,1,4,1,3,1,2,1,3,1,2,0,2,2,0,0,0,2,1,2,5,1,2,1,3,1,2,1,0,4,1,2,4,1,1,0,3,1,1,2,0,5,2,2,3,0,2,1,2,2,3,2,2,3,0,4,2,0,0,0,2,1,1,1,1,1,1,1,5,0,2,3,3,1,4,2,1,2,0,2,2,0,4,1,3,3,1,1,0,2,0,3,Cristina Valentina Echeverri- Las fieras,Kylian Mbappe,Alemania,Francia
+2022-11-19 12:25:06,lauracamersi803@gmail.com,Grupo H,0,1,1,2,0,0,1,0,3,0,1,1,3,0,1,1,2,0,2,0,0,2,0,2,3,0,1,1,2,1,2,0,0,3,0,2,2,0,1,0,0,2,0,0,0,1,1,2,2,0,2,1,1,1,2,1,1,2,0,3,2,0,0,3,3,0,2,0,1,2,0,0,3,1,2,0,3,0,1,2,1,3,0,1,2,0,2,0,1,2,0,1,0,3,0,2,La Perripolla,Neymar,Brasil,Brasil
+2022-11-19 12:25:06,nanacorpas@gmail.com,Grupo H,0,1,0,2,2,1,1,1,2,0,3,2,3,1,0,3,2,1,2,0,1,1,1,2,3,1,1,1,1,0,2,0,0,0,1,2,4,0,1,2,1,0,2,1,1,1,2,1,1,1,2,0,0,0,0,1,0,2,1,2,1,1,0,2,1,0,0,0,3,2,2,1,3,0,2,1,1,0,2,2,1,3,0,2,2,0,1,0,1,1,1,2,1,3,1,2,Ana Maria Corpas,Karim Benzema,Alemania,Portugal
+2022-11-19 12:25:06,danielabedoyamartinez@gmail.com,Grupo H,1,1,1,2,0,2,2,1,3,0,1,2,3,0,1,1,2,0,2,0,1,3,0,2,3,0,1,2,2,1,2,0,1,1,1,2,3,1,2,0,2,1,0,2,0,3,0,3,2,1,3,1,2,1,1,0,0,2,0,3,2,1,0,2,3,0,1,2,1,2,3,1,3,0,1,2,3,1,2,0,0,2,0,1,3,0,2,0,2,1,1,1,0,2,1,3,Lolita,Kylian Mbappe,Alemania,Brasil
+2022-11-19 12:25:06,cadaja78@hotmail.com,Grupo H,1,0,1,3,0,2,3,1,4,1,2,1,3,0,2,0,2,1,1,0,1,3,1,2,3,0,1,1,3,1,2,1,0,2,0,2,2,0,2,0,2,1,0,1,0,3,1,2,2,0,2,0,2,1,0,1,1,2,1,3,1,2,0,2,3,1,1,0,1,2,1,0,3,0,1,2,2,0,2,0,1,2,1,2,3,1,2,0,1,2,1,0,1,3,1,2,Club Atletico Vodka Juniors,Kylian Mbappe,Argentina,Brasil
+2022-11-20 12:25:06,leonardo.valencia@gmail.com,Grupo H,1,1,0,1,2,0,2,1,1,0,1,0,2,1,1,0,2,1,1,1,0,2,0,1,2,1,1,1,2,1,0,0,0,2,1,2,1,0,2,0,2,1,0,1,0,2,1,1,2,0,2,1,2,1,2,0,1,2,0,3,2,1,0,2,2,0,2,1,2,2,2,1,2,0,1,1,2,1,2,1,0,2,1,1,2,1,2,1,2,2,1,2,0,1,1,1,Leonardo Valencia Valencia,Leonel Messi,Brasil,Argentina
+
+===== HOJA: Puntajes Final (4x6) =====
+Nombre,Argentina Vs Francia,,Croacia Vs Marruecos,,
+,Ganador,Puntaje,Ganador,Puntaje,Puntaje Parcial
+Andres y Cia.,EMPATE,1,EMPATE,1,2
+Mauricio Perez (Mauro chef),,,,,
+
+===== HOJA: Puntajes Semifinal (31x6) =====
+Nombre,Argentina Vs Croacia,,Francia Vs Marruecos,,
+,Ganador,Puntaje,Ganador,Puntaje,Puntaje Parcial
+Mauricio Perez (Mauro chef),Argentina,2,Francia,5,7
+Leonardo Valencia Valencia,EMPATE,0,Francia,3,3
+Marta Restrepo,Argentina,3,EMPATE,0,3
+Emerson Alexis Gomez,Croacia,0,Marruecos,0,0
+La qatarsis mundial,EMPATE,1,Marruecos,1,2
+Lore Mira,Croacia,0,Marruecos,0,0
+TV y Novelas,EMPATE,0,Francia,5,5
+Luis Fermin Naranjo Artehourtua,Argentina,3,Francia,3,6
+Las Tejedoras,Argentina,3,Francia,3,6
+Lolita,Argentina,2,Francia,3,5
+Los Betancruz,EMPATE,0,Francia,3,3
+Qatarsis 1.0,Croacia,0,EMPATE,1,1
+Qatarsis 2.0,Croacia,0,EMPATE,0,0
+Casa VIII,Argentina,2,Francia,5,7
+Pascual,Croacia,0,Francia,5,5
+El cuculeito del balon,EMPATE,0,Francia,3,3
+Andres & Cia,EMPATE,1,EMPATE,1,2
+Alejandro Botero,EMPATE,0,Francia,3,3
+pregunte por lo que no vea,Argentina,3,EMPATE,1,4
+Alex Garcia,Croacia,0,Francia,2,2
+Club Atletico Vodka Juniors,Argentina,2,Francia,3,5
+Juan Esteban Montoya Hincapie,Argentina,3,Marruecos,0,3
+Safiro y Acero,Argentina,2,Francia,3,5
+John Jaramillo-Diogenes Restrepo,Argentina,3,Marruecos,0,3
+Luchismo,EMPATE,0,Marruecos,0,0
+Cristina Valentina Echeverri- Las fieras,Croacia,0,Francia,3,3
+La Perripolla,EMPATE,0,Francia,3,3
+Ana Maria Corpas,Croacia,0,Francia,3,3
+Guanabano Indigente,Argentina,2,Francia,3,5
+
+===== HOJA: Resultados Oficiales Final (3x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2022-12-17 00:00:00,Croacia,2,1,Marruecos,Croacia
+2022-12-18 00:00:00,Argentina,2,2,Francia,EMPATE
+
+===== HOJA: Resultados SemiFinal Oficiales (3x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2022-12-13 00:00:00,Argentina,3,0,Croacia,Argentina
+2022-12-14 00:00:00,Francia,2,0,Marruecos,Francia
+
+===== HOJA: Resultados Oficiales Cuartos de (5x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2022-12-09 00:00:00,Croacia,0,0,Brasil,EMPATE
+2022-12-09 00:00:00,Argentina,2,2,Paises Bajos,EMPATE
+2022-12-10 00:00:00,Marruecos,1,0,Portugal,Marruecos
+2022-12-10 00:00:00,Inglaterra,1,2,Francia,Francia
+
+===== HOJA: Resultados Oficiales Octavos de (9x6) =====
+Fecha,Equipo,Goles,Goles,Equipo,Ganador
+2022-12-03 00:00:00,Paises Bajos,3,1,Estados Unidos,Paises Bajos
+2022-12-03 00:00:00,Argentina,2,1,Australia,Argentina
+2022-12-04 00:00:00,Francia,3,1,Polonia,Francia
+2022-12-04 00:00:00,Inglaterra,3,0,Senegal,Inglaterra
+2022-12-05 00:00:00,Japón,1,1,Croacia,EMPATE
+2022-12-05 00:00:00,Brasil,4,1,Corea del Sur,Brasil
+2022-12-06 00:00:00,Marruecos,0,0,España,EMPATE
+2022-12-06 00:00:00,Portugal,6,1,Suiza,Portugal
+
+===== HOJA: Resultados Oficiales Fase de Gr (49x17) =====
+,Fecha,,Goles,Goles,,GANADOR,,,,,,,,,,
+A,2022-11-20 00:00:00,Qatar,0,2,Ecuador,Ecuador,Grupo A,,,,,,,,,
+,2022-11-21 00:00:00,Senegal,0,2,Paises Bajos,Paises Bajos,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-25 00:00:00,Qatar,1,3,Senegal,Senegal,1,Ecuador,4,3,1,1,1,4,3,1
+,2022-11-25 00:00:00,Paises Bajos,1,1,Ecuador,EMPATE,2,Qatar,0,3,0,0,3,1,7,-6
+,2022-11-29 00:00:00,Paises Bajos,2,0,Qatar,Paises Bajos,3,Paises Bajos,7,3,2,1,0,5,1,4
+,2022-11-29 00:00:00,Ecuador,1,2,Senegal,Senegal,4,Senegal,6,3,2,0,1,5,4,1
+B,2022-11-21 00:00:00,Inglaterra,6,2,Iran,Inglaterra,Grupo B,,,,,,,,,
+,2022-11-21 00:00:00,Estados Unidos,1,1,Gales,EMPATE,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-25 00:00:00,Inglaterra,0,0,Estados Unidos,EMPATE,1,Inglaterra,7,3,2,1,0,9,2,7
+,2022-11-25 00:00:00,Gales,0,2,Iran,Iran,2,Iran,3,3,1,0,2,4,7,-3
+,2022-11-29 00:00:00,Gales,0,3,Inglaterra,Inglaterra,3,Estados Unidos,5,3,1,2,0,2,1,1
+,2022-11-29 00:00:00,Iran ,0,1,Estados Unidos,Estados Unidos,4,Gales,1,3,0,1,2,1,6,-5
+C,2022-11-22 00:00:00,Argentina,1,2,Arabia Saudita,Arabia Saudita,Grupo C,,,,,,,,,
+,2022-11-22 00:00:00,Mexico,0,0,Polonia,EMPATE,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-26 00:00:00,Argentina,2,0,Mexico,Argentina,1,Argentina,3,,,,,5,2,3
+,2022-11-26 00:00:00,Polonia,2,0,Arabia Saudita,Polonia,2,Arabia Saudita,3,,,,,3,5,-2
+,2022-11-30 00:00:00,Polonia,0,2,Argentina,Argentina,3,Mexico,3,,,,,2,3,-1
+,2022-11-30 00:00:00,Arabia Saudita,1,2,Mexico,Mexico,4,Polonia,,,,,,2,2,0
+D,2022-11-22 00:00:00,Francia,4,1,Australia,Francia,Grupo D,,,,,,,,,
+,2022-11-22 00:00:00,Dinamarca,0,0,Tunez,EMPATE,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-26 00:00:00,Francia,2,1,Dinamarca,Francia,1,Francia,,,,,,6,3,3
+,2022-11-26 00:00:00,Tunez,0,1,Australia,Australia,2,Dinamarca,,,,,,1,3,-2
+,2022-11-30 00:00:00,Tunez,1,0,Francia,Tunez,3,Tunez,,,,,,1,1,0
+,2022-11-30 00:00:00,Australia,1,0,Dinamarca,Australia,4,Australia,,,,,,3,4,-1
+E,2022-11-23 00:00:00,España ,6,0,Costa Rica,España ,Grupo E,,,,,,,,,
+,2022-11-23 00:00:00,Alemania,1,2,Japón,Japón,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-27 00:00:00,España ,1,1,Alemania,EMPATE,1,España,,,,,,8,3,5
+,2022-11-27 00:00:00,Japón,0,1,Costa Rica,Costa Rica,2,Costa Rica,,,,,,3,10,-7
+,2022-12-01 00:00:00,Japón,2,1,España,Japón,3,Alemania,,,,,,6,5,1
+,2022-12-01 00:00:00,Costa Rica,2,4,Alemania,Alemania,4,Japon,,,,,,4,3,1
+F,2022-11-23 00:00:00,Belgica,1,0,Canada,Belgica,Grupo F,,,,,,,,,
+,2022-11-23 00:00:00,Marruecos,0,0,Croacia,EMPATE,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-27 00:00:00,Belgica,0,2,Marruecos,Marruecos,1,Belgica,,,,,,1,2,-1
+,2022-11-27 00:00:00,Croacia,4,1,Canada,Croacia,2,Canada,,,,,,2,7,-5
+,2022-12-01 00:00:00,Croacia,0,0,Belgica,EMPATE,3,Marruecos,,,,,,4,1,3
+,2022-12-01 00:00:00,Canada,1,2,Marruecos,Marruecos,4,Croacia,,,,,,4,1,3
+G,2022-11-24 00:00:00,Brasil,2,0,Serbia,Brasil,Grupo G,,,,,,,,,
+,2022-11-24 00:00:00,Suiza,1,0,Camerun,Suiza,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-28 00:00:00,Brasil,1,0,Suiza,Brasil,1,Brasil,,,,,,3,1,2
+,2022-11-28 00:00:00,Camerun,3,3,Serbia,EMPATE,2,Serbia,,,,,,5,8,-3
+,2022-12-02 00:00:00,Camerun,1,0,Brasil,Camerun,3,Suiza,,,,,,4,3,1
+,2022-12-02 00:00:00,Serbia,2,3,Suiza,Suiza,4,Camerun,,,,,,4,4,0
+H,2022-11-24 00:00:00,Portugal,3,2,Ghana,Portugal,Grupo H,,,,,,,,,
+,2022-11-24 00:00:00,Uruguay,0,0,Corea del Sur,EMPATE,Pos,Selección,Pts,J,G,E,P,GF,GC,DG
+,2022-11-28 00:00:00,Portugal,2,0,Uruguay,Portugal,1,Portugal,,,,,,6,4,2
+,2022-11-28 00:00:00,Corea del Sur,2,3,Ghana,Ghana,2,Ghana,,,,,,5,7,-2
+,2022-12-02 00:00:00,Corea del Sur,2,1,Portugal,Corea del Sur,3,Uruguay,,,,,,2,2,0
+,2022-12-02 00:00:00,Ghana,0,2,Uruguay,Uruguay,4,Corea del Sur,,,,,,4,4,0
+
+===== HOJA: Puntajes Cuartos de Final (31x10) =====
+Nombre,Croacia Vs Brasil,,Argentina Vs Paises Bajos,,Marruecos Vs Portugal,,Inglaterra Vs Francia,,
+,Ganador,Puntaje,Ganador,Puntaje,Ganador,Puntaje,Ganador,Puntaje,Puntaje Parcial
+Emerson Alexis Gomez,Brasil,0,Paises Bajos,1,Portugal,1,Francia,5,7
+Club Atletico Vodka Juniors,Brasil,0,Argentina,1,Portugal,0,Francia,5,6
+Lolita,Brasil,0,Argentina,1,Portugal,1,EMPATE,1,3
+Juan Esteban Montoya Hincapie,EMPATE,1,Argentina,1,Marruecos,2,Francia,5,9
+Alejandro Botero,Brasil,1,EMPATE,1,Portugal,1,EMPATE,1,4
+La qatarsis mundial,Brasil,0,EMPATE,5,Portugal,1,Francia,5,11
+Lore Mira,Croacia,1,Paises Bajos,0,Marruecos,3,EMPATE,1,5
+Pregunte por lo que no vea,Brasil,0,Argentina,1,Marruecos,2,Francia,3,6
+Casa VIII,Brasil,0,Argentina,1,Portugal,0,EMPATE,1,2
+Alex Garcia,Brasil,0,Argentina,0,Portugal,1,EMPATE,1,2
+Marta Restrepo,Brasil,0,Argentina,0,EMPATE,1,EMPATE,1,2
+Mauricio Perez (Mauro chef),Brasil,0,Paises Bajos,1,Portugal,0,Francia,5,6
+Pascual,Brasil,0,EMPATE,1,Portugal,1,EMPATE,1,3
+TV y Novelas,Brasil,0,Argentina,1,Portugal,0,Francia,5,6
+Ana Maria Corpas,Brasil,0,EMPATE,5,Portugal,1,Inglaterra,0,6
+Las tejedoras,Brasil,0,Argentina,0,Marruecos,3,EMPATE,1,4
+Andres & Cia,Brasil,0,EMPATE,1,Portugal,1,EMPATE,1,3
+El cuculeito del balon,Brasil,0,Argentina,1,Portugal,0,Francia,5,6
+Los Betancruz,Brasil,0,EMPATE,5,EMPATE,1,Inglaterra,0,6
+Luis Fermin Naranjo Artehourtua,Brasil,0,Argentina,1,EMPATE,0,Inglaterra,1,2
+John Jaramillo-Diogenes Restrepo,Brasil,1,Argentina,1,EMPATE,1,Francia,5,8
+Cristina Valentina Echeverri- Las fieras,Brasil,0,Paises Bajos,1,Portugal,0,EMPATE,1,2
+Leonardo Valencia Valencia,Brasil,0,Argentina,0,EMPATE,0,Francia,3,3
+Qatarsis 1.0,Brasil,1,Paises Bajos,1,Portugal,1,Inglaterra,1,4
+Qatarsis 2.0,Brasil,1,Argentina,1,Portugal,1,EMPATE,1,4
+La Perripolla,Brasil,1,EMPATE,1,Portugal,1,Francia,5,8
+Guanabano Indigente,Brasil,0,EMPATE,5,EMPATE,1,Francia,2,8
+Safiro y Acero,Brasil,1,Argentina,0,Portugal,1,Francia,2,4
+Luchismo,Brasil,1,EMPATE,5,Portugal,1,EMPATE,1,8
+
+===== HOJA: Puntajes Fases de Grupos (31x100) =====
+NOMBRE,Qatar Vs Ecuador,,Senegal Vs Paises Bajos,,Qatar Vs Senegal,,Paises Bajos vs Ecuador,,Paises Bajos vs Qatar,,Ecuador vs Senegal,,Inglaterra vs Iran,,Estados Unidos vs Gales,,Inglaterra vs Estados Unidos,,Gales vs Iran,,Gales vs Inglaterra,,Iran vs Estados Unidos,,Argentina vs Arabia Saudita,,Mexico vs Polonia,,Argentina vs Mexico,,Polonia vs Arabia Saudita,,Polonia vs Argentina,,Arabia Saudita vs Mexico,,Francia vs Australia,,Dinamarca vs Tunez,,Francia vs Dinamarca,,Tunez vs Australia,,Tunez vs Francia,,Australia vs Dinamarca,,España vs Costa Rica,,Alemania vs Japon,,España vs Alemania,,Japón vs Costa Rica,,Japón vs España,,Costa Rica vs Alemania,,Belgica vs Canada,,Marruecos vs Croacia,,Belgica vs Marruecos,,Croacia vs Canada,,Croacia vs Belgica,,Canada vs Marruecos,,Brasil vs Serbia,,Suiza vs Camerun,,Brasil vs Suiza,,Camerun vs Serbia,,Camerun vs Brasil,,Serbia vs Suiza,,Portugal vs Ghana,,Uruguay vs Corea del Sur,,Portugal vs Uruguay,,Corea del Sur vs Ghana,,Corea del Sur vs Portugal,,Ghana vs Uruguay,,,,
+,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,PUNTOS ,,PUNTOS VERIFICADOS
+Mauricio Perez (Mauro chef),Qatar,0,Paises Bajos,5,Senegal,2,Paises Bajos,0,Paises Bajos,3,EMPATE,1,Inglaterra,2,EMPATE,5,Inglaterra,1,Gales,0,Inglaterra,3,Estados Unidos,5,Argentina,0,EMPATE,1,Argentina,5,Polonia,3,Argentina,3,Mexico,3,Francia,2,Dinamarca,1,Francia,5,Australia,5,Francia,0,Dinamarca,1,España,1,Alemania,0,Alemania,1,EMPATE,1,España,0,Alemania,2,Belgica,5,Croacia,0,Belgica,0,Croacia,3,Belgica,1,Marruecos,3,Brasil,5,EMPATE,1,Brasil,2,Camerun,0,Brasil,1,Suiza,2,Portugal,2,Uruguay,1,Portugal,3,Ghana,2,Portugal,0,Ghana,0,92,66.0,94
+La qatarsis mundial,Ecuador,3,Paises Bajos,2,EMPATE,1,Paises Bajos,0,EMPATE,0,EMPATE,1,Inglaterra,2,EMPATE,1,Inglaterra,1,EMPATE,1,EMPATE,1,Iran,0,Argentina,0,Mexico,1,EMPATE,0,Polonia,3,EMPATE,1,EMPATE,0,Francia,3,Dinamarca,1,EMPATE,1,EMPATE,1,Francia,0,Dinamarca,1,España,0,Alemania,0,Alemania,1,Costa Rica,2,España,0,EMPATE,0,Belgica,3,Croacia,1,Belgica,0,Croacia,2,EMPATE,1,EMPATE,0,Brasil,2,EMPATE,1,Brasil,2,EMPATE,1,EMPATE,0,Suiza,2,Portugal,2,EMPATE,5,EMPATE,1,Ghana,2,Portugal,0,Uruguay,2,55,49.0,58
+Pascual,EMPATE,0,Paises Bajos,5,Senegal,3,Paises Bajos,0,Paises Bajos,2,EMPATE,1,Inglaterra,2,Estados Unidos,0,Inglaterra,1,EMPATE,1,Inglaterra,2,Estados Unidos,5,Argentina,0,EMPATE,1,Argentina,5,Polonia,3,Argentina,3,Mexico,3,Francia,2,Dinamarca,1,EMPATE,1,Tunez,1,Francia,1,Dinamarca,0,España,1,Alemania,0,España,1,EMPATE,1,España,0,Alemania,2,Belgica,2,EMPATE,1,Belgica,0,EMPATE,0,EMPATE,1,Canada,0,Brasil,5,EMPATE,1,Brasil,3,Serbia,0,Brasil,1,Serbia,1,Portugal,2,EMPATE,5,Portugal,2,EMPATE,0,Portugal,0,EMPATE,0,72,52.0,74
+Juan Esteban Montoya Hincapie,Ecuador,5,Paises Bajos,2,Senegal,2,Paises Bajos,1,Paises Bajos,3,Ecuador,0,Inglaterra,2,Estados Unidos,1,Inglaterra,0,EMPATE,0,Inglaterra,2,Estados Unidos,3,Argentina,0,Mexico,1,Argentina,5,Polonia,5,Argentina,2,Mexico,5,Francia,3,Dinamarca,1,EMPATE,1,EMPATE,1,Francia,1,Dinamarca,1,España,0,Alemania,0,España,1,EMPATE,1,España,1,Alemania,2,Belgica,3,Croacia,0,Belgica,0,EMPATE,1,Belgica,0,EMPATE,1,EMPATE,0,EMPATE,1,Brasil,3,Camerun,0,EMPATE,1,Serbia,1,Portugal,2,Uruguay,0,Uruguay,0,Ghana,2,Portugal,0,Uruguay,3,70,47.0,73
+Emerson Alexis Gomez,Ecuador,5,Paises Bajos,3,Senegal,3,EMPATE,1,Paises Bajos,5,Senegal,2,Inglaterra,2,Estados Unidos,1,Inglaterra,0,Gales,0,Inglaterra,5,EMPATE,1,Argentina,0,EMPATE,1,Argentina,2,Polonia,5,EMPATE,1,EMPATE,1,Francia,3,Dinamarca,1,Francia,3,EMPATE,1,Francia,1,EMPATE,1,España,1,Alemania,1,EMPATE,1,Japon,0,España,0,Alemania,3,Belgica,2,Croacia,0,EMPATE,0,EMPATE,0,Croacia,1,Canada,0,Brasil,3,Camerun,1,Brasil,3,Camerun,0,Brasil,0,EMPATE,0,Portugal,2,Uruguay,0,EMPATE,1,Corea del Sur,1,Portugal,0,EMPATE,1,69,49.0,71
+Pregunte por lo que no vea,Ecuador,3,Paises Bajos,3,Senegal,2,Paises Bajos,0,Paises Bajos,3,Senegal,3,Inglaterra,2,Gales,1,Inglaterra,0,Gales,0,EMPATE,0,Estados Unidos,5,Argentina,0,EMPATE,1,Argentina,3,Polonia,5,Argentina,2,Mexico,2,Francia,2,Dinamarca,0,EMPATE,1,Tunez,0,Francia,1,Dinamarca,0,España,1,Alemania,0,Alemania,1,EMPATE,0,España,1,Alemania,2,Belgica,2,EMPATE,1,Belgica,1,Croacia,2,Belgica,1,Marruecos,2,Serbia,0,Camerun,0,Brasil,3,EMPATE,1,Brasil,0,Serbia,1,Portugal,2,Uruguay,1,EMPATE,0,Ghana,2,Portugal,0,Uruguay,3,66,42.0,68
+Casa VIII,Ecuador,3,Paises Bajos,3,Senegal,2,Paises Bajos,1,Paises Bajos,3,EMPATE,1,Inglaterra,2,Estados Unidos,1,Inglaterra,1,Gales,0,Inglaterra,2,Estados Unidos,2,Argentina,0,Mexico,1,Argentina,3,Polonia,5,Argentina,2,Mexico,2,Francia,2,Dinamarca,1,Francia,5,EMPATE,1,Francia,0,EMPATE,1,España,0,Alemania,0,Alemania,1,Japon,0,España,0,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,2,EMPATE,1,Marruecos,2,Brasil,3,Camerun,0,Brasil,3,Camerun,0,Brasil,1,EMPATE,0,Portugal,2,Uruguay,1,Portugal,3,EMPATE,0,Portugal,0,Uruguay,3,72,53.0,75
+Luis Fermin Naranjo Artehourtua,Qatar,0,Paises Bajos,3,Qatar,0,Paises Bajos,1,Paises Bajos,5,Ecuador,0,Inglaterra,2,EMPATE,5,Inglaterra,0,Gales,0,Inglaterra,2,Estados Unidos,5,Argentina,0,Polonia,0,Argentina,2,Polonia,2,EMPATE,1,Mexico,3,Francia,2,Dinamarca,0,Francia,5,Tunez,0,Francia,1,Dinamarca,0,España,1,Alemania,0,EMPATE,1,Japon,1,España,0,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,2,Croacia,1,Marruecos,3,Brasil,2,Camerun,1,Brasil,2,Camerun,0,EMPATE,0,Suiza,2,Portugal,2,Uruguay,0,EMPATE,0,Ghana,2,Portugal,0,Uruguay,2,67,43.0,70
+Luchismo,EMPATE,0,Paises Bajos,5,Senegal,2,Paises Bajos,1,Paises Bajos,3,Ecuador,0,Inglaterra,2,EMPATE,5,Inglaterra,0,Gales,0,EMPATE,0,Estados Unidos,3,Argentina,0,Polonia,0,Argentina,3,Polonia,3,Argentina,3,Mexico,3,Francia,2,Dinamarca,1,EMPATE,1,Tunez,0,Francia,0,Dinamarca,0,España,1,Alemania,0,Alemania,1,Japon,0,España,0,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,2,Belgica,1,Marruecos,3,Brasil,5,Suiza,5,Brasil,3,Serbia,0,Brasil,0,Serbia,0,Portugal,2,Uruguay,0,Portugal,3,Ghana,2,Portugal,0,Uruguay,3,74,56.0,77
+Lore Mira,Qatar,0,Senegal,0,EMPATE,1,Paises Bajos,0,Qatar,0,Ecuador,0,Iran,0,Gales,1,Inglaterra,1,Gales,0,Inglaterra,3,Iran,1,Argentina,0,Mexico,0,Argentina,3,Arabia Saudita,0,EMPATE,1,Mexico,3,Francia,3,Dinamarca,0,EMPATE,0,Australia,2,Francia,0,Dinamarca,1,Costa Rica,0,Alemania,0,Alemania,0,Japon,0,EMPATE,0,Alemania,2,Belgica,3,Marruecos,0,Belgica,0,Canada,1,Belgica,0,EMPATE,1,Brasil,2,Suiza,3,Brasil,3,EMPATE,1,EMPATE,0,Suiza,2,Portugal,3,Uruguay,1,EMPATE,0,Ghana,2,Portugal,1,Uruguay,3,48,30.0,48
+Alejandro Botero,Ecuador,3,EMPATE,1,Senegal,2,Paises Bajos,1,Paises Bajos,5,EMPATE,1,Inglaterra,2,Gales,1,Inglaterra,0,Gales,0,EMPATE,0,Estados Unidos,3,Argentina,0,Polonia,1,Argentina,2,Polonia,5,EMPATE,1,Mexico,5,Francia,3,Dinamarca,1,EMPATE,1,Tunez,1,Francia,1,Dinamarca,1,España,1,Alemania,0,Alemania,1,EMPATE,0,España,0,Alemania,2,Belgica,2,Croacia,1,Belgica,0,Croacia,2,Belgica,0,Canada,1,Brasil,3,EMPATE,0,Brasil,2,EMPATE,1,Brasil,0,Suiza,2,EMPATE,1,Uruguay,1,Uruguay,0,Ghana,2,Portugal,0,EMPATE,0,63,44.0,66
+Guanabano Indigente,EMPATE,0,Paises Bajos,5,EMPATE,1,Ecuador,1,Paises Bajos,5,Ecuador,0,Inglaterra,2,Estados Unidos,0,Inglaterra,0,EMPATE,1,Inglaterra,3,Estados Unidos,3,Argentina,0,Mexico,0,Argentina,3,Arabia Saudita,0,Argentina,3,Mexico,3,Francia,2,Dinamarca,1,Dinamarca,0,EMPATE,1,Francia,0,Dinamarca,0,EMPATE,0,Alemania,0,EMPATE,1,Costa Rica,5,España,1,Alemania,2,Belgica,5,Croacia,1,Belgica,0,Croacia,3,EMPATE,1,EMPATE,1,Brasil,3,Suiza,2,Brasil,2,Serbia,0,Brasil,0,Suiza,2,Portugal,3,Uruguay,0,EMPATE,1,Corea del Sur,0,Portugal,0,Uruguay,5,72,44.0,73
+Safiro y Acero,Qatar,0,EMPATE,0,Senegal,3,Paises Bajos,1,Paises Bajos,3,Senegal,5,Inglaterra,2,Estados Unidos,0,Inglaterra,0,EMPATE,0,Inglaterra,2,Estados Unidos,5,Argentina,0,Polonia,0,Argentina,3,Polonia,5,EMPATE,0,Mexico,3,Francia,2,Dinamarca,0,Dinamarca,0,EMPATE,1,Francia,0,Dinamarca,0,España,1,EMPATE,1,EMPATE,1,Japon,0,EMPATE,1,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,2,EMPATE,1,Canada,1,Brasil,2,EMPATE,1,Brasil,3,Serbia,0,Brasil,0,Serbia,0,Portugal,2,EMPATE,1,Uruguay,0,Corea del Sur,1,EMPATE,1,Uruguay,3,63,39.0,66
+Marta Restrepo,Ecuador,5,Paises Bajos,3,Senegal,3,EMPATE,5,Paises Bajos,3,EMPATE,1,EMPATE,0,Estados Unidos,1,Inglaterra,1,Iran,3,Inglaterra,2,EMPATE,1,Argentina,0,Polonia,0,Argentina,5,Polonia,5,Argentina,3,Mexico,3,Francia,2,Dinamarca,1,Dinamarca,0,EMPATE,1,Francia,0,Dinamarca,0,España,1,Alemania,0,Alemania,0,Japon,0,España,0,Alemania,2,EMPATE,1,Marruecos,1,Belgica,0,Croacia,2,EMPATE,1,Marruecos,2,Brasil,3,Camerun,0,Brasil,2,EMPATE,1,Brasil,0,Suiza,2,Portugal,2,Uruguay,1,Uruguay,0,Corea del Sur,1,Portugal,0,Uruguay,5,75,57.0,82
+Alex Garcia,EMPATE,0,Senegal,0,Senegal,2,Ecuador,1,Paises Bajos,3,EMPATE,1,Inglaterra,2,Estados Unidos,1,Inglaterra,1,EMPATE,1,Inglaterra,3,Estados Unidos,3,Argentina,0,Polonia,0,Argentina,3,Polonia,5,EMPATE,0,Mexico,5,Francia,2,Dinamarca,0,Francia,2,EMPATE,0,Francia,1,EMPATE,1,España,0,Alemania,0,España,0,EMPATE,1,España,0,Alemania,2,Belgica,2,Croacia,1,Belgica,0,Croacia,3,EMPATE,1,Canada,1,Brasil,3,Suiza,2,Brasil,2,Camerun,0,Brasil,1,Suiza,2,Portugal,2,Uruguay,1,Uruguay,0,EMPATE,0,Portugal,0,Uruguay,3,64,40.0,67
+John Jaramillo-Diogenes Restrepo,Ecuador,5,Paises Bajos,2,Qatar,1,Paises Bajos,1,Paises Bajos,3,Ecuador,1,Inglaterra,2,Estados Unidos,1,Inglaterra,0,Gales,0,Inglaterra,3,Estados Unidos,2,Argentina,0,Polonia,0,Argentina,5,Polonia,3,Argentina,3,Mexico,2,Francia,3,Dinamarca,0,Dinamarca,0,Tunez,0,Francia,1,Dinamarca,0,España,1,Alemania,0,Alemania,1,Japon,0,España,0,Alemania,2,Belgica,5,Croacia,0,Belgica,0,Croacia,3,EMPATE,1,Canada,1,Brasil,2,Camerun,0,Brasil,3,Camerun,0,Brasil,0,Serbia,0,Portugal,2,Uruguay,0,Portugal,3,Corea del Sur,1,Portugal,0,Uruguay,5,68,47.0,71
+Los Betancruz,Ecuador,5,Paises Bajos,2,Senegal,3,EMPATE,1,EMPATE,0,Ecuador,0,Inglaterra,2,Estados Unidos,1,Inglaterra,1,EMPATE,0,Inglaterra,3,EMPATE,1,Argentina,0,Polonia,0,Argentina,2,Polonia,3,Argentina,3,Mexico,5,Francia,3,Dinamarca,0,Francia,2,Tunez,0,Francia,0,EMPATE,0,España,0,Alemania,0,EMPATE,1,Japon,0,España,0,Alemania,2,Belgica,2,Croacia,0,Belgica,0,Croacia,3,Belgica,0,Canada,0,Brasil,3,Camerun,0,Brasil,2,EMPATE,1,Brasil,0,Suiza,2,Portugal,3,Uruguay,1,Uruguay,0,Ghana,3,Portugal,0,Uruguay,2,62,47.0,65
+Andres & Cia,Ecuador,5,Paises Bajos,3,EMPATE,1,Paises Bajos,1,Paises Bajos,5,EMPATE,0,Inglaterra,2,Gales,1,Inglaterra,1,Gales,0,EMPATE,0,Estados Unidos,5,Argentina,0,EMPATE,1,Argentina,3,Polonia,5,Argentina,3,Mexico,2,Francia,3,Dinamarca,1,Francia,2,EMPATE,1,Francia,0,EMPATE,1,España,1,Alemania,0,Alemania,0,Japon,1,EMPATE,1,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,3,EMPATE,1,EMPATE,0,Brasil,3,Camerun,0,Brasil,2,EMPATE,1,Brasil,1,Suiza,2,Portugal,2,EMPATE,1,EMPATE,1,EMPATE,0,Portugal,0,Uruguay,5,77,52.0,80
+Las tejedoras,EMPATE,1,EMPATE,0,Senegal,3,EMPATE,5,Paises Bajos,3,Ecuador,0,Inglaterra,2,Estados Unidos,1,Inglaterra,1,EMPATE,0,Inglaterra,3,Estados Unidos,2,Argentina,0,Polonia,0,Argentina,3,Polonia,3,Argentina,3,Mexico,5,Francia,3,Dinamarca,0,Francia,3,EMPATE,1,Francia,0,Dinamarca,1,España,1,EMPATE,1,Alemania,0,EMPATE,1,España,0,Alemania,2,Canada,0,Croacia,0,Marruecos,3,EMPATE,0,Croacia,0,Marruecos,3,Brasil,3,EMPATE,1,Brasil,3,Camerun,0,Brasil,1,Serbia,1,Portugal,2,EMPATE,1,EMPATE,0,Ghana,2,EMPATE,1,Uruguay,3,72,51.0,79
+Qatarsis 1.0,Ecuador,3,Paises Bajos,2,EMPATE,0,Paises Bajos,0,Paises Bajos,3,Ecuador,0,Inglaterra,2,EMPATE,1,Inglaterra,0,Iran,3,Inglaterra,3,EMPATE,0,Argentina,0,Mexico,0,EMPATE,1,Polonia,3,EMPATE,1,Mexico,5,Francia,2,Dinamarca,0,Dinamarca,0,Tunez,1,Francia,1,Dinamarca,0,EMPATE,0,Alemania,0,Alemania,1,Costa Rica,2,España,0,Alemania,2,Belgica,3,Croacia,0,Belgica,1,Croacia,3,EMPATE,1,Marruecos,3,Brasil,2,EMPATE,0,Brasil,3,Serbia,1,Brasil,0,Serbia,0,Portugal,2,Corea del Sur,0,Uruguay,0,EMPATE,1,Portugal,0,Uruguay,3,59,37.0,59
+Qatarsis 2.0,Ecuador,5,Paises Bajos,5,EMPATE,1,Paises Bajos,0,Paises Bajos,5,Ecuador,1,Inglaterra,2,Gales,0,Inglaterra,1,Gales,0,Inglaterra,3,Estados Unidos,3,Argentina,0,Mexico,1,Argentina,2,Polonia,5,Argentina,3,Mexico,3,Francia,3,Tunez,0,Francia,3,EMPATE,1,Francia,0,Dinamarca,0,España,0,Alemania,0,EMPATE,5,Costa Rica,3,España,0,Alemania,2,Belgica,3,Croacia,0,Belgica,0,Croacia,2,EMPATE,1,Marruecos,2,Brasil,3,Suiza,2,Brasil,3,EMPATE,1,Brasil,0,Serbia,1,Portugal,3,Uruguay,0,EMPATE,1,EMPATE,0,Portugal,0,Uruguay,5,84,57.0,86
+TV y Novelas,Ecuador,3,Paises Bajos,3,Senegal,3,EMPATE,1,Paises Bajos,5,Ecuador,0,Inglaterra,2,EMPATE,5,Inglaterra,1,EMPATE,1,Inglaterra,3,Estados Unidos,5,Argentina,0,EMPATE,1,Argentina,3,Polonia,3,Argentina,3,EMPATE,1,Francia,2,Dinamarca,0,EMPATE,0,Australia,5,Francia,1,Dinamarca,1,España,1,Alemania,0,EMPATE,1,Japon,0,España,0,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,3,EMPATE,1,Canada,1,Brasil,3,EMPATE,1,Brasil,3,Camerun,0,Brasil,1,Serbia,1,Portugal,2,Uruguay,1,EMPATE,0,Ghana,2,Portugal,0,Uruguay,3,82,56.0,84
+El cuculeito del balon,EMPATE,0,Paises Bajos,3,Senegal,2,Paises Bajos,1,Paises Bajos,3,EMPATE,1,Inglaterra,2,Estados Unidos,1,Inglaterra,1,EMPATE,0,Inglaterra,3,Estados Unidos,3,Argentina,0,Polonia,1,Argentina,5,Polonia,3,Argentina,3,Mexico,2,Francia,2,Dinamarca,1,Francia,2,Australia,5,Francia,0,Dinamarca,0,España,1,Alemania,0,Alemania,1,Costa Rica,5,España,0,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,2,EMPATE,5,EMPATE,1,Brasil,5,Suiza,3,Brasil,5,Serbia,0,Brasil,0,Suiza,2,Portugal,2,Uruguay,1,Portugal,3,Ghana,2,Portugal,1,Uruguay,3,92,66.0,95
+Cristina Valentina Echeverri- Las fieras,Qatar,0,Paises Bajos,3,EMPATE,1,Paises Bajos,1,Paises Bajos,2,Ecuador,0,Inglaterra,2,Estados Unidos,0,EMPATE,1,EMPATE,1,Inglaterra,3,Estados Unidos,2,Argentina,0,Mexico,0,Argentina,2,Polonia,3,Argentina,3,Mexico,5,Francia,5,Dinamarca,1,Francia,3,Australia,2,Francia,0,EMPATE,0,España,1,Alemania,0,EMPATE,1,Japon,0,España,1,Alemania,3,Belgica,3,EMPATE,5,Belgica,0,EMPATE,1,EMPATE,1,EMPATE,1,Brasil,3,Camerun,0,Brasil,2,Camerun,0,Brasil,1,Suiza,2,Portugal,2,Uruguay,0,EMPATE,0,EMPATE,0,Portugal,0,Uruguay,3,70,46.0,73
+La Perripolla,Ecuador,3,Paises Bajos,3,EMPATE,0,Paises Bajos,1,Paises Bajos,3,EMPATE,1,Inglaterra,2,EMPATE,5,Inglaterra,1,Gales,0,Inglaterra,3,Estados Unidos,3,Argentina,0,EMPATE,1,Argentina,3,Polonia,5,Argentina,3,Mexico,3,Francia,2,Dinamarca,1,Dinamarca,0,EMPATE,1,Francia,0,Dinamarca,1,España,1,Alemania,0,EMPATE,5,Japon,1,España,0,Alemania,2,Belgica,3,Croacia,1,Belgica,0,Croacia,2,Belgica,0,EMPATE,0,Brasil,2,Suiza,3,Brasil,3,Serbia,0,Brasil,1,Suiza,2,Portugal,2,Uruguay,1,Uruguay,0,Ghana,2,Portugal,0,Uruguay,5,81,57.0,84
+Ana Maria Corpas,Ecuador,3,Paises Bajos,5,Qatar,0,EMPATE,5,Paises Bajos,5,Ecuador,1,Inglaterra,2,Gales,0,Inglaterra,0,Gales,0,EMPATE,0,Estados Unidos,2,Argentina,0,EMPATE,1,Argentina,3,Polonia,5,EMPATE,1,Mexico,5,Francia,3,Tunez,0,Francia,2,Tunez,1,EMPATE,1,Australia,2,EMPATE,0,Alemania,0,EMPATE,1,Costa Rica,5,España,0,Alemania,2,EMPATE,1,Croacia,1,Belgica,0,EMPATE,0,Croacia,0,Canada,0,Brasil,3,Suiza,2,Brasil,5,EMPATE,1,Brasil,1,Suiza,2,Portugal,2,Uruguay,1,EMPATE,0,Ghana,2,Portugal,0,Uruguay,3,79,59.0,84
+Lolita,EMPATE,0,Paises Bajos,3,Senegal,2,Paises Bajos,1,Paises Bajos,3,Senegal,5,Inglaterra,2,EMPATE,5,Inglaterra,1,Gales,0,Inglaterra,3,Estados Unidos,3,Argentina,0,Polonia,0,Argentina,3,Polonia,5,EMPATE,0,Mexico,5,Francia,3,Dinamarca,1,Francia,5,Australia,3,Francia,0,Dinamarca,0,España,0,Alemania,0,España,1,Japon,0,España,0,Alemania,2,Belgica,2,Croacia,1,Belgica,0,Canada,0,Belgica,0,Canada,0,Brasil,3,Camerun,1,Brasil,2,Camerun,0,Brasil,0,Suiza,2,Portugal,3,Uruguay,1,Portugal,3,EMPATE,0,Portugal,0,Uruguay,2,76,54.0,79
+Club Atletico Vodka Juniors,Qatar,0,Paises Bajos,2,Senegal,2,Paises Bajos,1,Paises Bajos,2,Ecuador,0,Inglaterra,2,Estados Unidos,0,Inglaterra,0,Gales,0,Inglaterra,3,Estados Unidos,2,Argentina,0,EMPATE,1,Argentina,2,Polonia,3,Argentina,5,Mexico,3,Francia,2,Dinamarca,1,Francia,5,Australia,5,Francia,0,Dinamarca,1,España,1,Alemania,0,España,1,Costa Rica,5,España,0,Alemania,2,Canada,1,Croacia,1,Belgica,0,Croacia,2,Belgica,0,Canada,1,Brasil,3,Camerun,1,Brasil,3,Camerun,0,Brasil,1,Suiza,2,Portugal,3,Uruguay,1,Uruguay,0,Corea del Sur,0,Portugal,0,Uruguay,3,73,51.0,76
+Leonardo Valencia Valencia,EMPATE,0,Paises Bajos,3,Qatar,0,Paises Bajos,1,Paises Bajos,3,Ecuador,1,Inglaterra,2,Estados Unidos,1,Inglaterra,0,EMPATE,0,Inglaterra,3,Estados Unidos,5,Argentina,0,EMPATE,1,Argentina,3,EMPATE,1,Argentina,5,Mexico,5,Francia,2,Dinamarca,1,Francia,5,Australia,5,Francia,0,EMPATE,1,España,1,Alemania,0,España,1,Japon,0,España,0,Alemania,2,Belgica,2,Croacia,1,Belgica,0,Croacia,3,EMPATE,1,Canada,0,Brasil,5,EMPATE,1,Brasil,2,Camerun,0,Brasil,0,EMPATE,0,Portugal,2,Uruguay,0,EMPATE,1,Ghana,2,Portugal,1,EMPATE,0,73,49.0,76
+
+===== HOJA: Puntajes Octavos de Final (31x18) =====
+Nombres,Paises Bajos Vs Estados Unidos,,Argentina Vs Australia,,Francia Vs Polonia,,Inglaterra Vs Senegal,,Japón Vs Croacia,,Brasil Vs Corea del Sur,,Marruecos Vs España,,Portugal Vs Suiza,,
+,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Ganador,Puntos,Puntos Octavos de Final
+Alejandro Botero,Paises Bajos,2,Argentina,2,Francia,3,Inglaterra,2,Japón,1,Brasil,3,EMPATE,1,Portugal,2,16
+Ana Maria Corpas,Paises Bajos,3,Argentina,2,Francia,3,Inglaterra,3,Japón,0,Brasil,3,EMPATE,1,EMPATE,0,15
+Marta Restrepo,Estados Unidos,0,Argentina,2,Polonia,0,Inglaterra,3,Japón,0,Corea del Sur,0,Marruecos,1,EMPATE,1,7
+Alex Garcia,EMPATE,1,Argentina,3,Francia,5,Inglaterra,2,Japón,1,Brasil,2,Marruecos,0,Portugal,2,16
+Lore Mira,Paises Bajos,3,Argentina,3,EMPATE,1,EMPATE,0,Japón,1,Brasil,2,España,1,Portugal,3,14
+Las tejedoras,Estados Unidos,0,Argentina,3,Francia,2,EMPATE,1,EMPATE,5,Brasil,2,EMPATE,1,Suiza,0,14
+Emerson Alexis Gomez,Paises Bajos,3,Argentina,3,Francia,3,Inglaterra,2,Japón,0,Brasil,2,Marruecos,1,Portugal,3,17
+Club Atletico Vodka Juniors,Estados Unidos,1,Argentina,3,Francia,2,Inglaterra,3,Japón,1,Brasil,2,España,0,Portugal,2,14
+Juan Esteban Montoya Hincapie,Paises Bajos,3,Argentina,3,Francia,2,Inglaterra,2,Japón,1,Brasil,2,España,0,Suiza,0,13
+Lolita,Paises Bajos,3,Argentina,3,Francia,2,Inglaterra,3,EMPATE,5,Brasil,2,España,0,Portugal,2,20
+Mauricio Perez (Mauro chef),Paises Bajos,2,Argentina,5,Francia,3,Inglaterra,3,Japón,1,Brasil,2,España,1,Portugal,2,19
+Leonardo Valencia Valencia,Paises Bajos,2,Argentina,3,Francia,3,Inglaterra,3,Japón,1,Brasil,3,EMPATE,1,Portugal,2,18
+TV y Novelas,Paises Bajos,3,Argentina,3,Francia,3,Inglaterra,3,EMPATE,5,Brasil,3,España,1,Portugal,3,24
+Casa VIII,Estados Unidos,0,Argentina,3,Francia,5,Inglaterra,2,Croacia,1,Brasil,3,España,1,EMPATE,1,16
+Luis Fermin Naranjo Artehourtua,Paises Bajos,3,Argentina,3,Francia,2,Inglaterra,3,Croacia,1,Brasil,2,España,0,Portugal,2,16
+La qatarsis mundial,Paises Bajos,3,Argentina,2,Francia,3,Inglaterra,3,Croacia,1,Brasil,2,España,0,EMPATE,0,14
+Pregunte por lo que no vea,Paises Bajos,3,Argentina,3,Francia,2,EMPATE,0,Croacia,1,Brasil,2,España,0,EMPATE,0,11
+La Perripolla,Paises Bajos,2,Argentina,5,Francia,2,Inglaterra,3,Japón,1,Brasil,2,EMPATE,1,Portugal,3,19
+John Jaramillo-Diogenes Restrepo,Estados Unidos,0,Argentina,3,Francia,3,Senegal,0,Japón,1,Brasil,2,Marruecos,0,EMPATE,1,10
+Andres & Cia,EMPATE,1,Argentina,2,Francia,5,Inglaterra,2,Croacia,0,Brasil,3,EMPATE,1,EMPATE,1,15
+Cristina Valentina Echeverri- Las fieras,Paises Bajos,3,Argentina,2,Francia,3,Inglaterra,3,Croacia,1,Brasil,3,España,0,EMPATE,1,16
+Safiro y Acero,Paises Bajos,3,Argentina,3,EMPATE,0,Inglaterra,5,Japón,1,Brasil,3,Marruecos,0,Suiza,0,15
+Qatarsis 1.0,Paises Bajos,3,Argentina,3,Francia,3,Inglaterra,5,Croacia,1,Brasil,2,EMPATE,1,Suiza,0,18
+Qatarsis 2.0,Paises Bajos,2,Argentina,5,Francia,5,Inglaterra,3,EMPATE,5,Brasil,2,Marruecos,0,EMPATE,1,23
+Guanabano Indigente,EMPATE,1,Argentina,5,Francia,3,Inglaterra,2,Japón,1,Brasil,2,EMPATE,1,EMPATE,1,16
+Los Betancruz,Estados Unidos,0,Argentina,3,Francia,3,Inglaterra,3,Japón,0,Brasil,2,EMPATE,1,EMPATE,0,12
+Luchismo,Paises Bajos,3,Argentina,3,Francia,3,EMPATE,0,Japón,0,Brasil,3,España,1,Portugal,2,15
+Pascual,Estados Unidos,0,Argentina,2,Francia,3,Inglaterra,5,Croacia,1,Brasil,2,España,1,Portugal,3,17
+El cuculeito del balon,Paises Bajos,2,Argentina,3,Francia,2,Inglaterra,2,Croacia,1,Brasil,2,España,1,Portugal,2,15
+
