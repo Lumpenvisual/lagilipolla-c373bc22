@@ -67,6 +67,9 @@ export type LbRow = {
   puntos_partidos: number;
   puntos_especiales: number;
   puntos_total: number;
+  aciertos_5: number;
+  aciertos_3: number;
+  aciertos_2: number;
   posicion: number;
 };
 
