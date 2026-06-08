@@ -10,22 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ReglasRouteImport } from './routes/reglas'
 import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as LeaderboardRouteImport } from './routes/leaderboard'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReglasRoute = ReglasRouteImport.update({
-  id: '/reglas',
-  path: '/reglas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegistroRoute = RegistroRouteImport.update({
@@ -38,21 +29,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LeaderboardRoute = LeaderboardRouteImport.update({
-  id: '/leaderboard',
-  path: '/leaderboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,76 +37,35 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/dashboard': typeof DashboardRoute
-  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/registro': typeof RegistroRoute
-  '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/dashboard': typeof DashboardRoute
-  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/registro': typeof RegistroRoute
-  '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
-  '/dashboard': typeof DashboardRoute
-  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/registro': typeof RegistroRoute
-  '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/admin'
-    | '/dashboard'
-    | '/leaderboard'
-    | '/login'
-    | '/registro'
-    | '/reglas'
-    | '/sitemap.xml'
+  fullPaths: '/' | '/login' | '/registro' | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/admin'
-    | '/dashboard'
-    | '/leaderboard'
-    | '/login'
-    | '/registro'
-    | '/reglas'
-    | '/sitemap.xml'
-  id:
-    | '__root__'
-    | '/'
-    | '/admin'
-    | '/dashboard'
-    | '/leaderboard'
-    | '/login'
-    | '/registro'
-    | '/reglas'
-    | '/sitemap.xml'
+  to: '/' | '/login' | '/registro' | '/sitemap.xml'
+  id: '__root__' | '/' | '/login' | '/registro' | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
-  DashboardRoute: typeof DashboardRoute
-  LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   RegistroRoute: typeof RegistroRoute
-  ReglasRoute: typeof ReglasRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -141,13 +76,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reglas': {
-      id: '/reglas'
-      path: '/reglas'
-      fullPath: '/reglas'
-      preLoaderRoute: typeof ReglasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/registro': {
@@ -164,27 +92,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/leaderboard': {
-      id: '/leaderboard'
-      path: '/leaderboard'
-      fullPath: '/leaderboard'
-      preLoaderRoute: typeof LeaderboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -197,14 +104,20 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
-  DashboardRoute: DashboardRoute,
-  LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   RegistroRoute: RegistroRoute,
-  ReglasRoute: ReglasRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
