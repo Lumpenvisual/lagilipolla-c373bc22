@@ -400,3 +400,26 @@ function DemoTab() {
     </div>
   );
 }
+
+/* ---------------- Reportes ---------------- */
+function ReportesTab() {
+  return (
+    <div className="space-y-6">
+      <Card className="border-info/30 bg-card p-6 card-shadow">
+        <h2 className="font-display text-xl text-info">📊 Reportes Excel</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Descarga reportes operativos en formato .xlsx.</p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <DownloadButton fn={generateLeaderboardXlsx} label="Leaderboard" icon={<FileSpreadsheet className="mr-2 size-4" />} />
+          <DownloadButton fn={generateParticipantesXlsx} label="Participantes y pagos" icon={<FileSpreadsheet className="mr-2 size-4" />} />
+        </div>
+      </Card>
+      <Card className="border-gold/30 bg-card p-6 card-shadow">
+        <h2 className="font-display text-xl text-gold">💾 Backup completo</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Descarga un Excel con todas las tablas (participants, picks, tournament_state, user_roles, admin_audit). Guárdalo en un lugar seguro como respaldo o para recuperación de desastres.</p>
+        <div className="mt-4">
+          <DownloadButton fn={generateBackupXlsx} label="Descargar backup completo" variant="hero" icon={<Database className="mr-2 size-4" />} />
+        </div>
+      </Card>
+    </div>
+  );
+}
