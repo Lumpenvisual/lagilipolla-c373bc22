@@ -1,0 +1,19 @@
+# Normalize line endings: store as LF in the repo, check out as LF on all platforms.
+# Avoids the CRLF/LF churn that otherwise floods prettier/eslint on Windows.
+* text=auto eol=lf
+
+# Binary assets — never touch their bytes.
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.lock  -text
+
+# Generated files: keep but don't show in diffs by default.
+src/routeTree.gen.ts linguist-generated=true
+bun.lock            linguist-generated=true
