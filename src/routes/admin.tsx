@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus, FlaskConical, AlertTriangle, FileSpreadsheet, Database } from "lucide-react";
+import { Loader2, Users, ClipboardList, ListPlus, RefreshCw, Trash2, Plus, FlaskConical, AlertTriangle, FileSpreadsheet, Database, Lock, Unlock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useTournamentState } from "@/hooks/usePolla";
@@ -405,6 +405,7 @@ function DemoTab() {
 function ReportesTab() {
   return (
     <div className="space-y-6">
+      <DeadlineLockCard />
       <Card className="border-info/30 bg-card p-6 card-shadow">
         <h2 className="font-display text-xl text-info">📊 Reportes Excel</h2>
         <p className="mt-2 text-sm text-muted-foreground">Descarga reportes operativos en formato .xlsx.</p>
@@ -421,5 +422,43 @@ function ReportesTab() {
         </div>
       </Card>
     </div>
+  );
+}
+
+function DeadlineLockCard() {
+  const qc = useQueryClient();
+  const { data: ts } = useTournamentState();
+  const lockedAt = (ts as any)?.picks_locked_at as string | undefined;
+  const isLocked = !!lockedAt && new Date(lockedAt).getTime() <= Date.now();
+  const [busy, setBusy] = useState(false);
+
+  const setLock = async (when: Date | null) => {
+    if (!confirm(when && when.getTime() <= Date.now() ? "¿Cerrar planillas ahora? Los usuarios no podrán editar." : "¿Reabrir planillas?")) return;
+    setBusy(true);
+    const iso = (when ?? new Date(2099, 0, 1)).toISOString();
+    const { error } = await supabase.from("tournament_state").update({ picks_locked_at: iso }).eq("id", 1);
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success(when && when.getTime() <= Date.now() ? "Planillas cerradas" : "Planillas reabiertas");
+    qc.invalidateQueries({ queryKey: ["tournament_state"] });
+  };
+
+  return (
+    <Card className={`p-6 card-shadow ${isLocked ? "border-destructive/40 bg-destructive/5" : "border-success/30 bg-success/5"}`}>
+      <h2 className={`font-display text-xl flex items-center gap-2 ${isLocked ? "text-destructive" : "text-success"}`}>
+        {isLocked ? <Lock className="size-5" /> : <Unlock className="size-5" />}
+        {isLocked ? "Planillas cerradas" : "Planillas abiertas"}
+      </h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {lockedAt
+          ? `Cierre programado: ${new Date(lockedAt).toLocaleString("es-CO", { timeZone: "America/Bogota" })} COT`
+          : "Sin fecha de cierre configurada"}
+      </p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {isLocked
+          ? <Button variant="hero" disabled={busy} onClick={() => setLock(null)}><Unlock className="mr-2 size-4" />Reabrir planillas</Button>
+          : <Button variant="destructive" disabled={busy} onClick={() => setLock(new Date())}><Lock className="mr-2 size-4" />Cerrar planillas ahora</Button>}
+      </div>
+    </Card>
   );
 }
