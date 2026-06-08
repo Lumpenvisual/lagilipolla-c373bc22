@@ -1,7 +1,5 @@
-export const ENTRY_FEE = 20; // CAD
-export const ADMIN_EMAIL = "admin@pollacad.com";
-export const TOURNAMENT_START_UTC = "2026-06-11T19:00:00Z";
-export const TOTAL_MATCHES = 72;
-
-// Prize distribution percentages by position (normal case)
+export const ENTRY_FEE = 100_000; // COP (kept for backwards-compat — use POLLA.cuotaCOP)
+export const ADMIN_EMAIL = "elguanabano@polla.co";
+export const TOURNAMENT_START_UTC = "2026-06-11T16:00:00Z"; // 11:00 COT
+export const TOTAL_MATCHES = 104;
 export const PRIZE_SPLIT = [0.6, 0.25, 0.1, 0.05];
