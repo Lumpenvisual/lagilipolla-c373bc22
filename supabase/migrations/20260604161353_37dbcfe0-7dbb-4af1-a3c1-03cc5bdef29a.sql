@@ -1,0 +1,1 @@
+ALTER TABLE public.participants DROP COLUMN IF EXISTS comprobante_url;
