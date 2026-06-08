@@ -3,45 +3,27 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { Menu, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/lib/i18n";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const { user, isAdmin, participant } = useAuth();
-  const t = useT();
   const approved = participant?.estado_pago === "aprobado";
   const linkCls =
     "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary";
   return (
     <>
-      <Link to="/jugar" className={linkCls} onClick={onNavigate}>
-        {t("nav.jugar")}
-      </Link>
-      <Link to="/concursos" className={linkCls} onClick={onNavigate}>
-        {t("nav.concursos")}
-      </Link>
-      <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>
-        {t("nav.tabla")}
-      </Link>
-      <Link to="/reglas" className={linkCls} onClick={onNavigate}>
-        {t("nav.reglas")}
-      </Link>
-
-      {user && (
-        <Link to="/dashboard" className={linkCls} onClick={onNavigate}>
-          {t("nav.dashboard")}
-        </Link>
-      )}
+      <Link to="/" className={linkCls} onClick={onNavigate}>Inicio</Link>
       {user && approved && (
-        <Link to="/predictions" className={linkCls} onClick={onNavigate}>
-          {t("nav.pronosticos")}
-        </Link>
+        <Link to="/planilla" className={linkCls} onClick={onNavigate}>Planilla</Link>
+      )}
+      <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>Tabla</Link>
+      <Link to="/reglas" className={linkCls} onClick={onNavigate}>Reglas</Link>
+      {user && (
+        <Link to="/dashboard" className={linkCls} onClick={onNavigate}>Mi cuenta</Link>
       )}
       {isAdmin && (
-        <Link to="/admin" className={linkCls} onClick={onNavigate}>
-          {t("nav.admin")}
-        </Link>
+        <Link to="/admin" className={linkCls} onClick={onNavigate}>Admin</Link>
       )}
     </>
   );
@@ -65,9 +47,9 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to="/" className="font-display text-2xl tracking-wide">
-          <span aria-hidden>⚽ </span>
-          <span className="gold-gradient-text">POLLA 2026</span>
+        <Link to="/" className="flex items-center gap-2 font-display text-2xl tracking-wide">
+          <span className="bandera-stripe-h h-3 w-6 rounded-sm" aria-hidden />
+          <span className="gold-gradient-text">LA GILIPOLLA 2026</span>
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
@@ -75,7 +57,6 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <LanguageSwitcher />
           {user ? (
             <>
               <div className="flex items-center gap-2">
@@ -104,7 +85,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
-          <LanguageSwitcher />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label={t("nav.menu")}>

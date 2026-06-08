@@ -12,16 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ReglasRouteImport } from './routes/reglas'
 import { Route as RegistroRouteImport } from './routes/registro'
-import { Route as PredictionsRouteImport } from './routes/predictions'
+import { Route as PlanillaRouteImport } from './routes/planilla'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as JugarIndexRouteImport } from './routes/jugar.index'
-import { Route as ConcursosIndexRouteImport } from './routes/concursos.index'
-import { Route as JugarModalidadRouteImport } from './routes/jugar.$modalidad'
-import { Route as ConcursosIdRouteImport } from './routes/concursos.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -38,9 +34,9 @@ const RegistroRoute = RegistroRouteImport.update({
   path: '/registro',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PredictionsRoute = PredictionsRouteImport.update({
-  id: '/predictions',
-  path: '/predictions',
+const PlanillaRoute = PlanillaRouteImport.update({
+  id: '/planilla',
+  path: '/planilla',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -68,26 +64,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JugarIndexRoute = JugarIndexRouteImport.update({
-  id: '/jugar/',
-  path: '/jugar/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConcursosIndexRoute = ConcursosIndexRouteImport.update({
-  id: '/concursos/',
-  path: '/concursos/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JugarModalidadRoute = JugarModalidadRouteImport.update({
-  id: '/jugar/$modalidad',
-  path: '/jugar/$modalidad',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConcursosIdRoute = ConcursosIdRouteImport.update({
-  id: '/concursos/$id',
-  path: '/concursos/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -95,14 +71,10 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
-  '/predictions': typeof PredictionsRoute
+  '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/concursos/$id': typeof ConcursosIdRoute
-  '/jugar/$modalidad': typeof JugarModalidadRoute
-  '/concursos/': typeof ConcursosIndexRoute
-  '/jugar/': typeof JugarIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,14 +82,10 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
-  '/predictions': typeof PredictionsRoute
+  '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/concursos/$id': typeof ConcursosIdRoute
-  '/jugar/$modalidad': typeof JugarModalidadRoute
-  '/concursos': typeof ConcursosIndexRoute
-  '/jugar': typeof JugarIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,14 +94,10 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
-  '/predictions': typeof PredictionsRoute
+  '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/concursos/$id': typeof ConcursosIdRoute
-  '/jugar/$modalidad': typeof JugarModalidadRoute
-  '/concursos/': typeof ConcursosIndexRoute
-  '/jugar/': typeof JugarIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -143,14 +107,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/login'
-    | '/predictions'
+    | '/planilla'
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
-    | '/concursos/$id'
-    | '/jugar/$modalidad'
-    | '/concursos/'
-    | '/jugar/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -158,14 +118,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/login'
-    | '/predictions'
+    | '/planilla'
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
-    | '/concursos/$id'
-    | '/jugar/$modalidad'
-    | '/concursos'
-    | '/jugar'
   id:
     | '__root__'
     | '/'
@@ -173,14 +129,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/leaderboard'
     | '/login'
-    | '/predictions'
+    | '/planilla'
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
-    | '/concursos/$id'
-    | '/jugar/$modalidad'
-    | '/concursos/'
-    | '/jugar/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,14 +141,10 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
-  PredictionsRoute: typeof PredictionsRoute
+  PlanillaRoute: typeof PlanillaRoute
   RegistroRoute: typeof RegistroRoute
   ReglasRoute: typeof ReglasRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  ConcursosIdRoute: typeof ConcursosIdRoute
-  JugarModalidadRoute: typeof JugarModalidadRoute
-  ConcursosIndexRoute: typeof ConcursosIndexRoute
-  JugarIndexRoute: typeof JugarIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -222,11 +170,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegistroRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/predictions': {
-      id: '/predictions'
-      path: '/predictions'
-      fullPath: '/predictions'
-      preLoaderRoute: typeof PredictionsRouteImport
+    '/planilla': {
+      id: '/planilla'
+      path: '/planilla'
+      fullPath: '/planilla'
+      preLoaderRoute: typeof PlanillaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -264,34 +212,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/jugar/': {
-      id: '/jugar/'
-      path: '/jugar'
-      fullPath: '/jugar/'
-      preLoaderRoute: typeof JugarIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concursos/': {
-      id: '/concursos/'
-      path: '/concursos'
-      fullPath: '/concursos/'
-      preLoaderRoute: typeof ConcursosIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/jugar/$modalidad': {
-      id: '/jugar/$modalidad'
-      path: '/jugar/$modalidad'
-      fullPath: '/jugar/$modalidad'
-      preLoaderRoute: typeof JugarModalidadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concursos/$id': {
-      id: '/concursos/$id'
-      path: '/concursos/$id'
-      fullPath: '/concursos/$id'
-      preLoaderRoute: typeof ConcursosIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -301,14 +221,10 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
-  PredictionsRoute: PredictionsRoute,
+  PlanillaRoute: PlanillaRoute,
   RegistroRoute: RegistroRoute,
   ReglasRoute: ReglasRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  ConcursosIdRoute: ConcursosIdRoute,
-  JugarModalidadRoute: JugarModalidadRoute,
-  ConcursosIndexRoute: ConcursosIndexRoute,
-  JugarIndexRoute: JugarIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
