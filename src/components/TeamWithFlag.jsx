@@ -1,19 +1,19 @@
-import React from "react";
+import { getFlagEmoji } from '@/utils/countryFlags';
 import { cn } from "@/lib/utils";
 
 const sizeMap = {
   sm: {
-    flag: "w-4 h-3",
+    emoji: "text-lg",
     text: "text-sm",
     gap: "gap-1.5",
   },
   md: {
-    flag: "w-6 h-4",
+    emoji: "text-2xl",
     text: "text-base",
     gap: "gap-2",
   },
   lg: {
-    flag: "w-8 h-6",
+    emoji: "text-4xl",
     text: "text-lg",
     gap: "gap-2.5",
   },
@@ -21,11 +21,11 @@ const sizeMap = {
 
 export const TeamWithFlag = ({
   teamName,
-  flagCode,
   size = "md",
   className,
 }) => {
-  const { flag, text, gap } = sizeMap[size];
+  const emoji = getFlagEmoji(teamName);
+  const { emoji: emojiSize, text, gap } = sizeMap[size];
 
   return (
     <span
@@ -36,10 +36,9 @@ export const TeamWithFlag = ({
       )}
       title={teamName}
     >
-      <span
-        className={cn("flag:" + flagCode.toUpperCase(), flag)}
-        aria-hidden="true"
-      />
+      <span className={cn(emojiSize)} aria-hidden="true">
+        {emoji}
+      </span>
       <span className={cn("font-medium whitespace-nowrap", text)}>
         {teamName}
       </span>
