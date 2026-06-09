@@ -37,7 +37,7 @@ export const TeamWithFlag = ({
       title={teamName}
     >
       <span
-        className={cn("fi", `fi-${flagCode.toLowerCase()}`, flag)}
+        className={cn("flag:" + flagCode.toUpperCase(), flag)}
         aria-hidden="true"
       />
       <span className={cn("font-medium whitespace-nowrap", text)}>
