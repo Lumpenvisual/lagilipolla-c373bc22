@@ -91,7 +91,17 @@ export function PagosTab() {
   };
   const recaudado = counts.aprobado * POLLA.cuotaCOP;
 
-  if (isLoading) return <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />;
+  if (isLoading) return <LoadingSpinner label="Cargando inscritos…" />;
+
+  if (parts.length === 0) {
+    return (
+      <EmptyState
+        icon={<Users className="size-8" />}
+        title="Sin inscritos todavía"
+        description="Cuando alguien se registre y suba su comprobante, aparecerá aquí para aprobar o rechazar."
+      />
+    );
+  }
 
   return (
     <div>
@@ -102,9 +112,10 @@ export function PagosTab() {
         <span className="text-muted-foreground">·</span>
         <span className="text-gold">{fmtCOP(recaudado)} COP recaudados</span>
       </Card>
-      <Card className="overflow-x-auto border-border bg-card card-shadow">
+      <Card className="overflow-hidden border-border bg-card card-shadow">
+        <div className="max-h-[70vh] overflow-auto">
         <table className="w-full min-w-[420px] text-sm">
-          <thead>
+          <thead className="sticky top-0 z-10 bg-card/95 backdrop-blur">
             <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
               <th className="p-2 sm:p-3">Nombre</th>
               <th className="p-2 sm:p-3">Estado</th>
@@ -113,7 +124,10 @@ export function PagosTab() {
           </thead>
           <tbody>
             {parts.map((p) => (
-              <tr key={p.id} className="border-b border-border/60">
+              <tr
+                key={p.id}
+                className="border-b border-border/60 transition-colors odd:bg-muted/20 hover:bg-muted/40"
+              >
                 <td className="p-2 sm:p-3 font-medium">
                   {p.nombre}
                   <br />
@@ -162,15 +176,9 @@ export function PagosTab() {
                 </td>
               </tr>
             ))}
-            {parts.length === 0 && (
-              <tr>
-                <td colSpan={3} className="p-6 text-center text-muted-foreground">
-                  Sin inscritos.
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
+        </div>
       </Card>
     </div>
   );
