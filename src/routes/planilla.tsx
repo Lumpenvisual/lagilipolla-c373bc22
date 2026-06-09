@@ -189,12 +189,27 @@ function Planilla() {
 
       {/* Bloque 1: Grupos */}
       {isVisible("grupos") && (
-      <section className="mt-8">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-xl sm:text-2xl text-gold">{t("planilla.groups.title")}</h2>
-          <span className="text-xs text-muted-foreground">{t("planilla.groups.progress", { done: completedGroups })}</span>
-        </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <Collapsible defaultOpen className="mt-8 group/sec">
+        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-gold/30 bg-gold/5 px-4 py-3 text-left transition-colors hover:bg-gold/10">
+          <div className="flex items-center gap-3">
+            <h2 className="font-display text-lg sm:text-xl text-gold uppercase tracking-wide">
+              {t("planilla.groups.title")}
+            </h2>
+            <span className="rounded-full border border-gold/40 bg-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold">
+              2 clasifican
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">
+              {t("planilla.groups.progress", { done: completedGroups })}
+            </span>
+            <ChevronDown className="size-4 text-gold transition-transform group-data-[state=closed]/sec:rotate-[-90deg]" />
+          </div>
+        </CollapsibleTrigger>
+        <p className="mt-2 px-1 text-xs text-muted-foreground">
+          Elige los <strong className="text-foreground/80">dos primeros clasificados</strong> de cada grupo. Los terceros, a la mierda.
+        </p>
+        <CollapsibleContent className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 data-[state=closed]:hidden">
           {GROUP_KEYS.map((key) => {
             const g = ts.groups[key];
             if (!g) return null;
@@ -257,25 +272,33 @@ function Planilla() {
               </Card>
             );
           })}
-        </div>
-      </section>
+        </CollapsibleContent>
+      </Collapsible>
       )}
 
       {/* Bloque 2: Grupo K */}
       {isVisible("grupos") && (
-      <section className="mt-10">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-xl sm:text-2xl text-info">
-            {t("planilla.k.title")}
-            <span className="ml-2 align-middle text-xs font-normal text-muted-foreground">
-              · {ts.group_k_matches.length} partidos
+      <Collapsible defaultOpen className="mt-6 group/seck">
+        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-info/30 bg-info/5 px-4 py-3 text-left transition-colors hover:bg-info/10">
+          <div className="flex items-center gap-3">
+            <h2 className="font-display text-lg sm:text-xl text-info uppercase tracking-wide">
+              {t("planilla.k.title")}
+            </h2>
+            <span className="rounded-full border border-info/40 bg-info/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-info">
+              {grupoKMatches.length} partidos
             </span>
-          </h2>
-          <span className="text-xs text-muted-foreground">{t("planilla.k.progress", { done: completedMatches })}</span>
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground">{t("planilla.k.hint")}</p>
-        <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
-          {ts.group_k_matches.map((m) => {
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">
+              {t("planilla.k.progress", { done: completedMatches })}
+            </span>
+            <ChevronDown className="size-4 text-info transition-transform group-data-[state=closed]/seck:rotate-[-90deg]" />
+          </div>
+        </CollapsibleTrigger>
+        <p className="mt-2 px-1 text-xs text-muted-foreground">{t("planilla.k.hint")}</p>
+        <CollapsibleContent className="data-[state=closed]:hidden">
+        <Card className="mt-3 border-border bg-card card-shadow divide-y divide-border">
+          {grupoKMatches.map((m) => {
             const lTeam = ts.groups.K.teams.find((t) => t.id === m.local);
             const vTeam = ts.groups.K.teams.find((t) => t.id === m.visitante);
             const lName = lTeam?.nombre ?? m.local;
@@ -332,7 +355,8 @@ function Planilla() {
             );
           })}
         </Card>
-      </section>
+        </CollapsibleContent>
+      </Collapsible>
       )}
 
       {/* Bloques dinámicos: fases eliminatorias */}
