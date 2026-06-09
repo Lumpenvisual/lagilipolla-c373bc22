@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2, Calendar, MapPin, Lock, Trophy } from "lucide-react";
+import { Loader2, Calendar, MapPin, Lock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useTournamentState } from "@/hooks/usePolla";
 import {
-  fmtFecha,
   isMatchLocked,
   FASE_LABEL,
+  GROUP_KEYS,
   type ExtraMatch,
   type Fase,
 } from "@/lib/polla";
@@ -32,7 +32,55 @@ export const Route = createFileRoute("/cronograma")({
   component: Cronograma,
 });
 
-type Row = ExtraMatch & { isGroupK: boolean };
+type Row = ExtraMatch & {
+  isGroupK: boolean;
+  localId: string;
+  visitanteId: string;
+  badge: string;
+};
+
+/* ISO3 → flag emoji (covers the WC2026 fixture squads + common placeholders). */
+const FLAG: Record<string, string> = {
+  ARG: "🇦🇷", AUS: "🇦🇺", AUT: "🇦🇹", BEL: "🇧🇪", BRA: "🇧🇷", CAN: "🇨🇦",
+  CHI: "🇨🇱", COD: "🇨🇩", COL: "🇨🇴", CRC: "🇨🇷", CRO: "🇭🇷", CUW: "🇨🇼",
+  DEN: "🇩🇰", ECU: "🇪🇨", EGY: "🇪🇬", ENG: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", ESP: "🇪🇸", FRA: "🇫🇷",
+  GER: "🇩🇪", GHA: "🇬🇭", HAI: "🇭🇹", IRN: "🇮🇷", ITA: "🇮🇹", JOR: "🇯🇴",
+  JPN: "🇯🇵", KOR: "🇰🇷", KSA: "🇸🇦", MAR: "🇲🇦", MEX: "🇲🇽", NED: "🇳🇱",
+  NGA: "🇳🇬", NOR: "🇳🇴", NZL: "🇳🇿", PAN: "🇵🇦", PAR: "🇵🇾", POL: "🇵🇱",
+  POR: "🇵🇹", QAT: "🇶🇦", RSA: "🇿🇦", SEN: "🇸🇳", SRB: "🇷🇸", SUI: "🇨🇭",
+  TUN: "🇹🇳", URU: "🇺🇾", USA: "🇺🇸", UZB: "🇺🇿", WAL: "🏴󠁧󠁢󠁷󠁬󠁳󠁿", ALG: "🇩🇿",
+  CMR: "🇨🇲", CIV: "🇨🇮", JAM: "🇯🇲", SCO: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", TUR: "🇹🇷", UAE: "🇦🇪",
+  IRQ: "🇮🇶", BOL: "🇧🇴", NCL: "🇳🇨", SUR: "🇸🇷", LCA: "🇱🇨", DRC: "🇨🇩",
+};
+const flagFor = (id: string): string => FLAG[id?.toUpperCase?.()] ?? "🏳️";
+
+const DAY_FMT = new Intl.DateTimeFormat("es-CO", {
+  day: "2-digit",
+  month: "short",
+  timeZone: "America/Bogota",
+});
+const TIME_FMT = new Intl.DateTimeFormat("es-CO", {
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+  timeZone: "America/Bogota",
+});
+const dayKey = (iso: string) => {
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? iso : DAY_FMT.format(d).toUpperCase().replace(".", "");
+};
+const timeLabel = (iso: string) => {
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? iso : TIME_FMT.format(d).toLowerCase();
+};
+
+const badgeFor = (fase: Fase, m: { id: string }): string => {
+  if (fase === "grupos") {
+    const k = GROUP_KEYS.find((g) => m.id.startsWith(`${g}-`) || m.id.startsWith(`g-${g}`));
+    return k ? `GRUPO ${k}` : "GRUPOS";
+  }
+  return FASE_LABEL[fase].toUpperCase();
+};
 
 function Cronograma() {
   const { data: ts, isLoading } = useTournamentState();
@@ -51,21 +99,32 @@ function Cronograma() {
       gh: m.gh,
       ga: m.ga,
       isGroupK: true,
+      localId: m.local,
+      visitanteId: m.visitante,
+      badge: badgeFor("grupos", m),
     }));
-    const extra: Row[] = (ts.extra_matches ?? []).map((m) => ({ ...m, isGroupK: false }));
+    const extra: Row[] = (ts.extra_matches ?? []).map((m) => ({
+      ...m,
+      isGroupK: false,
+      localId: m.local,
+      visitanteId: m.visitante,
+      badge: badgeFor(m.fase, m),
+    }));
     return [...groupK, ...extra].sort(
       (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime(),
     );
   }, [ts]);
 
-  const grouped = useMemo(() => {
-    const map = new Map<Fase, Row[]>();
+  /* Group by day for the fixture-style layout. */
+  const byDay = useMemo(() => {
+    const map = new Map<string, Row[]>();
     for (const r of rows) {
-      const list = map.get(r.fase) ?? [];
+      const k = dayKey(r.fecha);
+      const list = map.get(k) ?? [];
       list.push(r);
-      map.set(r.fase, list);
+      map.set(k, list);
     }
-    return map;
+    return Array.from(map.entries());
   }, [rows]);
 
   if (isLoading || !ts) {
@@ -76,8 +135,6 @@ function Cronograma() {
     );
   }
 
-  const orden: Fase[] = ["grupos", "treintaidosavos", "octavos", "cuartos", "semis", "tercero", "final"];
-
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
@@ -87,70 +144,93 @@ function Cronograma() {
         partido.
       </p>
 
-      <div className="mt-8 space-y-8">
-        {orden.map((fase) => {
-          const list = grouped.get(fase);
-          if (!list || list.length === 0) return null;
-          return (
-            <section key={fase}>
-              <div className="flex flex-wrap items-center gap-2">
-                <Trophy className="size-4 text-gold" />
-                <h2 className="font-display text-xl sm:text-2xl text-gold">{FASE_LABEL[fase]}</h2>
-                <span className="text-xs text-muted-foreground">· {list.length} partidos</span>
+      <div className="mt-8 space-y-10">
+        {byDay.map(([day, list]) => (
+          <section key={day}>
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-lg border border-gold/40 bg-gold/10 text-gold">
+                <Calendar className="size-5" />
               </div>
-              <Card className="mt-3 border-border bg-card card-shadow divide-y divide-border">
-                {list.map((m) => {
-                  const locked = isMatchLocked(m.fecha);
-                  const played = m.gh != null && m.ga != null;
-                  return (
-                    <div
-                      key={`${m.fase}-${m.id}`}
-                      className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-                    >
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
-                        <span className="inline-flex items-center gap-1.5">
-                          <Calendar className="size-3" /> {fmtFecha(m.fecha)}
+              <div>
+                <h2 className="font-display text-xl sm:text-2xl tracking-wide">{day}</h2>
+                <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                  {list.length} {list.length === 1 ? "partido" : "partidos"}
+                </p>
+              </div>
+              <div className="ml-2 h-px flex-1 bg-border" />
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {list.map((m) => {
+                const locked = isMatchLocked(m.fecha);
+                const played = m.gh != null && m.ga != null;
+                const [stadium] = (m.sede || "").split(" · ");
+                return (
+                  <Card
+                    key={`${m.fase}-${m.id}`}
+                    className="relative overflow-hidden border-border bg-card/60 p-0 card-shadow transition-colors hover:border-gold/40"
+                  >
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-gold/70 via-gold/30 to-transparent"
+                    />
+                    {/* Header: hora + badge fase */}
+                    <div className="flex items-center justify-between px-4 pt-4">
+                      <span className="rounded-md border border-border bg-muted/40 px-2.5 py-1 font-mono text-xs text-foreground/80">
+                        {timeLabel(m.fecha)}
+                      </span>
+                      <span className="rounded-md border border-gold/40 bg-gold/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
+                        {m.badge}
+                      </span>
+                    </div>
+
+                    {/* Equipos */}
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-5">
+                      <div className="flex flex-col items-center gap-2 text-center">
+                        <span className="text-3xl leading-none" aria-hidden>
+                          {flagFor(m.localId)}
                         </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <MapPin className="size-3" /> {m.sede || "Sede por definir"}
+                        <span className="font-display text-sm uppercase tracking-wide">
+                          {m.local || "Por definir"}
                         </span>
-                        {locked && !played && (
-                          <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                            <Lock className="size-3" /> Bloqueado
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        {played ? (
+                          <span className="rounded-md bg-gold/15 px-3 py-1 font-display text-base text-gold">
+                            {m.gh} – {m.ga}
+                          </span>
+                        ) : (
+                          <span className="font-display text-sm font-bold tracking-widest text-muted-foreground">
+                            VS
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center justify-center gap-3 sm:shrink-0">
-                        <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[140px]">
-                          {m.local || "Por definir"}
+                      <div className="flex flex-col items-center gap-2 text-center">
+                        <span className="text-3xl leading-none" aria-hidden>
+                          {flagFor(m.visitanteId)}
                         </span>
-                        <span
-                          className={`min-w-[64px] shrink-0 rounded-md px-3 py-1 text-center font-display text-lg ${
-                            played
-                              ? "bg-gold/15 text-gold"
-                              : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {played ? `${m.gh} – ${m.ga}` : "vs"}
-                        </span>
-                        <span className="flex-1 truncate text-sm font-medium sm:max-w-[140px]">
+                        <span className="font-display text-sm uppercase tracking-wide">
                           {m.visitante || "Por definir"}
                         </span>
                       </div>
                     </div>
-                  );
-                })}
-              </Card>
-            </section>
-          );
-        })}
 
-        {grouped.size === 1 && (
-          <Card className="border-info/30 bg-info/5 p-5 text-sm text-muted-foreground card-shadow">
-            Las jornadas eliminatorias (octavos en adelante) aparecerán aquí a medida que el admin
-            las vaya agregando.
-          </Card>
-        )}
+                    {/* Sede */}
+                    <div className="flex items-center justify-center gap-1.5 border-t border-border/60 bg-background/40 px-4 py-2.5 text-[11px] uppercase tracking-wider text-muted-foreground">
+                      <MapPin className="size-3" />
+                      <span>{stadium || "Sede por definir"}</span>
+                      {locked && !played && (
+                        <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-1.5 py-0.5 text-[9px] font-medium text-destructive">
+                          <Lock className="size-3" /> Bloqueado
+                        </span>
+                      )}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
     </main>
   );
