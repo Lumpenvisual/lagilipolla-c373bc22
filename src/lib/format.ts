@@ -1,10 +1,11 @@
 // Date/time helpers. Matches are stored in UTC; participants are in ET (EDT = UTC-4 during June).
 const ET_OFFSET_HOURS = -4;
 
-type FmtLang = "es";
+type FmtLang = "es" | "en";
 
 const MONTHS: Record<FmtLang, string[]> = {
   es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 };
 
 // Module-level current language, kept in sync by the i18n provider via setFormatLang().

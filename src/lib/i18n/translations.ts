@@ -2,10 +2,11 @@
 // Keys are dot-namespaced and resolved by the `t()` helper in ./index.tsx.
 // Use {var} placeholders for interpolation.
 
-export type Lang = "es";
+export type Lang = "es" | "en";
 
 export const LANGS: { code: Lang; label: string; flag: string }[] = [
   { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "en", label: "English", flag: "🇬🇧" },
 ];
 
 type Dict = Record<string, string>;
@@ -14,6 +15,7 @@ export const translations: Record<Lang, Dict> = {
   es: {
     // ---------- Nav ----------
     "nav.concursos": "Concursos",
+    "nav.home": "Inicio",
     "nav.tabla": "Tabla",
     "nav.reglas": "Reglas",
     "nav.dashboard": "Panel",
@@ -608,5 +610,145 @@ export const translations: Record<Lang, Dict> = {
     "mod.search.noResults": "Sin resultados",
     "mod.search.noResultsDesc": "Prueba con otro equipo u otra fecha.",
     "mod.search.clear": "Limpiar filtros",
+
+    // Accessibility panel (Spanish)
+    "a11y.open": "Opciones de accesibilidad",
+    "a11y.title": "Accesibilidad",
+    "a11y.subtitle": "Personaliza la experiencia a tus necesidades.",
+    "a11y.fontSize": "Tamaño del texto",
+    "a11y.fontSize.s": "Pequeño",
+    "a11y.fontSize.m": "Normal",
+    "a11y.fontSize.l": "Grande",
+    "a11y.fontSize.xl": "Muy grande",
+    "a11y.highContrast": "Alto contraste",
+    "a11y.highContrast.desc": "Aumenta el contraste y los bordes.",
+    "a11y.reducedMotion": "Reducir animaciones",
+    "a11y.reducedMotion.desc": "Desactiva animaciones y transiciones.",
+    "a11y.dyslexia": "Fuente para dislexia",
+    "a11y.dyslexia.desc": "Usa una tipografía más legible.",
+    "a11y.underline": "Subrayar enlaces",
+    "a11y.underline.desc": "Subraya siempre los enlaces para mejor visibilidad.",
+    "a11y.reset": "Restablecer",
+    "a11y.language": "Idioma",
+  },
+  // English partial dictionary. Missing keys fall back to Spanish automatically
+  // via the lookup chain in ./index.tsx (`dict[key] ?? translations.es[key] ?? key`).
+  en: {
+    // Nav
+    "nav.concursos": "Contests",
+    "nav.home": "Home",
+    "nav.tabla": "Standings",
+    "nav.reglas": "Rules",
+    "nav.dashboard": "Dashboard",
+    "nav.pronosticos": "Predictions",
+    "nav.admin": "Admin",
+    "nav.organizador": "Organizer",
+    "nav.login": "Sign in",
+    "nav.register": "Sign up",
+    "nav.logout": "Sign out",
+    "nav.menu": "Menu",
+    "nav.language": "Language",
+
+    // Common
+    "common.loading": "Loading…",
+    "common.back": "Back",
+    "common.viewAll": "View all",
+    "common.see": "View",
+    "common.save": "Save",
+    "common.saving": "Saving…",
+    "common.cancel": "Cancel",
+    "common.confirm": "Confirm",
+    "common.you": "you",
+    "common.player_one": "player",
+    "common.player_other": "players",
+    "common.match_one": "match",
+    "common.match_other": "matches",
+    "common.pozo": "Pot",
+    "common.cuota": "Entry",
+    "common.pts": "Pts",
+    "common.prize": "Prize",
+    "common.pos": "Pos",
+    "common.player": "Player",
+    "common.vs": "vs",
+    "common.tba": "TBA",
+
+    // Modalidades
+    "modalidad.partido": "By match",
+    "modalidad.dia": "Match day",
+    "modalidad.fase": "By stage",
+    "modalidad.mundial": "Full World Cup",
+    "modalidad.partido.desc": "A single match. Quick bet.",
+    "modalidad.dia.desc": "All matches on the same day.",
+    "modalidad.fase.desc": "A full tournament round.",
+    "modalidad.mundial.desc": "All 104 World Cup matches.",
+
+    // Estados
+    "estado.abierto": "Open",
+    "estado.cerrado": "Closed",
+    "estado.finalizado": "Finished",
+    "estado.proximo": "Coming soon",
+
+    // Pago
+    "pago.pendiente": "Payment pending",
+    "pago.aprobado": "Registered",
+    "pago.rechazado": "Rejected",
+
+    // Countdown
+    "countdown.days": "Days",
+    "countdown.hours": "Hours",
+    "countdown.min": "Min",
+    "countdown.sec": "Sec",
+    "countdown.started": "The tournament has started! ⚽",
+
+    // Landing (key bits)
+    "home.hero.matches": "72 matches",
+    "home.hero.groupStage": "Group stage",
+    "home.hero.gloryStarts": "Glory begins in",
+    "home.hero.cta": "Sign me up",
+    "home.hero.viewContests": "View contests",
+    "home.how.title": "How it works",
+    "home.prizes.title": "Prizes",
+    "home.scoring.title": "Scoring system",
+    "home.scoring.exact": "points · Exact score",
+    "home.scoring.result": "point · Correct winner",
+    "home.scoring.miss": "points · Wrong",
+    "home.pay.title": "💳 Payment instructions",
+
+    // Status
+    "status.exacto": "Exact",
+    "status.ganador": "Winner",
+    "status.fallido": "Missed",
+    "status.bloqueado": "Locked",
+    "status.guardado": "Saved",
+    "status.pendiente": "Pending",
+
+    // Errors / boundaries
+    "err.404.title": "Page not found",
+    "err.404.body": "The page you are looking for doesn't exist.",
+    "err.404.home": "Back to home",
+    "err.boundary.title": "Something went wrong",
+    "err.boundary.body": "An unexpected error occurred. Please try again.",
+    "err.boundary.retry": "Retry",
+    "err.boundary.home": "Home",
+
+    // Accessibility panel
+    "a11y.open": "Accessibility options",
+    "a11y.title": "Accessibility",
+    "a11y.subtitle": "Customize the experience to your needs.",
+    "a11y.fontSize": "Text size",
+    "a11y.fontSize.s": "Small",
+    "a11y.fontSize.m": "Default",
+    "a11y.fontSize.l": "Large",
+    "a11y.fontSize.xl": "Extra large",
+    "a11y.highContrast": "High contrast",
+    "a11y.highContrast.desc": "Boost color contrast and outlines.",
+    "a11y.reducedMotion": "Reduce motion",
+    "a11y.reducedMotion.desc": "Disable animations and transitions.",
+    "a11y.dyslexia": "Dyslexia-friendly font",
+    "a11y.dyslexia.desc": "Use a more legible font for body text.",
+    "a11y.underline": "Underline links",
+    "a11y.underline.desc": "Always underline links for better visibility.",
+    "a11y.reset": "Reset to default",
+    "a11y.language": "Language",
   },
 };

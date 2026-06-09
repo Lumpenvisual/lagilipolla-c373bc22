@@ -8,36 +8,37 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const { user, isAdmin, participant } = useAuth();
+  const t = useT();
   const approved = participant?.estado_pago === "aprobado";
   const linkCls =
-    "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary";
+    "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
   return (
     <>
       <Link to="/" className={linkCls} onClick={onNavigate}>
-        Inicio
+        {t("nav.home")}
       </Link>
       {user && approved && (
         <Link to="/planilla" className={linkCls} onClick={onNavigate}>
-          Planilla
+          {t("nav.pronosticos")}
         </Link>
       )}
       <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>
-        Tabla
+        {t("nav.tabla")}
       </Link>
       <Link to="/cronograma" className={linkCls} onClick={onNavigate}>
-        Cronograma
+        {t("nav.concursos")}
       </Link>
       <Link to="/reglas" className={linkCls} onClick={onNavigate}>
-        Reglas
+        {t("nav.reglas")}
       </Link>
       {user && (
         <Link to="/dashboard" className={linkCls} onClick={onNavigate}>
-          Mi cuenta
+          {t("nav.dashboard")}
         </Link>
       )}
       {isAdmin && (
         <Link to="/admin" className={linkCls} onClick={onNavigate}>
-          Admin
+          {t("nav.admin")}
         </Link>
       )}
     </>

@@ -16,6 +16,8 @@ import { LanguageProvider, tStatic } from "@/lib/i18n";
 import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { RealtimeSync } from "@/components/RealtimeSync";
+import { A11yProvider } from "@/lib/a11y";
+import { AccessibilityPanel } from "@/components/AccessibilityPanel";
 
 function NotFoundComponent() {
   return (
@@ -147,13 +149,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <AuthProvider>
-          <Navbar />
-          <RealtimeSync />
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <Toaster richColors position="top-center" />
-        </AuthProvider>
+        <A11yProvider>
+          <AuthProvider>
+            <Navbar />
+            <RealtimeSync />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <AccessibilityPanel />
+            <Toaster richColors position="top-center" />
+          </AuthProvider>
+        </A11yProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

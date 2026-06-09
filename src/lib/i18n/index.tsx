@@ -16,7 +16,7 @@ const STORAGE_KEY = "polla-lang";
 const DEFAULT_LANG: Lang = "es";
 
 function isLang(v: unknown): v is Lang {
-  return v === "es";
+  return v === "es" || v === "en";
 }
 
 function interpolate(str: string, vars?: Record<string, string | number>): string {
