@@ -536,6 +536,7 @@ export function CronogramaTab() {
   if (!ts) return <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />;
 
   const fases: Fase[] = ["octavos", "cuartos", "semis", "tercero", "final"];
+  const fasesEditables: Fase[] = ["grupos", ...fases];
 
   const save = async () => {
     const { error } = await supabase
@@ -619,7 +620,7 @@ export function CronogramaTab() {
         </div>
       </Card>
 
-      {fases.map((fase) => (
+      {fasesEditables.map((fase) => (
         <Card key={fase} className="border-border bg-card p-5 card-shadow">
           <div className="flex items-center justify-between">
             <h3 className="font-display text-lg">{FASE_LABEL[fase]}</h3>
