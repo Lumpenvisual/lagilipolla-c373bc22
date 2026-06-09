@@ -34,7 +34,14 @@ export type GroupMatch = {
 
 export type SpecialPlayer = { id: string; nombre: string; seleccion: string };
 
-export type Fase = "grupos" | "octavos" | "cuartos" | "semis" | "tercero" | "final";
+export type Fase =
+  | "grupos"
+  | "treintaidosavos"
+  | "octavos"
+  | "cuartos"
+  | "semis"
+  | "tercero"
+  | "final";
 
 export type ExtraMatch = {
   id: string;
@@ -70,6 +77,7 @@ export type TournamentState = {
 
 export const FASE_LABEL: Record<Fase, string> = {
   grupos: "Fase de grupos",
+  treintaidosavos: "Treintaidosavos de final",
   octavos: "Octavos de final",
   cuartos: "Cuartos de final",
   semis: "Semifinales",
