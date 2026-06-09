@@ -254,7 +254,12 @@ function Planilla() {
       {isVisible("grupos") && (
       <section className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-xl sm:text-2xl text-info">{t("planilla.k.title")}</h2>
+          <h2 className="font-display text-xl sm:text-2xl text-info">
+            {t("planilla.k.title")}
+            <span className="ml-2 align-middle text-xs font-normal text-muted-foreground">
+              · {ts.group_k_matches.length} partidos
+            </span>
+          </h2>
           <span className="text-xs text-muted-foreground">{t("planilla.k.progress", { done: completedMatches })}</span>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">{t("planilla.k.hint")}</p>
@@ -268,6 +273,7 @@ function Planilla() {
             const p = matches[m.id] ?? { gh: null, ga: null };
             const matchLocked = isMatchLocked(m.fecha);
             const disabled = locked || matchLocked;
+            const [stadium, city] = m.sede.split(" · ");
             return (
               <div
                 key={m.id}
@@ -278,7 +284,9 @@ function Planilla() {
                     <Calendar className="size-3" /> {fmtFecha(m.fecha)}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="size-3" /> {m.sede}
+                    <MapPin className="size-3" />
+                    <span className="text-foreground/80">{stadium}</span>
+                    {city && <span className="text-muted-foreground">· {city}</span>}
                   </span>
                   {matchLocked && (
                     <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
@@ -325,7 +333,12 @@ function Planilla() {
         return (
           <section key={fase} className="mt-10">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="font-display text-xl sm:text-2xl text-info">{FASE_LABEL[fase]}</h2>
+              <h2 className="font-display text-xl sm:text-2xl text-info">
+                {FASE_LABEL[fase]}
+                <span className="ml-2 align-middle text-xs font-normal text-muted-foreground">
+                  · {list.length} partidos
+                </span>
+              </h2>
               <span className="text-xs text-muted-foreground">
                 {t("planilla.extra.progress", { done, total: list.length })}
               </span>
@@ -335,6 +348,7 @@ function Planilla() {
                 const p = extra[m.id] ?? { gh: null, ga: null };
                 const matchLocked = isMatchLocked(m.fecha);
                 const disabled = locked || matchLocked;
+                const [stadium, city] = m.sede.split(" · ");
                 return (
                   <div
                     key={m.id}
@@ -345,7 +359,9 @@ function Planilla() {
                         <Calendar className="size-3" /> {fmtFecha(m.fecha)}
                       </span>
                       <span className="inline-flex items-center gap-1.5">
-                        <MapPin className="size-3" /> {m.sede}
+                        <MapPin className="size-3" />
+                        <span className="text-foreground/80">{stadium}</span>
+                        {city && <span className="text-muted-foreground">· {city}</span>}
                       </span>
                       {matchLocked && (
                         <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
