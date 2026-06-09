@@ -15,7 +15,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <Link to="/" className={linkCls} onClick={onNavigate}>
-        {t("nav.home") !== "nav.home" ? t("nav.home") : t("nav.concursos") ? "Inicio" : "Inicio"}
+        {t("nav.home")}
       </Link>
       {user && approved && (
         <Link to="/planilla" className={linkCls} onClick={onNavigate}>
