@@ -43,7 +43,28 @@ export function RealtimeSync() {
           const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
           if (myId && row?.participant_id === myId) {
             qc.invalidateQueries({ queryKey: ["my-pick", myId] });
+            qc.invalidateQueries({ queryKey: ["pick-history", "mine", myId] });
           }
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "pick_history" },
+        (payload) => {
+          const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
+          qc.invalidateQueries({ queryKey: ["pick-history", "all", null] });
+          if (myId && row?.participant_id === myId) {
+            qc.invalidateQueries({ queryKey: ["pick-history", "mine", myId] });
+          }
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "participants" },
+        () => {
+          qc.invalidateQueries({ queryKey: ["admin-participants"] });
+          qc.invalidateQueries({ queryKey: ["history-participants"] });
+          scheduleLb();
         },
       )
       .subscribe();
