@@ -14,7 +14,7 @@ type Dict = Record<string, string>;
 export const translations: Record<Lang, Dict> = {
   es: {
     // ---------- Nav ----------
-    "nav.concursos": "Concursos",
+    "nav.concursos": "Cronograma",
     "nav.home": "Inicio",
     "nav.tabla": "Tabla",
     "nav.reglas": "Reglas",
@@ -765,7 +765,7 @@ export const translations: Record<Lang, Dict> = {
   // via the lookup chain in ./index.tsx (`dict[key] ?? translations.es[key] ?? key`).
   en: {
     // ---------- Nav ----------
-    "nav.concursos": "Contests",
+    "nav.concursos": "Schedule",
     "nav.home": "Home",
     "nav.tabla": "Standings",
     "nav.reglas": "Rules",
