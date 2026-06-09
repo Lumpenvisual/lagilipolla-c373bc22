@@ -102,3 +102,6 @@ export const validateFlags = () => {
     console.warn('❌ Códigos de bandera faltantes:', missing);
   }
 };
+
+export const getFlagEmoji = (countryName) =>
+  COUNTRY_FLAGS_EMOJI[countryName?.trim()] || '🌍';
