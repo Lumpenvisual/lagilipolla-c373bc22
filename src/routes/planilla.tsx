@@ -366,76 +366,83 @@ function Planilla() {
           return p && p.gh != null && p.ga != null;
         }).length;
         return (
-          <section key={fase} className="mt-10">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="font-display text-xl sm:text-2xl text-info">
-                {FASE_LABEL[fase]}
-                <span className="ml-2 align-middle text-xs font-normal text-muted-foreground">
-                  · {list.length} partidos
+          <Collapsible key={fase} defaultOpen={false} className="mt-10 group/phase">
+            <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-info/30 bg-info/5 px-4 py-3 text-left transition-colors hover:bg-info/10">
+              <div className="flex items-center gap-3">
+                <h2 className="font-display text-lg sm:text-xl text-info uppercase tracking-wide">
+                  {FASE_LABEL[fase]}
+                </h2>
+                <span className="rounded-full border border-info/40 bg-info/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-info">
+                  {list.length} partidos
                 </span>
-              </h2>
-              <span className="text-xs text-muted-foreground">
-                {t("planilla.extra.progress", { done, total: list.length })}
-              </span>
-            </div>
-            <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
-              {list.map((m) => {
-                const p = extra[m.id] ?? { gh: null, ga: null };
-                const matchLocked = isMatchLocked(m.fecha);
-                const disabled = locked || matchLocked;
-                const [stadium, city] = m.sede.split(" · ");
-                return (
-                  <div
-                    key={m.id}
-                    className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Calendar className="size-3" /> {fmtFecha(m.fecha)}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5">
-                        <MapPin className="size-3" />
-                        <span className="text-foreground/80">{stadium}</span>
-                        {city && <span className="text-muted-foreground">· {city}</span>}
-                      </span>
-                      {matchLocked && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                          <Lock className="size-3" /> {t("planilla.k.blocked")}
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground">
+                  {t("planilla.extra.progress", { done, total: list.length })}
+                </span>
+                <ChevronDown className="size-4 text-info transition-transform group-data-[state=closed]/phase:rotate-[-90deg]" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="data-[state=closed]:hidden">
+              <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
+                {list.map((m) => {
+                  const p = extra[m.id] ?? { gh: null, ga: null };
+                  const matchLocked = isMatchLocked(m.fecha);
+                  const disabled = locked || matchLocked;
+                  const [stadium, city] = m.sede.split(" · ");
+                  return (
+                    <div
+                      key={m.id}
+                      className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
+                        <span className="inline-flex items-center gap-1.5">
+                          <Calendar className="size-3" /> {fmtFecha(m.fecha)}
                         </span>
-                      )}
+                        <span className="inline-flex items-center gap-1.5">
+                          <MapPin className="size-3" />
+                          <span className="text-foreground/80">{stadium}</span>
+                          {city && <span className="text-muted-foreground">· {city}</span>}
+                        </span>
+                        {matchLocked && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                            <Lock className="size-3" /> {t("planilla.k.blocked")}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-center gap-2 sm:shrink-0">
+                        <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[120px]">
+                          {m.local}
+                        </span>
+                        <Input
+                          type="number"
+                          min={0}
+                          max={20}
+                          disabled={disabled}
+                          value={p.gh ?? ""}
+                          onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
+                          className="h-9 w-14 text-center"
+                        />
+                        <span className="text-muted-foreground">–</span>
+                        <Input
+                          type="number"
+                          min={0}
+                          max={20}
+                          disabled={disabled}
+                          value={p.ga ?? ""}
+                          onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
+                          className="h-9 w-14 text-center"
+                        />
+                        <span className="flex-1 truncate text-sm font-medium sm:max-w-[120px]">
+                          {m.visitante}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                      <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[120px]">
-                        {m.local}
-                      </span>
-                      <Input
-                        type="number"
-                        min={0}
-                        max={20}
-                        disabled={disabled}
-                        value={p.gh ?? ""}
-                        onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
-                        className="h-9 w-14 text-center"
-                      />
-                      <span className="text-muted-foreground">–</span>
-                      <Input
-                        type="number"
-                        min={0}
-                        max={20}
-                        disabled={disabled}
-                        value={p.ga ?? ""}
-                        onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
-                        className="h-9 w-14 text-center"
-                      />
-                      <span className="flex-1 truncate text-sm font-medium sm:max-w-[120px]">
-                        {m.visitante}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </Card>
-          </section>
+                  );
+                })}
+              </Card>
+            </CollapsibleContent>
+          </Collapsible>
         );
       })}
 
