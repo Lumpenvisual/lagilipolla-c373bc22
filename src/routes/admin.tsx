@@ -28,6 +28,10 @@ import {
   fmtCOP,
   GROUP_KEYS,
   slotOptions,
+  FASE_LABEL,
+  type ExtraMatch,
+  type Fase,
+  type Phases,
   type SpecialPlayer,
   type TournamentState,
 } from "@/lib/polla";
@@ -49,7 +53,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "pagos" | "resultados" | "listas" | "reportes";
+type Tab = "pagos" | "resultados" | "cronograma" | "listas" | "reportes";
 
 function AdminPage() {
   const router = useRouter();
@@ -80,6 +84,7 @@ function AdminPage() {
   const tabs: { key: Tab; label: string; icon: typeof Users }[] = [
     { key: "pagos", label: "Pagos", icon: Users },
     { key: "resultados", label: "Resultados", icon: ClipboardList },
+    { key: "cronograma", label: "Cronograma", icon: ClipboardList },
     { key: "listas", label: "Listas", icon: ListPlus },
     { key: "reportes", label: "Reportes", icon: FileSpreadsheet },
   ];
@@ -108,6 +113,7 @@ function AdminPage() {
       <div className="mt-6">
         {tab === "pagos" && <PagosTab />}
         {tab === "resultados" && <ResultadosTab />}
+        {tab === "cronograma" && <CronogramaTab />}
         {tab === "listas" && <ListasTab />}
         {tab === "reportes" && <ReportesTab />}
       </div>
@@ -490,6 +496,214 @@ function ListasTab() {
       </div>
     </div>
   );
+}
+
+/* ---------------- Cronograma (fases + extra_matches) ---------------- */
+const DEFAULT_PHASES: Phases = {
+  grupos: true,
+  octavos: false,
+  cuartos: false,
+  semis: false,
+  tercero: false,
+  final: false,
+};
+
+function CronogramaTab() {
+  const qc = useQueryClient();
+  const { data: ts } = useTournamentState();
+  const [phases, setPhases] = useState<Phases>(DEFAULT_PHASES);
+  const [extras, setExtras] = useState<ExtraMatch[]>([]);
+
+  useEffect(() => {
+    if (ts) {
+      setPhases({ ...DEFAULT_PHASES, ...(ts.phases ?? {}) });
+      setExtras(ts.extra_matches ?? []);
+    }
+  }, [ts]);
+
+  if (!ts) return <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />;
+
+  const fases: Fase[] = ["octavos", "cuartos", "semis", "tercero", "final"];
+
+  const save = async () => {
+    const { error } = await supabase
+      .from("tournament_state")
+      .update({
+        phases: phases as never,
+        extra_matches: extras as never,
+      })
+      .eq("id", 1);
+    if (error) return toast.error(error.message);
+    toast.success("Cronograma guardado");
+    qc.invalidateQueries({ queryKey: ["tournament-state"] });
+  };
+
+  const addMatch = (fase: Fase) => {
+    const id = `${fase}-${Math.random().toString(36).slice(2, 8)}`;
+    setExtras((arr) => [
+      ...arr,
+      {
+        id,
+        fase,
+        fecha: new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 16),
+        local: "",
+        visitante: "",
+        sede: "",
+        gh: null,
+        ga: null,
+      },
+    ]);
+  };
+
+  const updateMatch = (id: string, patch: Partial<ExtraMatch>) => {
+    setExtras((arr) => arr.map((m) => (m.id === id ? { ...m, ...patch } : m)));
+  };
+  const removeMatch = (id: string) => setExtras((arr) => arr.filter((m) => m.id !== id));
+
+  const grouped = (fase: Fase) => extras.filter((m) => m.fase === fase);
+
+  return (
+    <div className="space-y-6">
+      <Card className="border-gold/30 bg-card p-5 card-shadow">
+        <h2 className="font-display text-xl text-gold">Activar fases del torneo</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Activa cada fase solo cuando ya conozcas los equipos. Las puntuaciones ya calculadas no se
+          ven afectadas.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {(["grupos", ...fases] as Fase[]).map((f) => {
+            const active = !!phases[f];
+            return (
+              <button
+                key={f}
+                onClick={() => setPhases((p) => ({ ...p, [f]: !active }))}
+                className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+                  active
+                    ? "border-success/50 bg-success/15 text-success"
+                    : "border-border bg-muted text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {active ? "✅" : "⚪"} {FASE_LABEL[f]}
+              </button>
+            );
+          })}
+        </div>
+      </Card>
+
+      {fases.map((fase) => (
+        <Card key={fase} className="border-border bg-card p-5 card-shadow">
+          <div className="flex items-center justify-between">
+            <h3 className="font-display text-lg">{FASE_LABEL[fase]}</h3>
+            <Button size="sm" onClick={() => addMatch(fase)} variant="secondary">
+              <Plus className="mr-1 size-4" /> Agregar partido
+            </Button>
+          </div>
+          {grouped(fase).length === 0 ? (
+            <p className="mt-3 text-xs text-muted-foreground">
+              Sin partidos. Cuando se definan los cruces, agrégalos aquí.
+            </p>
+          ) : (
+            <div className="mt-3 space-y-3">
+              {grouped(fase).map((m) => (
+                <div
+                  key={m.id}
+                  className="grid grid-cols-1 gap-2 rounded-md border border-border bg-muted/30 p-3 sm:grid-cols-[1fr_1fr_auto] sm:items-start"
+                >
+                  <div className="space-y-2">
+                    <Input
+                      placeholder="Local (ej: 1A o Colombia)"
+                      value={m.local}
+                      onChange={(e) => updateMatch(m.id, { local: e.target.value })}
+                    />
+                    <Input
+                      placeholder="Visitante (ej: 2B o España)"
+                      value={m.visitante}
+                      onChange={(e) => updateMatch(m.id, { visitante: e.target.value })}
+                    />
+                    <Input
+                      placeholder="Sede"
+                      value={m.sede}
+                      onChange={(e) => updateMatch(m.id, { sede: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div>
+                      <Label className="text-[11px] uppercase text-muted-foreground">
+                        Fecha y hora (COT)
+                      </Label>
+                      <Input
+                        type="datetime-local"
+                        value={toLocalInput(m.fecha)}
+                        onChange={(e) =>
+                          updateMatch(m.id, { fecha: fromLocalInput(e.target.value) })
+                        }
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Label className="text-[11px] uppercase text-muted-foreground">
+                        Marcador
+                      </Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={m.gh ?? ""}
+                        onChange={(e) =>
+                          updateMatch(m.id, {
+                            gh: e.target.value === "" ? null : Math.max(0, parseInt(e.target.value, 10) || 0),
+                          })
+                        }
+                        className="h-9 w-16 text-center"
+                      />
+                      <span>–</span>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={m.ga ?? ""}
+                        onChange={(e) =>
+                          updateMatch(m.id, {
+                            ga: e.target.value === "" ? null : Math.max(0, parseInt(e.target.value, 10) || 0),
+                          })
+                        }
+                        className="h-9 w-16 text-center"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => removeMatch(m.id)}
+                    title="Eliminar partido"
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      ))}
+
+      <div className="sticky bottom-4 flex justify-center">
+        <Button onClick={save} variant="hero" size="lg" className="shadow-2xl">
+          <RefreshCw className="mr-2 size-4" /> Guardar cronograma
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/** ISO ↔ <input type="datetime-local"> (en hora local del navegador del admin). */
+function toLocalInput(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function fromLocalInput(v: string): string {
+  if (!v) return "";
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? "" : d.toISOString();
 }
 
 function ListEditor({
