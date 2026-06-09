@@ -1,217 +1,104 @@
+// utils/countryFlags.js
+// Mapping de 48 países WC2026 CON NOMBRES EN ESPAÑOL
+// Códigos ISO 3166-1 alpha-2 para flag-icons
+
 export const COUNTRY_FLAG_MAP = {
+  // GRUPO A
+  'México': 'mx',
+  'Sudáfrica': 'za',
+  'Corea del Sur': 'kr',
+  'Chequía': 'cz',
 
-  // CONCACAF
+  // GRUPO B
+  'Canadá': 'ca',
+  'Bosnia y Herzegovina': 'ba',
+  'Catar': 'qa',
+  'Suiza': 'ch',
 
-  'Mexico': 'mx',
+  // GRUPO C
+  'Brasil': 'br',
+  'Marruecos': 'ma',
+  'Haití': 'ht',
+  'Escocia': 'gb-sct',
 
-  'USA': 'us',
+  // GRUPO D
+  'Estados Unidos': 'us',
+  'Paraguay': 'py',
+  'Australia': 'au',
+  'Turquía': 'tr',
 
-  'Canada': 'ca',
-
-  'Panama': 'pa',
-
-  'Haiti': 'ht',
-
-  'Jamaica': 'jm',
-
-  'Costa Rica': 'cr',
-
-  'Curaçao': 'cw',
-
-  
-
-  // CONMEBOL
-
-  'Brazil': 'br',
-
-  'Argentina': 'ar',
-
-  'Uruguay': 'uy',
-
-  'Colombia': 'co',
-
+  // GRUPO E
+  'Alemania': 'de',
+  'Curazao': 'cw',
+  'Costa de Marfil': 'ci',
   'Ecuador': 'ec',
 
-  'Paraguay': 'py',
+  // GRUPO F
+  'Países Bajos': 'nl',
+  'Japón': 'jp',
+  'Suecia': 'se',
+  'Túnez': 'tn',
 
-  'Peru': 'pe',
+  // GRUPO G
+  'Bélgica': 'be',
+  'Egipto': 'eg',
+  'Irán': 'ir',
+  'Nueva Zelanda': 'nz',
 
-  
+  // GRUPO H
+  'España': 'es',
+  'Cabo Verde': 'cv',
+  'Arabia Saudita': 'sa',
+  'Uruguay': 'uy',
 
-  // UEFA - Críticos (estos suelen fallar)
-
-  'England': 'gb-eng',      // ⚠️ NO es 'gb', es 'gb-eng'
-
-  'Scotland': 'gb-sct',     // ⚠️ NO es 'gb', es 'gb-sct'
-
-  'Wales': 'gb-wls',        // Si participa
-
-  'France': 'fr',
-
-  'Spain': 'es',
-
-  'Germany': 'de',
-
-  'Italy': 'it',
-
-  'Netherlands': 'nl',
-
-  'Belgium': 'be',
-
-  'Portugal': 'pt',
-
-  'Poland': 'pl',
-
-  'Austria': 'at',
-
-  'Switzerland': 'ch',
-
-  'Sweden': 'se',
-
-  'Denmark': 'dk',
-
-  'Norway': 'no',
-
-  'Croatia': 'hr',
-
-  'Serbia': 'rs',
-
-  'Bosnia & Herzegovina': 'ba',  // ⚠️ NO era 'bo', es 'ba'
-
-  'Montenegro': 'me',
-
-  'Albania': 'al',
-
-  'Bulgaria': 'bg',
-
-  'Romania': 'ro',
-
-  'Hungary': 'hu',
-
-  'Slovakia': 'sk',
-
-  'Czechia': 'cz',
-
-  'Ukraine': 'ua',
-
-  'Georgia': 'ge',
-
-  'Greece': 'gr',
-
-  'Slovenia': 'si',
-
-  'Turkey': 'tr',
-
-  'Türkiye': 'tr',           // Ambas variantes
-
-  
-
-  // AFC - Críticos
-
-  'Japan': 'jp',
-
-  'South Korea': 'kr',       // ⚠️ NO era 'sk' (eso es Slovakia)
-
-  'Australia': 'au',
-
-  'Iraq': 'iq',
-
-  'Jordan': 'jo',
-
-  'Iran': 'ir',
-
-  'Saudi Arabia': 'sa',
-
-  'Qatar': 'qa',             // ⚠️ NO era 'at' (eso es Austria)
-
-  'Uzbekistan': 'uz',
-
-  
-
-  // CAF
-
-  'Egypt': 'eg',
-
-  'Morocco': 'ma',
-
-  'Tunisia': 'tn',
-
+  // GRUPO I
+  'Francia': 'fr',
   'Senegal': 'sn',
+  'Iraq': 'iq',
+  'Noruega': 'no',
 
-  'Ivory Coast': 'ci',
+  // GRUPO J
+  'Argentina': 'ar',
+  'Argelia': 'dz',
+  'Austria': 'at',
+  'Jordania': 'jo',
 
+  // GRUPO K
+  'Portugal': 'pt',
+  'RD Congo': 'cd',
+  'Uzbekistán': 'uz',
+  'Colombia': 'co',
+
+  // GRUPO L
+  'Inglaterra': 'gb-eng',
+  'Croacia': 'hr',
   'Ghana': 'gh',
-
-  'Cape Verde': 'cv',
-
-  'Cameroon': 'cm',
-
-  'South Africa': 'za',
-
-  'Nigeria': 'ng',
-
-  'Mali': 'ml',
-
-  'DR Congo': 'cd',
-
-  'Congo': 'cg',
-
-  'Kenya': 'ke',
-
-  'Uganda': 'ug',
-
-  'Ethiopia': 'et',
-
-  'Algeria': 'dz',
-
-  'Libya': 'ly',
-
-  'Sudan': 'sd',
-
-  'Tanzania': 'tz',
-
-  
-
-  // OFC
-
-  'New Zealand': 'nz',
-
-  
-
-  // Otros
-
-  'Curaçao': 'cw',
-
+  'Panamá': 'pa',
 };
 
 export const getFlagCode = (countryName) => {
+  if (!countryName) return 'un';
 
-  // Intenta match exacto primero
+  const code = COUNTRY_FLAG_MAP[countryName.trim()];
 
-  if (COUNTRY_FLAG_MAP[countryName]) {
-
-    return COUNTRY_FLAG_MAP[countryName];
-
+  if (!code) {
+    console.warn(`⚠️ Flag code not found for: "${countryName}"`);
+    return 'un';
   }
 
-  
+  return code;
+};
 
-  // Si no encuentra, intenta sin espacios extras
+// Función para debug - verificar que todos los códigos existan
+export const validateFlags = () => {
+  const validCodes = ['mx','za','kr','cz','ca','ba','qa','ch','br','ma','ht','gb-sct','us','py','au','tr','de','cw','ci','ec','nl','jp','se','tn','be','eg','ir','nz','es','cv','sa','uy','fr','sn','iq','no','ar','dz','at','jo','pt','cd','uz','co','gb-eng','hr','gh','pa'];
 
-  const trimmed = countryName?.trim();
+  const mapCodes = Object.values(COUNTRY_FLAG_MAP);
+  const missing = validCodes.filter(code => !mapCodes.includes(code));
 
-  if (COUNTRY_FLAG_MAP[trimmed]) {
-
-    return COUNTRY_FLAG_MAP[trimmed];
-
+  if (missing.length === 0) {
+    console.log('✅ Todas las banderas están configuradas correctamente');
+  } else {
+    console.warn('❌ Códigos de bandera faltantes:', missing);
   }
-
-  
-
-  // Fallback: retorna 'un' (bandera genérica de Naciones Unidas)
-
-  console.warn(`Flag code not found for: ${countryName}`);
-
-  return 'un';
-
 };
