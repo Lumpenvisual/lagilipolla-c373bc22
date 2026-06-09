@@ -228,8 +228,6 @@ export type Database = {
         Returns: boolean
       }
       recalc_all_picks: { Args: never; Returns: number }
-      reset_polla_demo: { Args: never; Returns: Json }
-      seed_polla_demo: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
