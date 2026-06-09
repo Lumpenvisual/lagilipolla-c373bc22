@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useTournamentState, useMyPick, useSavePick } from "@/hooks/usePolla";
 import { useT } from "@/lib/i18n";
+import { TeamWithFlag } from "@/components/TeamWithFlag";
+import { getFlagCode } from "@/utils/countryFlags";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -227,9 +229,9 @@ function Planilla() {
                 </div>
                 <ul className="mt-2 mb-3 space-y-0.5 text-xs text-muted-foreground">
                   {g.teams.map((t) => (
-                    <li key={t.id}>
-                      {t.po ? "🟡 " : "· "}
-                      {t.nombre}
+                    <li key={t.id} className="flex items-center gap-1.5">
+                      <span>{t.po ? "🟡" : "·"}</span>
+                      <TeamWithFlag teamName={t.nombre} flagCode={getFlagCode(t.nombre)} size="sm" />
                     </li>
                   ))}
                 </ul>
@@ -329,7 +331,9 @@ function Planilla() {
                   )}
                 </div>
                 <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                  <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[120px]">{lName}</span>
+                  <div className="flex flex-1 justify-end sm:max-w-[140px]">
+                    <TeamWithFlag teamName={lName} flagCode={getFlagCode(lName)} size="sm" className="truncate" />
+                  </div>
                   <Input
                     type="number"
                     min={0}
@@ -349,7 +353,9 @@ function Planilla() {
                     onChange={(e) => setMatch(m.id, "ga", e.target.value)}
                     className="h-9 w-14 text-center"
                   />
-                  <span className="flex-1 truncate text-sm font-medium sm:max-w-[120px]">{vName}</span>
+                  <div className="flex flex-1 sm:max-w-[140px]">
+                    <TeamWithFlag teamName={vName} flagCode={getFlagCode(vName)} size="sm" className="truncate" />
+                  </div>
                 </div>
               </div>
             );
@@ -411,9 +417,9 @@ function Planilla() {
                         )}
                       </div>
                       <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                        <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[120px]">
-                          {m.local}
-                        </span>
+                        <div className="flex flex-1 justify-end sm:max-w-[140px]">
+                          <TeamWithFlag teamName={m.local} flagCode={getFlagCode(m.local)} size="sm" className="truncate" />
+                        </div>
                         <Input
                           type="number"
                           min={0}
@@ -433,9 +439,9 @@ function Planilla() {
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
                           className="h-9 w-14 text-center"
                         />
-                        <span className="flex-1 truncate text-sm font-medium sm:max-w-[120px]">
-                          {m.visitante}
-                        </span>
+                        <div className="flex flex-1 sm:max-w-[140px]">
+                          <TeamWithFlag teamName={m.visitante} flagCode={getFlagCode(m.visitante)} size="sm" className="truncate" />
+                        </div>
                       </div>
                     </div>
                   );
