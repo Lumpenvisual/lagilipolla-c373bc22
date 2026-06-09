@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useTournamentState, useMyPick, useSavePick } from "@/hooks/usePolla";
 import { useT } from "@/lib/i18n";
+import { TeamWithFlag } from "@/components/TeamWithFlag";
+import { getFlagCode } from "@/utils/countryFlags";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
