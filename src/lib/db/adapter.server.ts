@@ -34,7 +34,7 @@ export const db = {
   ) {
     const c = await getDb();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return c.rpc(fn as string, args as any);
+    return c.rpc(fn, args as any);
   },
   async storage() {
     const c = await getDb();
