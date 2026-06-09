@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import { useAuth } from "@/hooks/useAuth";
+import { AboutSection, VideoDemo } from "@/components/landing";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -150,6 +151,10 @@ function Landing() {
           </div>
         </div>
       </section>
+
+      <AboutSection />
+
+      <VideoDemo />
 
       <section className="mx-auto max-w-5xl px-4 pb-16">
         <h2 className="text-center font-display text-3xl tracking-wide sm:text-4xl">
