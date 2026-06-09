@@ -76,7 +76,7 @@ function Cronograma() {
     );
   }
 
-  const orden: Fase[] = ["grupos", "octavos", "cuartos", "semis", "tercero", "final"];
+  const orden: Fase[] = ["grupos", "treintaidosavos", "octavos", "cuartos", "semis", "tercero", "final"];
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">

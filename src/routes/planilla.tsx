@@ -104,7 +104,7 @@ function Planilla() {
   const visibility = ((ts as unknown as { visibility?: Record<string, boolean> }).visibility) ?? {};
   const isVisible = (k: string) => visibility[k] !== false;
   const extraMatches: ExtraMatch[] = (ts.extra_matches ?? []) as ExtraMatch[];
-    const phaseOrder: Fase[] = ["grupos", "octavos", "cuartos", "semis", "tercero", "final"];
+    const phaseOrder: Fase[] = ["grupos", "treintaidosavos", "octavos", "cuartos", "semis", "tercero", "final"];
   const matchesByPhase = phaseOrder
     .filter((f) => isVisible(f))
     .map((f) => ({ fase: f, list: extraMatches.filter((m) => m.fase === f) }))

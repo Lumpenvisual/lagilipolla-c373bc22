@@ -497,6 +497,7 @@ export function ListasTab() {
 /* ---------------- Cronograma (fases + extra_matches) ---------------- */
 const DEFAULT_PHASES: Phases = {
   grupos: true,
+  treintaidosavos: false,
   octavos: false,
   cuartos: false,
   semis: false,
@@ -506,6 +507,7 @@ const DEFAULT_PHASES: Phases = {
 
 const DEFAULT_VISIBILITY: Record<string, boolean> = {
   grupos: true,
+  treintaidosavos: true,
   octavos: true,
   cuartos: true,
   semis: true,
@@ -535,7 +537,7 @@ export function CronogramaTab() {
 
   if (!ts) return <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />;
 
-  const fases: Fase[] = ["octavos", "cuartos", "semis", "tercero", "final"];
+  const fases: Fase[] = ["treintaidosavos", "octavos", "cuartos", "semis", "tercero", "final"];
   const fasesEditables: Fase[] = ["grupos", ...fases];
 
   const save = async () => {
