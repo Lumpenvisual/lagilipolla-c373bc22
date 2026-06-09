@@ -235,7 +235,11 @@ function Cronograma() {
         {byDay.map(([day, list]) => {
           const isOpen = !collapsed[day];
           return (
-            <section key={day}>
+            <section
+              key={day}
+              ref={(el) => { dayRefs.current[day] = el; }}
+              id={`day-${day}`}
+            >
               <button
                 type="button"
                 onClick={() => setCollapsed((s) => ({ ...s, [day]: !s[day] }))}
