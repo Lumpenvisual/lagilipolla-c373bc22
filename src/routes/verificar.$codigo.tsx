@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/button";
 import { verifyComprobante } from "@/lib/reports.functions";
 
 export const Route = createFileRoute("/verificar/$codigo")({
-  head: () => ({ meta: [{ title: "Verificar comprobante · LA GILIPOLLA 2026" }] }),
+  head: () => ({
+    meta: [
+      { title: "Verificar comprobante · LA GILIPOLLA 2026" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: VerifyPage,
   errorComponent: ({ error }) => (
     <main className="mx-auto max-w-md px-4 py-16 text-center">

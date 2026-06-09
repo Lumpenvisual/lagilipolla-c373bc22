@@ -15,7 +15,11 @@ export const Route = createFileRoute("/login")({
     meta: [
       { title: tStatic("login.meta.title") },
       { name: "description", content: tStatic("login.meta.desc") },
+      { property: "og:title", content: tStatic("login.meta.title") },
+      { property: "og:description", content: tStatic("login.meta.desc") },
+      { property: "og:url", content: "https://lagilipolla.lovable.app/login" },
     ],
+    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/login" }],
   }),
   component: LoginPage,
 });

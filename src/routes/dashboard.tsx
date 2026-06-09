@@ -9,7 +9,12 @@ import { DownloadButton } from "@/components/DownloadButton";
 import { generateComprobantePDF, generateMyPlanillaXlsx } from "@/lib/reports.functions";
 
 export const Route = createFileRoute("/dashboard")({
-  head: () => ({ meta: [{ title: "Mi cuenta · LA GILIPOLLA 2026" }] }),
+  head: () => ({
+    meta: [
+      { title: "Mi cuenta · LA GILIPOLLA 2026" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: Dashboard,
 });
 

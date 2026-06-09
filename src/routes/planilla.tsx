@@ -20,7 +20,12 @@ import {
 } from "@/lib/polla";
 
 export const Route = createFileRoute("/planilla")({
-  head: () => ({ meta: [{ title: "Planilla · LA GILIPOLLA 2026" }] }),
+  head: () => ({
+    meta: [
+      { title: "Planilla · LA GILIPOLLA 2026" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: Planilla,
 });
 
