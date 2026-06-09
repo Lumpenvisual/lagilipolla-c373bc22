@@ -68,12 +68,60 @@ export type Database = {
         }
         Relationships: []
       }
+      pick_history: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          fase: string
+          ga_anterior: number | null
+          ga_nuevo: number | null
+          gh_anterior: number | null
+          gh_nuevo: number | null
+          id: string
+          match_id: string
+          participant_id: string
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          fase: string
+          ga_anterior?: number | null
+          ga_nuevo?: number | null
+          gh_anterior?: number | null
+          gh_nuevo?: number | null
+          id?: string
+          match_id: string
+          participant_id: string
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          fase?: string
+          ga_anterior?: number | null
+          ga_nuevo?: number | null
+          gh_anterior?: number | null
+          gh_nuevo?: number | null
+          id?: string
+          match_id?: string
+          participant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pick_history_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       picks: {
         Row: {
           aciertos_2: number
           aciertos_3: number
           aciertos_5: number
           arquero_id: string | null
+          extra_matches: Json
           goleador_id: string | null
           group_k_matches: Json
           groups: Json
@@ -89,6 +137,7 @@ export type Database = {
           aciertos_3?: number
           aciertos_5?: number
           arquero_id?: string | null
+          extra_matches?: Json
           goleador_id?: string | null
           group_k_matches?: Json
           groups?: Json
@@ -104,6 +153,7 @@ export type Database = {
           aciertos_3?: number
           aciertos_5?: number
           arquero_id?: string | null
+          extra_matches?: Json
           goleador_id?: string | null
           group_k_matches?: Json
           groups?: Json
@@ -139,6 +189,7 @@ export type Database = {
           phases: Json
           picks_locked_at: string
           updated_at: string
+          visibility: Json
         }
         Insert: {
           arquero_id?: string | null
@@ -154,6 +205,7 @@ export type Database = {
           phases?: Json
           picks_locked_at?: string
           updated_at?: string
+          visibility?: Json
         }
         Update: {
           arquero_id?: string | null
@@ -169,6 +221,7 @@ export type Database = {
           phases?: Json
           picks_locked_at?: string
           updated_at?: string
+          visibility?: Json
         }
         Relationships: []
       }
