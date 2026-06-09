@@ -21,11 +21,13 @@ export const Route = createFileRoute("/")({
 });
 
 function useCountdown(target: Date) {
-  const [now, setNow] = useState(() => Date.now());
+  // Start at target time so SSR renders 00s and avoids hydration mismatches.
+  const [now, setNow] = useState(() => target.getTime());
   useEffect(() => {
+    setNow(Date.now());
     const i = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(i);
-  }, []);
+  }, [target]);
   const ms = Math.max(0, target.getTime() - now);
   const s = Math.floor(ms / 1000);
   return {

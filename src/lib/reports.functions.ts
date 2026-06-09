@@ -684,9 +684,22 @@ export const listBackups = createServerFn({ method: "GET" })
     }));
   });
 
+const BACKUP_PATH_RE = /^auto\/[A-Za-z0-9._-]+\.xlsx$/;
+const backupPathSchema = z
+  .object({
+    path: z
+      .string()
+      .min(1)
+      .max(256)
+      .refine((p) => BACKUP_PATH_RE.test(p) && !p.includes(".."), {
+        message: "Ruta de backup inválida",
+      }),
+  })
+  .strict();
+
 export const getBackupSignedUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ path: z.string().min(1).max(256) }).parse(d))
+  .inputValidator((d) => backupPathSchema.parse(d))
   .handler(async ({ context, data }) => {
     await requireAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -699,7 +712,7 @@ export const getBackupSignedUrl = createServerFn({ method: "POST" })
 
 export const deleteBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ path: z.string().min(1).max(256) }).parse(d))
+  .inputValidator((d) => backupPathSchema.parse(d))
   .handler(async ({ context, data }) => {
     await requireAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
