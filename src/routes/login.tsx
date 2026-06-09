@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,7 @@ function LoginPage() {
   const [orgEmail, setOrgEmail] = useState("");
   const [orgPass, setOrgPass] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,13 +80,24 @@ function LoginPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="pass">{t("login.password")}</Label>
-                <Input
-                  id="pass"
-                  type="password"
-                  value={orgPass}
-                  onChange={(e) => setOrgPass(e.target.value)}
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <Input
+                    id="pass"
+                    type={showSecret ? "text" : "password"}
+                    value={orgPass}
+                    onChange={(e) => setOrgPass(e.target.value)}
+                    placeholder="••••••••"
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSecret((v) => !v)}
+                    aria-label={showSecret ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+                  >
+                    {showSecret ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
               </div>
             </>
           ) : (
@@ -102,14 +114,25 @@ function LoginPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="pin">{t("login.pin")}</Label>
-                <Input
-                  id="pin"
-                  type="password"
-                  inputMode="numeric"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                  placeholder="••••"
-                />
+                <div className="relative">
+                  <Input
+                    id="pin"
+                    type={showSecret ? "text" : "password"}
+                    inputMode="numeric"
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    placeholder="••••"
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSecret((v) => !v)}
+                    aria-label={showSecret ? "Ocultar PIN" : "Mostrar PIN"}
+                    className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+                  >
+                    {showSecret ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
               </div>
             </>
           )}
