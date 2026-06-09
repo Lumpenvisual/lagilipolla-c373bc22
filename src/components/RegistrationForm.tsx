@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,8 @@ export function RegistrationForm() {
   const [alias, setAlias] = useState("");
   const [pin, setPin] = useState("");
   const [pin2, setPin2] = useState("");
+  const [showPin, setShowPin] = useState(false);
+  const [showPin2, setShowPin2] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -109,25 +111,47 @@ export function RegistrationForm() {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="pin">{t("reg.pin")}</Label>
-            <Input
-              id="pin"
-              type="password"
-              inputMode="numeric"
-              value={pin}
-              onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
-              placeholder="••••"
-            />
+            <div className="relative">
+              <Input
+                id="pin"
+                type={showPin ? "text" : "password"}
+                inputMode="numeric"
+                value={pin}
+                onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                placeholder="••••"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPin((v) => !v)}
+                aria-label={showPin ? "Ocultar PIN" : "Mostrar PIN"}
+                className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+              >
+                {showPin ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="pin2">{t("reg.pin2")}</Label>
-            <Input
-              id="pin2"
-              type="password"
-              inputMode="numeric"
-              value={pin2}
-              onChange={(e) => setPin2(e.target.value.replace(/\D/g, "").slice(0, 4))}
-              placeholder="••••"
-            />
+            <div className="relative">
+              <Input
+                id="pin2"
+                type={showPin2 ? "text" : "password"}
+                inputMode="numeric"
+                value={pin2}
+                onChange={(e) => setPin2(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                placeholder="••••"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPin2((v) => !v)}
+                aria-label={showPin2 ? "Ocultar PIN" : "Mostrar PIN"}
+                className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+              >
+                {showPin2 ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </div>
         </div>
 
