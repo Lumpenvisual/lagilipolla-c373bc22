@@ -21,6 +21,17 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
@@ -51,6 +62,8 @@ import { useT, tStatic } from "@/lib/i18n";
 export function PagosTab() {
   const t = useT();
   const qc = useQueryClient();
+  const [toDelete, setToDelete] = useState<{ id: string; nombre: string } | null>(null);
+  const [typed, setTyped] = useState("");
   const { data: parts = [], isLoading } = useQuery({
     queryKey: ["admin-participants"],
     queryFn: async () => {
@@ -76,15 +89,17 @@ export function PagosTab() {
     }
   };
 
-  const eliminarParticipante = async (id: string, nombre: string) => {
-    if (!window.confirm(t("admin.t.confirm.deletePart", { name: nombre }))) return;
-    const { error } = await supabase.from("participants").delete().eq("id", id);
+  const confirmEliminar = async () => {
+    if (!toDelete) return;
+    const { error } = await supabase.from("participants").delete().eq("id", toDelete.id);
     if (error) toast.error(error.message);
     else {
       toast.success(t("admin.t.toast.partDeleted"));
       qc.invalidateQueries({ queryKey: ["admin-participants"] });
       qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
     }
+    setToDelete(null);
+    setTyped("");
   };
 
   const counts = {
@@ -171,7 +186,10 @@ export function PagosTab() {
                     size="sm"
                     variant="destructive"
                     title={t("admin.t.pagos.deleteTitle")}
-                    onClick={() => eliminarParticipante(p.id, p.nombre)}
+                    onClick={() => {
+                      setToDelete({ id: p.id, nombre: p.nombre });
+                      setTyped("");
+                    }}
                   >
                     <Trash2 className="size-4" />
                   </Button>
@@ -183,6 +201,46 @@ export function PagosTab() {
         </table>
         </div>
       </Card>
+
+      <AlertDialog
+        open={!!toDelete}
+        onOpenChange={(o) => {
+          if (!o) {
+            setToDelete(null);
+            setTyped("");
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("admin.t.confirm.deletePartTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("admin.t.confirm.deletePart", { name: toDelete?.nombre ?? "" })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">
+              {t("admin.t.confirm.deletePartType", { name: toDelete?.nombre ?? "" })}
+            </Label>
+            <Input
+              value={typed}
+              onChange={(e) => setTyped(e.target.value)}
+              placeholder={toDelete?.nombre ?? ""}
+              autoFocus
+            />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={!toDelete || typed.trim() !== toDelete.nombre.trim()}
+              onClick={confirmEliminar}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t("admin.t.confirm.deletePartCta")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
