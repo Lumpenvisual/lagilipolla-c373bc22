@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import { DownloadButton } from "@/components/DownloadButton";
 import { generateComprobantePDF, generateMyPlanillaXlsx } from "@/lib/reports.functions";
+import { PickHistoryCard } from "@/components/PickHistoryCard";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -194,6 +195,10 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
           </div>
         </Card>
       )}
+
+      <div className="mt-6">
+        <PickHistoryCard scope="mine" participantId={participantId} />
+      </div>
     </main>
   );
 }
