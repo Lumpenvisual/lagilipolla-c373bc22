@@ -15,6 +15,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider, tStatic } from "@/lib/i18n";
 import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { RealtimeSync } from "@/components/RealtimeSync";
 
 function NotFoundComponent() {
   return (
@@ -148,6 +149,7 @@ function RootComponent() {
       <LanguageProvider>
         <AuthProvider>
           <Navbar />
+          <RealtimeSync />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           <Toaster richColors position="top-center" />

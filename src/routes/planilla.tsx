@@ -13,6 +13,7 @@ import {
   GROUP_KEYS,
   slotOptions,
   fmtFecha,
+  isMatchLocked,
   type GroupKey,
   type PickGroups,
   type PickMatches,
@@ -220,6 +221,8 @@ function Planilla() {
             const vName = vTeam?.nombre ?? m.visitante;
             const colombia = m.local === "COL" || m.visitante === "COL";
             const p = matches[m.id] ?? { gh: null, ga: null };
+            const matchLocked = isMatchLocked(m.fecha);
+            const disabled = locked || matchLocked;
             return (
               <div
                 key={m.id}
@@ -232,6 +235,11 @@ function Planilla() {
                   <div className="inline-flex items-center gap-1.5 ml-2">
                     <MapPin className="size-3" /> {m.sede}
                   </div>
+                  {matchLocked && (
+                    <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                      <Lock className="size-3" /> Bloqueado · faltan menos de 24h
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center justify-center gap-2 sm:col-start-1 sm:row-start-2">
                   <span className="flex-1 text-right text-sm font-medium">{lName}</span>
@@ -239,7 +247,7 @@ function Planilla() {
                     type="number"
                     min={0}
                     max={20}
-                    disabled={locked}
+                    disabled={disabled}
                     value={p.gh ?? ""}
                     onChange={(e) => setMatch(m.id, "gh", e.target.value)}
                     className="h-9 w-14 text-center"
@@ -249,7 +257,7 @@ function Planilla() {
                     type="number"
                     min={0}
                     max={20}
-                    disabled={locked}
+                    disabled={disabled}
                     value={p.ga ?? ""}
                     onChange={(e) => setMatch(m.id, "ga", e.target.value)}
                     className="h-9 w-14 text-center"
