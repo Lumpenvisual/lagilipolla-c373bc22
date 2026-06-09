@@ -184,7 +184,32 @@ function Cronograma() {
             className="h-11 rounded-full border-border bg-card pl-10"
           />
         </div>
-        <div className="relative sm:w-56">
+        <div className="relative sm:w-48">
+          <CalendarDays className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <select
+            value={dateJump}
+            onChange={(e) => {
+              const val = e.target.value;
+              setDateJump(val);
+              if (val !== "all") {
+                setCollapsed((s) => ({ ...s, [val]: false }));
+                setTimeout(() => {
+                  dayRefs.current[val]?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 50);
+              }
+            }}
+            className="h-11 w-full appearance-none rounded-full border border-border bg-card pl-10 pr-10 text-sm"
+          >
+            <option value="all">Todas las fechas</option>
+            {byDay.map(([day]) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
+        <div className="relative sm:w-48">
           <select
             value={groupFilter}
             onChange={(e) => setGroupFilter(e.target.value as "all" | GroupKey)}
