@@ -2,10 +2,11 @@
 // Keys are dot-namespaced and resolved by the `t()` helper in ./index.tsx.
 // Use {var} placeholders for interpolation.
 
-export type Lang = "es";
+export type Lang = "es" | "en";
 
 export const LANGS: { code: Lang; label: string; flag: string }[] = [
   { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "en", label: "English", flag: "🇬🇧" },
 ];
 
 type Dict = Record<string, string>;
