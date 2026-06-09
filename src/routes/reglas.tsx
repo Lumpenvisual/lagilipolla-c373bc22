@@ -41,8 +41,7 @@ function PtsRow({ pts, txt, color }: { pts: string; txt: string; color: string }
 
 function ReglasPage() {
   const { lang } = useLanguage();
-  const en = lang === "en";
-  const L = en ? RULES_EN : RULES_ES;
+  const L = lang === "en" ? RULES_EN : RULES_ES;
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
       {/* Hero / membrete */}
