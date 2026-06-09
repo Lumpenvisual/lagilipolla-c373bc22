@@ -20,7 +20,14 @@ export const Route = createFileRoute("/cronograma")({
         content:
           "Cronograma de partidos del Mundial 2026 en hora Colombia (COT). Fechas, sedes y resultados.",
       },
+      { property: "og:title", content: "Cronograma · LA GILIPOLLA 2026" },
+      {
+        property: "og:description",
+        content: "Fechas, sedes y resultados del Mundial 2026 en hora Colombia.",
+      },
+      { property: "og:url", content: "https://lagilipolla.lovable.app/cronograma" },
     ],
+    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/cronograma" }],
   }),
   component: Cronograma,
 });

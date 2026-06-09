@@ -15,7 +15,15 @@ export const Route = createFileRoute("/")({
         name: "description",
         content: `Polla del Mundial 2026 · cuota ${fmtCOP(POLLA.cuotaCOP)} COP · Bar El Guanábano.`,
       },
+      { property: "og:title", content: "LA GILIPOLLA 2026 · Bar El Guanábano" },
+      {
+        property: "og:description",
+        content: `Polla del Mundial 2026 · cuota ${fmtCOP(POLLA.cuotaCOP)} COP · Bar El Guanábano.`,
+      },
+      { property: "og:url", content: "https://lagilipolla.lovable.app/" },
+      { property: "og:type", content: "website" },
     ],
+    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/" }],
   }),
   component: Landing,
 });

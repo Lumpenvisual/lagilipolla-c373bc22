@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "";
+const BASE_URL = "https://lagilipolla.lovable.app";
 
 interface SitemapEntry {
   path: string;
@@ -15,7 +15,10 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/reglas", changefreq: "monthly", priority: "0.9" },
+          { path: "/cronograma", changefreq: "daily", priority: "0.8" },
           { path: "/leaderboard", changefreq: "hourly", priority: "0.8" },
+          { path: "/registro", changefreq: "monthly", priority: "0.5" },
           { path: "/login", changefreq: "monthly", priority: "0.3" },
         ];
 
