@@ -331,8 +331,8 @@ function Planilla() {
                   )}
                 </div>
                 <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                  <div className="flex flex-1 justify-end sm:max-w-[140px]">
-                    <TeamWithFlag teamName={lName} flagCode={getFlagCode(lName)} size="sm" className="truncate" />
+                  <div className="flex w-[160px] justify-end">
+                    <TeamWithFlag teamName={lName} flagCode={getFlagCode(lName)} size="sm" className="truncate justify-end text-right" />
                   </div>
                   <Input
                     type="number"
@@ -353,7 +353,7 @@ function Planilla() {
                     onChange={(e) => setMatch(m.id, "ga", e.target.value)}
                     className="h-9 w-14 text-center"
                   />
-                  <div className="flex flex-1 sm:max-w-[140px]">
+                  <div className="flex w-[160px] justify-start">
                     <TeamWithFlag teamName={vName} flagCode={getFlagCode(vName)} size="sm" className="truncate" />
                   </div>
                 </div>
@@ -417,8 +417,8 @@ function Planilla() {
                         )}
                       </div>
                       <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                        <div className="flex flex-1 justify-end sm:max-w-[140px]">
-                          <TeamWithFlag teamName={m.local} flagCode={getFlagCode(m.local)} size="sm" className="truncate" />
+                        <div className="flex w-[180px] justify-end">
+                          <TeamWithFlag teamName={m.local} flagCode={getFlagCode(m.local)} size="sm" className="truncate justify-end text-right" />
                         </div>
                         <Input
                           type="number"
@@ -439,7 +439,7 @@ function Planilla() {
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
                           className="h-9 w-14 text-center"
                         />
-                        <div className="flex flex-1 sm:max-w-[140px]">
+                        <div className="flex w-[180px] justify-start">
                           <TeamWithFlag teamName={m.visitante} flagCode={getFlagCode(m.visitante)} size="sm" className="truncate" />
                         </div>
                       </div>
