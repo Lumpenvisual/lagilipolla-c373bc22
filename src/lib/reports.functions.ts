@@ -608,3 +608,102 @@ export const verifyComprobante = createServerFn({ method: "POST" })
       codigo: row.codigo as string,
     };
   });
+
+// ============== ADMIN: backup a Storage (bucket "backups") ==============
+
+export const uploadBackupToStorage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { wb } = await makeWorkbook();
+
+    const tables = [
+      "participants",
+      "picks",
+      "tournament_state",
+      "user_roles",
+      "admin_audit",
+    ] as const;
+    for (const t of tables) {
+      const { data, error } = await supabaseAdmin.from(t).select("*");
+      if (error) throw new Error(`${t}: ${error.message}`);
+      const rows = (data ?? []) as Record<string, unknown>[];
+      const ws = wb.addWorksheet(t);
+      if (rows.length > 0) {
+        const cols = Object.keys(rows[0]);
+        ws.columns = cols.map((c) => ({
+          header: c,
+          key: c,
+          width: Math.min(40, Math.max(12, c.length + 4)),
+        }));
+        for (const r of rows) {
+          const flat: Record<string, unknown> = {};
+          for (const c of cols) {
+            const v = r[c];
+            flat[c] = v != null && typeof v === "object" ? JSON.stringify(v) : v;
+          }
+          ws.addRow(flat);
+        }
+      } else {
+        ws.addRow(["(vacío)"]);
+      }
+    }
+    const meta = wb.addWorksheet("_meta");
+    meta.addRow(["Generado", new Date().toISOString()]);
+    meta.addRow(["Versión", "1.0"]);
+    meta.addRow(["Tablas", tables.join(", ")]);
+
+    const buf: ArrayBuffer = await wb.xlsx.writeBuffer();
+    const filename = `gilipolla-backup-${nowStamp()}.xlsx`;
+    const path = `auto/${filename}`;
+    const { error: upErr } = await supabaseAdmin.storage
+      .from("backups")
+      .upload(path, new Uint8Array(buf), {
+        contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        upsert: false,
+      });
+    if (upErr) throw new Error(upErr.message);
+    return { ok: true as const, path, filename };
+  });
+
+export const listBackups = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin.storage
+      .from("backups")
+      .list("auto", { limit: 100, sortBy: { column: "created_at", order: "desc" } });
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((f) => ({
+      name: f.name,
+      path: `auto/${f.name}`,
+      size: f.metadata?.size ?? null,
+      created_at: f.created_at ?? null,
+    }));
+  });
+
+export const getBackupSignedUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ path: z.string().min(1).max(256) }).parse(d))
+  .handler(async ({ context, data }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: signed, error } = await supabaseAdmin.storage
+      .from("backups")
+      .createSignedUrl(data.path, 300);
+    if (error) throw new Error(error.message);
+    return { url: signed.signedUrl };
+  });
+
+export const deleteBackup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ path: z.string().min(1).max(256) }).parse(d))
+  .handler(async ({ context, data }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.storage.from("backups").remove([data.path]);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });

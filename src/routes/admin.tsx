@@ -36,7 +36,13 @@ import {
   generateLeaderboardXlsx,
   generateParticipantesXlsx,
   generateBackupXlsx,
+  uploadBackupToStorage,
+  listBackups,
+  getBackupSignedUrl,
+  deleteBackup,
 } from "@/lib/reports.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { Cloud, CloudUpload, Download } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · LA GILIPOLLA 2026" }] }),
@@ -558,11 +564,116 @@ function ReportesTab() {
           />
         </div>
       </Card>
+      <CloudBackupCard />
     </div>
   );
 }
 
 function DeadlineLockCard() {
+  // see below
+  return <DeadlineLockCardImpl />;
+}
+
+function CloudBackupCard() {
+  const qc = useQueryClient();
+  const runUpload = useServerFn(uploadBackupToStorage);
+  const runList = useServerFn(listBackups);
+  const runSign = useServerFn(getBackupSignedUrl);
+  const runDelete = useServerFn(deleteBackup);
+  const [busy, setBusy] = useState(false);
+
+  const { data: files, isLoading } = useQuery({
+    queryKey: ["backups-list"],
+    queryFn: () => runList(),
+  });
+
+  const createBackup = async () => {
+    setBusy(true);
+    const tid = toast.loading("Creando respaldo en la nube…");
+    try {
+      const r = await runUpload();
+      toast.success(`Respaldo creado: ${r.filename}`, { id: tid });
+      qc.invalidateQueries({ queryKey: ["backups-list"] });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error", { id: tid });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const download = async (path: string) => {
+    try {
+      const { url } = await runSign({ data: { path } });
+      window.open(url, "_blank");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error");
+    }
+  };
+
+  const remove = async (path: string) => {
+    if (!confirm(`¿Eliminar respaldo ${path}?`)) return;
+    try {
+      await runDelete({ data: { path } });
+      toast.success("Eliminado");
+      qc.invalidateQueries({ queryKey: ["backups-list"] });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error");
+    }
+  };
+
+  return (
+    <Card className="border-info/30 bg-card p-6 card-shadow">
+      <h2 className="font-display text-xl text-info flex items-center gap-2">
+        <Cloud className="size-5" /> Respaldos en la nube
+      </h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Genera un respaldo .xlsx y guárdalo en el bucket privado <code>backups</code>. Solo el
+        admin puede ver, descargar o eliminar estos archivos.
+      </p>
+      <div className="mt-4">
+        <Button onClick={createBackup} disabled={busy} variant="hero">
+          {busy ? (
+            <Loader2 className="mr-2 size-4 animate-spin" />
+          ) : (
+            <CloudUpload className="mr-2 size-4" />
+          )}
+          Crear respaldo ahora
+        </Button>
+      </div>
+      <div className="mt-6">
+        <h3 className="text-sm font-medium text-muted-foreground">Historial</h3>
+        {isLoading ? (
+          <p className="mt-2 text-sm text-muted-foreground">Cargando…</p>
+        ) : !files || files.length === 0 ? (
+          <p className="mt-2 text-sm text-muted-foreground">Aún no hay respaldos.</p>
+        ) : (
+          <ul className="mt-2 divide-y divide-border text-sm">
+            {files.map((f) => (
+              <li key={f.path} className="flex items-center gap-2 py-2">
+                <span className="flex-1 truncate">
+                  {f.name}
+                  {f.size != null && (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {(f.size / 1024).toFixed(1)} KB
+                    </span>
+                  )}
+                </span>
+                <Button size="sm" variant="secondary" onClick={() => download(f.path)}>
+                  <Download className="size-4" />
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => remove(f.path)}>
+                  <Trash2 className="size-4 text-destructive" />
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function DeadlineLockCardImpl() {
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const lockedAt = ts?.picks_locked_at ?? undefined;
