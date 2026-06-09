@@ -36,7 +36,13 @@ import {
   generateLeaderboardXlsx,
   generateParticipantesXlsx,
   generateBackupXlsx,
+  uploadBackupToStorage,
+  listBackups,
+  getBackupSignedUrl,
+  deleteBackup,
 } from "@/lib/reports.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { Cloud, CloudUpload } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · LA GILIPOLLA 2026" }] }),
@@ -558,6 +564,7 @@ function ReportesTab() {
           />
         </div>
       </Card>
+      <CloudBackupCard />
     </div>
   );
 }
