@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2, Calendar, MapPin, Lock, ChevronDown, Search } from "lucide-react";
+import { Loader2, Calendar, MapPin, Lock, ChevronDown, Search, CalendarDays } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useTournamentState } from "@/hooks/usePolla";
