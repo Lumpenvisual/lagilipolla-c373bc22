@@ -19,7 +19,12 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CronogramaRouteImport } from './routes/cronograma'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerificarCodigoRouteImport } from './routes/verificar.$codigo'
+import { Route as AdminResultadosRouteImport } from './routes/admin.resultados'
+import { Route as AdminReportesRouteImport } from './routes/admin.reportes'
+import { Route as AdminListasRouteImport } from './routes/admin.listas'
+import { Route as AdminCronogramaRouteImport } from './routes/admin.cronograma'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -71,15 +76,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const VerificarCodigoRoute = VerificarCodigoRouteImport.update({
   id: '/verificar/$codigo',
   path: '/verificar/$codigo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminResultadosRoute = AdminResultadosRouteImport.update({
+  id: '/resultados',
+  path: '/resultados',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportesRoute = AdminReportesRouteImport.update({
+  id: '/reportes',
+  path: '/reportes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminListasRoute = AdminListasRouteImport.update({
+  id: '/listas',
+  path: '/listas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCronogramaRoute = AdminCronogramaRouteImport.update({
+  id: '/cronograma',
+  path: '/cronograma',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/cronograma': typeof CronogramaRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
@@ -88,11 +118,15 @@ export interface FileRoutesByFullPath {
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/cronograma': typeof AdminCronogramaRoute
+  '/admin/listas': typeof AdminListasRoute
+  '/admin/reportes': typeof AdminReportesRoute
+  '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/cronograma': typeof CronogramaRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
@@ -101,12 +135,17 @@ export interface FileRoutesByTo {
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/cronograma': typeof AdminCronogramaRoute
+  '/admin/listas': typeof AdminListasRoute
+  '/admin/reportes': typeof AdminReportesRoute
+  '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/cronograma': typeof CronogramaRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
@@ -115,7 +154,12 @@ export interface FileRoutesById {
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/cronograma': typeof AdminCronogramaRoute
+  '/admin/listas': typeof AdminListasRoute
+  '/admin/reportes': typeof AdminReportesRoute
+  '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,11 +174,15 @@ export interface FileRouteTypes {
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
+    | '/admin/cronograma'
+    | '/admin/listas'
+    | '/admin/reportes'
+    | '/admin/resultados'
     | '/verificar/$codigo'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/cronograma'
     | '/dashboard'
     | '/leaderboard'
@@ -143,7 +191,12 @@ export interface FileRouteTypes {
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
+    | '/admin/cronograma'
+    | '/admin/listas'
+    | '/admin/reportes'
+    | '/admin/resultados'
     | '/verificar/$codigo'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -156,12 +209,17 @@ export interface FileRouteTypes {
     | '/registro'
     | '/reglas'
     | '/sitemap.xml'
+    | '/admin/cronograma'
+    | '/admin/listas'
+    | '/admin/reportes'
+    | '/admin/resultados'
     | '/verificar/$codigo'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CronogramaRoute: typeof CronogramaRoute
   DashboardRoute: typeof DashboardRoute
   LeaderboardRoute: typeof LeaderboardRoute
@@ -245,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/verificar/$codigo': {
       id: '/verificar/$codigo'
       path: '/verificar/$codigo'
@@ -252,12 +317,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificarCodigoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/resultados': {
+      id: '/admin/resultados'
+      path: '/resultados'
+      fullPath: '/admin/resultados'
+      preLoaderRoute: typeof AdminResultadosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reportes': {
+      id: '/admin/reportes'
+      path: '/reportes'
+      fullPath: '/admin/reportes'
+      preLoaderRoute: typeof AdminReportesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/listas': {
+      id: '/admin/listas'
+      path: '/listas'
+      fullPath: '/admin/listas'
+      preLoaderRoute: typeof AdminListasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cronograma': {
+      id: '/admin/cronograma'
+      path: '/cronograma'
+      fullPath: '/admin/cronograma'
+      preLoaderRoute: typeof AdminCronogramaRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminCronogramaRoute: typeof AdminCronogramaRoute
+  AdminListasRoute: typeof AdminListasRoute
+  AdminReportesRoute: typeof AdminReportesRoute
+  AdminResultadosRoute: typeof AdminResultadosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCronogramaRoute: AdminCronogramaRoute,
+  AdminListasRoute: AdminListasRoute,
+  AdminReportesRoute: AdminReportesRoute,
+  AdminResultadosRoute: AdminResultadosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   CronogramaRoute: CronogramaRoute,
   DashboardRoute: DashboardRoute,
   LeaderboardRoute: LeaderboardRoute,
