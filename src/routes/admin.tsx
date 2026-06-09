@@ -28,6 +28,10 @@ import {
   fmtCOP,
   GROUP_KEYS,
   slotOptions,
+  FASE_LABEL,
+  type ExtraMatch,
+  type Fase,
+  type Phases,
   type SpecialPlayer,
   type TournamentState,
 } from "@/lib/polla";
@@ -49,7 +53,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type Tab = "pagos" | "resultados" | "listas" | "reportes";
+type Tab = "pagos" | "resultados" | "cronograma" | "listas" | "reportes";
 
 function AdminPage() {
   const router = useRouter();
@@ -80,6 +84,7 @@ function AdminPage() {
   const tabs: { key: Tab; label: string; icon: typeof Users }[] = [
     { key: "pagos", label: "Pagos", icon: Users },
     { key: "resultados", label: "Resultados", icon: ClipboardList },
+    { key: "cronograma", label: "Cronograma", icon: ClipboardList },
     { key: "listas", label: "Listas", icon: ListPlus },
     { key: "reportes", label: "Reportes", icon: FileSpreadsheet },
   ];
@@ -108,6 +113,7 @@ function AdminPage() {
       <div className="mt-6">
         {tab === "pagos" && <PagosTab />}
         {tab === "resultados" && <ResultadosTab />}
+        {tab === "cronograma" && <CronogramaTab />}
         {tab === "listas" && <ListasTab />}
         {tab === "reportes" && <ReportesTab />}
       </div>
