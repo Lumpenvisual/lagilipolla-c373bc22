@@ -143,6 +143,17 @@ function PagosTab() {
     }
   };
 
+  const eliminarParticipante = async (id: string, nombre: string) => {
+    if (!window.confirm(`¿Eliminar a "${nombre}"? Se borrarán también su planilla y comprobantes. Esta acción no se puede deshacer.`)) return;
+    const { error } = await supabase.from("participants").delete().eq("id", id);
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Participante eliminado");
+      qc.invalidateQueries({ queryKey: ["admin-participants"] });
+      qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+    }
+  };
+
   const counts = {
     pendiente: parts.filter((p) => p.estado_pago === "pendiente").length,
     aprobado: parts.filter((p) => p.estado_pago === "aprobado").length,
@@ -207,6 +218,14 @@ function PagosTab() {
                     onClick={() => setEstado(p.id, "rechazado")}
                   >
                     ❌
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    title="Mover a la papelera (eliminar)"
+                    onClick={() => eliminarParticipante(p.id, p.nombre)}
+                  >
+                    <Trash2 className="size-4" />
                   </Button>
                 </td>
               </tr>
