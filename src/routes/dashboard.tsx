@@ -111,9 +111,9 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
   const planillaCompleta = !!pick && !!pick.goleador_id && !!pick.arquero_id;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-4xl">
+      <h1 className="mt-3 font-display text-3xl sm:text-4xl">
         Hola, <span className="gold-gradient-text">{nombre}</span>
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">Bienvenido a LA GILIPOLLA 2026.</p>
