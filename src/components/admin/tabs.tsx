@@ -41,6 +41,7 @@ import {
   FASE_LABEL,
   type ExtraMatch,
   type Fase,
+  type GroupMatch,
   type Phases,
   type SpecialPlayer,
   type TournamentState,
@@ -524,12 +525,14 @@ export function CronogramaTab() {
   const { data: ts } = useTournamentState();
   const [phases, setPhases] = useState<Phases>(DEFAULT_PHASES);
   const [extras, setExtras] = useState<ExtraMatch[]>([]);
+  const [groupMatches, setGroupMatches] = useState<GroupMatch[]>([]);
   const [visibility, setVisibility] = useState<Record<string, boolean>>(DEFAULT_VISIBILITY);
 
   useEffect(() => {
     if (ts) {
       setPhases({ ...DEFAULT_PHASES, ...(ts.phases ?? {}) });
       setExtras(ts.extra_matches ?? []);
+      setGroupMatches(ts.group_k_matches ?? []);
       const v = (ts as unknown as { visibility?: Record<string, boolean> }).visibility ?? {};
       setVisibility({ ...DEFAULT_VISIBILITY, ...v });
     }
@@ -546,6 +549,7 @@ export function CronogramaTab() {
       .update({
         phases: phases as never,
         extra_matches: extras as never,
+        group_k_matches: groupMatches as never,
         visibility: visibility as never,
       })
       .eq("id", 1);
@@ -555,6 +559,22 @@ export function CronogramaTab() {
   };
 
   const addMatch = (fase: Fase) => {
+    if (fase === "grupos") {
+      const id = `g-${Math.random().toString(36).slice(2, 8)}`;
+      setGroupMatches((arr) => [
+        ...arr,
+        {
+          id,
+          fecha: new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 16),
+          local: "",
+          visitante: "",
+          sede: "",
+          gh: null,
+          ga: null,
+        },
+      ]);
+      return;
+    }
     const id = `${fase}-${Math.random().toString(36).slice(2, 8)}`;
     setExtras((arr) => [
       ...arr,
@@ -571,12 +591,29 @@ export function CronogramaTab() {
     ]);
   };
 
-  const updateMatch = (id: string, patch: Partial<ExtraMatch>) => {
+  const updateMatch = (fase: Fase, id: string, patch: Partial<ExtraMatch>) => {
+    if (fase === "grupos") {
+      setGroupMatches((arr) => arr.map((m) => (m.id === id ? { ...m, ...patch } : m)));
+      return;
+    }
     setExtras((arr) => arr.map((m) => (m.id === id ? { ...m, ...patch } : m)));
   };
-  const removeMatch = (id: string) => setExtras((arr) => arr.filter((m) => m.id !== id));
+  const removeMatch = (fase: Fase, id: string) => {
+    if (fase === "grupos") {
+      setGroupMatches((arr) => arr.filter((m) => m.id !== id));
+      return;
+    }
+    setExtras((arr) => arr.filter((m) => m.id !== id));
+  };
 
-  const grouped = (fase: Fase) => extras.filter((m) => m.fase === fase);
+  const grouped = (fase: Fase): (ExtraMatch | GroupMatch)[] => {
+    if (fase === "grupos") {
+      return [...groupMatches].sort((a, b) => (a.fecha || "").localeCompare(b.fecha || ""));
+    }
+    return extras
+      .filter((m) => m.fase === fase)
+      .sort((a, b) => (a.fecha || "").localeCompare(b.fecha || ""));
+  };
 
   return (
     <div className="space-y-6">
@@ -643,17 +680,17 @@ export function CronogramaTab() {
                     <Input
                       placeholder={t("admin.t.cron.phLocal")}
                       value={m.local}
-                      onChange={(e) => updateMatch(m.id, { local: e.target.value })}
+                      onChange={(e) => updateMatch(fase, m.id, { local: e.target.value })}
                     />
                     <Input
                       placeholder={t("admin.t.cron.phVisitante")}
                       value={m.visitante}
-                      onChange={(e) => updateMatch(m.id, { visitante: e.target.value })}
+                      onChange={(e) => updateMatch(fase, m.id, { visitante: e.target.value })}
                     />
                     <Input
                       placeholder={t("admin.t.cron.phSede")}
                       value={m.sede}
-                      onChange={(e) => updateMatch(m.id, { sede: e.target.value })}
+                      onChange={(e) => updateMatch(fase, m.id, { sede: e.target.value })}
                     />
                   </div>
                   <div className="space-y-2">
@@ -665,7 +702,7 @@ export function CronogramaTab() {
                         type="datetime-local"
                         value={toLocalInput(m.fecha)}
                         onChange={(e) =>
-                          updateMatch(m.id, { fecha: fromLocalInput(e.target.value) })
+                          updateMatch(fase, m.id, { fecha: fromLocalInput(e.target.value) })
                         }
                       />
                     </div>
@@ -678,7 +715,7 @@ export function CronogramaTab() {
                         min={0}
                         value={m.gh ?? ""}
                         onChange={(e) =>
-                          updateMatch(m.id, {
+                          updateMatch(fase, m.id, {
                             gh: e.target.value === "" ? null : Math.max(0, parseInt(e.target.value, 10) || 0),
                           })
                         }
@@ -690,7 +727,7 @@ export function CronogramaTab() {
                         min={0}
                         value={m.ga ?? ""}
                         onChange={(e) =>
-                          updateMatch(m.id, {
+                          updateMatch(fase, m.id, {
                             ga: e.target.value === "" ? null : Math.max(0, parseInt(e.target.value, 10) || 0),
                           })
                         }
@@ -701,7 +738,7 @@ export function CronogramaTab() {
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => removeMatch(m.id)}
+                    onClick={() => removeMatch(fase, m.id)}
                     title={t("admin.t.cron.deleteMatch")}
                   >
                     <Trash2 className="size-4" />
