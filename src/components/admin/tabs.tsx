@@ -503,17 +503,32 @@ const DEFAULT_PHASES: Phases = {
   final: false,
 };
 
+const DEFAULT_VISIBILITY: Record<string, boolean> = {
+  grupos: true,
+  octavos: true,
+  cuartos: true,
+  semis: true,
+  tercero: true,
+  final: true,
+  goleador: true,
+  arquero: true,
+  historico: true,
+};
+
 export function CronogramaTab() {
   const t = useT();
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [phases, setPhases] = useState<Phases>(DEFAULT_PHASES);
   const [extras, setExtras] = useState<ExtraMatch[]>([]);
+  const [visibility, setVisibility] = useState<Record<string, boolean>>(DEFAULT_VISIBILITY);
 
   useEffect(() => {
     if (ts) {
       setPhases({ ...DEFAULT_PHASES, ...(ts.phases ?? {}) });
       setExtras(ts.extra_matches ?? []);
+      const v = (ts as unknown as { visibility?: Record<string, boolean> }).visibility ?? {};
+      setVisibility({ ...DEFAULT_VISIBILITY, ...v });
     }
   }, [ts]);
 
@@ -527,6 +542,7 @@ export function CronogramaTab() {
       .update({
         phases: phases as never,
         extra_matches: extras as never,
+        visibility: visibility as never,
       })
       .eq("id", 1);
     if (error) return toast.error(error.message);
@@ -580,6 +596,25 @@ export function CronogramaTab() {
               </button>
             );
           })}
+        </div>
+      </Card>
+
+      <Card className="border-border bg-card p-5 card-shadow">
+        <h2 className="font-display text-xl">{t("admin.t.cron.visTitle")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.visHint")}</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {Object.keys(DEFAULT_VISIBILITY).map((k) => (
+            <label
+              key={k}
+              className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/20 px-3 py-2"
+            >
+              <span className="text-sm">{t(`admin.t.cron.vis.${k}`)}</span>
+              <Switch
+                checked={visibility[k] !== false}
+                onCheckedChange={(v) => setVisibility((s) => ({ ...s, [k]: v }))}
+              />
+            </label>
+          ))}
         </div>
       </Card>
 
