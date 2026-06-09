@@ -46,7 +46,7 @@ import {
 import { useServerFn } from "@tanstack/react-start";
 
 /* ---------------- Pagos ---------------- */
-function PagosTab() {
+export function PagosTab() {
   const qc = useQueryClient();
   const { data: parts = [], isLoading } = useQuery({
     queryKey: ["admin-participants"],
@@ -177,7 +177,7 @@ function PagosTab() {
 }
 
 /* ---------------- Resultados ---------------- */
-function ResultadosTab() {
+export function ResultadosTab() {
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [draft, setDraft] = useState<TournamentState | null>(null);
@@ -382,7 +382,7 @@ function ResultadosTab() {
 }
 
 /* ---------------- Listas (goleadores/arqueros) ---------------- */
-function ListasTab() {
+export function ListasTab() {
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [gols, setGols] = useState<SpecialPlayer[]>([]);
@@ -434,7 +434,7 @@ const DEFAULT_PHASES: Phases = {
   final: false,
 };
 
-function CronogramaTab() {
+export function CronogramaTab() {
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [phases, setPhases] = useState<Phases>(DEFAULT_PHASES);
@@ -686,7 +686,7 @@ function ListEditor({
 }
 
 /* ---------------- Reportes ---------------- */
-function ReportesTab() {
+export function ReportesTab() {
   return (
     <div className="space-y-6">
       <DeadlineLockCard />
