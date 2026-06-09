@@ -119,3 +119,9 @@ export const FECHA_FMT = new Intl.DateTimeFormat("es-CO", {
 export function fmtFecha(iso: string): string {
   return FECHA_FMT.format(new Date(iso)) + " COT";
 }
+
+/** Un partido queda bloqueado para edición de marcadores cuando faltan ≤ 24h para empezar. */
+export function isMatchLocked(iso: string, nowMs: number = Date.now()): boolean {
+  const start = new Date(iso).getTime();
+  return start - nowMs <= 24 * 60 * 60 * 1000;
+}
