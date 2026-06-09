@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
-import { Loader2, Save, CheckCircle2, Lock, MapPin, Calendar } from "lucide-react";
+import { Loader2, Save, CheckCircle2, Lock, MapPin, Calendar, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useTournamentState, useMyPick, useSavePick } from "@/hooks/usePolla";
@@ -9,6 +9,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -110,10 +115,16 @@ function Planilla() {
     .map((f) => ({ fase: f, list: extraMatches.filter((m) => m.fase === f) }))
     .filter((p) => p.list.length > 0);
 
+  /* Reglamento: en 1ª ronda se predicen marcadores SOLO de los partidos del Grupo de Colombia (Grupo K). */
+  const groupKTeamIds = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
+  const grupoKMatches = ts.group_k_matches.filter(
+    (m) => groupKTeamIds.has(m.local) && groupKTeamIds.has(m.visitante),
+  );
+
   const completedGroups = GROUP_KEYS.filter(
     (k) => groups[k]?.pos1 && groups[k]?.pos2 && groups[k]?.pos1 !== groups[k]?.pos2,
   ).length;
-  const completedMatches = ts.group_k_matches.filter((m) => {
+  const completedMatches = grupoKMatches.filter((m) => {
     const p = matches[m.id];
     return p && p.gh != null && p.ga != null;
   }).length;
