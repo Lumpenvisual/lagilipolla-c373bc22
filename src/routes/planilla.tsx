@@ -10,11 +10,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   POLLA,
   GROUP_KEYS,
   slotOptions,
   fmtFecha,
   isMatchLocked,
+  FASE_LABEL,
+  type Fase,
+  type ExtraMatch,
   type GroupKey,
   type PickGroups,
   type PickMatches,
@@ -40,15 +54,18 @@ function Planilla() {
 
   const [groups, setGroups] = useState<PickGroups>({});
   const [matches, setMatches] = useState<PickMatches>({});
+  const [extra, setExtra] = useState<PickMatches>({});
   const [goleador, setGoleador] = useState<string | null>(null);
   const [arquero, setArquero] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (initialized) return;
     if (pick) {
       setGroups(pick.groups ?? {});
       setMatches(pick.group_k_matches ?? {});
+      setExtra(pick.extra_matches ?? {});
       setGoleador(pick.goleador_id);
       setArquero(pick.arquero_id);
       setInitialized(true);
@@ -84,11 +101,24 @@ function Planilla() {
   }
   if (!ts) return null;
 
+  const visibility = ((ts as unknown as { visibility?: Record<string, boolean> }).visibility) ?? {};
+  const isVisible = (k: string) => visibility[k] !== false;
+  const extraMatches: ExtraMatch[] = (ts.extra_matches ?? []) as ExtraMatch[];
+  const phaseOrder: Fase[] = ["octavos", "cuartos", "semis", "tercero", "final"];
+  const matchesByPhase = phaseOrder
+    .filter((f) => isVisible(f))
+    .map((f) => ({ fase: f, list: extraMatches.filter((m) => m.fase === f) }))
+    .filter((p) => p.list.length > 0);
+
   const completedGroups = GROUP_KEYS.filter(
     (k) => groups[k]?.pos1 && groups[k]?.pos2 && groups[k]?.pos1 !== groups[k]?.pos2,
   ).length;
   const completedMatches = ts.group_k_matches.filter((m) => {
     const p = matches[m.id];
+    return p && p.gh != null && p.ga != null;
+  }).length;
+  const completedExtra = extraMatches.filter((m) => {
+    const p = extra[m.id];
     return p && p.gh != null && p.ga != null;
   }).length;
   const completedEsp = (goleador ? 1 : 0) + (arquero ? 1 : 0);
@@ -102,10 +132,12 @@ function Planilla() {
       await save.mutateAsync({
         groups,
         group_k_matches: matches,
+        extra_matches: extra,
         goleador_id: goleador,
         arquero_id: arquero,
       });
       toast.success(t("planilla.toast.saved"));
+      setConfirmOpen(false);
     } catch (e) {
       toast.error(t("planilla.toast.saveFailed", { err: e instanceof Error ? e.message : "error" }));
     }
@@ -120,6 +152,13 @@ function Planilla() {
   const setMatch = (id: string, field: "gh" | "ga", v: string) => {
     const n = v === "" ? null : Math.max(0, Math.min(20, parseInt(v, 10) || 0));
     setMatches((m) => ({
+      ...m,
+      [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
+    }));
+  };
+  const setExtraScore = (id: string, field: "gh" | "ga", v: string) => {
+    const n = v === "" ? null : Math.max(0, Math.min(20, parseInt(v, 10) || 0));
+    setExtra((m) => ({
       ...m,
       [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
     }));
