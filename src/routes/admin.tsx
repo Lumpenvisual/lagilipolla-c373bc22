@@ -42,7 +42,7 @@ import {
   deleteBackup,
 } from "@/lib/reports.functions";
 import { useServerFn } from "@tanstack/react-start";
-import { Cloud, CloudUpload } from "lucide-react";
+import { Cloud, CloudUpload, Download } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin · LA GILIPOLLA 2026" }] }),
