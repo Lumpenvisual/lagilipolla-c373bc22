@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { POLLA, fmtCOP } from "@/lib/polla";
+import { useLanguage } from "@/lib/i18n";
 
 export const Route = createFileRoute("/reglas")({
   head: () => ({
@@ -39,70 +40,54 @@ function PtsRow({ pts, txt, color }: { pts: string; txt: string; color: string }
 }
 
 function ReglasPage() {
+  const { lang } = useLanguage();
+  const L = lang === "en" ? RULES_EN : RULES_ES;
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
       {/* Hero / membrete */}
       <header className="text-center">
         <div className="bandera-stripe-h mx-auto h-1.5 w-24 rounded-sm" aria-hidden />
         <p className="mt-4 text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-          Reglamento oficial
+          {L.officialRules}
         </p>
         <h1 className="mt-2 font-display text-4xl sm:text-6xl">
           LA <span className="gold-gradient-text">GILIPOLLA</span> 2026
         </h1>
-        <p className="mt-2 text-base text-muted-foreground">Bar El Guanábano · Mundial FIFA 2026</p>
+        <p className="mt-2 text-base text-muted-foreground">Bar El Guanábano · {L.fifaWc2026}</p>
         <p className="mt-1 text-sm italic text-gold">"¡Qué Polla, por fin salió!"</p>
       </header>
 
       {/* Resumen rápido */}
       <section className="mt-10 grid gap-4 sm:grid-cols-3">
         <Card className="border-gold/40 bg-gold/5 p-5 text-center card-shadow">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Cuota</p>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">{L.entryFee}</p>
           <p className="mt-1 font-display text-3xl text-gold">{fmtCOP(POLLA.cuotaCOP)}</p>
           <p className="text-xs text-muted-foreground">COP · "$100 Lukas"</p>
         </Card>
         <Card className="border-info/40 bg-info/5 p-5 text-center card-shadow">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Inscripciones</p>
-          <p className="mt-1 font-display text-2xl">20 may → 11 jun</p>
-          <p className="text-xs text-muted-foreground">2026 · cierre 10:00 a.m. COT</p>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">{L.registrations}</p>
+          <p className="mt-1 font-display text-2xl">{L.regDates}</p>
+          <p className="text-xs text-muted-foreground">{L.regClose}</p>
         </Card>
         <Card className="border-destructive/40 bg-destructive/5 p-5 text-center card-shadow">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Premios</p>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">{L.prizes}</p>
           <p className="mt-1 font-display text-2xl text-destructive">60% / 20%</p>
-          <p className="text-xs text-muted-foreground">1° y 2° lugar · 20% admin</p>
+          <p className="text-xs text-muted-foreground">{L.prizesSub}</p>
         </Card>
       </section>
 
       {/* Cómo funciona */}
       <Card className="mt-10 border-border bg-card p-6 card-shadow">
-        <h2 className="font-display text-2xl">¿Cómo funciona?</h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Por <span className="font-semibold text-gold">{fmtCOP(POLLA.cuotaCOP)} COP</span> tienes
-          derecho a apostar en{" "}
-          <strong className="text-foreground">todas las rondas del Mundial</strong>. En la primera
-          ronda, en <strong className="text-foreground">los 12 grupos (A–L)</strong> eliges los{" "}
-          <strong className="text-foreground">dos primeros clasificados</strong> (los terceros, a la
-          mierda). El <strong className="text-foreground">Grupo K es uno más</strong>: también
-          eliges 1° y 2°, y como Colombia está en él, adicionalmente predices el{" "}
-          <strong className="text-foreground">marcador exacto de sus 6 partidos</strong>. En las
-          siguientes rondas, hasta la final, se apuesta el marcador de todos los partidos. Los
-          puntos se cuentan a los <em>90 minutos + reposición</em> — no alargue.
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          <strong className="text-foreground">
-            Los ganadores serán quienes tengan los mayores puntajes al final del Mundial.
-          </strong>
-          Un apostador puede ir de polla en polla siempre y cuando pague los $100.000 de nuevo. Se
-          permiten seudónimos. Si hay pollas compartidas, deben elegir un <em>capitán</em> que será
-          quien haga preguntas, quejas y reclamos por el grupo.
-        </p>
+        <h2 className="font-display text-2xl">{L.howItWorks}</h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{L.how1}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{L.how2}</p>
       </Card>
 
       {/* Info oficial FIFA */}
       <Card className="mt-6 border-info/30 bg-card p-6 card-shadow">
-        <h2 className="font-display text-2xl text-info">🌎 Datos oficiales · FIFA World Cup 2026™</h2>
+        <h2 className="font-display text-2xl text-info">🌎 {L.fifaOfficial}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Información tomada de{" "}
+          {L.infoFrom}{" "}
           <a
             href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026"
             target="_blank"
@@ -114,211 +99,319 @@ function ReglasPage() {
           .
         </p>
         <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-          <li>
-            <strong className="text-foreground">Fechas:</strong> 11 de junio – 19 de julio de 2026
-          </li>
-          <li>
-            <strong className="text-foreground">Anfitriones:</strong> Canadá 🇨🇦 · México 🇲🇽 · EE. UU. 🇺🇸
-          </li>
-          <li>
-            <strong className="text-foreground">Selecciones:</strong> 48 (récord histórico)
-          </li>
-          <li>
-            <strong className="text-foreground">Formato:</strong> 12 grupos de 4 (A–L)
-          </li>
-          <li>
-            <strong className="text-foreground">Partidos:</strong> 104 en total
-          </li>
-          <li>
-            <strong className="text-foreground">Sedes:</strong> 16 ciudades anfitrionas
-          </li>
-          <li>
-            <strong className="text-foreground">Inauguración:</strong> Estadio Azteca, CDMX
-          </li>
-          <li>
-            <strong className="text-foreground">Final:</strong> MetLife Stadium, New Jersey · 19 jul
-          </li>
+          {L.fifaFacts.map(([k, v]) => (
+            <li key={k}>
+              <strong className="text-foreground">{k}:</strong> {v}
+            </li>
+          ))}
         </ul>
-        <p className="mt-3 text-xs italic text-muted-foreground">
-          Clasifican a octavos los <strong className="not-italic text-foreground">2 primeros</strong>{" "}
-          de cada grupo y los <strong className="not-italic text-foreground">8 mejores terceros</strong>
-          . Para LA GILIPOLLA solo cuentan 1° y 2° de cada grupo.
-        </p>
+        <p className="mt-3 text-xs italic text-muted-foreground">{L.fifaNote}</p>
       </Card>
 
       {/* Sistema de puntos */}
       <div className="mt-10 space-y-6">
-        <h2 className="font-display text-3xl">📊 Sistema de puntos</h2>
+        <h2 className="font-display text-3xl">📊 {L.pointsSystem}</h2>
 
         <Card className="border-gold/30 bg-card p-6 card-shadow">
-          <h3 className="font-display text-2xl text-gold">Apuesta por grupos (1° y 2°)</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Para cada uno de los 12 grupos (A–L) eliges los dos primeros clasificados.
-          </p>
+          <h3 className="font-display text-2xl text-gold">{L.groupBetTitle}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{L.groupBetDesc}</p>
           <div className="mt-4 grid gap-2">
-            <PtsRow pts="5" color="bg-gold/20 text-gold" txt="Aciertas 1° y 2° exactos." />
-            <PtsRow
-              pts="3"
-              color="bg-info/20 text-info"
-              txt="Aciertas los dos primeros, pero en desorden."
-            />
-            <PtsRow
-              pts="1"
-              color="bg-muted text-foreground"
-              txt="Aciertas solo uno (en cualquier posición)."
-            />
-            <PtsRow pts="0" color="bg-destructive/20 text-destructive" txt="No aciertas ninguno." />
+            <PtsRow pts="5" color="bg-gold/20 text-gold" txt={L.gp5} />
+            <PtsRow pts="3" color="bg-info/20 text-info" txt={L.gp3} />
+            <PtsRow pts="1" color="bg-muted text-foreground" txt={L.gp1} />
+            <PtsRow pts="0" color="bg-destructive/20 text-destructive" txt={L.gp0} />
           </div>
         </Card>
 
         <Card className="border-info/30 bg-card p-6 card-shadow">
-          <h3 className="font-display text-2xl text-info">
-            Apuesta por marcador · Grupo K y siguientes rondas
-          </h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Predices el marcador exacto de cada partido del Grupo K (Colombia) y, en las siguientes
-            rondas, de todos los partidos hasta la final.
-          </p>
+          <h3 className="font-display text-2xl text-info">{L.scoreBetTitle}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{L.scoreBetDesc}</p>
           <div className="mt-4 grid gap-2">
-            <PtsRow pts="5" color="bg-gold/20 text-gold" txt="Marcador exacto del partido." />
-            <PtsRow
-              pts="3"
-              color="bg-info/20 text-info"
-              txt="Aciertas el equipo ganador Y el número de goles de cualquier equipo."
-            />
-            <PtsRow
-              pts="2"
-              color="bg-success/20 text-success"
-              txt="Aciertas solo el equipo ganador (sin importar los goles)."
-            />
-            <PtsRow
-              pts="1"
-              color="bg-muted text-foreground"
-              txt="Aciertas el empate (sin importar el número de goles)."
-            />
-            <PtsRow
-              pts="1"
-              color="bg-muted text-foreground"
-              txt="Aciertas la cantidad de goles de un equipo (sin importar el resultado final)."
-            />
-            <PtsRow pts="0" color="bg-destructive/20 text-destructive" txt="Ningún acierto." />
+            <PtsRow pts="5" color="bg-gold/20 text-gold" txt={L.sc5} />
+            <PtsRow pts="3" color="bg-info/20 text-info" txt={L.sc3} />
+            <PtsRow pts="2" color="bg-success/20 text-success" txt={L.sc2a} />
+            <PtsRow pts="1" color="bg-muted text-foreground" txt={L.sc1a} />
+            <PtsRow pts="1" color="bg-muted text-foreground" txt={L.sc1b} />
+            <PtsRow pts="0" color="bg-destructive/20 text-destructive" txt={L.sc0} />
           </div>
-          <p className="mt-3 text-xs italic text-muted-foreground">
-            Los marcadores se cuentan a los 90 minutos + reposición.{" "}
-            <strong className="not-italic">No alargue.</strong>
-          </p>
+          <p className="mt-3 text-xs italic text-muted-foreground">{L.scoreNote}</p>
         </Card>
 
         <Card className="border-destructive/30 bg-card p-6 card-shadow">
-          <h3 className="font-display text-2xl text-destructive">Selecciones especiales</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Según los premios oficiales FIFA entregados en la final.
-          </p>
+          <h3 className="font-display text-2xl text-destructive">{L.specialTitle}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{L.specialDesc}</p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            <PtsRow
-              pts="10"
-              color="bg-destructive/20 text-destructive"
-              txt="Goleador del Mundial."
-            />
-            <PtsRow
-              pts="10"
-              color="bg-destructive/20 text-destructive"
-              txt="Mejor arquero del Mundial."
-            />
+            <PtsRow pts="10" color="bg-destructive/20 text-destructive" txt={L.topScorer} />
+            <PtsRow pts="10" color="bg-destructive/20 text-destructive" txt={L.topKeeper} />
           </div>
         </Card>
       </div>
 
       {/* Premios */}
       <Card className="mt-10 border-gold/40 bg-gold/5 p-6 card-shadow">
-        <h2 className="font-display text-2xl text-gold">🏆 Premios y reparto del pozo</h2>
+        <h2 className="font-display text-2xl text-gold">🏆 {L.prizesTitle}</h2>
         <ul className="mt-3 ml-5 list-disc space-y-2 text-sm text-muted-foreground">
-          <li>
-            <strong className="text-foreground">60%</strong> para el puntaje más alto.
-          </li>
-          <li>
-            <strong className="text-foreground">20%</strong> para el segundo puesto.
-          </li>
-          <li>
-            <strong className="text-foreground">20%</strong> restante para gastos de administración.
-          </li>
+          {L.prizesList.map((p, i) => (
+            <li key={i}>{p}</li>
+          ))}
         </ul>
-        <p className="mt-3 text-xs italic text-muted-foreground">
-          La ceremonia de premiación será minutos después de terminada la final.
-        </p>
+        <p className="mt-3 text-xs italic text-muted-foreground">{L.prizesCeremony}</p>
       </Card>
 
       {/* Desempates */}
       <Card className="mt-6 border-info/30 bg-card p-6 card-shadow">
-        <h2 className="font-display text-2xl text-info">⚖️ Desempates</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Si hay empate en puntos en cualquiera de los puestos ganadores se aplica este orden:
-        </p>
+        <h2 className="font-display text-2xl text-info">⚖️ {L.tiebreaksTitle}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{L.tiebreaksDesc}</p>
         <ol className="mt-3 ml-5 list-decimal space-y-2 text-sm text-muted-foreground">
-          <li>
-            Gana quien tenga <strong className="text-foreground">más aciertos de 5 puntos</strong>.
-          </li>
-          <li>
-            Si persiste, gana quien tenga{" "}
-            <strong className="text-foreground">más aciertos de 3 puntos</strong>.
-          </li>
-          <li>
-            Si aún persiste, gana quien tenga{" "}
-            <strong className="text-foreground">más aciertos de 2 puntos</strong>.
-          </li>
+          {L.tiebreaksList.map((t, i) => (
+            <li key={i}>{t}</li>
+          ))}
         </ol>
       </Card>
 
       {/* Inscripción y pago */}
       <Card className="mt-6 border-border bg-card p-6 card-shadow">
-        <h2 className="font-display text-2xl">📝 Inscripción y pago</h2>
+        <h2 className="font-display text-2xl">📝 {L.regPayTitle}</h2>
         <ul className="mt-3 ml-5 list-disc space-y-2 text-sm text-muted-foreground">
-          <li>
-            Inscripciones desde el <strong className="text-foreground">20 de mayo</strong> hasta el{" "}
-            <strong className="text-foreground">11 de junio de 2026, 10:00 a.m. COT</strong>.
-          </li>
-          <li>
-            Pago de inscripción{" "}
-            <strong className="text-foreground">solamente con FIFA Uribe y El Rojo</strong>.
-          </li>
-          <li>Paopollas y Eduardo Colina se ocupan solo del fixture.</li>
-          <li>Cada formulario será sellado con fecha y hora de entrega.</li>
-          <li>
-            No se aceptan tachones ni enmendaduras: debe venir con nombre y firma del participante,
-            e incluir el sello de pago.
-          </li>
-          <li>Después del cierre no se aceptan cambios.</li>
-          <li>Los formularios y resultados actualizados estarán en el tablero del Bar.</li>
+          {L.regPayList.map((p, i) => (
+            <li key={i}>{p}</li>
+          ))}
         </ul>
       </Card>
 
       {/* Sede */}
       <Card className="mt-6 border-gold/30 bg-gold/5 p-6 text-center card-shadow">
-        <h2 className="font-display text-2xl text-gold">PA' QUE VENGAN</h2>
-        <p className="mt-3 text-sm text-muted-foreground">
-          La sede oficial es el{" "}
-          <strong className="text-foreground">Centro Recreativo y Cultural "El Guanábano"</strong>,{" "}
-          situado en la <strong className="text-foreground">Carrera 43 No. 53-21</strong>. Este año
-          la intención es vernos más en el bar, por eso la información del Mundial estará
-          físicamente en él.
-        </p>
+        <h2 className="font-display text-2xl text-gold">{L.venueTitle}</h2>
+        <p className="mt-3 text-sm text-muted-foreground">{L.venueDesc}</p>
       </Card>
 
       <div className="mt-10 flex flex-wrap justify-center gap-3">
         <Button asChild variant="hero" size="lg">
-          <Link to="/registro">Inscribirme ahora</Link>
+          <Link to="/registro">{L.ctaRegister}</Link>
         </Button>
         <Button asChild variant="secondary" size="lg">
-          <Link to="/planilla">Ver la planilla</Link>
+          <Link to="/planilla">{L.ctaSheet}</Link>
         </Button>
         <Button asChild variant="ghost" size="lg">
-          <Link to="/">Volver al inicio</Link>
+          <Link to="/">{L.ctaHome}</Link>
         </Button>
       </div>
 
-      <p className="mt-10 text-center text-xs text-muted-foreground">
-        Las decisiones del organizador del bar son finales.
-      </p>
+      <p className="mt-10 text-center text-xs text-muted-foreground">{L.finalNote}</p>
     </main>
   );
 }
+
+type Rules = {
+  officialRules: string;
+  fifaWc2026: string;
+  entryFee: string;
+  registrations: string;
+  regDates: string;
+  regClose: string;
+  prizes: string;
+  prizesSub: string;
+  howItWorks: string;
+  how1: string;
+  how2: string;
+  fifaOfficial: string;
+  infoFrom: string;
+  fifaFacts: [string, string][];
+  fifaNote: string;
+  pointsSystem: string;
+  groupBetTitle: string;
+  groupBetDesc: string;
+  gp5: string;
+  gp3: string;
+  gp1: string;
+  gp0: string;
+  scoreBetTitle: string;
+  scoreBetDesc: string;
+  sc5: string;
+  sc3: string;
+  sc2a: string;
+  sc1a: string;
+  sc1b: string;
+  sc0: string;
+  scoreNote: string;
+  specialTitle: string;
+  specialDesc: string;
+  topScorer: string;
+  topKeeper: string;
+  prizesTitle: string;
+  prizesList: string[];
+  prizesCeremony: string;
+  tiebreaksTitle: string;
+  tiebreaksDesc: string;
+  tiebreaksList: string[];
+  regPayTitle: string;
+  regPayList: string[];
+  venueTitle: string;
+  venueDesc: string;
+  ctaRegister: string;
+  ctaSheet: string;
+  ctaHome: string;
+  finalNote: string;
+};
+
+const RULES_ES: Rules = {
+  officialRules: "Reglamento oficial",
+  fifaWc2026: "Mundial FIFA 2026",
+  entryFee: "Cuota",
+  registrations: "Inscripciones",
+  regDates: "20 may → 11 jun",
+  regClose: "2026 · cierre 10:00 a.m. COT",
+  prizes: "Premios",
+  prizesSub: "1° y 2° lugar · 20% admin",
+  howItWorks: "¿Cómo funciona?",
+  how1: "Por la cuota tienes derecho a apostar en todas las rondas del Mundial. En la primera ronda, en los 12 grupos (A–L) eliges los dos primeros clasificados (los terceros, a la mierda). El Grupo K es uno más: también eliges 1° y 2°, y como Colombia está en él, adicionalmente predices el marcador exacto de sus 6 partidos. En las siguientes rondas, hasta la final, se apuesta el marcador de todos los partidos. Los puntos se cuentan a los 90 minutos + reposición — no alargue.",
+  how2: "Los ganadores serán quienes tengan los mayores puntajes al final del Mundial. Un apostador puede ir de polla en polla siempre y cuando pague los $100.000 de nuevo. Se permiten seudónimos. Si hay pollas compartidas, deben elegir un capitán que será quien haga preguntas, quejas y reclamos por el grupo.",
+  fifaOfficial: "Datos oficiales · FIFA World Cup 2026™",
+  infoFrom: "Información tomada de",
+  fifaFacts: [
+    ["Fechas", "11 de junio – 19 de julio de 2026"],
+    ["Anfitriones", "Canadá 🇨🇦 · México 🇲🇽 · EE. UU. 🇺🇸"],
+    ["Selecciones", "48 (récord histórico)"],
+    ["Formato", "12 grupos de 4 (A–L)"],
+    ["Partidos", "104 en total"],
+    ["Sedes", "16 ciudades anfitrionas"],
+    ["Inauguración", "Estadio Azteca, CDMX"],
+    ["Final", "MetLife Stadium, New Jersey · 19 jul"],
+  ],
+  fifaNote:
+    "Clasifican a octavos los 2 primeros de cada grupo y los 8 mejores terceros. Para LA GILIPOLLA solo cuentan 1° y 2° de cada grupo.",
+  pointsSystem: "Sistema de puntos",
+  groupBetTitle: "Apuesta por grupos (1° y 2°)",
+  groupBetDesc: "Para cada uno de los 12 grupos (A–L) eliges los dos primeros clasificados.",
+  gp5: "Aciertas 1° y 2° exactos.",
+  gp3: "Aciertas los dos primeros, pero en desorden.",
+  gp1: "Aciertas solo uno (en cualquier posición).",
+  gp0: "No aciertas ninguno.",
+  scoreBetTitle: "Apuesta por marcador · Grupo K y siguientes rondas",
+  scoreBetDesc:
+    "Predices el marcador exacto de cada partido del Grupo K (Colombia) y, en las siguientes rondas, de todos los partidos hasta la final.",
+  sc5: "Marcador exacto del partido.",
+  sc3: "Aciertas el equipo ganador Y el número de goles de cualquier equipo.",
+  sc2a: "Aciertas solo el equipo ganador (sin importar los goles).",
+  sc1a: "Aciertas el empate (sin importar el número de goles).",
+  sc1b: "Aciertas la cantidad de goles de un equipo (sin importar el resultado final).",
+  sc0: "Ningún acierto.",
+  scoreNote: "Los marcadores se cuentan a los 90 minutos + reposición. No alargue.",
+  specialTitle: "Selecciones especiales",
+  specialDesc: "Según los premios oficiales FIFA entregados en la final.",
+  topScorer: "Goleador del Mundial.",
+  topKeeper: "Mejor arquero del Mundial.",
+  prizesTitle: "Premios y reparto del pozo",
+  prizesList: [
+    "60% para el puntaje más alto.",
+    "20% para el segundo puesto.",
+    "20% restante para gastos de administración.",
+  ],
+  prizesCeremony: "La ceremonia de premiación será minutos después de terminada la final.",
+  tiebreaksTitle: "Desempates",
+  tiebreaksDesc:
+    "Si hay empate en puntos en cualquiera de los puestos ganadores se aplica este orden:",
+  tiebreaksList: [
+    "Gana quien tenga más aciertos de 5 puntos.",
+    "Si persiste, gana quien tenga más aciertos de 3 puntos.",
+    "Si aún persiste, gana quien tenga más aciertos de 2 puntos.",
+  ],
+  regPayTitle: "Inscripción y pago",
+  regPayList: [
+    "Inscripciones desde el 20 de mayo hasta el 11 de junio de 2026, 10:00 a.m. COT.",
+    "Pago de inscripción solamente con FIFA Uribe y El Rojo.",
+    "Paopollas y Eduardo Colina se ocupan solo del fixture.",
+    "Cada formulario será sellado con fecha y hora de entrega.",
+    "No se aceptan tachones ni enmendaduras: debe venir con nombre y firma del participante, e incluir el sello de pago.",
+    "Después del cierre no se aceptan cambios.",
+    "Los formularios y resultados actualizados estarán en el tablero del Bar.",
+  ],
+  venueTitle: "PA' QUE VENGAN",
+  venueDesc:
+    "La sede oficial es el Centro Recreativo y Cultural \"El Guanábano\", situado en la Carrera 43 No. 53-21. Este año la intención es vernos más en el bar, por eso la información del Mundial estará físicamente en él.",
+  ctaRegister: "Inscribirme ahora",
+  ctaSheet: "Ver la planilla",
+  ctaHome: "Volver al inicio",
+  finalNote: "Las decisiones del organizador del bar son finales.",
+};
+
+const RULES_EN: Rules = {
+  officialRules: "Official rules",
+  fifaWc2026: "FIFA World Cup 2026",
+  entryFee: "Entry fee",
+  registrations: "Registrations",
+  regDates: "May 20 → Jun 11",
+  regClose: "2026 · closes 10:00 a.m. COT",
+  prizes: "Prizes",
+  prizesSub: "1st & 2nd place · 20% admin",
+  howItWorks: "How does it work?",
+  how1: "The entry fee lets you bet on every round of the World Cup. In the first round, for the 12 groups (A–L) you pick the top two qualifiers (third place doesn't matter). Group K is one more: you also pick 1st and 2nd, and since Colombia is in it, you additionally predict the exact score of its 6 matches. From the next rounds through the final you predict the exact score of every match. Points are counted at 90 minutes + stoppage time — no extra time.",
+  how2: "The winners are the players with the highest scores at the end of the World Cup. A bettor can play several pools as long as they pay the entry fee each time. Pseudonyms are allowed. For shared entries, pick a captain who handles questions, complaints and claims for the group.",
+  fifaOfficial: "Official data · FIFA World Cup 2026™",
+  infoFrom: "Information taken from",
+  fifaFacts: [
+    ["Dates", "June 11 – July 19, 2026"],
+    ["Hosts", "Canada 🇨🇦 · Mexico 🇲🇽 · USA 🇺🇸"],
+    ["Teams", "48 (record number)"],
+    ["Format", "12 groups of 4 (A–L)"],
+    ["Matches", "104 in total"],
+    ["Venues", "16 host cities"],
+    ["Opening", "Estadio Azteca, Mexico City"],
+    ["Final", "MetLife Stadium, New Jersey · Jul 19"],
+  ],
+  fifaNote:
+    "The top 2 of each group plus the 8 best third-placed teams advance to the round of 16. For LA GILIPOLLA only 1st and 2nd of each group count.",
+  pointsSystem: "Points system",
+  groupBetTitle: "Group bet (1st & 2nd)",
+  groupBetDesc: "For each of the 12 groups (A–L) you pick the two qualifiers.",
+  gp5: "Exact 1st and 2nd.",
+  gp3: "Both qualifiers, but in the wrong order.",
+  gp1: "Only one right (either position).",
+  gp0: "Neither right.",
+  scoreBetTitle: "Score bet · Group K and later rounds",
+  scoreBetDesc:
+    "Predict the exact score of every Group K match (Colombia) and, in later rounds, every match through the final.",
+  sc5: "Exact match score.",
+  sc3: "Correct winner AND the goal count of either team.",
+  sc2a: "Correct winner only (regardless of goals).",
+  sc1a: "Correct draw (regardless of goals).",
+  sc1b: "Correct goal count of one team (regardless of result).",
+  sc0: "Nothing right.",
+  scoreNote: "Scores count at 90 minutes + stoppage time. No extra time.",
+  specialTitle: "Special picks",
+  specialDesc: "Based on the official FIFA awards given at the final.",
+  topScorer: "Top scorer of the World Cup.",
+  topKeeper: "Best goalkeeper of the World Cup.",
+  prizesTitle: "Prizes and pot split",
+  prizesList: [
+    "60% for the highest score.",
+    "20% for second place.",
+    "20% remaining for administration costs.",
+  ],
+  prizesCeremony: "The awards ceremony takes place minutes after the final ends.",
+  tiebreaksTitle: "Tiebreakers",
+  tiebreaksDesc:
+    "If there is a tie on points for any of the winning positions, this order applies:",
+  tiebreaksList: [
+    "Whoever has more 5-point hits wins.",
+    "If it persists, whoever has more 3-point hits wins.",
+    "If it still persists, whoever has more 2-point hits wins.",
+  ],
+  regPayTitle: "Registration and payment",
+  regPayList: [
+    "Registrations open May 20 through June 11, 2026, 10:00 a.m. COT.",
+    "Registration payment only with FIFA Uribe and El Rojo.",
+    "Paopollas and Eduardo Colina only handle the fixture.",
+    "Each form is stamped with the date and time of delivery.",
+    "No cross-outs or amendments: it must include the participant's name and signature, plus the payment stamp.",
+    "No changes accepted after the deadline.",
+    "Updated forms and results will be on the Bar board.",
+  ],
+  venueTitle: "COME ON OVER",
+  venueDesc:
+    "The official venue is the \"El Guanábano\" Recreational and Cultural Center, at Carrera 43 No. 53-21. This year the idea is to see each other more at the bar, so the World Cup information will be physically there.",
+  ctaRegister: "Register now",
+  ctaSheet: "Open the sheet",
+  ctaHome: "Back to home",
+  finalNote: "The bar organizer's decisions are final.",
+};
