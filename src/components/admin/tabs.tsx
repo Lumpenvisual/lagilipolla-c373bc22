@@ -21,6 +21,17 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
@@ -51,6 +62,8 @@ import { useT, tStatic } from "@/lib/i18n";
 export function PagosTab() {
   const t = useT();
   const qc = useQueryClient();
+  const [toDelete, setToDelete] = useState<{ id: string; nombre: string } | null>(null);
+  const [typed, setTyped] = useState("");
   const { data: parts = [], isLoading } = useQuery({
     queryKey: ["admin-participants"],
     queryFn: async () => {
@@ -76,15 +89,17 @@ export function PagosTab() {
     }
   };
 
-  const eliminarParticipante = async (id: string, nombre: string) => {
-    if (!window.confirm(t("admin.t.confirm.deletePart", { name: nombre }))) return;
-    const { error } = await supabase.from("participants").delete().eq("id", id);
+  const confirmEliminar = async () => {
+    if (!toDelete) return;
+    const { error } = await supabase.from("participants").delete().eq("id", toDelete.id);
     if (error) toast.error(error.message);
     else {
       toast.success(t("admin.t.toast.partDeleted"));
       qc.invalidateQueries({ queryKey: ["admin-participants"] });
       qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
     }
+    setToDelete(null);
+    setTyped("");
   };
 
   const counts = {
@@ -171,7 +186,10 @@ export function PagosTab() {
                     size="sm"
                     variant="destructive"
                     title={t("admin.t.pagos.deleteTitle")}
-                    onClick={() => eliminarParticipante(p.id, p.nombre)}
+                    onClick={() => {
+                      setToDelete({ id: p.id, nombre: p.nombre });
+                      setTyped("");
+                    }}
                   >
                     <Trash2 className="size-4" />
                   </Button>
@@ -183,6 +201,46 @@ export function PagosTab() {
         </table>
         </div>
       </Card>
+
+      <AlertDialog
+        open={!!toDelete}
+        onOpenChange={(o) => {
+          if (!o) {
+            setToDelete(null);
+            setTyped("");
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("admin.t.confirm.deletePartTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("admin.t.confirm.deletePart", { name: toDelete?.nombre ?? "" })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">
+              {t("admin.t.confirm.deletePartType", { name: toDelete?.nombre ?? "" })}
+            </Label>
+            <Input
+              value={typed}
+              onChange={(e) => setTyped(e.target.value)}
+              placeholder={toDelete?.nombre ?? ""}
+              autoFocus
+            />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={!toDelete || typed.trim() !== toDelete.nombre.trim()}
+              onClick={confirmEliminar}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t("admin.t.confirm.deletePartCta")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -445,17 +503,32 @@ const DEFAULT_PHASES: Phases = {
   final: false,
 };
 
+const DEFAULT_VISIBILITY: Record<string, boolean> = {
+  grupos: true,
+  octavos: true,
+  cuartos: true,
+  semis: true,
+  tercero: true,
+  final: true,
+  goleador: true,
+  arquero: true,
+  historico: true,
+};
+
 export function CronogramaTab() {
   const t = useT();
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [phases, setPhases] = useState<Phases>(DEFAULT_PHASES);
   const [extras, setExtras] = useState<ExtraMatch[]>([]);
+  const [visibility, setVisibility] = useState<Record<string, boolean>>(DEFAULT_VISIBILITY);
 
   useEffect(() => {
     if (ts) {
       setPhases({ ...DEFAULT_PHASES, ...(ts.phases ?? {}) });
       setExtras(ts.extra_matches ?? []);
+      const v = (ts as unknown as { visibility?: Record<string, boolean> }).visibility ?? {};
+      setVisibility({ ...DEFAULT_VISIBILITY, ...v });
     }
   }, [ts]);
 
@@ -469,6 +542,7 @@ export function CronogramaTab() {
       .update({
         phases: phases as never,
         extra_matches: extras as never,
+        visibility: visibility as never,
       })
       .eq("id", 1);
     if (error) return toast.error(error.message);
@@ -522,6 +596,25 @@ export function CronogramaTab() {
               </button>
             );
           })}
+        </div>
+      </Card>
+
+      <Card className="border-border bg-card p-5 card-shadow">
+        <h2 className="font-display text-xl">{t("admin.t.cron.visTitle")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.visHint")}</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {Object.keys(DEFAULT_VISIBILITY).map((k) => (
+            <label
+              key={k}
+              className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/20 px-3 py-2"
+            >
+              <span className="text-sm">{t(`admin.t.cron.vis.${k}`)}</span>
+              <Switch
+                checked={visibility[k] !== false}
+                onCheckedChange={(v) => setVisibility((s) => ({ ...s, [k]: v }))}
+              />
+            </label>
+          ))}
         </div>
       </Card>
 
