@@ -130,11 +130,13 @@ export type Database = {
           arqueros: Json
           cuota_cop: number
           deadline: string
+          extra_matches: Json
           goleador_id: string | null
           goleadores: Json
           group_k_matches: Json
           groups: Json
           id: number
+          phases: Json
           picks_locked_at: string
           updated_at: string
         }
@@ -143,11 +145,13 @@ export type Database = {
           arqueros?: Json
           cuota_cop?: number
           deadline?: string
+          extra_matches?: Json
           goleador_id?: string | null
           goleadores?: Json
           group_k_matches?: Json
           groups?: Json
           id?: number
+          phases?: Json
           picks_locked_at?: string
           updated_at?: string
         }
@@ -156,11 +160,13 @@ export type Database = {
           arqueros?: Json
           cuota_cop?: number
           deadline?: string
+          extra_matches?: Json
           goleador_id?: string | null
           goleadores?: Json
           group_k_matches?: Json
           groups?: Json
           id?: number
+          phases?: Json
           picks_locked_at?: string
           updated_at?: string
         }
@@ -227,6 +233,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_match_locked: { Args: { _match_id: string }; Returns: boolean }
       recalc_all_picks: { Args: never; Returns: number }
     }
     Enums: {
