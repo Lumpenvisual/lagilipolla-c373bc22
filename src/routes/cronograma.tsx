@@ -89,7 +89,7 @@ function Cronograma() {
   const [groupFilter, setGroupFilter] = useState<"all" | GroupKey>("all");
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [dateJump, setDateJump] = useState<string>("all");
-  const dayRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const dayRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const rows = useMemo<Row[]>(() => {
     if (!ts) return [];
