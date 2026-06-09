@@ -80,7 +80,7 @@ export const translations: Record<Lang, Dict> = {
     // ---------- Landing ----------
     "home.meta.title": "Polla Mundial FIFA 2026 ⚽ — Pronostica y gana",
     "home.meta.desc":
-      "Únete a la Polla Mundial FIFA 2026: pronostica los 72 partidos de fase de grupos por $20 CAD y gana hasta el 60% del pozo.",
+      "Únete a la Polla Mundial FIFA 2026: pronostica los 72 partidos de fase de grupos por $100.000 COP y gana hasta el 60% del pozo.",
     "home.hero.alt": "Estadio de fútbol iluminado de noche",
     "home.hero.matches": "72 partidos",
     "home.hero.groupStage": "Fase de grupos",
@@ -88,7 +88,7 @@ export const translations: Record<Lang, Dict> = {
     "home.hero.cta": "Inscribirme",
     "home.hero.viewContests": "Ver concursos",
     "home.how.title": "Cómo funciona",
-    "home.step1.title": "Regístrate y paga $20 CAD",
+    "home.step1.title": "Regístrate y paga $100.000 COP",
     "home.step1.desc": "Crea tu alias y PIN; el pago se coordina aparte.",
     "home.step2.title": "Pronostica los 72 partidos",
     "home.step2.desc": "Marca el resultado de cada juego antes del kickoff.",
@@ -105,8 +105,8 @@ export const translations: Record<Lang, Dict> = {
     "home.scoring.missEx": "(resultado incorrecto)",
     "home.pay.title": "💳 Instrucciones de pago",
     "home.pay.body":
-      "Paga $20 CAD por e-Transfer a {email} o en efectivo. Incluye tu alias en el mensaje. El organizador te activará al confirmar el pago.",
-    "home.footer": "POLLA MUNDIAL 2026 · {email} · $20 CAD antes del 11 Jun 2026",
+      "Paga $100.000 COP por e-Transfer a {email} o en efectivo. Incluye tu alias en el mensaje. El organizador te activará al confirmar el pago.",
+    "home.footer": "POLLA MUNDIAL 2026 · {email} · $100.000 COP antes del 11 Jun 2026",
 
     // ---------- Concursos list ----------
     "concursos.meta.title": "Concursos — Polla Mundial 2026",
@@ -198,7 +198,7 @@ export const translations: Record<Lang, Dict> = {
     "reg.pin": "PIN (4 dígitos)",
     "reg.pin2": "Repite el PIN",
     "reg.accept": "Acepto las reglas del torneo",
-    "reg.submit": "INSCRIBIRME — $20 CAD",
+    "reg.submit": "INSCRIBIRME — $100.000 COP",
     "reg.done.title": "Registro recibido",
     "reg.done.body":
       "Tu inscripción quedó pendiente de aprobación. El organizador te activará una vez confirmado tu pago. Guarda tu alias y PIN para entrar.",

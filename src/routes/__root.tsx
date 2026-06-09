@@ -81,13 +81,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Polla de pronósticos del Mundial 2026: 72 partidos de fase de grupos, $20 CAD. Pronostica, suma puntos y gana hasta el 60% del pozo.",
+          "Polla de pronósticos del Mundial 2026: 72 partidos de fase de grupos, $100.000 COP. Pronostica, suma puntos y gana hasta el 60% del pozo.",
       },
       { name: "author", content: "Polla Mundial 2026" },
       { property: "og:title", content: "Polla Mundial FIFA 2026 ⚽" },
       {
         property: "og:description",
-        content: "72 partidos · Fase de grupos · $20 CAD. Pronostica y compite en tiempo real.",
+        content: "72 partidos · Fase de grupos · $100.000 COP. Pronostica y compite en tiempo real.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
