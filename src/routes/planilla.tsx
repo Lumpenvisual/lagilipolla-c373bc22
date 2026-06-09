@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { Loader2, Save, CheckCircle2, Lock, MapPin, Calendar, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -52,7 +52,6 @@ export const Route = createFileRoute("/planilla")({
 });
 
 function Planilla() {
-  const router = useRouter();
   const t = useT();
   const { user, participant, loading } = useAuth();
   const { data: ts, isLoading: tsLoading } = useTournamentState();
@@ -81,7 +80,12 @@ function Planilla() {
     }
   }, [pick, pickLoading, ts, initialized]);
 
-  const locked = useMemo(() => Date.now() > POLLA.deadline.getTime(), []);
+  // Bloqueo: fuente de verdad es tournament_state.picks_locked_at; si no existe, deadline local.
+  const lockAt = useMemo(() => {
+    const fromDb = ts?.picks_locked_at ? new Date(ts.picks_locked_at) : null;
+    return fromDb && !isNaN(fromDb.getTime()) ? fromDb : POLLA.deadline;
+  }, [ts?.picks_locked_at]);
+  const locked = useMemo(() => Date.now() > lockAt.getTime(), [lockAt]);
 
   if (loading || tsLoading || pickLoading) {
     return (
@@ -91,14 +95,32 @@ function Planilla() {
     );
   }
   if (!user) {
-    router.navigate({ to: "/login" });
-    return null;
+    return <Navigate to="/login" replace />;
   }
-  if (!participant || participant.estado_pago !== "aprobado") {
+  // Estados del perfil: sin inscripción → registro; pendiente/rechazado → cuenta; aprobado → planilla.
+  if (!participant) {
     return (
       <main className="mx-auto max-w-md px-4 py-16">
         <Card className="border-gold/40 bg-gold/5 p-8 text-center card-shadow">
-          <p className="text-sm text-muted-foreground">{t("planilla.notApproved")}</p>
+          <p className="text-sm text-muted-foreground">{t("planilla.noParticipant")}</p>
+          <Button className="mt-4" asChild>
+            <Link to="/registro">{t("planilla.goRegister")}</Link>
+          </Button>
+        </Card>
+      </main>
+    );
+  }
+  if (participant.estado_pago !== "aprobado") {
+    const msgKey =
+      participant.estado_pago === "rechazado"
+        ? "planilla.pagoRechazado"
+        : participant.estado_pago === "pendiente"
+          ? "planilla.pagoPendiente"
+          : "planilla.notApproved";
+    return (
+      <main className="mx-auto max-w-md px-4 py-16">
+        <Card className="border-gold/40 bg-gold/5 p-8 text-center card-shadow">
+          <p className="text-sm text-muted-foreground">{t(msgKey)}</p>
           <Button className="mt-4" asChild>
             <Link to="/dashboard">{t("planilla.goAccount")}</Link>
           </Button>
