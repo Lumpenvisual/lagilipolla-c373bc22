@@ -34,10 +34,30 @@ export type GroupMatch = {
 
 export type SpecialPlayer = { id: string; nombre: string; seleccion: string };
 
+export type Fase = "grupos" | "octavos" | "cuartos" | "semis" | "tercero" | "final";
+
+export type ExtraMatch = {
+  id: string;
+  fase: Fase;
+  fecha: string;
+  local: string;
+  visitante: string;
+  sede: string;
+  gh: number | null;
+  ga: number | null;
+};
+
+export type Phases = Record<Exclude<Fase, "grupos" | "tercero">, boolean> & {
+  grupos: boolean;
+  tercero?: boolean;
+};
+
 export type TournamentState = {
   id: number;
   groups: Groups;
   group_k_matches: GroupMatch[];
+  extra_matches?: ExtraMatch[];
+  phases?: Phases;
   goleadores: SpecialPlayer[];
   arqueros: SpecialPlayer[];
   goleador_id: string | null;
@@ -46,6 +66,15 @@ export type TournamentState = {
   cuota_cop: number;
   updated_at: string;
   picks_locked_at?: string | null;
+};
+
+export const FASE_LABEL: Record<Fase, string> = {
+  grupos: "Fase de grupos",
+  octavos: "Octavos de final",
+  cuartos: "Cuartos de final",
+  semis: "Semifinales",
+  tercero: "Tercer puesto",
+  final: "Final",
 };
 
 export type PickGroups = Partial<Record<GroupKey, { pos1: string | null; pos2: string | null }>>;
