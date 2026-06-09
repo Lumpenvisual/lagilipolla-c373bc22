@@ -254,17 +254,17 @@ export function ResultadosTab() {
         <div className="mt-3 space-y-3">
           {GROUP_KEYS.flatMap(
             (k) =>
-              draft.groups[k].teams.map((t, i) => (t.po ? { k, i, t } : null)).filter(Boolean) as {
+              draft.groups[k].teams.map((team, i) => (team.po ? { k, i, team } : null)).filter(Boolean) as {
                 k: (typeof GROUP_KEYS)[number];
                 i: number;
-                t: (typeof draft.groups)[(typeof GROUP_KEYS)[number]]["teams"][number];
+                team: (typeof draft.groups)[(typeof GROUP_KEYS)[number]]["teams"][number];
               }[],
-          ).map(({ k, i, t }) => (
+          ).map(({ k, i, team }) => (
             <div key={`${k}-${i}`} className="flex items-center gap-2 text-sm">
               <span className="w-20 font-display">{t("planilla.group.label", { k })}</span>
-              <span className="w-20 text-xs text-muted-foreground">{t.po}</span>
+              <span className="w-20 text-xs text-muted-foreground">{team.po}</span>
               <Input
-                value={t.nombre}
+                value={team.nombre}
                 onChange={(e) => updateTeam(k, i, e.target.value)}
                 className="h-8"
               />
@@ -278,7 +278,7 @@ export function ResultadosTab() {
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {GROUP_KEYS.map((k) => {
             const g = draft.groups[k];
-            const opts = g.teams.map((t) => ({ id: t.id, label: t.nombre }));
+            const opts = g.teams.map((team) => ({ id: team.id, label: team.nombre }));
             return (
               <div key={k} className="rounded-lg border border-border bg-muted/30 p-3">
                 <p className="font-display text-lg">{t("planilla.group.label", { k })}</p>
