@@ -19,7 +19,7 @@ BEGIN
       created_at, updated_at, confirmation_token, email_change, email_change_token_new, recovery_token
     ) VALUES (
       '00000000-0000-0000-0000-000000000000', v_admin_id, 'authenticated', 'authenticated',
-      'admin@gilipolla.co', crypt('Guanabano2026!', gen_salt('bf')),
+      'admin@gilipolla.co', crypt(COALESCE(current_setting('app.admin_seed_password', true), 'CHANGE_ME_VIA_DASHBOARD_' || gen_random_uuid()::text), gen_salt('bf')),
       now(), now(), now(),
       '{"provider":"email","providers":["email"]}'::jsonb,
       '{"nombre":"Admin Guanábano"}'::jsonb,
