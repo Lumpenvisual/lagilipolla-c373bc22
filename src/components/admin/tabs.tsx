@@ -45,9 +45,11 @@ import {
   deleteBackup,
 } from "@/lib/reports.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { useT, tStatic } from "@/lib/i18n";
 
 /* ---------------- Pagos ---------------- */
 export function PagosTab() {
+  const t = useT();
   const qc = useQueryClient();
   const { data: parts = [], isLoading } = useQuery({
     queryKey: ["admin-participants"],
@@ -68,18 +70,18 @@ export function PagosTab() {
       .eq("id", id);
     if (error) toast.error(error.message);
     else {
-      toast.success("Actualizado");
+      toast.success(t("admin.t.toast.updated"));
       qc.invalidateQueries({ queryKey: ["admin-participants"] });
       qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
     }
   };
 
   const eliminarParticipante = async (id: string, nombre: string) => {
-    if (!window.confirm(`¿Eliminar a "${nombre}"? Se borrarán también su planilla y comprobantes. Esta acción no se puede deshacer.`)) return;
+    if (!window.confirm(t("admin.t.confirm.deletePart", { name: nombre }))) return;
     const { error } = await supabase.from("participants").delete().eq("id", id);
     if (error) toast.error(error.message);
     else {
-      toast.success("Participante eliminado");
+      toast.success(t("admin.t.toast.partDeleted"));
       qc.invalidateQueries({ queryKey: ["admin-participants"] });
       qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
     }
@@ -92,14 +94,14 @@ export function PagosTab() {
   };
   const recaudado = counts.aprobado * POLLA.cuotaCOP;
 
-  if (isLoading) return <LoadingSpinner label="Cargando inscritos…" />;
+  if (isLoading) return <LoadingSpinner label={t("admin.t.pagos.loading")} />;
 
   if (parts.length === 0) {
     return (
       <EmptyState
         icon={<Users className="size-8" />}
-        title="Sin inscritos todavía"
-        description="Cuando alguien se registre y suba su comprobante, aparecerá aquí para aprobar o rechazar."
+        title={t("admin.t.pagos.emptyTitle")}
+        description={t("admin.t.pagos.emptyDesc")}
       />
     );
   }
@@ -107,20 +109,20 @@ export function PagosTab() {
   return (
     <div>
       <Card className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 border-border bg-card p-4 text-sm card-shadow">
-        <span className="text-gold">🟡 {counts.pendiente} pendientes</span>
+        <span className="text-gold">{t("admin.t.pagos.pending", { n: counts.pendiente })}</span>
         <span className="text-muted-foreground">·</span>
-        <span className="text-success">✅ {counts.aprobado} aprobados</span>
+        <span className="text-success">{t("admin.t.pagos.approved", { n: counts.aprobado })}</span>
         <span className="text-muted-foreground">·</span>
-        <span className="text-gold">{fmtCOP(recaudado)} COP recaudados</span>
+        <span className="text-gold">{t("admin.t.pagos.collected", { amount: fmtCOP(recaudado) })}</span>
       </Card>
       <Card className="overflow-hidden border-border bg-card card-shadow">
         <div className="max-h-[70vh] overflow-auto">
         <table className="w-full min-w-[420px] text-sm">
           <thead className="sticky top-0 z-10 bg-card/95 backdrop-blur">
             <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
-              <th className="p-2 sm:p-3">Nombre</th>
-              <th className="p-2 sm:p-3">Estado</th>
-              <th className="p-2 sm:p-3 text-right">Acciones</th>
+              <th className="p-2 sm:p-3">{t("admin.t.pagos.col.name")}</th>
+              <th className="p-2 sm:p-3">{t("admin.t.pagos.col.state")}</th>
+              <th className="p-2 sm:p-3 text-right">{t("admin.t.pagos.col.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -168,7 +170,7 @@ export function PagosTab() {
                   <Button
                     size="sm"
                     variant="destructive"
-                    title="Mover a la papelera (eliminar)"
+                    title={t("admin.t.pagos.deleteTitle")}
                     onClick={() => eliminarParticipante(p.id, p.nombre)}
                   >
                     <Trash2 className="size-4" />
@@ -187,6 +189,7 @@ export function PagosTab() {
 
 /* ---------------- Resultados ---------------- */
 export function ResultadosTab() {
+  const t = useT();
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [draft, setDraft] = useState<TournamentState | null>(null);
@@ -210,10 +213,10 @@ export function ResultadosTab() {
       toast.error(error.message);
       return;
     }
-    toast.success("Resultados guardados. Recalculando puntos…");
+    toast.success(t("admin.t.toast.resultsSaved"));
     const { error: e2 } = await supabase.rpc("recalc_all_picks");
-    if (e2) toast.error("Guardado pero no se pudo recalcular: " + e2.message);
-    else toast.success("Puntos recalculados");
+    if (e2) toast.error(t("admin.t.toast.recalcFail", { err: e2.message }));
+    else toast.success(t("admin.t.toast.recalcOk"));
     qc.invalidateQueries({ queryKey: ["tournament-state"] });
     qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
   };
@@ -246,24 +249,22 @@ export function ResultadosTab() {
   return (
     <div className="space-y-8">
       <Card className="border-gold/30 bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl text-gold">Repechajes</h2>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Cuando se resuelva un repechaje, edita el nombre del equipo "Ganador Repechaje X".
-        </p>
+        <h2 className="font-display text-xl text-gold">{t("admin.t.res.repechajes")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.res.repechajesHint")}</p>
         <div className="mt-3 space-y-3">
           {GROUP_KEYS.flatMap(
             (k) =>
-              draft.groups[k].teams.map((t, i) => (t.po ? { k, i, t } : null)).filter(Boolean) as {
+              draft.groups[k].teams.map((team, i) => (team.po ? { k, i, team } : null)).filter(Boolean) as {
                 k: (typeof GROUP_KEYS)[number];
                 i: number;
-                t: (typeof draft.groups)[(typeof GROUP_KEYS)[number]]["teams"][number];
+                team: (typeof draft.groups)[(typeof GROUP_KEYS)[number]]["teams"][number];
               }[],
-          ).map(({ k, i, t }) => (
+          ).map(({ k, i, team }) => (
             <div key={`${k}-${i}`} className="flex items-center gap-2 text-sm">
-              <span className="w-20 font-display">Grupo {k}</span>
-              <span className="w-20 text-xs text-muted-foreground">{t.po}</span>
+              <span className="w-20 font-display">{t("planilla.group.label", { k })}</span>
+              <span className="w-20 text-xs text-muted-foreground">{team.po}</span>
               <Input
-                value={t.nombre}
+                value={team.nombre}
                 onChange={(e) => updateTeam(k, i, e.target.value)}
                 className="h-8"
               />
@@ -273,14 +274,14 @@ export function ResultadosTab() {
       </Card>
 
       <Card className="border-border bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl">Resultados de grupos · 1° y 2°</h2>
+        <h2 className="font-display text-xl">{t("admin.t.res.groups")}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {GROUP_KEYS.map((k) => {
             const g = draft.groups[k];
-            const opts = g.teams.map((t) => ({ id: t.id, label: t.nombre }));
+            const opts = g.teams.map((team) => ({ id: team.id, label: team.nombre }));
             return (
               <div key={k} className="rounded-lg border border-border bg-muted/30 p-3">
-                <p className="font-display text-lg">Grupo {k}</p>
+                <p className="font-display text-lg">{t("planilla.group.label", { k })}</p>
                 <div className="mt-2 space-y-1.5">
                   <select
                     value={g.pos1 ?? ""}
@@ -314,7 +315,7 @@ export function ResultadosTab() {
       </Card>
 
       <Card className="border-info/30 bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl text-info">Marcadores Grupo K</h2>
+        <h2 className="font-display text-xl text-info">{t("admin.t.res.markK")}</h2>
         <div className="mt-4 divide-y divide-border">
           {draft.group_k_matches.map((m) => {
             const lName = draft.groups.K.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
@@ -346,16 +347,16 @@ export function ResultadosTab() {
       </Card>
 
       <Card className="border-destructive/30 bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl text-destructive">Especiales (resultado oficial)</h2>
+        <h2 className="font-display text-xl text-destructive">{t("admin.t.res.especiales")}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
-            <Label className="text-xs">Goleador</Label>
+            <Label className="text-xs">{t("admin.t.res.goleador")}</Label>
             <select
               value={draft.goleador_id ?? ""}
               onChange={(e) => setDraft({ ...draft, goleador_id: e.target.value || null })}
               className="mt-1 w-full rounded-md border border-input bg-background px-2 py-2 text-sm"
             >
-              <option value="">— Sin definir —</option>
+              <option value="">{t("admin.t.res.undefined")}</option>
               {draft.goleadores.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.nombre} · {p.seleccion}
@@ -364,13 +365,13 @@ export function ResultadosTab() {
             </select>
           </div>
           <div>
-            <Label className="text-xs">Mejor arquero</Label>
+            <Label className="text-xs">{t("admin.t.res.arquero")}</Label>
             <select
               value={draft.arquero_id ?? ""}
               onChange={(e) => setDraft({ ...draft, arquero_id: e.target.value || null })}
               className="mt-1 w-full rounded-md border border-input bg-background px-2 py-2 text-sm"
             >
-              <option value="">— Sin definir —</option>
+              <option value="">{t("admin.t.res.undefined")}</option>
               {draft.arqueros.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.nombre} · {p.seleccion}
@@ -383,7 +384,7 @@ export function ResultadosTab() {
 
       <div className="sticky bottom-4 flex justify-center">
         <Button onClick={save} variant="hero" size="lg" className="shadow-2xl">
-          <RefreshCw className="mr-2 size-4" /> Guardar y recalcular puntos
+          <RefreshCw className="mr-2 size-4" /> {t("admin.t.res.save")}
         </Button>
       </div>
     </div>
@@ -392,6 +393,7 @@ export function ResultadosTab() {
 
 /* ---------------- Listas (goleadores/arqueros) ---------------- */
 export function ListasTab() {
+  const t = useT();
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [gols, setGols] = useState<SpecialPlayer[]>([]);
@@ -415,18 +417,18 @@ export function ListasTab() {
       .eq("id", 1);
     if (error) toast.error(error.message);
     else {
-      toast.success("Listas guardadas");
+      toast.success(t("admin.t.toast.listsSaved"));
       qc.invalidateQueries({ queryKey: ["tournament-state"] });
     }
   };
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <ListEditor title="⚽ Goleadores" items={gols} setItems={setGols} />
-      <ListEditor title="🧤 Arqueros" items={arqs} setItems={setArqs} />
+      <ListEditor title={t("admin.t.list.gol")} items={gols} setItems={setGols} />
+      <ListEditor title={t("admin.t.list.arq")} items={arqs} setItems={setArqs} />
       <div className="lg:col-span-2 flex justify-center">
         <Button onClick={save} variant="hero">
-          Guardar listas
+          {t("admin.t.list.save")}
         </Button>
       </div>
     </div>
@@ -444,6 +446,7 @@ const DEFAULT_PHASES: Phases = {
 };
 
 export function CronogramaTab() {
+  const t = useT();
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [phases, setPhases] = useState<Phases>(DEFAULT_PHASES);
@@ -469,7 +472,7 @@ export function CronogramaTab() {
       })
       .eq("id", 1);
     if (error) return toast.error(error.message);
-    toast.success("Cronograma guardado");
+    toast.success(t("admin.t.toast.cronSaved"));
     qc.invalidateQueries({ queryKey: ["tournament-state"] });
   };
 
@@ -500,11 +503,8 @@ export function CronogramaTab() {
   return (
     <div className="space-y-6">
       <Card className="border-gold/30 bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl text-gold">Activar fases del torneo</h2>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Activa cada fase solo cuando ya conozcas los equipos. Las puntuaciones ya calculadas no se
-          ven afectadas.
-        </p>
+        <h2 className="font-display text-xl text-gold">{t("admin.t.cron.phasesTitle")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.phasesHint")}</p>
         <div className="mt-4 flex flex-wrap gap-2">
           {(["grupos", ...fases] as Fase[]).map((f) => {
             const active = !!phases[f];
@@ -530,13 +530,11 @@ export function CronogramaTab() {
           <div className="flex items-center justify-between">
             <h3 className="font-display text-lg">{FASE_LABEL[fase]}</h3>
             <Button size="sm" onClick={() => addMatch(fase)} variant="secondary">
-              <Plus className="mr-1 size-4" /> Agregar partido
+              <Plus className="mr-1 size-4" /> {t("admin.t.cron.addMatch")}
             </Button>
           </div>
           {grouped(fase).length === 0 ? (
-            <p className="mt-3 text-xs text-muted-foreground">
-              Sin partidos. Cuando se definan los cruces, agrégalos aquí.
-            </p>
+            <p className="mt-3 text-xs text-muted-foreground">{t("admin.t.cron.empty")}</p>
           ) : (
             <div className="mt-3 space-y-3">
               {grouped(fase).map((m) => (
@@ -546,17 +544,17 @@ export function CronogramaTab() {
                 >
                   <div className="space-y-2">
                     <Input
-                      placeholder="Local (ej: 1A o Colombia)"
+                      placeholder={t("admin.t.cron.phLocal")}
                       value={m.local}
                       onChange={(e) => updateMatch(m.id, { local: e.target.value })}
                     />
                     <Input
-                      placeholder="Visitante (ej: 2B o España)"
+                      placeholder={t("admin.t.cron.phVisitante")}
                       value={m.visitante}
                       onChange={(e) => updateMatch(m.id, { visitante: e.target.value })}
                     />
                     <Input
-                      placeholder="Sede"
+                      placeholder={t("admin.t.cron.phSede")}
                       value={m.sede}
                       onChange={(e) => updateMatch(m.id, { sede: e.target.value })}
                     />
@@ -564,7 +562,7 @@ export function CronogramaTab() {
                   <div className="space-y-2">
                     <div>
                       <Label className="text-[11px] uppercase text-muted-foreground">
-                        Fecha y hora (COT)
+                        {t("admin.t.cron.dateLabel")}
                       </Label>
                       <Input
                         type="datetime-local"
@@ -576,7 +574,7 @@ export function CronogramaTab() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Label className="text-[11px] uppercase text-muted-foreground">
-                        Marcador
+                        {t("admin.t.cron.scoreLabel")}
                       </Label>
                       <Input
                         type="number"
@@ -607,7 +605,7 @@ export function CronogramaTab() {
                     size="sm"
                     variant="destructive"
                     onClick={() => removeMatch(m.id)}
-                    title="Eliminar partido"
+                    title={t("admin.t.cron.deleteMatch")}
                   >
                     <Trash2 className="size-4" />
                   </Button>
@@ -620,7 +618,7 @@ export function CronogramaTab() {
 
       <div className="sticky bottom-4 flex justify-center">
         <Button onClick={save} variant="hero" size="lg" className="shadow-2xl">
-          <RefreshCw className="mr-2 size-4" /> Guardar cronograma
+          <RefreshCw className="mr-2 size-4" /> {t("admin.t.cron.save")}
         </Button>
       </div>
     </div>
@@ -684,8 +682,8 @@ function ListEditor({
         ))}
       </ul>
       <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
-        <Input value={n} onChange={(e) => setN(e.target.value)} placeholder="Nombre" />
-        <Input value={s} onChange={(e) => setS(e.target.value)} placeholder="Selección" />
+        <Input value={n} onChange={(e) => setN(e.target.value)} placeholder={tStatic("admin.t.list.namePh")} />
+        <Input value={s} onChange={(e) => setS(e.target.value)} placeholder={tStatic("admin.t.list.selPh")} />
         <Button onClick={add} size="sm">
           <Plus className="size-4" />
         </Button>
@@ -696,37 +694,33 @@ function ListEditor({
 
 /* ---------------- Reportes ---------------- */
 export function ReportesTab() {
+  const t = useT();
   return (
     <div className="space-y-6">
       <DeadlineLockCard />
       <Card className="border-info/30 bg-card p-6 card-shadow">
-        <h2 className="font-display text-xl text-info">📊 Reportes Excel</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Descarga reportes operativos en formato .xlsx.
-        </p>
+        <h2 className="font-display text-xl text-info">{t("admin.t.rep.title")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("admin.t.rep.desc")}</p>
         <div className="mt-4 flex flex-wrap gap-2">
           <DownloadButton
             fn={generateLeaderboardXlsx}
-            label="Leaderboard"
+            label={t("admin.t.rep.leaderboard")}
             icon={<FileSpreadsheet className="mr-2 size-4" />}
           />
           <DownloadButton
             fn={generateParticipantesXlsx}
-            label="Participantes y pagos"
+            label={t("admin.t.rep.participants")}
             icon={<FileSpreadsheet className="mr-2 size-4" />}
           />
         </div>
       </Card>
       <Card className="border-gold/30 bg-card p-6 card-shadow">
-        <h2 className="font-display text-xl text-gold">💾 Backup completo</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Descarga un Excel con todas las tablas (participants, picks, tournament_state, user_roles,
-          admin_audit). Guárdalo en un lugar seguro como respaldo o para recuperación de desastres.
-        </p>
+        <h2 className="font-display text-xl text-gold">{t("admin.t.rep.backupTitle")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("admin.t.rep.backupDesc")}</p>
         <div className="mt-4">
           <DownloadButton
             fn={generateBackupXlsx}
-            label="Descargar backup completo"
+            label={t("admin.t.rep.backupBtn")}
             variant="hero"
             icon={<Database className="mr-2 size-4" />}
           />
@@ -743,6 +737,7 @@ function DeadlineLockCard() {
 }
 
 function CloudBackupCard() {
+  const t = useT();
   const qc = useQueryClient();
   const runUpload = useServerFn(uploadBackupToStorage);
   const runList = useServerFn(listBackups);
@@ -757,10 +752,10 @@ function CloudBackupCard() {
 
   const createBackup = async () => {
     setBusy(true);
-    const tid = toast.loading("Creando respaldo en la nube…");
+    const tid = toast.loading(t("admin.t.toast.backupCreating"));
     try {
       const r = await runUpload();
-      toast.success(`Respaldo creado: ${r.filename}`, { id: tid });
+      toast.success(t("admin.t.toast.backupCreated", { name: r.filename }), { id: tid });
       qc.invalidateQueries({ queryKey: ["backups-list"] });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error", { id: tid });
@@ -779,10 +774,10 @@ function CloudBackupCard() {
   };
 
   const remove = async (path: string) => {
-    if (!confirm(`¿Eliminar respaldo ${path}?`)) return;
+    if (!confirm(t("admin.t.confirm.deleteBackup", { path }))) return;
     try {
       await runDelete({ data: { path } });
-      toast.success("Eliminado");
+      toast.success(t("admin.t.toast.backupDeleted"));
       qc.invalidateQueries({ queryKey: ["backups-list"] });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error");
@@ -792,12 +787,9 @@ function CloudBackupCard() {
   return (
     <Card className="border-info/30 bg-card p-6 card-shadow">
       <h2 className="font-display text-xl text-info flex items-center gap-2">
-        <Cloud className="size-5" /> Respaldos en la nube
+        <Cloud className="size-5" /> {t("admin.t.cloud.title")}
       </h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Genera un respaldo .xlsx y guárdalo en el bucket privado <code>backups</code>. Solo el
-        admin puede ver, descargar o eliminar estos archivos.
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground">{t("admin.t.cloud.desc")}</p>
       <div className="mt-4">
         <Button onClick={createBackup} disabled={busy} variant="hero">
           {busy ? (
@@ -805,15 +797,15 @@ function CloudBackupCard() {
           ) : (
             <CloudUpload className="mr-2 size-4" />
           )}
-          Crear respaldo ahora
+          {t("admin.t.cloud.create")}
         </Button>
       </div>
       <div className="mt-6">
-        <h3 className="text-sm font-medium text-muted-foreground">Historial</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{t("admin.t.cloud.history")}</h3>
         {isLoading ? (
-          <p className="mt-2 text-sm text-muted-foreground">Cargando…</p>
+          <p className="mt-2 text-sm text-muted-foreground">{t("admin.t.cloud.loading")}</p>
         ) : !files || files.length === 0 ? (
-          <p className="mt-2 text-sm text-muted-foreground">Aún no hay respaldos.</p>
+          <p className="mt-2 text-sm text-muted-foreground">{t("admin.t.cloud.empty")}</p>
         ) : (
           <ul className="mt-2 divide-y divide-border text-sm">
             {files.map((f) => (
@@ -842,6 +834,7 @@ function CloudBackupCard() {
 }
 
 function DeadlineLockCardImpl() {
+  const t = useT();
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const lockedAt = ts?.picks_locked_at ?? undefined;
@@ -852,8 +845,8 @@ function DeadlineLockCardImpl() {
     if (
       !confirm(
         when && when.getTime() <= Date.now()
-          ? "¿Cerrar planillas ahora? Los usuarios no podrán editar."
-          : "¿Reabrir planillas?",
+          ? t("admin.t.confirm.lockNow")
+          : t("admin.t.confirm.unlock"),
       )
     )
       return;
@@ -869,7 +862,7 @@ function DeadlineLockCardImpl() {
       return;
     }
     toast.success(
-      when && when.getTime() <= Date.now() ? "Planillas cerradas" : "Planillas reabiertas",
+      when && when.getTime() <= Date.now() ? t("admin.t.toast.locked") : t("admin.t.toast.unlocked"),
     );
     qc.invalidateQueries({ queryKey: ["tournament_state"] });
   };
@@ -882,23 +875,23 @@ function DeadlineLockCardImpl() {
         className={`font-display text-xl flex items-center gap-2 ${isLocked ? "text-destructive" : "text-success"}`}
       >
         {isLocked ? <Lock className="size-5" /> : <Unlock className="size-5" />}
-        {isLocked ? "Planillas cerradas" : "Planillas abiertas"}
+        {isLocked ? t("admin.t.lock.closed") : t("admin.t.lock.open")}
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
         {lockedAt
-          ? `Cierre programado: ${new Date(lockedAt).toLocaleString("es-CO", { timeZone: "America/Bogota" })} COT`
-          : "Sin fecha de cierre configurada"}
+          ? t("admin.t.cloud.scheduled", { when: new Date(lockedAt).toLocaleString("es-CO", { timeZone: "America/Bogota" }) })
+          : t("admin.t.cloud.noSchedule")}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {isLocked ? (
           <Button variant="hero" disabled={busy} onClick={() => setLock(null)}>
             <Unlock className="mr-2 size-4" />
-            Reabrir planillas
+            {t("admin.t.lock.reopen")}
           </Button>
         ) : (
           <Button variant="destructive" disabled={busy} onClick={() => setLock(new Date())}>
             <Lock className="mr-2 size-4" />
-            Cerrar planillas ahora
+            {t("admin.t.lock.closeNow")}
           </Button>
         )}
       </div>

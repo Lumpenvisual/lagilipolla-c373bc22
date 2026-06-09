@@ -4,6 +4,7 @@ import { Loader2, Save, CheckCircle2, Lock, MapPin, Calendar } from "lucide-reac
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useTournamentState, useMyPick, useSavePick } from "@/hooks/usePolla";
+import { useT } from "@/lib/i18n";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/planilla")({
 
 function Planilla() {
   const router = useRouter();
+  const t = useT();
   const { user, participant, loading } = useAuth();
   const { data: ts, isLoading: tsLoading } = useTournamentState();
   const { data: pick, isLoading: pickLoading } = useMyPick(participant?.id);
@@ -72,9 +74,9 @@ function Planilla() {
     return (
       <main className="mx-auto max-w-md px-4 py-16">
         <Card className="border-gold/40 bg-gold/5 p-8 text-center card-shadow">
-          <p className="text-sm text-muted-foreground">Aún no tienes el pago aprobado.</p>
+          <p className="text-sm text-muted-foreground">{t("planilla.notApproved")}</p>
           <Button className="mt-4" asChild>
-            <Link to="/dashboard">Ir a mi cuenta</Link>
+            <Link to="/dashboard">{t("planilla.goAccount")}</Link>
           </Button>
         </Card>
       </main>
@@ -93,7 +95,7 @@ function Planilla() {
 
   const submit = async () => {
     if (locked) {
-      toast.error("La planilla está cerrada.");
+      toast.error(t("planilla.toast.closed"));
       return;
     }
     try {
@@ -103,9 +105,9 @@ function Planilla() {
         goleador_id: goleador,
         arquero_id: arquero,
       });
-      toast.success("Planilla guardada");
+      toast.success(t("planilla.toast.saved"));
     } catch (e) {
-      toast.error("No se pudo guardar: " + (e instanceof Error ? e.message : "error"));
+      toast.error(t("planilla.toast.saveFailed", { err: e instanceof Error ? e.message : "error" }));
     }
   };
 
@@ -126,22 +128,20 @@ function Planilla() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-3xl sm:text-4xl">📝 Mi planilla</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.
-      </p>
+      <h1 className="mt-3 font-display text-3xl sm:text-4xl">{t("planilla.title")}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">{t("planilla.subtitle")}</p>
 
       {locked && (
         <Card className="mt-4 border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
-          <Lock className="inline size-4 mr-1" /> La planilla está cerrada. Solo lectura.
+          <Lock className="inline size-4 mr-1" /> {t("planilla.closedBanner")}
         </Card>
       )}
 
       {/* Bloque 1: Grupos */}
       <section className="mt-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-xl sm:text-2xl text-gold">1ª ronda · Grupos</h2>
-          <span className="text-xs text-muted-foreground">{completedGroups} / 12 grupos</span>
+          <h2 className="font-display text-xl sm:text-2xl text-gold">{t("planilla.groups.title")}</h2>
+          <span className="text-xs text-muted-foreground">{t("planilla.groups.progress", { done: completedGroups })}</span>
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {GROUP_KEYS.map((key) => {
@@ -156,7 +156,7 @@ function Planilla() {
                 className={`border-border bg-card p-4 card-shadow ${complete ? "ring-1 ring-gold/40" : ""}`}
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-display text-xl">Grupo {key}</h3>
+                  <h3 className="font-display text-xl">{t("planilla.group.label", { k: key })}</h3>
                   {complete && <CheckCircle2 className="size-4 text-gold" />}
                 </div>
                 <ul className="mt-2 mb-3 space-y-0.5 text-xs text-muted-foreground">
@@ -169,7 +169,7 @@ function Planilla() {
                 </ul>
                 <div className="space-y-2">
                   <div>
-                    <Label className="text-[11px] uppercase text-muted-foreground">1° lugar</Label>
+                    <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos1")}</Label>
                     <select
                       disabled={locked}
                       value={sel.pos1 ?? ""}
@@ -180,13 +180,13 @@ function Planilla() {
                       {opts.map((o) => (
                         <option key={o.id} value={o.id}>
                           {o.label}
-                          {o.isCandidate ? " (candidato)" : ""}
+                          {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
                         </option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <Label className="text-[11px] uppercase text-muted-foreground">2° lugar</Label>
+                    <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos2")}</Label>
                     <select
                       disabled={locked}
                       value={sel.pos2 ?? ""}
@@ -197,7 +197,7 @@ function Planilla() {
                       {opts.map((o) => (
                         <option key={o.id} value={o.id}>
                           {o.label}
-                          {o.isCandidate ? " (candidato)" : ""}
+                          {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
                         </option>
                       ))}
                     </select>
@@ -212,12 +212,10 @@ function Planilla() {
       {/* Bloque 2: Grupo K */}
       <section className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-xl sm:text-2xl text-info">Grupo K · Marcadores 🇨🇴</h2>
-          <span className="text-xs text-muted-foreground">{completedMatches} / 6 partidos</span>
+          <h2 className="font-display text-xl sm:text-2xl text-info">{t("planilla.k.title")}</h2>
+          <span className="text-xs text-muted-foreground">{t("planilla.k.progress", { done: completedMatches })}</span>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Predice el resultado exacto. Si Colombia juega de visitante, va a la derecha.
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground">{t("planilla.k.hint")}</p>
         <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
           {ts.group_k_matches.map((m) => {
             const lTeam = ts.groups.K.teams.find((t) => t.id === m.local);
@@ -242,7 +240,7 @@ function Planilla() {
                   </span>
                   {matchLocked && (
                     <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                      <Lock className="size-3" /> Bloqueado · faltan menos de 24h
+                      <Lock className="size-3" /> {t("planilla.k.blocked")}
                     </span>
                   )}
                 </div>
@@ -278,21 +276,19 @@ function Planilla() {
       {/* Bloque 3: Especiales */}
       <section className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-xl sm:text-2xl text-destructive">Especiales</h2>
-          <span className="text-xs text-muted-foreground">{completedEsp} / 2</span>
+          <h2 className="font-display text-xl sm:text-2xl text-destructive">{t("planilla.esp.title")}</h2>
+          <span className="text-xs text-muted-foreground">{t("planilla.esp.progress", { done: completedEsp })}</span>
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <Card className="border-border bg-card p-5 card-shadow">
-            <Label className="text-xs uppercase text-muted-foreground">
-              ⚽ Goleador del Mundial
-            </Label>
+            <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
             <select
               disabled={locked}
               value={goleador ?? ""}
               onChange={(e) => setGoleador(e.target.value || null)}
               className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
-              <option value="">— Selecciona —</option>
+              <option value="">{t("planilla.esp.select")}</option>
               {ts.goleadores.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.nombre} · {p.seleccion}
@@ -301,14 +297,14 @@ function Planilla() {
             </select>
           </Card>
           <Card className="border-border bg-card p-5 card-shadow">
-            <Label className="text-xs uppercase text-muted-foreground">🧤 Mejor arquero</Label>
+            <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
             <select
               disabled={locked}
               value={arquero ?? ""}
               onChange={(e) => setArquero(e.target.value || null)}
               className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
-              <option value="">— Selecciona —</option>
+              <option value="">{t("planilla.esp.select")}</option>
               {ts.arqueros.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.nombre} · {p.seleccion}
@@ -332,7 +328,7 @@ function Planilla() {
           ) : (
             <Save className="mr-2 size-4" />
           )}
-          Guardar planilla
+          {t("planilla.save")}
         </Button>
       </div>
     </main>
