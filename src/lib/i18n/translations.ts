@@ -609,6 +609,26 @@ export const translations: Record<Lang, Dict> = {
     "mod.search.noResults": "Sin resultados",
     "mod.search.noResultsDesc": "Prueba con otro equipo u otra fecha.",
     "mod.search.clear": "Limpiar filtros",
+
+    // Accessibility panel (Spanish)
+    "a11y.open": "Opciones de accesibilidad",
+    "a11y.title": "Accesibilidad",
+    "a11y.subtitle": "Personaliza la experiencia a tus necesidades.",
+    "a11y.fontSize": "Tamaño del texto",
+    "a11y.fontSize.s": "Pequeño",
+    "a11y.fontSize.m": "Normal",
+    "a11y.fontSize.l": "Grande",
+    "a11y.fontSize.xl": "Muy grande",
+    "a11y.highContrast": "Alto contraste",
+    "a11y.highContrast.desc": "Aumenta el contraste y los bordes.",
+    "a11y.reducedMotion": "Reducir animaciones",
+    "a11y.reducedMotion.desc": "Desactiva animaciones y transiciones.",
+    "a11y.dyslexia": "Fuente para dislexia",
+    "a11y.dyslexia.desc": "Usa una tipografía más legible.",
+    "a11y.underline": "Subrayar enlaces",
+    "a11y.underline.desc": "Subraya siempre los enlaces para mejor visibilidad.",
+    "a11y.reset": "Restablecer",
+    "a11y.language": "Idioma",
   },
   // English partial dictionary. Missing keys fall back to Spanish automatically
   // via the lookup chain in ./index.tsx (`dict[key] ?? translations.es[key] ?? key`).
