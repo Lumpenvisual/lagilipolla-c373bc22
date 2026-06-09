@@ -1,16 +1,30 @@
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 /**
- * Suscripción Realtime global: cuando el admin guarda resultados o se
- * recalculan puntos, el frontend invalida automáticamente las queries
- * de estado del torneo, planilla propia y leaderboard.
+ * Suscripción Realtime global con debounce para soportar 50+ usuarios
+ * concurrentes sin saturar el RPC `get_polla_leaderboard`.
+ * - tournament_state: invalida estado + leaderboard (poco frecuente).
+ * - picks: agrupa invalidaciones en una ventana de 1.5s. Sólo invalida
+ *   `my-pick` cuando el cambio es del propio participante.
  */
 export function RealtimeSync() {
   const qc = useQueryClient();
+  const { participant } = useAuth();
+  const myId = participant?.id ?? null;
 
   useEffect(() => {
+    let lbTimer: ReturnType<typeof setTimeout> | null = null;
+    const scheduleLb = () => {
+      if (lbTimer) return;
+      lbTimer = setTimeout(() => {
+        lbTimer = null;
+        qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+      }, 1500);
+    };
+
     const channel = supabase
       .channel("polla-live")
       .on(
@@ -18,23 +32,27 @@ export function RealtimeSync() {
         { event: "*", schema: "public", table: "tournament_state" },
         () => {
           qc.invalidateQueries({ queryKey: ["tournament-state"] });
-          qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+          scheduleLb();
         },
       )
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "picks" },
-        () => {
-          qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
-          qc.invalidateQueries({ queryKey: ["my-pick"] });
+        (payload) => {
+          scheduleLb();
+          const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
+          if (myId && row?.participant_id === myId) {
+            qc.invalidateQueries({ queryKey: ["my-pick", myId] });
+          }
         },
       )
       .subscribe();
 
     return () => {
+      if (lbTimer) clearTimeout(lbTimer);
       supabase.removeChannel(channel);
     };
-  }, [qc]);
+  }, [qc, myId]);
 
   return null;
 }
