@@ -72,9 +72,9 @@ function Cronograma() {
   const orden: Fase[] = ["grupos", "octavos", "cuartos", "semis", "tercero", "final"];
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-4xl">📅 Cronograma y fechas</h1>
+      <h1 className="mt-3 font-display text-3xl sm:text-4xl">📅 Cronograma y fechas</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Todos los horarios en hora Colombia (COT). Los marcadores se bloquean 24h antes de cada
         partido.
@@ -86,9 +86,9 @@ function Cronograma() {
           if (!list || list.length === 0) return null;
           return (
             <section key={fase}>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Trophy className="size-4 text-gold" />
-                <h2 className="font-display text-2xl text-gold">{FASE_LABEL[fase]}</h2>
+                <h2 className="font-display text-xl sm:text-2xl text-gold">{FASE_LABEL[fase]}</h2>
                 <span className="text-xs text-muted-foreground">· {list.length} partidos</span>
               </div>
               <Card className="mt-3 border-border bg-card card-shadow divide-y divide-border">
@@ -98,27 +98,27 @@ function Cronograma() {
                   return (
                     <div
                       key={`${m.fase}-${m.id}`}
-                      className="grid grid-cols-1 gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center"
+                      className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
                     >
-                      <div className="text-xs text-muted-foreground">
-                        <div className="inline-flex items-center gap-1.5">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
+                        <span className="inline-flex items-center gap-1.5">
                           <Calendar className="size-3" /> {fmtFecha(m.fecha)}
-                        </div>
-                        <div className="mt-0.5 inline-flex items-center gap-1.5">
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
                           <MapPin className="size-3" /> {m.sede || "Sede por definir"}
-                        </div>
+                        </span>
                         {locked && !played && (
-                          <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                          <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
                             <Lock className="size-3" /> Bloqueado
-                          </div>
+                          </span>
                         )}
                       </div>
-                      <div className="flex items-center justify-center gap-3 sm:col-start-1 sm:row-start-2">
-                        <span className="flex-1 text-right text-sm font-medium">
+                      <div className="flex items-center justify-center gap-3 sm:shrink-0">
+                        <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[140px]">
                           {m.local || "Por definir"}
                         </span>
                         <span
-                          className={`min-w-[64px] rounded-md px-3 py-1 text-center font-display text-lg ${
+                          className={`min-w-[64px] shrink-0 rounded-md px-3 py-1 text-center font-display text-lg ${
                             played
                               ? "bg-gold/15 text-gold"
                               : "bg-muted text-muted-foreground"
@@ -126,7 +126,7 @@ function Cronograma() {
                         >
                           {played ? `${m.gh} – ${m.ga}` : "vs"}
                         </span>
-                        <span className="flex-1 text-sm font-medium">
+                        <span className="flex-1 truncate text-sm font-medium sm:max-w-[140px]">
                           {m.visitante || "Por definir"}
                         </span>
                       </div>

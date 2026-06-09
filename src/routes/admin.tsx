@@ -90,16 +90,16 @@ function AdminPage() {
   ];
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-4xl">🛠️ Admin · LA GILIPOLLA</h1>
+      <h1 className="mt-3 font-display text-3xl sm:text-4xl">🛠️ Admin · LA GILIPOLLA</h1>
 
-      <div className="mt-6 flex gap-2 overflow-x-auto">
+      <div className="mt-6 flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4">
         {tabs.map((tt) => (
           <button
             key={tt.key}
             onClick={() => setTab(tt.key)}
-            className={`flex items-center gap-2 whitespace-nowrap rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border px-3 py-2 text-sm font-medium transition-colors sm:px-4 ${
               tab === tt.key
                 ? "border-gold bg-gold/15 text-gold"
                 : "border-border bg-card text-muted-foreground hover:text-foreground"
@@ -171,31 +171,31 @@ function PagosTab() {
 
   return (
     <div>
-      <Card className="mb-4 border-border bg-card p-4 text-sm card-shadow">
+      <Card className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 border-border bg-card p-4 text-sm card-shadow">
         <span className="text-gold">🟡 {counts.pendiente} pendientes</span>
-        <span className="mx-2 text-muted-foreground">·</span>
+        <span className="text-muted-foreground">·</span>
         <span className="text-success">✅ {counts.aprobado} aprobados</span>
-        <span className="mx-2 text-muted-foreground">·</span>
+        <span className="text-muted-foreground">·</span>
         <span className="text-gold">{fmtCOP(recaudado)} COP recaudados</span>
       </Card>
       <Card className="overflow-x-auto border-border bg-card card-shadow">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[420px] text-sm">
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
-              <th className="p-3">Nombre</th>
-              <th className="p-3">Estado</th>
-              <th className="p-3 text-right">Acciones</th>
+              <th className="p-2 sm:p-3">Nombre</th>
+              <th className="p-2 sm:p-3">Estado</th>
+              <th className="p-2 sm:p-3 text-right">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {parts.map((p) => (
               <tr key={p.id} className="border-b border-border/60">
-                <td className="p-3 font-medium">
+                <td className="p-2 sm:p-3 font-medium">
                   {p.nombre}
                   <br />
-                  <span className="text-xs text-muted-foreground">{p.email}</span>
+                  <span className="text-xs text-muted-foreground break-all">{p.email}</span>
                 </td>
-                <td className="p-3">
+                <td className="p-2 sm:p-3">
                   <span
                     className={`rounded-full border px-2 py-0.5 text-xs ${
                       p.estado_pago === "aprobado"
@@ -208,7 +208,8 @@ function PagosTab() {
                     {p.estado_pago}
                   </span>
                 </td>
-                <td className="p-3 text-right space-x-1">
+                <td className="p-2 sm:p-3 text-right">
+                  <div className="flex flex-wrap justify-end gap-1">
                   <Button
                     size="sm"
                     variant="hero"
@@ -233,6 +234,7 @@ function PagosTab() {
                   >
                     <Trash2 className="size-4" />
                   </Button>
+                  </div>
                 </td>
               </tr>
             ))}

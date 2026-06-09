@@ -16,9 +16,9 @@ function Lb() {
   const { data: rows = [], isLoading } = usePollaLeaderboard();
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <main className="mx-auto max-w-4xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-4xl">🏅 Tabla de posiciones</h1>
+      <h1 className="mt-3 font-display text-3xl sm:text-4xl">🏅 Tabla de posiciones</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         {rows.length} participantes · LA GILIPOLLA 2026
       </p>
@@ -36,24 +36,24 @@ function Lb() {
         </p>
       ) : (
         <Card className="mt-6 overflow-x-auto border-border bg-card card-shadow">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[480px] text-sm">
             <thead>
               <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <th className="p-3">Pos</th>
-                <th className="p-3">Participante</th>
-                <th className="p-3 text-center">Grupos</th>
-                <th className="p-3 text-center">Partidos</th>
-                <th className="p-3 text-center">Especiales</th>
-                <th className="p-3 text-center" title="Aciertos de 5 pts (desempate a)">
+                <th className="p-2 sm:p-3">Pos</th>
+                <th className="p-2 sm:p-3">Participante</th>
+                <th className="hidden sm:table-cell p-3 text-center">Grupos</th>
+                <th className="hidden sm:table-cell p-3 text-center">Partidos</th>
+                <th className="hidden sm:table-cell p-3 text-center">Especiales</th>
+                <th className="hidden md:table-cell p-3 text-center" title="Aciertos de 5 pts (desempate a)">
                   5pt
                 </th>
-                <th className="p-3 text-center" title="Aciertos de 3 pts (desempate b)">
+                <th className="hidden md:table-cell p-3 text-center" title="Aciertos de 3 pts (desempate b)">
                   3pt
                 </th>
-                <th className="p-3 text-center" title="Aciertos de 2 pts (desempate c)">
+                <th className="hidden md:table-cell p-3 text-center" title="Aciertos de 2 pts (desempate c)">
                   2pt
                 </th>
-                <th className="p-3 text-right">Total</th>
+                <th className="p-2 sm:p-3 text-right">Total</th>
               </tr>
             </thead>
             <tbody>
@@ -72,23 +72,26 @@ function Lb() {
                     key={r.participant_id}
                     className={`border-b border-border/60 ${bg} ${me ? "outline outline-1 -outline-offset-1 outline-info" : ""}`}
                   >
-                    <td className="p-3 font-display text-lg">{MEDAL[r.posicion] ?? r.posicion}</td>
-                    <td className="p-3 font-medium">
-                      {r.nombre} {me && <span className="text-xs text-info">(tú)</span>}
+                    <td className="p-2 sm:p-3 font-display text-lg">{MEDAL[r.posicion] ?? r.posicion}</td>
+                    <td className="p-2 sm:p-3 font-medium">
+                      <div className="truncate">{r.nombre} {me && <span className="text-xs text-info">(tú)</span>}</div>
+                      <div className="mt-0.5 text-[10px] text-muted-foreground sm:hidden">
+                        G {r.puntos_grupos} · P {r.puntos_partidos} · E {r.puntos_especiales}
+                      </div>
                     </td>
-                    <td className="p-3 text-center text-muted-foreground">{r.puntos_grupos}</td>
-                    <td className="p-3 text-center text-muted-foreground">{r.puntos_partidos}</td>
-                    <td className="p-3 text-center text-muted-foreground">{r.puntos_especiales}</td>
-                    <td className="p-3 text-center text-xs text-muted-foreground">
+                    <td className="hidden sm:table-cell p-3 text-center text-muted-foreground">{r.puntos_grupos}</td>
+                    <td className="hidden sm:table-cell p-3 text-center text-muted-foreground">{r.puntos_partidos}</td>
+                    <td className="hidden sm:table-cell p-3 text-center text-muted-foreground">{r.puntos_especiales}</td>
+                    <td className="hidden md:table-cell p-3 text-center text-xs text-muted-foreground">
                       {r.aciertos_5}
                     </td>
-                    <td className="p-3 text-center text-xs text-muted-foreground">
+                    <td className="hidden md:table-cell p-3 text-center text-xs text-muted-foreground">
                       {r.aciertos_3}
                     </td>
-                    <td className="p-3 text-center text-xs text-muted-foreground">
+                    <td className="hidden md:table-cell p-3 text-center text-xs text-muted-foreground">
                       {r.aciertos_2}
                     </td>
-                    <td className="p-3 text-right font-display text-xl text-gold">
+                    <td className="p-2 sm:p-3 text-right font-display text-lg sm:text-xl text-gold">
                       {r.puntos_total}
                     </td>
                   </tr>

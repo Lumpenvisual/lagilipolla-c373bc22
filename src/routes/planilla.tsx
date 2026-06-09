@@ -119,9 +119,9 @@ function Planilla() {
   };
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
       <div className="bandera-stripe-h h-1 w-16 rounded-sm" aria-hidden />
-      <h1 className="mt-3 font-display text-4xl">📝 Mi planilla</h1>
+      <h1 className="mt-3 font-display text-3xl sm:text-4xl">📝 Mi planilla</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.
       </p>
@@ -134,8 +134,8 @@ function Planilla() {
 
       {/* Bloque 1: Grupos */}
       <section className="mt-8">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-2xl text-gold">1ª ronda · Grupos</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-xl sm:text-2xl text-gold">1ª ronda · Grupos</h2>
           <span className="text-xs text-muted-foreground">{completedGroups} / 12 grupos</span>
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -206,8 +206,8 @@ function Planilla() {
 
       {/* Bloque 2: Grupo K */}
       <section className="mt-10">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-2xl text-info">Grupo K · Marcadores 🇨🇴</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-xl sm:text-2xl text-info">Grupo K · Marcadores 🇨🇴</h2>
           <span className="text-xs text-muted-foreground">{completedMatches} / 6 partidos</span>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -226,23 +226,23 @@ function Planilla() {
             return (
               <div
                 key={m.id}
-                className={`grid grid-cols-1 gap-2 p-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center ${colombia ? "bg-gold/5" : ""}`}
+                className={`flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between ${colombia ? "bg-gold/5" : ""}`}
               >
-                <div className="text-xs text-muted-foreground">
-                  <div className="inline-flex items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
+                  <span className="inline-flex items-center gap-1.5">
                     <Calendar className="size-3" /> {fmtFecha(m.fecha)}
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 ml-2">
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
                     <MapPin className="size-3" /> {m.sede}
-                  </div>
+                  </span>
                   {matchLocked && (
-                    <div className="mt-1 inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
                       <Lock className="size-3" /> Bloqueado · faltan menos de 24h
-                    </div>
+                    </span>
                   )}
                 </div>
-                <div className="flex items-center justify-center gap-2 sm:col-start-1 sm:row-start-2">
-                  <span className="flex-1 text-right text-sm font-medium">{lName}</span>
+                <div className="flex items-center justify-center gap-2 sm:shrink-0">
+                  <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[120px]">{lName}</span>
                   <Input
                     type="number"
                     min={0}
@@ -262,7 +262,7 @@ function Planilla() {
                     onChange={(e) => setMatch(m.id, "ga", e.target.value)}
                     className="h-9 w-14 text-center"
                   />
-                  <span className="flex-1 text-sm font-medium">{vName}</span>
+                  <span className="flex-1 truncate text-sm font-medium sm:max-w-[120px]">{vName}</span>
                 </div>
               </div>
             );
@@ -272,8 +272,8 @@ function Planilla() {
 
       {/* Bloque 3: Especiales */}
       <section className="mt-10">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-2xl text-destructive">Especiales</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-xl sm:text-2xl text-destructive">Especiales</h2>
           <span className="text-xs text-muted-foreground">{completedEsp} / 2</span>
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -314,13 +314,13 @@ function Planilla() {
         </div>
       </section>
 
-      <div className="sticky bottom-4 mt-10 flex justify-center">
+      <div className="sticky bottom-4 mt-10 flex justify-center px-4">
         <Button
           onClick={submit}
           disabled={locked || save.isPending}
           variant="hero"
           size="lg"
-          className="h-12 px-10 text-base uppercase tracking-wider shadow-2xl"
+          className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
         >
           {save.isPending ? (
             <Loader2 className="mr-2 size-4 animate-spin" />
