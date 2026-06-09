@@ -84,6 +84,7 @@ export type PickRow = {
   participant_id: string;
   groups: PickGroups;
   group_k_matches: PickMatches;
+  extra_matches?: PickMatches;
   goleador_id: string | null;
   arquero_id: string | null;
   puntos_grupos: number;

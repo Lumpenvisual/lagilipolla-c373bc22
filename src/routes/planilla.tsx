@@ -10,11 +10,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   POLLA,
   GROUP_KEYS,
   slotOptions,
   fmtFecha,
   isMatchLocked,
+  FASE_LABEL,
+  type Fase,
+  type ExtraMatch,
   type GroupKey,
   type PickGroups,
   type PickMatches,
@@ -40,15 +54,18 @@ function Planilla() {
 
   const [groups, setGroups] = useState<PickGroups>({});
   const [matches, setMatches] = useState<PickMatches>({});
+  const [extra, setExtra] = useState<PickMatches>({});
   const [goleador, setGoleador] = useState<string | null>(null);
   const [arquero, setArquero] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (initialized) return;
     if (pick) {
       setGroups(pick.groups ?? {});
       setMatches(pick.group_k_matches ?? {});
+      setExtra(pick.extra_matches ?? {});
       setGoleador(pick.goleador_id);
       setArquero(pick.arquero_id);
       setInitialized(true);
@@ -84,11 +101,24 @@ function Planilla() {
   }
   if (!ts) return null;
 
+  const visibility = ((ts as unknown as { visibility?: Record<string, boolean> }).visibility) ?? {};
+  const isVisible = (k: string) => visibility[k] !== false;
+  const extraMatches: ExtraMatch[] = (ts.extra_matches ?? []) as ExtraMatch[];
+  const phaseOrder: Fase[] = ["octavos", "cuartos", "semis", "tercero", "final"];
+  const matchesByPhase = phaseOrder
+    .filter((f) => isVisible(f))
+    .map((f) => ({ fase: f, list: extraMatches.filter((m) => m.fase === f) }))
+    .filter((p) => p.list.length > 0);
+
   const completedGroups = GROUP_KEYS.filter(
     (k) => groups[k]?.pos1 && groups[k]?.pos2 && groups[k]?.pos1 !== groups[k]?.pos2,
   ).length;
   const completedMatches = ts.group_k_matches.filter((m) => {
     const p = matches[m.id];
+    return p && p.gh != null && p.ga != null;
+  }).length;
+  const completedExtra = extraMatches.filter((m) => {
+    const p = extra[m.id];
     return p && p.gh != null && p.ga != null;
   }).length;
   const completedEsp = (goleador ? 1 : 0) + (arquero ? 1 : 0);
@@ -102,10 +132,12 @@ function Planilla() {
       await save.mutateAsync({
         groups,
         group_k_matches: matches,
+        extra_matches: extra,
         goleador_id: goleador,
         arquero_id: arquero,
       });
       toast.success(t("planilla.toast.saved"));
+      setConfirmOpen(false);
     } catch (e) {
       toast.error(t("planilla.toast.saveFailed", { err: e instanceof Error ? e.message : "error" }));
     }
@@ -124,6 +156,13 @@ function Planilla() {
       [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
     }));
   };
+  const setExtraScore = (id: string, field: "gh" | "ga", v: string) => {
+    const n = v === "" ? null : Math.max(0, Math.min(20, parseInt(v, 10) || 0));
+    setExtra((m) => ({
+      ...m,
+      [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
+    }));
+  };
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
@@ -138,6 +177,7 @@ function Planilla() {
       )}
 
       {/* Bloque 1: Grupos */}
+      {isVisible("grupos") && (
       <section className="mt-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-xl sm:text-2xl text-gold">{t("planilla.groups.title")}</h2>
@@ -208,8 +248,10 @@ function Planilla() {
           })}
         </div>
       </section>
+      )}
 
       {/* Bloque 2: Grupo K */}
+      {isVisible("grupos") && (
       <section className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-xl sm:text-2xl text-info">{t("planilla.k.title")}</h2>
@@ -272,14 +314,89 @@ function Planilla() {
           })}
         </Card>
       </section>
+      )}
+
+      {/* Bloques dinámicos: fases eliminatorias */}
+      {matchesByPhase.map(({ fase, list }) => {
+        const done = list.filter((m) => {
+          const p = extra[m.id];
+          return p && p.gh != null && p.ga != null;
+        }).length;
+        return (
+          <section key={fase} className="mt-10">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="font-display text-xl sm:text-2xl text-info">{FASE_LABEL[fase]}</h2>
+              <span className="text-xs text-muted-foreground">
+                {t("planilla.extra.progress", { done, total: list.length })}
+              </span>
+            </div>
+            <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
+              {list.map((m) => {
+                const p = extra[m.id] ?? { gh: null, ga: null };
+                const matchLocked = isMatchLocked(m.fecha);
+                const disabled = locked || matchLocked;
+                return (
+                  <div
+                    key={m.id}
+                    className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Calendar className="size-3" /> {fmtFecha(m.fecha)}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin className="size-3" /> {m.sede}
+                      </span>
+                      {matchLocked && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                          <Lock className="size-3" /> {t("planilla.k.blocked")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-center gap-2 sm:shrink-0">
+                      <span className="flex-1 truncate text-right text-sm font-medium sm:max-w-[120px]">
+                        {m.local}
+                      </span>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={20}
+                        disabled={disabled}
+                        value={p.gh ?? ""}
+                        onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
+                        className="h-9 w-14 text-center"
+                      />
+                      <span className="text-muted-foreground">–</span>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={20}
+                        disabled={disabled}
+                        value={p.ga ?? ""}
+                        onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
+                        className="h-9 w-14 text-center"
+                      />
+                      <span className="flex-1 truncate text-sm font-medium sm:max-w-[120px]">
+                        {m.visitante}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </Card>
+          </section>
+        );
+      })}
 
       {/* Bloque 3: Especiales */}
+      {(isVisible("goleador") || isVisible("arquero")) && (
       <section className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-xl sm:text-2xl text-destructive">{t("planilla.esp.title")}</h2>
           <span className="text-xs text-muted-foreground">{t("planilla.esp.progress", { done: completedEsp })}</span>
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {isVisible("goleador") && (
           <Card className="border-border bg-card p-5 card-shadow">
             <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
             <select
@@ -296,6 +413,8 @@ function Planilla() {
               ))}
             </select>
           </Card>
+          )}
+          {isVisible("arquero") && (
           <Card className="border-border bg-card p-5 card-shadow">
             <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
             <select
@@ -312,24 +431,48 @@ function Planilla() {
               ))}
             </select>
           </Card>
+          )}
         </div>
       </section>
+      )}
 
       <div className="sticky bottom-4 mt-10 flex justify-center px-4">
-        <Button
-          onClick={submit}
-          disabled={locked || save.isPending}
-          variant="hero"
-          size="lg"
-          className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
-        >
-          {save.isPending ? (
-            <Loader2 className="mr-2 size-4 animate-spin" />
-          ) : (
-            <Save className="mr-2 size-4" />
-          )}
-          {t("planilla.save")}
-        </Button>
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <AlertDialogTrigger asChild>
+            <Button
+              disabled={locked || save.isPending}
+              variant="hero"
+              size="lg"
+              className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
+            >
+              {save.isPending ? (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              ) : (
+                <Save className="mr-2 size-4" />
+              )}
+              {t("planilla.save")}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t("planilla.confirm.title")}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t("planilla.confirm.desc", {
+                  groups: completedGroups,
+                  matches: completedMatches,
+                  extras: completedExtra,
+                  esp: completedEsp,
+                })}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+              <AlertDialogAction onClick={submit} disabled={save.isPending}>
+                {t("planilla.confirm.cta")}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </main>
   );

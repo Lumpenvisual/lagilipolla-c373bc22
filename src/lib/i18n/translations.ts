@@ -656,6 +656,11 @@ export const translations: Record<Lang, Dict> = {
     "planilla.toast.closed": "La planilla está cerrada.",
     "planilla.toast.saved": "Planilla guardada",
     "planilla.toast.saveFailed": "No se pudo guardar: {err}",
+    "planilla.extra.progress": "{done} / {total} partidos",
+    "planilla.extra.empty": "El admin aún no ha agregado partidos para esta fase.",
+    "planilla.confirm.title": "Confirmar cambios",
+    "planilla.confirm.desc": "Vas a guardar {groups} grupos, {matches} marcadores de grupo K, {extras} marcadores eliminatorios y {esp} especiales. ¿Confirmas?",
+    "planilla.confirm.cta": "Sí, guardar",
 
     // ---------- Admin tabs (sub-rutas) ----------
     "admin.t.toast.updated": "Actualizado",
@@ -1372,6 +1377,11 @@ export const translations: Record<Lang, Dict> = {
     "planilla.toast.closed": "The ballot is closed.",
     "planilla.toast.saved": "Ballot saved",
     "planilla.toast.saveFailed": "Couldn't save: {err}",
+    "planilla.extra.progress": "{done} / {total} matches",
+    "planilla.extra.empty": "Admin hasn't added matches for this phase yet.",
+    "planilla.confirm.title": "Confirm changes",
+    "planilla.confirm.desc": "You'll save {groups} groups, {matches} group K scores, {extras} knockout scores and {esp} specials. Confirm?",
+    "planilla.confirm.cta": "Yes, save",
 
     // ---------- Admin tabs ----------
     "admin.t.toast.updated": "Updated",
