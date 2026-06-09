@@ -80,15 +80,13 @@ function ReglasPage() {
           Por <span className="font-semibold text-gold">{fmtCOP(POLLA.cuotaCOP)} COP</span> tienes
           derecho a apostar en{" "}
           <strong className="text-foreground">todas las rondas del Mundial</strong>. En la primera
-          ronda únicamente se apuestan los{" "}
-          <strong className="text-foreground">
-            resultados de cada partido del Grupo K (Colombia)
-          </strong>{" "}
-          y, para los demás grupos, los{" "}
+          ronda, en <strong className="text-foreground">los 12 grupos (A–L)</strong> eliges los{" "}
           <strong className="text-foreground">dos primeros clasificados</strong> (los terceros, a la
-          mierda). En las siguientes rondas hasta la final se apuesta con resultados. Se ganan
-          puntos según los aciertos en el marcador a los 90 minutos y reposición —{" "}
-          <em>no alargue</em>.
+          mierda). El <strong className="text-foreground">Grupo K es uno más</strong>: también
+          eliges 1° y 2°, y como Colombia está en él, adicionalmente predices el{" "}
+          <strong className="text-foreground">marcador exacto de sus 6 partidos</strong>. En las
+          siguientes rondas, hasta la final, se apuesta el marcador de todos los partidos. Los
+          puntos se cuentan a los <em>90 minutos + reposición</em> — no alargue.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           <strong className="text-foreground">
@@ -97,6 +95,54 @@ function ReglasPage() {
           Un apostador puede ir de polla en polla siempre y cuando pague los $100.000 de nuevo. Se
           permiten seudónimos. Si hay pollas compartidas, deben elegir un <em>capitán</em> que será
           quien haga preguntas, quejas y reclamos por el grupo.
+        </p>
+      </Card>
+
+      {/* Info oficial FIFA */}
+      <Card className="mt-6 border-info/30 bg-card p-6 card-shadow">
+        <h2 className="font-display text-2xl text-info">🌎 Datos oficiales · FIFA World Cup 2026™</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Información tomada de{" "}
+          <a
+            href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-info underline underline-offset-2"
+          >
+            fifa.com
+          </a>
+          .
+        </p>
+        <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+          <li>
+            <strong className="text-foreground">Fechas:</strong> 11 de junio – 19 de julio de 2026
+          </li>
+          <li>
+            <strong className="text-foreground">Anfitriones:</strong> Canadá 🇨🇦 · México 🇲🇽 · EE. UU. 🇺🇸
+          </li>
+          <li>
+            <strong className="text-foreground">Selecciones:</strong> 48 (récord histórico)
+          </li>
+          <li>
+            <strong className="text-foreground">Formato:</strong> 12 grupos de 4 (A–L)
+          </li>
+          <li>
+            <strong className="text-foreground">Partidos:</strong> 104 en total
+          </li>
+          <li>
+            <strong className="text-foreground">Sedes:</strong> 16 ciudades anfitrionas
+          </li>
+          <li>
+            <strong className="text-foreground">Inauguración:</strong> Estadio Azteca, CDMX
+          </li>
+          <li>
+            <strong className="text-foreground">Final:</strong> MetLife Stadium, New Jersey · 19 jul
+          </li>
+        </ul>
+        <p className="mt-3 text-xs italic text-muted-foreground">
+          Clasifican a octavos los <strong className="not-italic text-foreground">2 primeros</strong>{" "}
+          de cada grupo y los <strong className="not-italic text-foreground">8 mejores terceros</strong>
+          . Para LA GILIPOLLA solo cuentan 1° y 2° de cada grupo.
         </p>
       </Card>
 
