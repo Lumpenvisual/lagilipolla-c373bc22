@@ -15,6 +15,8 @@ export function useTournamentState() {
       return data as unknown as TournamentState;
     },
     staleTime: 60_000,
+    gcTime: 10 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -81,5 +83,8 @@ export function usePollaLeaderboard() {
       if (error) throw error;
       return ((data ?? []) as LbRow[]).sort((a, b) => a.posicion - b.posicion);
     },
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
