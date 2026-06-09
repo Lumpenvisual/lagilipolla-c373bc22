@@ -46,6 +46,7 @@ import {
   type TournamentState,
 } from "@/lib/polla";
 import { DownloadButton } from "@/components/DownloadButton";
+import { PickHistoryCard } from "@/components/PickHistoryCard";
 import {
   generateLeaderboardXlsx,
   generateParticipantesXlsx,
@@ -820,6 +821,7 @@ export function ReportesTab() {
         </div>
       </Card>
       <CloudBackupCard />
+      <PickHistoryCard scope="all" />
     </div>
   );
 }
