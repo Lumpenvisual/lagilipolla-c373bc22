@@ -1449,7 +1449,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Actions",
     "admin.t.pagos.deleteTitle": "Move to trash (delete)",
     "admin.t.res.repechajes": "Play-offs",
-    "admin.t.res.repechajesHint": "Once a play-off is resolved, edit the \"Play-off X Winner\" team name.",
+    "admin.t.res.repechajesHint": "Once a play-off is resolved, edit the \"Play-off X Winner\" team name. In knockout matches with a tie-breaker (extra time or penalty shoot-out), only the 90-minute score counts — not the shoot-out result.",
     "admin.t.res.groups": "Group results · 1st and 2nd",
     "admin.t.res.markK": "Group K scores",
     "admin.t.res.especiales": "Specials (official result)",
