@@ -694,7 +694,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Acciones",
     "admin.t.pagos.deleteTitle": "Mover a la papelera (eliminar)",
     "admin.t.res.repechajes": "Repechajes",
-    "admin.t.res.repechajesHint": "Cuando se resuelva un repechaje, edita el nombre del equipo \"Ganador Repechaje X\".",
+    "admin.t.res.repechajesHint": "Cuando se resuelva un repechaje, edita el nombre del equipo \"Ganador Repechaje X\". Si en un partido de eliminatorias hay repechaje (alargue o penales), solo se tendrá en cuenta el marcador de los primeros 90 minutos, no el del repechaje.",
     "admin.t.res.groups": "Resultados de grupos · 1° y 2°",
     "admin.t.res.markK": "Marcadores Grupo K",
     "admin.t.res.especiales": "Especiales (resultado oficial)",
