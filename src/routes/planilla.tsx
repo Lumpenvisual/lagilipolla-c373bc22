@@ -158,9 +158,48 @@ function Planilla() {
   }).length;
   const completedEsp = (goleador ? 1 : 0) + (arquero ? 1 : 0);
 
+  /** Valida la planilla antes de guardar. Devuelve lista de errores legibles. */
+  const validate = (): string[] => {
+    const errors: string[] = [];
+    const dup: string[] = [];
+    const incomp: string[] = [];
+    GROUP_KEYS.forEach((k) => {
+      const g = ts.groups[k];
+      if (!g) return;
+      const sel = groups[k] ?? { pos1: null, pos2: null };
+      if (!sel.pos1 || !sel.pos2) {
+        incomp.push(k);
+      } else if (sel.pos1 === sel.pos2) {
+        dup.push(k);
+      }
+    });
+    if (incomp.length) errors.push(`Grupos sin completar: ${incomp.join(", ")}`);
+    if (dup.length) errors.push(`Grupos con equipo repetido (1º y 2º iguales): ${dup.join(", ")}`);
+    return errors;
+  };
+
+  const tryOpenConfirm = () => {
+    if (locked) {
+      toast.error(t("planilla.toast.closed"));
+      return;
+    }
+    const errors = validate();
+    if (errors.length) {
+      toast.error(errors.join(" · "), { duration: 6000 });
+      return;
+    }
+    setConfirmOpen(true);
+  };
+
   const submit = async () => {
     if (locked) {
       toast.error(t("planilla.toast.closed"));
+      return;
+    }
+    const errors = validate();
+    if (errors.length) {
+      toast.error(errors.join(" · "), { duration: 6000 });
+      setConfirmOpen(false);
       return;
     }
     try {
