@@ -522,7 +522,8 @@ function Planilla() {
                 {list.map((m) => {
                   const p = extra[m.id] ?? { gh: null, ga: null };
                   const matchLocked = isMatchLocked(m.fecha);
-                  const disabled = locked || matchLocked;
+                  const ghDisabled = locked || matchLocked || isExtraFieldLocked(m.id, "gh");
+                  const gaDisabled = locked || matchLocked || isExtraFieldLocked(m.id, "ga");
                   const [stadium, city] = m.sede.split(" · ");
                   return (
                     <div
@@ -552,7 +553,7 @@ function Planilla() {
                           type="number"
                           min={0}
                           max={20}
-                          disabled={disabled}
+                          disabled={ghDisabled}
                           value={p.gh ?? ""}
                           onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
                           className="h-9 w-14 text-center"
@@ -562,7 +563,7 @@ function Planilla() {
                           type="number"
                           min={0}
                           max={20}
-                          disabled={disabled}
+                          disabled={gaDisabled}
                           value={p.ga ?? ""}
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
                           className="h-9 w-14 text-center"
