@@ -284,7 +284,7 @@ function Planilla() {
             <Card className="border-border bg-card p-5 card-shadow">
               <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
               <Input
-                disabled={locked}
+                disabled={locked || goleadorLocked}
                 value={goleador ?? ""}
                 onChange={(e) => setGoleador(e.target.value || null)}
                 placeholder="Escribe el nombre del jugador"
@@ -297,7 +297,7 @@ function Planilla() {
             <Card className="border-border bg-card p-5 card-shadow">
               <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
               <Input
-                disabled={locked}
+                disabled={locked || arqueroLocked}
                 value={arquero ?? ""}
                 onChange={(e) => setArquero(e.target.value || null)}
                 placeholder="Escribe el nombre del arquero"
@@ -361,7 +361,7 @@ function Planilla() {
                   <div>
                     <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos1")}</Label>
                     <select
-                      disabled={locked}
+                      disabled={locked || isPosLocked(key, "pos1")}
                       value={sel.pos1 ?? ""}
                       onChange={(e) => setGroup(key, "pos1", e.target.value)}
                       className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
@@ -378,7 +378,7 @@ function Planilla() {
                   <div>
                     <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos2")}</Label>
                     <select
-                      disabled={locked}
+                      disabled={locked || isPosLocked(key, "pos2")}
                       value={sel.pos2 ?? ""}
                       onChange={(e) => setGroup(key, "pos2", e.target.value)}
                       className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
