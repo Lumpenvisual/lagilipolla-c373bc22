@@ -21,8 +21,8 @@ export function useTournamentState() {
       if (error) throw error;
       return data as unknown as TournamentState;
     },
-    staleTime: 60_000,           // 1 min fresco
-    gcTime: 10 * 60_000,         // 10 min en cache
+    staleTime: 60_000, // 1 min fresco
+    gcTime: 10 * 60_000, // 10 min en cache
     refetchOnWindowFocus: false, // evita refetch al cambiar de pestaña
   });
 }
@@ -50,7 +50,7 @@ export function useMyPick(participantId: string | null | undefined) {
         .from("picks")
         .select("*")
         .eq("participant_id", participantId!)
-        .maybeSingle();          // 0 o 1 fila → nunca tira si no hay match
+        .maybeSingle(); // 0 o 1 fila → nunca tira si no hay match
       if (error) throw error;
       return data ?? null;
     },
@@ -68,10 +68,9 @@ export function useSavePick(participantId: string | null | undefined) {
   return useMutation({
     mutationFn: async (input: SavePickInput) => {
       if (!participantId) throw new Error("Sin participante");
-      const { error } = await supabase.from("picks").upsert(
-        { participant_id: participantId, ...input },
-        { onConflict: "participant_id" },
-      );
+      const { error } = await supabase
+        .from("picks")
+        .upsert({ participant_id: participantId, ...input }, { onConflict: "participant_id" });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -92,7 +91,7 @@ const save = useSavePick(participantId);
   onClick={() => save.mutate({ groups, group_k_matches, extra_matches, goleador_id, arquero_id })}
 >
   {save.isPending ? "Guardando…" : "Guardar planilla"}
-</Button>
+</Button>;
 ```
 
 ## 4. RPC + transformación de respuesta
@@ -119,12 +118,12 @@ export function usePollaLeaderboard() {
 
 ## 5. Convención de `queryKey`
 
-| Recurso             | Key                                  |
-| ------------------- | ------------------------------------ |
-| Estado del torneo   | `["tournament-state"]`               |
-| Pick del usuario    | `["my-pick", participantId]`         |
-| Tabla de posiciones | `["polla-leaderboard"]`              |
-| Historial de picks  | `["pick-history", participantId]`    |
+| Recurso             | Key                               |
+| ------------------- | --------------------------------- |
+| Estado del torneo   | `["tournament-state"]`            |
+| Pick del usuario    | `["my-pick", participantId]`      |
+| Tabla de posiciones | `["polla-leaderboard"]`           |
+| Historial de picks  | `["pick-history", participantId]` |
 
 Reglas:
 

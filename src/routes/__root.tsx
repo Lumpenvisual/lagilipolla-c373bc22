@@ -90,7 +90,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Polla Mundial FIFA 2026 ⚽" },
       {
         property: "og:description",
-        content: "72 partidos · Fase de grupos · $100.000 COP. Pronostica y compite en tiempo real.",
+        content:
+          "72 partidos · Fase de grupos · $100.000 COP. Pronostica y compite en tiempo real.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

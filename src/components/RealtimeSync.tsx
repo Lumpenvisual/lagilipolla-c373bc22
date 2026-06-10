@@ -27,26 +27,18 @@ export function RealtimeSync() {
 
     const channel = supabase
       .channel("polla-live")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "tournament_state" },
-        () => {
-          qc.invalidateQueries({ queryKey: ["tournament-state"] });
-          scheduleLb();
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "picks" },
-        (payload) => {
-          scheduleLb();
-          const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
-          if (myId && row?.participant_id === myId) {
-            qc.invalidateQueries({ queryKey: ["my-pick", myId] });
-            qc.invalidateQueries({ queryKey: ["pick-history", "mine", myId] });
-          }
-        },
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "tournament_state" }, () => {
+        qc.invalidateQueries({ queryKey: ["tournament-state"] });
+        scheduleLb();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "picks" }, (payload) => {
+        scheduleLb();
+        const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
+        if (myId && row?.participant_id === myId) {
+          qc.invalidateQueries({ queryKey: ["my-pick", myId] });
+          qc.invalidateQueries({ queryKey: ["pick-history", "mine", myId] });
+        }
+      })
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "pick_history" },
@@ -58,15 +50,11 @@ export function RealtimeSync() {
           }
         },
       )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "participants" },
-        () => {
-          qc.invalidateQueries({ queryKey: ["admin-participants"] });
-          qc.invalidateQueries({ queryKey: ["history-participants"] });
-          scheduleLb();
-        },
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "participants" }, () => {
+        qc.invalidateQueries({ queryKey: ["admin-participants"] });
+        qc.invalidateQueries({ queryKey: ["history-participants"] });
+        scheduleLb();
+      })
       .subscribe();
 
     return () => {

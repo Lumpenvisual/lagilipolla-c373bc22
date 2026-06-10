@@ -18,14 +18,14 @@ que no esté reflejado aquí.
 
 ## Tablas (resumen)
 
-| Tabla | Propósito |
-|---|---|
-| `participants` | Inscripciones a la polla (1 por usuario) + estado de pago |
-| `picks` | Predicciones del participante + puntos calculados |
-| `pick_history` | Auditoría de cambios en marcadores |
-| `tournament_state` | Estado oficial del torneo (1 sola fila, id=1) |
-| `user_roles` | Roles por usuario (`user` / `admin`) — separado de profiles |
-| `admin_audit` | Log de acciones admin |
+| Tabla              | Propósito                                                   |
+| ------------------ | ----------------------------------------------------------- |
+| `participants`     | Inscripciones a la polla (1 por usuario) + estado de pago   |
+| `picks`            | Predicciones del participante + puntos calculados           |
+| `pick_history`     | Auditoría de cambios en marcadores                          |
+| `tournament_state` | Estado oficial del torneo (1 sola fila, id=1)               |
+| `user_roles`       | Roles por usuario (`user` / `admin`) — separado de profiles |
+| `admin_audit`      | Log de acciones admin                                       |
 
 RLS habilitado en todas las tablas `public`. Admin se verifica vía
 `has_role(auth.uid(), 'admin')` (SECURITY DEFINER).
@@ -44,10 +44,12 @@ RLS habilitado en todas las tablas `public`. Admin se verifica vía
 ## Datos (no esquema)
 
 Los datos de las tablas **no** viven en el repo. Para exportarlos:
+
 - Dashboard de Supabase → Database → Tables → Export CSV, o
 - `pg_dump --data-only` con `SUPABASE_DB_URL`.
 
 Scripts útiles en `scripts/`:
+
 - `apply_official_data.mjs` — aplica datos oficiales del torneo
 - `clean_demo.mjs` — limpia datos demo
 - `e2e_data_check.mjs` — verifica integridad

@@ -8,7 +8,6 @@ import {
   type ReactNode,
 } from "react";
 import { translations, LANGS, type Lang } from "./translations";
-import { setFormatLang } from "@/lib/format";
 
 export { LANGS, type Lang };
 
@@ -63,7 +62,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (isLang(stored) && stored !== lang) {
         setLangState(stored);
-        setFormatLang(stored);
       }
     } catch {
       /* ignore */
@@ -72,14 +70,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    setFormatLang(lang);
     if (typeof document !== "undefined") {
       document.documentElement.lang = lang;
     }
   }, [lang]);
 
   const setLang = useCallback((next: Lang) => {
-    setFormatLang(next);
     setLangState(next);
     try {
       localStorage.setItem(STORAGE_KEY, next);

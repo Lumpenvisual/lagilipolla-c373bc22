@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useTournamentState } from "@/hooks/usePolla";
 import {
   isMatchLocked,
+  isSectionVisible,
   FASE_LABEL,
   GROUP_KEYS,
   type ExtraMatch,
@@ -44,17 +45,70 @@ type Row = ExtraMatch & {
 
 /* ISO3 → flag emoji (cubre el fixture WC2026). */
 const FLAG: Record<string, string> = {
-  ALG: "🇩🇿", ARG: "🇦🇷", AUS: "🇦🇺", AUT: "🇦🇹", BEL: "🇧🇪", BIH: "🇧🇦",
-  BOL: "🇧🇴", BRA: "🇧🇷", CAN: "🇨🇦", CHI: "🇨🇱", CIV: "🇨🇮", CMR: "🇨🇲",
-  COD: "🇨🇩", COL: "🇨🇴", CPV: "🇨🇻", CRC: "🇨🇷", CRO: "🇭🇷", CUW: "🇨🇼",
-  CZE: "🇨🇿", DEN: "🇩🇰", DRC: "🇨🇩", ECU: "🇪🇨", EGY: "🇪🇬",
-  ENG: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", ESP: "🇪🇸", FRA: "🇫🇷", GER: "🇩🇪", GHA: "🇬🇭", HAI: "🇭🇹",
-  IRN: "🇮🇷", IRQ: "🇮🇶", ITA: "🇮🇹", JAM: "🇯🇲", JOR: "🇯🇴", JPN: "🇯🇵",
-  KOR: "🇰🇷", KSA: "🇸🇦", LCA: "🇱🇨", MAR: "🇲🇦", MEX: "🇲🇽", NCL: "🇳🇨",
-  NED: "🇳🇱", NGA: "🇳🇬", NOR: "🇳🇴", NZL: "🇳🇿", PAN: "🇵🇦", PAR: "🇵🇾",
-  POL: "🇵🇱", POR: "🇵🇹", QAT: "🇶🇦", RSA: "🇿🇦", SCO: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  SEN: "🇸🇳", SRB: "🇷🇸", SUI: "🇨🇭", SUR: "🇸🇷", SWE: "🇸🇪", TUN: "🇹🇳",
-  TUR: "🇹🇷", UAE: "🇦🇪", URU: "🇺🇾", USA: "🇺🇸", UZB: "🇺🇿", WAL: "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+  ALG: "🇩🇿",
+  ARG: "🇦🇷",
+  AUS: "🇦🇺",
+  AUT: "🇦🇹",
+  BEL: "🇧🇪",
+  BIH: "🇧🇦",
+  BOL: "🇧🇴",
+  BRA: "🇧🇷",
+  CAN: "🇨🇦",
+  CHI: "🇨🇱",
+  CIV: "🇨🇮",
+  CMR: "🇨🇲",
+  COD: "🇨🇩",
+  COL: "🇨🇴",
+  CPV: "🇨🇻",
+  CRC: "🇨🇷",
+  CRO: "🇭🇷",
+  CUW: "🇨🇼",
+  CZE: "🇨🇿",
+  DEN: "🇩🇰",
+  DRC: "🇨🇩",
+  ECU: "🇪🇨",
+  EGY: "🇪🇬",
+  ENG: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+  ESP: "🇪🇸",
+  FRA: "🇫🇷",
+  GER: "🇩🇪",
+  GHA: "🇬🇭",
+  HAI: "🇭🇹",
+  IRN: "🇮🇷",
+  IRQ: "🇮🇶",
+  ITA: "🇮🇹",
+  JAM: "🇯🇲",
+  JOR: "🇯🇴",
+  JPN: "🇯🇵",
+  KOR: "🇰🇷",
+  KSA: "🇸🇦",
+  LCA: "🇱🇨",
+  MAR: "🇲🇦",
+  MEX: "🇲🇽",
+  NCL: "🇳🇨",
+  NED: "🇳🇱",
+  NGA: "🇳🇬",
+  NOR: "🇳🇴",
+  NZL: "🇳🇿",
+  PAN: "🇵🇦",
+  PAR: "🇵🇾",
+  POL: "🇵🇱",
+  POR: "🇵🇹",
+  QAT: "🇶🇦",
+  RSA: "🇿🇦",
+  SCO: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+  SEN: "🇸🇳",
+  SRB: "🇷🇸",
+  SUI: "🇨🇭",
+  SUR: "🇸🇷",
+  SWE: "🇸🇪",
+  TUN: "🇹🇳",
+  TUR: "🇹🇷",
+  UAE: "🇦🇪",
+  URU: "🇺🇾",
+  USA: "🇺🇸",
+  UZB: "🇺🇿",
+  WAL: "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
 };
 const flagFor = (id: string): string => FLAG[id?.toUpperCase?.()] ?? "🏳️";
 
@@ -71,7 +125,12 @@ const TIME_FMT = new Intl.DateTimeFormat("es-CO", {
 });
 const dayKey = (iso: string) => {
   const d = new Date(iso);
-  return isNaN(d.getTime()) ? iso : DAY_FMT.format(d).toUpperCase().replace(/\./g, "");
+  return isNaN(d.getTime()) ? "POR DEFINIR" : DAY_FMT.format(d).toUpperCase().replace(/\./g, "");
+};
+/** ms para ordenar; las fechas sin definir van al final. */
+const sortMs = (iso: string) => {
+  const t = new Date(iso).getTime();
+  return isNaN(t) ? Number.POSITIVE_INFINITY : t;
 };
 const timeLabel = (iso: string) => {
   const d = new Date(iso);
@@ -130,9 +189,10 @@ function Cronograma() {
       groupKey: null,
       badge: badgeFor(m.fase, null),
     }));
-    return [...groupK, ...extra].sort(
-      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime(),
-    );
+    // Una fase solo aparece en el cronograma si el admin la dejó activa (visible).
+    return [...groupK, ...extra]
+      .filter((r) => isSectionVisible(ts.visibility, r.fase))
+      .sort((a, b) => sortMs(a.fecha) - sortMs(b.fecha));
   }, [ts]);
 
   const byDay = useMemo(() => {
@@ -237,7 +297,9 @@ function Cronograma() {
           return (
             <section
               key={day}
-              ref={(el) => { dayRefs.current[day] = el; }}
+              ref={(el) => {
+                dayRefs.current[day] = el;
+              }}
               id={`day-${day}`}
             >
               <button

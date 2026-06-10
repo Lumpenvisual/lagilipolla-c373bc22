@@ -11,11 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,12 +28,14 @@ import {
   slotOptions,
   fmtFecha,
   isMatchLocked,
+  isSectionVisible,
   FASE_LABEL,
   type Fase,
   type ExtraMatch,
   type GroupKey,
   type PickGroups,
   type PickMatches,
+  type VisibilityKey,
 } from "@/lib/polla";
 
 export const Route = createFileRoute("/planilla")({
@@ -91,12 +89,9 @@ function Planilla() {
   const savedGroups = pick?.groups ?? {};
   const savedMatches = pick?.group_k_matches ?? {};
   const savedExtra = pick?.extra_matches ?? {};
-  const isPosLocked = (k: GroupKey, f: "pos1" | "pos2") =>
-    !!(savedGroups[k]?.[f]);
-  const isMatchFieldLocked = (id: string, f: "gh" | "ga") =>
-    savedMatches[id]?.[f] != null;
-  const isExtraFieldLocked = (id: string, f: "gh" | "ga") =>
-    savedExtra[id]?.[f] != null;
+  const isPosLocked = (k: GroupKey, f: "pos1" | "pos2") => !!savedGroups[k]?.[f];
+  const isMatchFieldLocked = (id: string, f: "gh" | "ga") => savedMatches[id]?.[f] != null;
+  const isExtraFieldLocked = (id: string, f: "gh" | "ga") => savedExtra[id]?.[f] != null;
   const goleadorLocked = !!(pick?.goleador_id && pick.goleador_id.trim() !== "");
   const arqueroLocked = !!(pick?.arquero_id && pick.arquero_id.trim() !== "");
 
@@ -143,10 +138,17 @@ function Planilla() {
   }
   if (!ts) return null;
 
-  const visibility = ((ts as unknown as { visibility?: Record<string, boolean> }).visibility) ?? {};
-  const isVisible = (k: string) => visibility[k] !== false;
-  const extraMatches: ExtraMatch[] = (ts.extra_matches ?? []) as ExtraMatch[];
-    const phaseOrder: Fase[] = ["grupos", "dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
+  const isVisible = (k: VisibilityKey) => isSectionVisible(ts.visibility, k);
+  const extraMatches: ExtraMatch[] = ts.extra_matches ?? [];
+  const phaseOrder: Fase[] = [
+    "grupos",
+    "dieciseisavos",
+    "octavos",
+    "cuartos",
+    "semis",
+    "tercero",
+    "final",
+  ];
   const matchesByPhase = phaseOrder
     .filter((f) => isVisible(f))
     .map((f) => ({ fase: f, list: extraMatches.filter((m) => m.fase === f) }))
@@ -222,7 +224,9 @@ function Planilla() {
       toast.success(t("planilla.toast.saved"));
       setConfirmOpen(false);
     } catch (e) {
-      toast.error(t("planilla.toast.saveFailed", { err: e instanceof Error ? e.message : "error" }));
+      toast.error(
+        t("planilla.toast.saveFailed", { err: e instanceof Error ? e.message : "error" }),
+      );
     }
   };
 
@@ -261,236 +265,261 @@ function Planilla() {
 
       {/* Bloque 0: Especiales (goleador / arquero) — texto libre */}
       {(isVisible("goleador") || isVisible("arquero")) && (
-      <Collapsible defaultOpen className="mt-8 group/esp">
-        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-left transition-colors hover:bg-destructive/10">
-          <div className="flex items-center gap-3">
-            <h2 className="font-display text-lg sm:text-xl text-destructive uppercase tracking-wide">
-              {t("planilla.esp.title")}
-            </h2>
-            <span className="rounded-full border border-destructive/40 bg-destructive/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive">
-              {completedEsp}/2
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">
-              {t("planilla.esp.progress", { done: completedEsp })}
-            </span>
-            <ChevronDown className="size-4 text-destructive transition-transform group-data-[state=closed]/esp:rotate-[-90deg]" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="data-[state=closed]:hidden">
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {isVisible("goleador") && (
-            <Card className="border-border bg-card p-5 card-shadow">
-              <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
-              <Input
-                disabled={locked || goleadorLocked}
-                value={goleador ?? ""}
-                onChange={(e) => setGoleador(e.target.value || null)}
-                placeholder="Escribe el nombre del jugador"
-                maxLength={80}
-                className="mt-2"
-              />
-            </Card>
-            )}
-            {isVisible("arquero") && (
-            <Card className="border-border bg-card p-5 card-shadow">
-              <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
-              <Input
-                disabled={locked || arqueroLocked}
-                value={arquero ?? ""}
-                onChange={(e) => setArquero(e.target.value || null)}
-                placeholder="Escribe el nombre del arquero"
-                maxLength={80}
-                className="mt-2"
-              />
-            </Card>
-            )}
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+        <Collapsible defaultOpen className="mt-8 group/esp">
+          <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-left transition-colors hover:bg-destructive/10">
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-lg sm:text-xl text-destructive uppercase tracking-wide">
+                {t("planilla.esp.title")}
+              </h2>
+              <span className="rounded-full border border-destructive/40 bg-destructive/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive">
+                {completedEsp}/2
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">
+                {t("planilla.esp.progress", { done: completedEsp })}
+              </span>
+              <ChevronDown className="size-4 text-destructive transition-transform group-data-[state=closed]/esp:rotate-[-90deg]" />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="data-[state=closed]:hidden">
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {isVisible("goleador") && (
+                <Card className="border-border bg-card p-5 card-shadow">
+                  <Label className="text-xs uppercase text-muted-foreground">
+                    {t("planilla.esp.goleador")}
+                  </Label>
+                  <Input
+                    disabled={locked || goleadorLocked}
+                    value={goleador ?? ""}
+                    onChange={(e) => setGoleador(e.target.value || null)}
+                    placeholder="Escribe el nombre del jugador"
+                    maxLength={80}
+                    className="mt-2"
+                  />
+                </Card>
+              )}
+              {isVisible("arquero") && (
+                <Card className="border-border bg-card p-5 card-shadow">
+                  <Label className="text-xs uppercase text-muted-foreground">
+                    {t("planilla.esp.arquero")}
+                  </Label>
+                  <Input
+                    disabled={locked || arqueroLocked}
+                    value={arquero ?? ""}
+                    onChange={(e) => setArquero(e.target.value || null)}
+                    placeholder="Escribe el nombre del arquero"
+                    maxLength={80}
+                    className="mt-2"
+                  />
+                </Card>
+              )}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       )}
 
       {/* Bloque 1: Grupos */}
       {isVisible("grupos") && (
-      <Collapsible defaultOpen className="mt-8 group/sec">
-        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-gold/30 bg-gold/5 px-4 py-3 text-left transition-colors hover:bg-gold/10">
-          <div className="flex items-center gap-3">
-            <h2 className="font-display text-lg sm:text-xl text-gold uppercase tracking-wide">
-              {t("planilla.groups.title")}
-            </h2>
-            <span className="rounded-full border border-gold/40 bg-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold">
-              2 clasifican
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">
-              {t("planilla.groups.progress", { done: completedGroups })}
-            </span>
-            <ChevronDown className="size-4 text-gold transition-transform group-data-[state=closed]/sec:rotate-[-90deg]" />
-          </div>
-        </CollapsibleTrigger>
-        <p className="mt-2 px-1 text-xs text-muted-foreground">
-          Elige los <strong className="text-foreground/80">dos primeros clasificados</strong> de cada grupo. Los terceros, a la mierda.
-        </p>
-        <CollapsibleContent className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 data-[state=closed]:hidden">
-          {GROUP_KEYS.map((key) => {
-            const g = ts.groups[key];
-            if (!g) return null;
-            const opts = g.teams.flatMap(slotOptions);
-            const sel = groups[key] ?? { pos1: null, pos2: null };
-            const complete = sel.pos1 && sel.pos2 && sel.pos1 !== sel.pos2;
-            return (
-              <Card
-                key={key}
-                className={`border-border bg-card p-4 card-shadow ${complete ? "ring-1 ring-gold/40" : ""}`}
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-display text-xl">{t("planilla.group.label", { k: key })}</h3>
-                  {complete && <CheckCircle2 className="size-4 text-gold" />}
-                </div>
-                <ul className="mt-2 mb-3 space-y-0.5 text-xs text-muted-foreground">
-                  {g.teams.map((t) => (
-                    <li key={t.id} className="flex items-center gap-1.5">
-                      <span>{t.po ? "🟡" : "·"}</span>
-                      <TeamWithFlag teamName={t.nombre} flagCode={getFlagCode(t.nombre)} size="sm" />
-                    </li>
-                  ))}
-                </ul>
-                <div className="space-y-2">
-                  <div>
-                    <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos1")}</Label>
-                    <select
-                      disabled={locked || isPosLocked(key, "pos1")}
-                      value={sel.pos1 ?? ""}
-                      onChange={(e) => setGroup(key, "pos1", e.target.value)}
-                      className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
-                    >
-                      <option value="">—</option>
-                      {opts.map((o) => (
-                        <option key={o.id} value={o.id} disabled={sel.pos2 === o.id}>
-                          {o.label}
-                          {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
-                        </option>
-                      ))}
-                    </select>
+        <Collapsible defaultOpen className="mt-8 group/sec">
+          <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-gold/30 bg-gold/5 px-4 py-3 text-left transition-colors hover:bg-gold/10">
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-lg sm:text-xl text-gold uppercase tracking-wide">
+                {t("planilla.groups.title")}
+              </h2>
+              <span className="rounded-full border border-gold/40 bg-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold">
+                2 clasifican
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">
+                {t("planilla.groups.progress", { done: completedGroups })}
+              </span>
+              <ChevronDown className="size-4 text-gold transition-transform group-data-[state=closed]/sec:rotate-[-90deg]" />
+            </div>
+          </CollapsibleTrigger>
+          <p className="mt-2 px-1 text-xs text-muted-foreground">
+            Elige los <strong className="text-foreground/80">dos primeros clasificados</strong> de
+            cada grupo. Los terceros, a la mierda.
+          </p>
+          <CollapsibleContent className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 data-[state=closed]:hidden">
+            {GROUP_KEYS.map((key) => {
+              const g = ts.groups[key];
+              if (!g) return null;
+              const opts = g.teams.flatMap(slotOptions);
+              const sel = groups[key] ?? { pos1: null, pos2: null };
+              const complete = sel.pos1 && sel.pos2 && sel.pos1 !== sel.pos2;
+              return (
+                <Card
+                  key={key}
+                  className={`border-border bg-card p-4 card-shadow ${complete ? "ring-1 ring-gold/40" : ""}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-display text-xl">
+                      {t("planilla.group.label", { k: key })}
+                    </h3>
+                    {complete && <CheckCircle2 className="size-4 text-gold" />}
                   </div>
-                  <div>
-                    <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos2")}</Label>
-                    <select
-                      disabled={locked || isPosLocked(key, "pos2")}
-                      value={sel.pos2 ?? ""}
-                      onChange={(e) => setGroup(key, "pos2", e.target.value)}
-                      className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
-                    >
-                      <option value="">—</option>
-                      {opts.map((o) => (
-                        <option key={o.id} value={o.id} disabled={sel.pos1 === o.id}>
-                          {o.label}
-                          {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
-                        </option>
-                      ))}
-                    </select>
+                  <ul className="mt-2 mb-3 space-y-0.5 text-xs text-muted-foreground">
+                    {g.teams.map((t) => (
+                      <li key={t.id} className="flex items-center gap-1.5">
+                        <span>{t.po ? "🟡" : "·"}</span>
+                        <TeamWithFlag
+                          teamName={t.nombre}
+                          flagCode={getFlagCode(t.nombre)}
+                          size="sm"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="space-y-2">
+                    <div>
+                      <Label className="text-[11px] uppercase text-muted-foreground">
+                        {t("planilla.group.pos1")}
+                      </Label>
+                      <select
+                        disabled={locked || isPosLocked(key, "pos1")}
+                        value={sel.pos1 ?? ""}
+                        onChange={(e) => setGroup(key, "pos1", e.target.value)}
+                        className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
+                      >
+                        <option value="">—</option>
+                        {opts.map((o) => (
+                          <option key={o.id} value={o.id} disabled={sel.pos2 === o.id}>
+                            {o.label}
+                            {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <Label className="text-[11px] uppercase text-muted-foreground">
+                        {t("planilla.group.pos2")}
+                      </Label>
+                      <select
+                        disabled={locked || isPosLocked(key, "pos2")}
+                        value={sel.pos2 ?? ""}
+                        onChange={(e) => setGroup(key, "pos2", e.target.value)}
+                        className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
+                      >
+                        <option value="">—</option>
+                        {opts.map((o) => (
+                          <option key={o.id} value={o.id} disabled={sel.pos1 === o.id}>
+                            {o.label}
+                            {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
-                {sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2 && (
-                  <p className="mt-2 text-[11px] font-medium text-destructive">
-                    1º y 2º no pueden ser el mismo equipo.
-                  </p>
-                )}
-              </Card>
-            );
-          })}
-        </CollapsibleContent>
-      </Collapsible>
+                  {sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2 && (
+                    <p className="mt-2 text-[11px] font-medium text-destructive">
+                      1º y 2º no pueden ser el mismo equipo.
+                    </p>
+                  )}
+                </Card>
+              );
+            })}
+          </CollapsibleContent>
+        </Collapsible>
       )}
 
       {/* Bloque 2: Grupo K */}
       {isVisible("grupos") && (
-      <Collapsible defaultOpen className="mt-6 group/seck">
-        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-info/30 bg-info/5 px-4 py-3 text-left transition-colors hover:bg-info/10">
-          <div className="flex items-center gap-3">
-            <h2 className="font-display text-lg sm:text-xl text-info uppercase tracking-wide">
-              {t("planilla.k.title")}
-            </h2>
-            <span className="rounded-full border border-info/40 bg-info/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-info">
-              {grupoKMatches.length} partidos
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">
-              {t("planilla.k.progress", { done: completedMatches })}
-            </span>
-            <ChevronDown className="size-4 text-info transition-transform group-data-[state=closed]/seck:rotate-[-90deg]" />
-          </div>
-        </CollapsibleTrigger>
-        <p className="mt-2 px-1 text-xs text-muted-foreground">{t("planilla.k.hint")}</p>
-        <CollapsibleContent className="data-[state=closed]:hidden">
-        <Card className="mt-3 border-border bg-card card-shadow divide-y divide-border">
-          {grupoKMatches.map((m) => {
-            const lTeam = ts.groups.K.teams.find((t) => t.id === m.local);
-            const vTeam = ts.groups.K.teams.find((t) => t.id === m.visitante);
-            const lName = lTeam?.nombre ?? m.local;
-            const vName = vTeam?.nombre ?? m.visitante;
-            const colombia = m.local === "COL" || m.visitante === "COL";
-            const p = matches[m.id] ?? { gh: null, ga: null };
-            const matchLocked = isMatchLocked(m.fecha);
-            const ghDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "gh");
-            const gaDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "ga");
-            const [stadium, city] = m.sede.split(" · ");
-            return (
-              <div
-                key={m.id}
-                className={`flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between ${colombia ? "bg-gold/5" : ""}`}
-              >
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Calendar className="size-3" /> {fmtFecha(m.fecha)}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="size-3" />
-                    <span className="text-foreground/80">{stadium}</span>
-                    {city && <span className="text-muted-foreground">· {city}</span>}
-                  </span>
-                  {matchLocked && (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                      <Lock className="size-3" /> {t("planilla.k.blocked")}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                  <div className="flex w-[160px] justify-end">
-                    <TeamWithFlag teamName={lName} flagCode={getFlagCode(lName)} size="sm" className="truncate justify-end text-right" />
+        <Collapsible defaultOpen className="mt-6 group/seck">
+          <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-info/30 bg-info/5 px-4 py-3 text-left transition-colors hover:bg-info/10">
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-lg sm:text-xl text-info uppercase tracking-wide">
+                {t("planilla.k.title")}
+              </h2>
+              <span className="rounded-full border border-info/40 bg-info/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-info">
+                {grupoKMatches.length} partidos
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground">
+                {t("planilla.k.progress", { done: completedMatches })}
+              </span>
+              <ChevronDown className="size-4 text-info transition-transform group-data-[state=closed]/seck:rotate-[-90deg]" />
+            </div>
+          </CollapsibleTrigger>
+          <p className="mt-2 px-1 text-xs text-muted-foreground">{t("planilla.k.hint")}</p>
+          <CollapsibleContent className="data-[state=closed]:hidden">
+            <Card className="mt-3 border-border bg-card card-shadow divide-y divide-border">
+              {grupoKMatches.map((m) => {
+                const lTeam = ts.groups.K.teams.find((t) => t.id === m.local);
+                const vTeam = ts.groups.K.teams.find((t) => t.id === m.visitante);
+                const lName = lTeam?.nombre ?? m.local;
+                const vName = vTeam?.nombre ?? m.visitante;
+                const colombia = m.local === "COL" || m.visitante === "COL";
+                const p = matches[m.id] ?? { gh: null, ga: null };
+                const matchLocked = isMatchLocked(m.fecha);
+                const ghDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "gh");
+                const gaDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "ga");
+                const [stadium, city] = m.sede.split(" · ");
+                return (
+                  <div
+                    key={m.id}
+                    className={`flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between ${colombia ? "bg-gold/5" : ""}`}
+                  >
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Calendar className="size-3" /> {fmtFecha(m.fecha)}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin className="size-3" />
+                        <span className="text-foreground/80">{stadium}</span>
+                        {city && <span className="text-muted-foreground">· {city}</span>}
+                      </span>
+                      {matchLocked && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+                          <Lock className="size-3" /> {t("planilla.k.blocked")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-center gap-2 sm:shrink-0">
+                      <div className="flex w-[160px] justify-end">
+                        <TeamWithFlag
+                          teamName={lName}
+                          flagCode={getFlagCode(lName)}
+                          size="sm"
+                          className="truncate justify-end text-right"
+                        />
+                      </div>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={20}
+                        disabled={ghDisabled}
+                        value={p.gh ?? ""}
+                        onChange={(e) => setMatch(m.id, "gh", e.target.value)}
+                        className="h-9 w-14 text-center"
+                      />
+                      <span className="text-muted-foreground">–</span>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={20}
+                        disabled={gaDisabled}
+                        value={p.ga ?? ""}
+                        onChange={(e) => setMatch(m.id, "ga", e.target.value)}
+                        className="h-9 w-14 text-center"
+                      />
+                      <div className="flex w-[160px] justify-start">
+                        <TeamWithFlag
+                          teamName={vName}
+                          flagCode={getFlagCode(vName)}
+                          size="sm"
+                          className="truncate"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={20}
-                    disabled={ghDisabled}
-                    value={p.gh ?? ""}
-                    onChange={(e) => setMatch(m.id, "gh", e.target.value)}
-                    className="h-9 w-14 text-center"
-                  />
-                  <span className="text-muted-foreground">–</span>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={20}
-                    disabled={gaDisabled}
-                    value={p.ga ?? ""}
-                    onChange={(e) => setMatch(m.id, "ga", e.target.value)}
-                    className="h-9 w-14 text-center"
-                  />
-                  <div className="flex w-[160px] justify-start">
-                    <TeamWithFlag teamName={vName} flagCode={getFlagCode(vName)} size="sm" className="truncate" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </Card>
-        </CollapsibleContent>
-      </Collapsible>
+                );
+              })}
+            </Card>
+          </CollapsibleContent>
+        </Collapsible>
       )}
 
       {/* Bloques dinámicos: fases eliminatorias */}
@@ -547,7 +576,12 @@ function Planilla() {
                       </div>
                       <div className="flex items-center justify-center gap-2 sm:shrink-0">
                         <div className="flex w-[180px] justify-end">
-                          <TeamWithFlag teamName={m.local} flagCode={getFlagCode(m.local)} size="sm" className="truncate justify-end text-right" />
+                          <TeamWithFlag
+                            teamName={m.local}
+                            flagCode={getFlagCode(m.local)}
+                            size="sm"
+                            className="truncate justify-end text-right"
+                          />
                         </div>
                         <Input
                           type="number"
@@ -569,7 +603,12 @@ function Planilla() {
                           className="h-9 w-14 text-center"
                         />
                         <div className="flex w-[180px] justify-start">
-                          <TeamWithFlag teamName={m.visitante} flagCode={getFlagCode(m.visitante)} size="sm" className="truncate" />
+                          <TeamWithFlag
+                            teamName={m.visitante}
+                            flagCode={getFlagCode(m.visitante)}
+                            size="sm"
+                            className="truncate"
+                          />
                         </div>
                       </div>
                     </div>
@@ -582,9 +621,7 @@ function Planilla() {
       })}
 
       {/* Bloque 3: Especiales */}
-      {(isVisible("goleador") || isVisible("arquero")) && (
-      <></>
-      )}
+      {(isVisible("goleador") || isVisible("arquero")) && <></>}
 
       <div className="sticky bottom-4 mt-10 flex justify-center px-4">
         <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>

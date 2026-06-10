@@ -130,77 +130,79 @@ export function PagosTab() {
         <span className="text-muted-foreground">·</span>
         <span className="text-success">{t("admin.t.pagos.approved", { n: counts.aprobado })}</span>
         <span className="text-muted-foreground">·</span>
-        <span className="text-gold">{t("admin.t.pagos.collected", { amount: fmtCOP(recaudado) })}</span>
+        <span className="text-gold">
+          {t("admin.t.pagos.collected", { amount: fmtCOP(recaudado) })}
+        </span>
       </Card>
       <Card className="overflow-hidden border-border bg-card card-shadow">
         <div className="max-h-[70vh] overflow-auto">
-        <table className="w-full min-w-[420px] text-sm">
-          <thead className="sticky top-0 z-10 bg-card/95 backdrop-blur">
-            <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
-              <th className="p-2 sm:p-3">{t("admin.t.pagos.col.name")}</th>
-              <th className="p-2 sm:p-3">{t("admin.t.pagos.col.state")}</th>
-              <th className="p-2 sm:p-3 text-right">{t("admin.t.pagos.col.actions")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {parts.map((p) => (
-              <tr
-                key={p.id}
-                className="border-b border-border/60 transition-colors odd:bg-muted/20 hover:bg-muted/40"
-              >
-                <td className="p-2 sm:p-3 font-medium">
-                  {p.nombre}
-                  <br />
-                  <span className="text-xs text-muted-foreground break-all">{p.email}</span>
-                </td>
-                <td className="p-2 sm:p-3">
-                  <span
-                    className={`rounded-full border px-2 py-0.5 text-xs ${
-                      p.estado_pago === "aprobado"
-                        ? "border-success/40 bg-success/10 text-success"
-                        : p.estado_pago === "rechazado"
-                          ? "border-destructive/40 bg-destructive/10 text-destructive"
-                          : "border-gold/40 bg-gold/10 text-gold"
-                    }`}
-                  >
-                    {p.estado_pago}
-                  </span>
-                </td>
-                <td className="p-2 sm:p-3 text-right">
-                  <div className="flex flex-wrap justify-end gap-1">
-                  <Button
-                    size="sm"
-                    variant="hero"
-                    disabled={p.estado_pago === "aprobado"}
-                    onClick={() => setEstado(p.id, "aprobado")}
-                  >
-                    ✅
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    disabled={p.estado_pago === "rechazado"}
-                    onClick={() => setEstado(p.id, "rechazado")}
-                  >
-                    ❌
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    title={t("admin.t.pagos.deleteTitle")}
-                    onClick={() => {
-                      setToDelete({ id: p.id, nombre: p.nombre });
-                      setTyped("");
-                    }}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                  </div>
-                </td>
+          <table className="w-full min-w-[420px] text-sm">
+            <thead className="sticky top-0 z-10 bg-card/95 backdrop-blur">
+              <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
+                <th className="p-2 sm:p-3">{t("admin.t.pagos.col.name")}</th>
+                <th className="p-2 sm:p-3">{t("admin.t.pagos.col.state")}</th>
+                <th className="p-2 sm:p-3 text-right">{t("admin.t.pagos.col.actions")}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {parts.map((p) => (
+                <tr
+                  key={p.id}
+                  className="border-b border-border/60 transition-colors odd:bg-muted/20 hover:bg-muted/40"
+                >
+                  <td className="p-2 sm:p-3 font-medium">
+                    {p.nombre}
+                    <br />
+                    <span className="text-xs text-muted-foreground break-all">{p.email}</span>
+                  </td>
+                  <td className="p-2 sm:p-3">
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-xs ${
+                        p.estado_pago === "aprobado"
+                          ? "border-success/40 bg-success/10 text-success"
+                          : p.estado_pago === "rechazado"
+                            ? "border-destructive/40 bg-destructive/10 text-destructive"
+                            : "border-gold/40 bg-gold/10 text-gold"
+                      }`}
+                    >
+                      {p.estado_pago}
+                    </span>
+                  </td>
+                  <td className="p-2 sm:p-3 text-right">
+                    <div className="flex flex-wrap justify-end gap-1">
+                      <Button
+                        size="sm"
+                        variant="hero"
+                        disabled={p.estado_pago === "aprobado"}
+                        onClick={() => setEstado(p.id, "aprobado")}
+                      >
+                        ✅
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        disabled={p.estado_pago === "rechazado"}
+                        onClick={() => setEstado(p.id, "rechazado")}
+                      >
+                        ❌
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        title={t("admin.t.pagos.deleteTitle")}
+                        onClick={() => {
+                          setToDelete({ id: p.id, nombre: p.nombre });
+                          setTyped("");
+                        }}
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Card>
 
@@ -314,7 +316,9 @@ export function ResultadosTab() {
         <div className="mt-3 space-y-3">
           {GROUP_KEYS.flatMap(
             (k) =>
-              draft.groups[k].teams.map((team, i) => (team.po ? { k, i, team } : null)).filter(Boolean) as {
+              draft.groups[k].teams
+                .map((team, i) => (team.po ? { k, i, team } : null))
+                .filter(Boolean) as {
                 k: (typeof GROUP_KEYS)[number];
                 i: number;
                 team: (typeof draft.groups)[(typeof GROUP_KEYS)[number]]["teams"][number];
@@ -379,9 +383,7 @@ export function ResultadosTab() {
         <div className="mt-4 divide-y divide-border">
           {(() => {
             const kIds = new Set(draft.groups.K.teams.map((t) => t.id));
-            return draft.group_k_matches.filter(
-              (m) => kIds.has(m.local) && kIds.has(m.visitante),
-            );
+            return draft.group_k_matches.filter((m) => kIds.has(m.local) && kIds.has(m.visitante));
           })().map((m) => {
             const lName = draft.groups.K.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
             const vName =
@@ -531,11 +533,20 @@ export function CronogramaTab() {
 
   useEffect(() => {
     if (ts) {
-      setPhases({ ...DEFAULT_PHASES, ...(ts.phases ?? {}) });
+      // Normaliza a booleanos reales: registros antiguos pueden traer "true"/"false" (string) en jsonb.
+      const toBool = (val: unknown) => val === true || val === "true";
+      const normObj = (raw: Record<string, unknown>) =>
+        Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, toBool(v)]));
+      setPhases({
+        ...DEFAULT_PHASES,
+        ...normObj((ts.phases ?? {}) as Record<string, unknown>),
+      } as Phases);
       setExtras(ts.extra_matches ?? []);
       setGroupMatches(ts.group_k_matches ?? []);
-      const v = (ts as unknown as { visibility?: Record<string, boolean> }).visibility ?? {};
-      setVisibility({ ...DEFAULT_VISIBILITY, ...v });
+      setVisibility({
+        ...DEFAULT_VISIBILITY,
+        ...normObj((ts.visibility ?? {}) as Record<string, unknown>),
+      });
     }
   }, [ts]);
 
@@ -545,13 +556,17 @@ export function CronogramaTab() {
   const fasesEditables: Fase[] = ["grupos", ...fases];
 
   const save = async () => {
+    // La visibilidad de cada fase para los usuarios la dicta su toggle de activación:
+    // mantenemos phases y visibility sincronizados para las 7 fases antes de persistir.
+    const syncedVisibility: Record<string, boolean> = { ...visibility };
+    for (const f of fasesEditables) syncedVisibility[f] = !!phases[f];
     const { error } = await supabase
       .from("tournament_state")
       .update({
         phases: phases as never,
         extra_matches: extras as never,
         group_k_matches: groupMatches as never,
-        visibility: visibility as never,
+        visibility: syncedVisibility as never,
       })
       .eq("id", 1);
     if (error) return toast.error(error.message);
@@ -566,7 +581,7 @@ export function CronogramaTab() {
         ...arr,
         {
           id,
-          fecha: new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 16),
+          fecha: "", // fecha en blanco: el admin la define cuando FIFA la confirme
           local: "",
           visitante: "",
           sede: "",
@@ -582,7 +597,7 @@ export function CronogramaTab() {
       {
         id,
         fase,
-        fecha: new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 16),
+        fecha: "", // fecha en blanco: el admin la define cuando FIFA la confirme
         local: "",
         visitante: "",
         sede: "",
@@ -622,12 +637,18 @@ export function CronogramaTab() {
         <h2 className="font-display text-xl text-gold">{t("admin.t.cron.phasesTitle")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.phasesHint")}</p>
         <div className="mt-4 flex flex-wrap gap-2">
-          {(["grupos", ...fases] as Fase[]).map((f) => {
+          {fasesEditables.map((f) => {
             const active = !!phases[f];
             return (
               <button
                 key={f}
-                onClick={() => setPhases((p) => ({ ...p, [f]: !active }))}
+                onClick={() => {
+                  const next = !active;
+                  // Un solo interruptor: activar/desactivar la fase la muestra u oculta
+                  // a los usuarios Y habilita/deshabilita la carga de marcadores.
+                  setPhases((p) => ({ ...p, [f]: next }));
+                  setVisibility((s) => ({ ...s, [f]: next }));
+                }}
                 className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
                   active
                     ? "border-success/50 bg-success/15 text-success"
@@ -645,7 +666,7 @@ export function CronogramaTab() {
         <h2 className="font-display text-xl">{t("admin.t.cron.visTitle")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.visHint")}</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {Object.keys(DEFAULT_VISIBILITY).map((k) => (
+          {(["goleador", "arquero", "historico"] as const).map((k) => (
             <label
               key={k}
               className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/20 px-3 py-2"
@@ -717,7 +738,10 @@ export function CronogramaTab() {
                         value={m.gh ?? ""}
                         onChange={(e) =>
                           updateMatch(fase, m.id, {
-                            gh: e.target.value === "" ? null : Math.max(0, parseInt(e.target.value, 10) || 0),
+                            gh:
+                              e.target.value === ""
+                                ? null
+                                : Math.max(0, parseInt(e.target.value, 10) || 0),
                           })
                         }
                         className="h-9 w-16 text-center"
@@ -729,7 +753,10 @@ export function CronogramaTab() {
                         value={m.ga ?? ""}
                         onChange={(e) =>
                           updateMatch(fase, m.id, {
-                            ga: e.target.value === "" ? null : Math.max(0, parseInt(e.target.value, 10) || 0),
+                            ga:
+                              e.target.value === ""
+                                ? null
+                                : Math.max(0, parseInt(e.target.value, 10) || 0),
                           })
                         }
                         className="h-9 w-16 text-center"
@@ -817,8 +844,16 @@ function ListEditor({
         ))}
       </ul>
       <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
-        <Input value={n} onChange={(e) => setN(e.target.value)} placeholder={tStatic("admin.t.list.namePh")} />
-        <Input value={s} onChange={(e) => setS(e.target.value)} placeholder={tStatic("admin.t.list.selPh")} />
+        <Input
+          value={n}
+          onChange={(e) => setN(e.target.value)}
+          placeholder={tStatic("admin.t.list.namePh")}
+        />
+        <Input
+          value={s}
+          onChange={(e) => setS(e.target.value)}
+          placeholder={tStatic("admin.t.list.selPh")}
+        />
         <Button onClick={add} size="sm">
           <Plus className="size-4" />
         </Button>
@@ -998,7 +1033,9 @@ function DeadlineLockCardImpl() {
       return;
     }
     toast.success(
-      when && when.getTime() <= Date.now() ? t("admin.t.toast.locked") : t("admin.t.toast.unlocked"),
+      when && when.getTime() <= Date.now()
+        ? t("admin.t.toast.locked")
+        : t("admin.t.toast.unlocked"),
     );
     qc.invalidateQueries({ queryKey: ["tournament_state"] });
   };
@@ -1015,7 +1052,9 @@ function DeadlineLockCardImpl() {
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
         {lockedAt
-          ? t("admin.t.cloud.scheduled", { when: new Date(lockedAt).toLocaleString("es-CO", { timeZone: "America/Bogota" }) })
+          ? t("admin.t.cloud.scheduled", {
+              when: new Date(lockedAt).toLocaleString("es-CO", { timeZone: "America/Bogota" }),
+            })
           : t("admin.t.cloud.noSchedule")}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
@@ -1048,7 +1087,13 @@ function ParticipantSpecialsPicks() {
         .order("nombre");
       if (e1) throw e1;
       const ids = (parts ?? []).map((p) => p.id);
-      if (ids.length === 0) return [] as { id: string; nombre: string; goleador: string | null; arquero: string | null }[];
+      if (ids.length === 0)
+        return [] as {
+          id: string;
+          nombre: string;
+          goleador: string | null;
+          arquero: string | null;
+        }[];
       const { data: picks, error: e2 } = await supabase
         .from("picks")
         .select("participant_id, goleador_id, arquero_id")
@@ -1076,9 +1121,7 @@ function ParticipantSpecialsPicks() {
         className="flex w-full items-center justify-between gap-2 text-left text-sm font-medium hover:text-foreground"
       >
         <span>Apuestas de participantes (goleador / arquero)</span>
-        <span className="text-xs text-muted-foreground">
-          {open ? "Ocultar ▲" : "Mostrar ▼"}
-        </span>
+        <span className="text-xs text-muted-foreground">{open ? "Ocultar ▲" : "Mostrar ▼"}</span>
       </button>
       {open && (
         <div className="mt-3 overflow-x-auto rounded-md border border-border">
@@ -1101,8 +1144,12 @@ function ParticipantSpecialsPicks() {
                 {data.map((r) => (
                   <tr key={r.id} className="border-b border-border/60">
                     <td className="p-2 font-medium">{r.nombre}</td>
-                    <td className="p-2">{r.goleador ?? <span className="text-muted-foreground">—</span>}</td>
-                    <td className="p-2">{r.arquero ?? <span className="text-muted-foreground">—</span>}</td>
+                    <td className="p-2">
+                      {r.goleador ?? <span className="text-muted-foreground">—</span>}
+                    </td>
+                    <td className="p-2">
+                      {r.arquero ?? <span className="text-muted-foreground">—</span>}
+                    </td>
                   </tr>
                 ))}
               </tbody>

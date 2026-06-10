@@ -6,7 +6,7 @@ import { useTournamentState } from "@/hooks/usePolla";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
-import { FASE_LABEL, type Fase } from "@/lib/polla";
+import { FASE_LABEL, isSectionVisible, type Fase } from "@/lib/polla";
 
 type Row = {
   id: string;
@@ -41,9 +41,7 @@ export function PickHistoryCard({
 }) {
   const t = useT();
   const { data: ts } = useTournamentState();
-  const visibility =
-    ((ts as unknown as { visibility?: Record<string, boolean> } | undefined)?.visibility) ?? {};
-  const visible = visibility.historico !== false;
+  const visible = isSectionVisible(ts?.visibility, "historico");
 
   const { data: rows = [], isLoading } = useQuery({
     queryKey: ["pick-history", scope, participantId ?? null],
@@ -115,7 +113,8 @@ export function PickHistoryCard({
     const a = document.createElement("a");
     a.href = url;
     const stamp = new Date().toISOString().slice(0, 10);
-    a.download = scope === "mine" ? `mi-historico-${stamp}.csv` : `historico-marcadores-${stamp}.csv`;
+    a.download =
+      scope === "mine" ? `mi-historico-${stamp}.csv` : `historico-marcadores-${stamp}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

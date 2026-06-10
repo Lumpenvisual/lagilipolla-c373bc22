@@ -1,5 +1,4 @@
 @import "tailwindcss" source(none);
-@import "country-flag-icons/3x2/flags.css";
 @source "../src";
 @import "tw-animate-css";
 
@@ -281,8 +280,7 @@ html.a11y-reduce-motion *::after {
 
 /* Dyslexia-friendly font — falls back gracefully if OpenDyslexic isn't installed. */
 html.a11y-dyslexia body {
-  font-family:
-    "OpenDyslexic", "Comic Sans MS", "Atkinson Hyperlegible", system-ui, sans-serif;
+  font-family: "OpenDyslexic", "Comic Sans MS", "Atkinson Hyperlegible", system-ui, sans-serif;
   letter-spacing: 0.02em;
   word-spacing: 0.08em;
   line-height: 1.7;

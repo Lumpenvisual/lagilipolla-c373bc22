@@ -67,7 +67,9 @@ function ReglasPage() {
           <p className="text-xs text-muted-foreground">COP · "$100 Lukas"</p>
         </Card>
         <Card className="border-info/40 bg-info/5 p-5 text-center card-shadow">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">{L.registrations}</p>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">
+            {L.registrations}
+          </p>
           <p className="mt-1 font-display text-2xl">{L.regDates}</p>
           <p className="text-xs text-muted-foreground">{L.regClose}</p>
         </Card>
@@ -300,7 +302,8 @@ const RULES_ES: Rules = {
   sc1a: "Aciertas el empate (sin importar el número de goles).",
   sc1b: "Aciertas la cantidad de goles de un equipo (sin importar el resultado final).",
   sc0: "Ningún acierto.",
-  scoreNote: "Los marcadores se cuentan a los 90 minutos + reposición. Si hay repechaje (alargue o penales), no cuenta: solo vale el resultado de los primeros 90 minutos.",
+  scoreNote:
+    "Los marcadores se cuentan a los 90 minutos + reposición. Si hay repechaje (alargue o penales), no cuenta: solo vale el resultado de los primeros 90 minutos.",
   specialTitle: "Selecciones especiales",
   specialDesc: "Según los premios oficiales FIFA entregados en la final.",
   topScorer: "Goleador del Mundial.",
@@ -332,7 +335,7 @@ const RULES_ES: Rules = {
   ],
   venueTitle: "PA' QUE VENGAN",
   venueDesc:
-    "La sede oficial es el Centro Recreativo y Cultural \"El Guanábano\", situado en la Carrera 43 No. 53-21. Este año la intención es vernos más en el bar, por eso la información del Mundial estará físicamente en él.",
+    'La sede oficial es el Centro Recreativo y Cultural "El Guanábano", situado en la Carrera 43 No. 53-21. Este año la intención es vernos más en el bar, por eso la información del Mundial estará físicamente en él.',
   ctaRegister: "Inscribirme ahora",
   ctaSheet: "Ver la planilla",
   ctaHome: "Volver al inicio",
@@ -413,7 +416,7 @@ const RULES_EN: Rules = {
   ],
   venueTitle: "COME ON OVER",
   venueDesc:
-    "The official venue is the \"El Guanábano\" Recreational and Cultural Center, at Carrera 43 No. 53-21. This year the idea is to see each other more at the bar, so the World Cup information will be physically there.",
+    'The official venue is the "El Guanábano" Recreational and Cultural Center, at Carrera 43 No. 53-21. This year the idea is to see each other more at the bar, so the World Cup information will be physically there.',
   ctaRegister: "Register now",
   ctaSheet: "Open the sheet",
   ctaHome: "Back to home",

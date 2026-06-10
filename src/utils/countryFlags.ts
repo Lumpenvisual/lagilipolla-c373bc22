@@ -1,78 +1,80 @@
+// Mapping de los 48 países WC2026 (nombres en español, como vienen en tournament_state)
+// a códigos ISO 3166-1 alpha-2; las banderas viven en public/flags/<code>.svg.
 export const COUNTRY_FLAG_MAP: Record<string, string> = {
-  // CONCACAF
-  'Mexico': 'mx',
-  'USA': 'us',
-  'Canada': 'ca',
-  'Panama': 'pa',
-  'Haiti': 'ht',
-  'Jamaica': 'jm',
-  'Costa Rica': 'cr',
-  'Curaçao': 'cw',
-  // CONMEBOL
-  'Brazil': 'br',
-  'Argentina': 'ar',
-  'Uruguay': 'uy',
-  'Colombia': 'co',
-  'Ecuador': 'ec',
-  'Paraguay': 'py',
-  'Peru': 'pe',
-  // UEFA
-  'England': 'gb',
-  'France': 'fr',
-  'Spain': 'es',
-  'Germany': 'de',
-  'Italy': 'it',
-  'Netherlands': 'nl',
-  'Belgium': 'be',
-  'Portugal': 'pt',
-  'Czechia': 'cz',
-  'Poland': 'pl',
-  'Austria': 'at',
-  'Switzerland': 'ch',
-  'Sweden': 'se',
-  'Denmark': 'dk',
-  'Serbia': 'rs',
-  'Croatia': 'hr',
-  'Bosnia & Herzegovina': 'ba',
-  'Norway': 'no',
-  'Ukraine': 'ua',
-  'Romania': 'ro',
-  'Bulgaria': 'bg',
-  'Montenegro': 'me',
-  'Albania': 'al',
-  'Georgia': 'ge',
-  'Scotland': 'gb-sct',
-  // AFC
-  'Japan': 'jp',
-  'South Korea': 'kr',
-  'Australia': 'au',
-  'Iraq': 'iq',
-  'Jordan': 'jo',
-  'Saudi Arabia': 'sa',
-  'Iran': 'ir',
-  'Uzbekistan': 'uz',
-  'Qatar': 'qa',
-  'Türkiye': 'tr',
-  // CAF
-  'Egypt': 'eg',
-  'Morocco': 'ma',
-  'Tunisia': 'tn',
-  'Senegal': 'sn',
-  'Ivory Coast': 'ci',
-  'Ghana': 'gh',
-  'Cape Verde': 'cv',
-  'Cameroon': 'cm',
-  'South Africa': 'za',
-  'Burkina Faso': 'bf',
-  'Mali': 'ml',
-  'Niger': 'ne',
-  'Nigeria': 'ng',
-  'Kenya': 'ke',
-  'DR Congo': 'cd',
-  'Algeria': 'dz',
-  // OFC
-  'New Zealand': 'nz',
+  // GRUPO A
+  México: "mx",
+  Sudáfrica: "za",
+  "Corea del Sur": "kr",
+  Chequía: "cz",
+
+  // GRUPO B
+  Canadá: "ca",
+  "Bosnia y Herzegovina": "ba",
+  Catar: "qa",
+  Suiza: "ch",
+
+  // GRUPO C
+  Brasil: "br",
+  Marruecos: "ma",
+  Haití: "ht",
+  Escocia: "gb-sct",
+
+  // GRUPO D
+  "Estados Unidos": "us",
+  Paraguay: "py",
+  Australia: "au",
+  Turquía: "tr",
+
+  // GRUPO E
+  Alemania: "de",
+  Curazao: "cw",
+  "Costa de Marfil": "ci",
+  Ecuador: "ec",
+
+  // GRUPO F
+  "Países Bajos": "nl",
+  Japón: "jp",
+  Suecia: "se",
+  Túnez: "tn",
+
+  // GRUPO G
+  Bélgica: "be",
+  Egipto: "eg",
+  Irán: "ir",
+  "Nueva Zelanda": "nz",
+
+  // GRUPO H
+  España: "es",
+  "Cabo Verde": "cv",
+  "Arabia Saudita": "sa",
+  Uruguay: "uy",
+
+  // GRUPO I
+  Francia: "fr",
+  Senegal: "sn",
+  Iraq: "iq",
+  Noruega: "no",
+
+  // GRUPO J
+  Argentina: "ar",
+  Argelia: "dz",
+  Austria: "at",
+  Jordania: "jo",
+
+  // GRUPO K
+  Portugal: "pt",
+  "RD Congo": "cd",
+  Uzbekistán: "uz",
+  Colombia: "co",
+
+  // GRUPO L
+  Inglaterra: "gb-eng",
+  Croacia: "hr",
+  Ghana: "gh",
+  Panamá: "pa",
 };
 
-export const getFlagCode = (countryName: string): string =>
-  COUNTRY_FLAG_MAP[countryName] || 'un';
+export const getFlagCode = (countryName: string | null | undefined): string => {
+  if (!countryName) return "un";
+  return COUNTRY_FLAG_MAP[countryName.trim()] ?? "un";
+};
