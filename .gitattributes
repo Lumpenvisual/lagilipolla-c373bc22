@@ -17,3 +17,4 @@
 # Generated files: keep but don't show in diffs by default.
 src/routeTree.gen.ts linguist-generated=true
 bun.lock            linguist-generated=true
+supabase/schema.snapshot.sql linguist-generated=true
