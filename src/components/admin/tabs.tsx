@@ -440,6 +440,7 @@ export function ResultadosTab() {
             />
           </div>
         </div>
+        <ParticipantSpecialsPicks />
       </Card>
 
       <div className="sticky bottom-4 flex justify-center">
