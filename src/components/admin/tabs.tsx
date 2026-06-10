@@ -1034,3 +1034,82 @@ function DeadlineLockCardImpl() {
     </Card>
   );
 }
+
+/* ---------------- Picks de especiales por participante (admin) ---------------- */
+function ParticipantSpecialsPicks() {
+  const [open, setOpen] = useState(false);
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-specials-picks"],
+    queryFn: async () => {
+      const { data: parts, error: e1 } = await supabase
+        .from("participants")
+        .select("id, nombre, estado_pago")
+        .eq("estado_pago", "aprobado")
+        .order("nombre");
+      if (e1) throw e1;
+      const ids = (parts ?? []).map((p) => p.id);
+      if (ids.length === 0) return [] as { id: string; nombre: string; goleador: string | null; arquero: string | null }[];
+      const { data: picks, error: e2 } = await supabase
+        .from("picks")
+        .select("participant_id, goleador_id, arquero_id")
+        .in("participant_id", ids);
+      if (e2) throw e2;
+      const byId = new Map((picks ?? []).map((p) => [p.participant_id, p]));
+      return (parts ?? []).map((p) => {
+        const pk = byId.get(p.id);
+        return {
+          id: p.id,
+          nombre: p.nombre,
+          goleador: (pk?.goleador_id ?? null) || null,
+          arquero: (pk?.arquero_id ?? null) || null,
+        };
+      });
+    },
+    staleTime: 30_000,
+  });
+
+  return (
+    <div className="mt-5 border-t border-border pt-4">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-2 text-left text-sm font-medium hover:text-foreground"
+      >
+        <span>Apuestas de participantes (goleador / arquero)</span>
+        <span className="text-xs text-muted-foreground">
+          {open ? "Ocultar ▲" : "Mostrar ▼"}
+        </span>
+      </button>
+      {open && (
+        <div className="mt-3 overflow-x-auto rounded-md border border-border">
+          {isLoading ? (
+            <div className="flex justify-center py-6">
+              <Loader2 className="size-4 animate-spin text-muted-foreground" />
+            </div>
+          ) : !data || data.length === 0 ? (
+            <p className="px-3 py-4 text-xs text-muted-foreground">Sin participantes aprobados.</p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                  <th className="p-2">Participante</th>
+                  <th className="p-2">Goleador</th>
+                  <th className="p-2">Arquero</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((r) => (
+                  <tr key={r.id} className="border-b border-border/60">
+                    <td className="p-2 font-medium">{r.nombre}</td>
+                    <td className="p-2">{r.goleador ?? <span className="text-muted-foreground">—</span>}</td>
+                    <td className="p-2">{r.arquero ?? <span className="text-muted-foreground">—</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
