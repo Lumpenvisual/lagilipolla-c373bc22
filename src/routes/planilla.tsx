@@ -582,21 +582,20 @@ function Planilla() {
 
       <div className="sticky bottom-4 mt-10 flex justify-center px-4">
         <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-          <AlertDialogTrigger asChild>
-            <Button
-              disabled={locked || save.isPending}
-              variant="hero"
-              size="lg"
-              className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
-            >
-              {save.isPending ? (
-                <Loader2 className="mr-2 size-4 animate-spin" />
-              ) : (
-                <Save className="mr-2 size-4" />
-              )}
-              {t("planilla.save")}
-            </Button>
-          </AlertDialogTrigger>
+          <Button
+            onClick={tryOpenConfirm}
+            disabled={locked || save.isPending}
+            variant="hero"
+            size="lg"
+            className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
+          >
+            {save.isPending ? (
+              <Loader2 className="mr-2 size-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 size-4" />
+            )}
+            {t("planilla.save")}
+          </Button>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t("planilla.confirm.title")}</AlertDialogTitle>
