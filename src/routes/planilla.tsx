@@ -435,7 +435,8 @@ function Planilla() {
             const colombia = m.local === "COL" || m.visitante === "COL";
             const p = matches[m.id] ?? { gh: null, ga: null };
             const matchLocked = isMatchLocked(m.fecha);
-            const disabled = locked || matchLocked;
+            const ghDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "gh");
+            const gaDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "ga");
             const [stadium, city] = m.sede.split(" · ");
             return (
               <div
@@ -465,7 +466,7 @@ function Planilla() {
                     type="number"
                     min={0}
                     max={20}
-                    disabled={disabled}
+                    disabled={ghDisabled}
                     value={p.gh ?? ""}
                     onChange={(e) => setMatch(m.id, "gh", e.target.value)}
                     className="h-9 w-14 text-center"
@@ -475,7 +476,7 @@ function Planilla() {
                     type="number"
                     min={0}
                     max={20}
-                    disabled={disabled}
+                    disabled={gaDisabled}
                     value={p.ga ?? ""}
                     onChange={(e) => setMatch(m.id, "ga", e.target.value)}
                     className="h-9 w-14 text-center"
