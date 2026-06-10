@@ -86,6 +86,20 @@ function Planilla() {
   }, [ts?.picks_locked_at]);
   const locked = useMemo(() => Date.now() > lockAt.getTime(), [lockAt]);
 
+  // Bloqueo por campo: lo que ya está guardado en servidor no se puede modificar.
+  // El usuario sólo puede llenar campos en blanco.
+  const savedGroups = pick?.groups ?? {};
+  const savedMatches = pick?.group_k_matches ?? {};
+  const savedExtra = pick?.extra_matches ?? {};
+  const isPosLocked = (k: GroupKey, f: "pos1" | "pos2") =>
+    !!(savedGroups[k]?.[f]);
+  const isMatchFieldLocked = (id: string, f: "gh" | "ga") =>
+    savedMatches[id]?.[f] != null;
+  const isExtraFieldLocked = (id: string, f: "gh" | "ga") =>
+    savedExtra[id]?.[f] != null;
+  const goleadorLocked = !!(pick?.goleador_id && pick.goleador_id.trim() !== "");
+  const arqueroLocked = !!(pick?.arquero_id && pick.arquero_id.trim() !== "");
+
   if (loading || tsLoading || pickLoading) {
     return (
       <main className="flex min-h-[60vh] items-center justify-center">
@@ -161,18 +175,14 @@ function Planilla() {
   const validate = (): string[] => {
     const errors: string[] = [];
     const dup: string[] = [];
-    const incomp: string[] = [];
     GROUP_KEYS.forEach((k) => {
       const g = ts.groups[k];
       if (!g) return;
       const sel = groups[k] ?? { pos1: null, pos2: null };
-      if (!sel.pos1 || !sel.pos2) {
-        incomp.push(k);
-      } else if (sel.pos1 === sel.pos2) {
+      if (sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2) {
         dup.push(k);
       }
     });
-    if (incomp.length) errors.push(`Grupos sin completar: ${incomp.join(", ")}`);
     if (dup.length) errors.push(`Grupos con equipo repetido (1º y 2º iguales): ${dup.join(", ")}`);
     return errors;
   };
