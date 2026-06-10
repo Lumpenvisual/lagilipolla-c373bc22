@@ -25,7 +25,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   POLLA,
@@ -158,9 +157,48 @@ function Planilla() {
   }).length;
   const completedEsp = (goleador ? 1 : 0) + (arquero ? 1 : 0);
 
+  /** Valida la planilla antes de guardar. Devuelve lista de errores legibles. */
+  const validate = (): string[] => {
+    const errors: string[] = [];
+    const dup: string[] = [];
+    const incomp: string[] = [];
+    GROUP_KEYS.forEach((k) => {
+      const g = ts.groups[k];
+      if (!g) return;
+      const sel = groups[k] ?? { pos1: null, pos2: null };
+      if (!sel.pos1 || !sel.pos2) {
+        incomp.push(k);
+      } else if (sel.pos1 === sel.pos2) {
+        dup.push(k);
+      }
+    });
+    if (incomp.length) errors.push(`Grupos sin completar: ${incomp.join(", ")}`);
+    if (dup.length) errors.push(`Grupos con equipo repetido (1º y 2º iguales): ${dup.join(", ")}`);
+    return errors;
+  };
+
+  const tryOpenConfirm = () => {
+    if (locked) {
+      toast.error(t("planilla.toast.closed"));
+      return;
+    }
+    const errors = validate();
+    if (errors.length) {
+      toast.error(errors.join(" · "), { duration: 6000 });
+      return;
+    }
+    setConfirmOpen(true);
+  };
+
   const submit = async () => {
     if (locked) {
       toast.error(t("planilla.toast.closed"));
+      return;
+    }
+    const errors = validate();
+    if (errors.length) {
+      toast.error(errors.join(" · "), { duration: 6000 });
+      setConfirmOpen(false);
       return;
     }
     try {
@@ -268,7 +306,7 @@ function Planilla() {
                     >
                       <option value="">—</option>
                       {opts.map((o) => (
-                        <option key={o.id} value={o.id}>
+                        <option key={o.id} value={o.id} disabled={sel.pos2 === o.id}>
                           {o.label}
                           {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
                         </option>
@@ -285,7 +323,7 @@ function Planilla() {
                     >
                       <option value="">—</option>
                       {opts.map((o) => (
-                        <option key={o.id} value={o.id}>
+                        <option key={o.id} value={o.id} disabled={sel.pos1 === o.id}>
                           {o.label}
                           {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
                         </option>
@@ -293,6 +331,11 @@ function Planilla() {
                     </select>
                   </div>
                 </div>
+                {sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2 && (
+                  <p className="mt-2 text-[11px] font-medium text-destructive">
+                    1º y 2º no pueden ser el mismo equipo.
+                  </p>
+                )}
               </Card>
             );
           })}
@@ -538,21 +581,20 @@ function Planilla() {
 
       <div className="sticky bottom-4 mt-10 flex justify-center px-4">
         <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-          <AlertDialogTrigger asChild>
-            <Button
-              disabled={locked || save.isPending}
-              variant="hero"
-              size="lg"
-              className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
-            >
-              {save.isPending ? (
-                <Loader2 className="mr-2 size-4 animate-spin" />
-              ) : (
-                <Save className="mr-2 size-4" />
-              )}
-              {t("planilla.save")}
-            </Button>
-          </AlertDialogTrigger>
+          <Button
+            onClick={tryOpenConfirm}
+            disabled={locked || save.isPending}
+            variant="hero"
+            size="lg"
+            className="h-12 w-full max-w-sm px-6 text-sm uppercase tracking-wider shadow-2xl sm:w-auto sm:px-10 sm:text-base"
+          >
+            {save.isPending ? (
+              <Loader2 className="mr-2 size-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 size-4" />
+            )}
+            {t("planilla.save")}
+          </Button>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t("planilla.confirm.title")}</AlertDialogTitle>
