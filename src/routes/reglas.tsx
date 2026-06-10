@@ -283,9 +283,9 @@ const RULES_ES: Rules = {
   pointsSystem: "Sistema de puntos",
   groupBetTitle: "Apuesta por grupos (1° y 2°)",
   groupBetDesc: "Para cada uno de los 12 grupos (A–L) eliges los dos primeros clasificados.",
-  gp5: "Aciertas 1° y 2° exactos.",
-  gp3: "Aciertas los dos primeros, pero en desorden.",
-  gp1: "Aciertas solo uno (en cualquier posición).",
+  gp5: "Aciertas clasificados en su orden.",
+  gp3: "Aciertas clasificados en desorden.",
+  gp1: "Aciertas únicamente uno de los clasificados.",
   gp0: "No aciertas ninguno.",
   scoreBetTitle: "Apuesta por marcador · Grupo K y siguientes rondas",
   scoreBetDesc:
