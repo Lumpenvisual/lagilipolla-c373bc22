@@ -16,7 +16,12 @@ export const Route = createFileRoute("/admin")({
 });
 
 type AdminTab = {
-  to: "/admin" | "/admin/resultados" | "/admin/cronograma" | "/admin/listas" | "/admin/reportes";
+  to:
+    | "/admin"
+    | "/admin/resultados"
+    | "/admin/cronograma"
+    | "/admin/especiales"
+    | "/admin/reportes";
   label: string;
   icon: typeof Users;
   exact?: boolean;
@@ -26,7 +31,7 @@ const TABS: AdminTab[] = [
   { to: "/admin", label: "Pagos", icon: Users, exact: true },
   { to: "/admin/resultados", label: "Resultados", icon: ClipboardList },
   { to: "/admin/cronograma", label: "Cronograma", icon: ClipboardList },
-  { to: "/admin/listas", label: "Listas", icon: ListPlus },
+  { to: "/admin/especiales", label: "Especiales", icon: ListPlus },
   { to: "/admin/reportes", label: "Reportes", icon: FileSpreadsheet },
 ];
 

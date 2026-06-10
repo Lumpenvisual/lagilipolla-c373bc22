@@ -34,6 +34,28 @@ export type GroupMatch = {
 
 export type SpecialPlayer = { id: string; nombre: string; seleccion: string };
 
+/* ---- Especiales (goleador/arquero) como texto libre ----
+ * El participante escribe nombre + selección; se persisten compuestos en el
+ * mismo campo de texto (picks.goleador_id / arquero_id) como "Nombre (Selección)",
+ * así el cálculo de puntos en SQL (igualdad de texto con el oficial) no cambia. */
+
+export function composeSpecial(nombre: string, seleccion: string): string | null {
+  const n = nombre.trim();
+  const s = seleccion.trim();
+  if (!n) return null;
+  return s ? `${n} (${s})` : n;
+}
+
+export function parseSpecial(text: string | null | undefined): {
+  nombre: string;
+  seleccion: string;
+} {
+  if (!text) return { nombre: "", seleccion: "" };
+  const m = text.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+  if (m) return { nombre: m[1].trim(), seleccion: m[2].trim() };
+  return { nombre: text.trim(), seleccion: "" };
+}
+
 export type Fase =
   | "grupos"
   | "dieciseisavos"

@@ -27,6 +27,8 @@ import {
   GROUP_KEYS,
   slotOptions,
   fmtFecha,
+  composeSpecial,
+  parseSpecial,
   isMatchLocked,
   isSectionVisible,
   FASE_LABEL,
@@ -58,8 +60,10 @@ function Planilla() {
   const [groups, setGroups] = useState<PickGroups>({});
   const [matches, setMatches] = useState<PickMatches>({});
   const [extra, setExtra] = useState<PickMatches>({});
-  const [goleador, setGoleador] = useState<string | null>(null);
-  const [arquero, setArquero] = useState<string | null>(null);
+  const [golNombre, setGolNombre] = useState("");
+  const [golSel, setGolSel] = useState("");
+  const [arqNombre, setArqNombre] = useState("");
+  const [arqSel, setArqSel] = useState("");
   const [initialized, setInitialized] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -69,8 +73,12 @@ function Planilla() {
       setGroups(pick.groups ?? {});
       setMatches(pick.group_k_matches ?? {});
       setExtra(pick.extra_matches ?? {});
-      setGoleador(pick.goleador_id);
-      setArquero(pick.arquero_id);
+      const g = parseSpecial(pick.goleador_id);
+      setGolNombre(g.nombre);
+      setGolSel(g.seleccion);
+      const a = parseSpecial(pick.arquero_id);
+      setArqNombre(a.nombre);
+      setArqSel(a.seleccion);
       setInitialized(true);
     } else if (!pickLoading && ts) {
       setInitialized(true);
@@ -171,7 +179,7 @@ function Planilla() {
     const p = extra[m.id];
     return p && p.gh != null && p.ga != null;
   }).length;
-  const completedEsp = (goleador ? 1 : 0) + (arquero ? 1 : 0);
+  const completedEsp = (golNombre.trim() ? 1 : 0) + (arqNombre.trim() ? 1 : 0);
 
   /** Valida la planilla antes de guardar. Devuelve lista de errores legibles. */
   const validate = (): string[] => {
@@ -218,8 +226,8 @@ function Planilla() {
         groups,
         group_k_matches: matches,
         extra_matches: extra,
-        goleador_id: goleador,
-        arquero_id: arquero,
+        goleador_id: composeSpecial(golNombre, golSel),
+        arquero_id: composeSpecial(arqNombre, arqSel),
       });
       toast.success(t("planilla.toast.saved"));
       setConfirmOpen(false);
@@ -289,14 +297,34 @@ function Planilla() {
                   <Label className="text-xs uppercase text-muted-foreground">
                     {t("planilla.esp.goleador")}
                   </Label>
-                  <Input
-                    disabled={locked || goleadorLocked}
-                    value={goleador ?? ""}
-                    onChange={(e) => setGoleador(e.target.value || null)}
-                    placeholder="Escribe el nombre del jugador"
-                    maxLength={80}
-                    className="mt-2"
-                  />
+                  <div className="mt-2 space-y-2">
+                    <div>
+                      <Label className="text-[11px] text-muted-foreground">
+                        {t("planilla.esp.nameLabel")}
+                      </Label>
+                      <Input
+                        disabled={locked || goleadorLocked}
+                        value={golNombre}
+                        onChange={(e) => setGolNombre(e.target.value)}
+                        placeholder={t("planilla.esp.namePh")}
+                        maxLength={60}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-[11px] text-muted-foreground">
+                        {t("planilla.esp.selLabel")}
+                      </Label>
+                      <Input
+                        disabled={locked || goleadorLocked}
+                        value={golSel}
+                        onChange={(e) => setGolSel(e.target.value)}
+                        placeholder={t("planilla.esp.selPh")}
+                        maxLength={40}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
                 </Card>
               )}
               {isVisible("arquero") && (
@@ -304,14 +332,34 @@ function Planilla() {
                   <Label className="text-xs uppercase text-muted-foreground">
                     {t("planilla.esp.arquero")}
                   </Label>
-                  <Input
-                    disabled={locked || arqueroLocked}
-                    value={arquero ?? ""}
-                    onChange={(e) => setArquero(e.target.value || null)}
-                    placeholder="Escribe el nombre del arquero"
-                    maxLength={80}
-                    className="mt-2"
-                  />
+                  <div className="mt-2 space-y-2">
+                    <div>
+                      <Label className="text-[11px] text-muted-foreground">
+                        {t("planilla.esp.nameLabel")}
+                      </Label>
+                      <Input
+                        disabled={locked || arqueroLocked}
+                        value={arqNombre}
+                        onChange={(e) => setArqNombre(e.target.value)}
+                        placeholder={t("planilla.esp.namePh")}
+                        maxLength={60}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-[11px] text-muted-foreground">
+                        {t("planilla.esp.selLabel")}
+                      </Label>
+                      <Input
+                        disabled={locked || arqueroLocked}
+                        value={arqSel}
+                        onChange={(e) => setArqSel(e.target.value)}
+                        placeholder={t("planilla.esp.selPh")}
+                        maxLength={40}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
                 </Card>
               )}
             </div>

@@ -41,13 +41,13 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   POLLA,
   fmtCOP,
+  parseSpecial,
   GROUP_KEYS,
   FASE_LABEL,
   type ExtraMatch,
   type Fase,
   type GroupMatch,
   type Phases,
-  type SpecialPlayer,
   type TournamentState,
 } from "@/lib/polla";
 import { DownloadButton } from "@/components/DownloadButton";
@@ -62,7 +62,7 @@ import {
   deleteBackup,
 } from "@/lib/reports.functions";
 import { useServerFn } from "@tanstack/react-start";
-import { useT, tStatic } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
 
 /* ---------------- Pagos ---------------- */
 export function PagosTab() {
@@ -458,47 +458,17 @@ export function ResultadosTab() {
   );
 }
 
-/* ---------------- Listas (goleadores/arqueros) ---------------- */
-export function ListasTab() {
+/* ---------------- Especiales (respuestas de los participantes) ---------------- */
+export function EspecialesTab() {
   const t = useT();
-  const qc = useQueryClient();
-  const { data: ts } = useTournamentState();
-  const [gols, setGols] = useState<SpecialPlayer[]>([]);
-  const [arqs, setArqs] = useState<SpecialPlayer[]>([]);
-  useEffect(() => {
-    if (ts) {
-      setGols(ts.goleadores);
-      setArqs(ts.arqueros);
-    }
-  }, [ts]);
-
-  if (!ts) return <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />;
-
-  const save = async () => {
-    const { error } = await supabase
-      .from("tournament_state")
-      .update({
-        goleadores: gols as never,
-        arqueros: arqs as never,
-      })
-      .eq("id", 1);
-    if (error) toast.error(error.message);
-    else {
-      toast.success(t("admin.t.toast.listsSaved"));
-      qc.invalidateQueries({ queryKey: ["tournament-state"] });
-    }
-  };
-
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <ListEditor title={t("admin.t.list.gol")} items={gols} setItems={setGols} />
-      <ListEditor title={t("admin.t.list.arq")} items={arqs} setItems={setArqs} />
-      <div className="lg:col-span-2 flex justify-center">
-        <Button onClick={save} variant="hero">
-          {t("admin.t.list.save")}
-        </Button>
+    <Card className="border-border bg-card p-5 card-shadow">
+      <h2 className="font-display text-xl">{t("admin.t.esp.title")}</h2>
+      <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.esp.hint")}</p>
+      <div className="mt-4 overflow-x-auto rounded-md border border-border">
+        <SpecialsTable />
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -832,67 +802,6 @@ function fromLocalInput(v: string): string {
   return isNaN(d.getTime()) ? "" : d.toISOString();
 }
 
-function ListEditor({
-  title,
-  items,
-  setItems,
-}: {
-  title: string;
-  items: SpecialPlayer[];
-  setItems: (s: SpecialPlayer[]) => void;
-}) {
-  const [n, setN] = useState("");
-  const [s, setS] = useState("");
-  const add = () => {
-    if (!n.trim()) return;
-    const id =
-      n
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "")
-        .slice(0, 16) +
-      "-" +
-      Math.random().toString(36).slice(2, 6);
-    setItems([...items, { id, nombre: n.trim(), seleccion: s.trim() }]);
-    setN("");
-    setS("");
-  };
-  return (
-    <Card className="border-border bg-card p-5 card-shadow">
-      <h2 className="font-display text-xl">{title}</h2>
-      <ul className="mt-3 divide-y divide-border text-sm">
-        {items.map((p, i) => (
-          <li key={p.id} className="flex items-center gap-2 py-1.5">
-            <span className="flex-1">
-              {p.nombre} <span className="text-xs text-muted-foreground">· {p.seleccion}</span>
-            </span>
-            <button
-              onClick={() => setItems(items.filter((_, j) => j !== i))}
-              className="text-destructive hover:text-destructive/80"
-            >
-              <Trash2 className="size-4" />
-            </button>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-3 grid grid-cols-[1fr_1fr_auto] gap-2">
-        <Input
-          value={n}
-          onChange={(e) => setN(e.target.value)}
-          placeholder={tStatic("admin.t.list.namePh")}
-        />
-        <Input
-          value={s}
-          onChange={(e) => setS(e.target.value)}
-          placeholder={tStatic("admin.t.list.selPh")}
-        />
-        <Button onClick={add} size="sm">
-          <Plus className="size-4" />
-        </Button>
-      </div>
-    </Card>
-  );
-}
-
 /* ---------------- Reportes ---------------- */
 export function ReportesTab() {
   const t = useT();
@@ -1105,9 +1014,23 @@ function DeadlineLockCardImpl() {
   );
 }
 
-/* ---------------- Picks de especiales por participante (admin) ---------------- */
-function ParticipantSpecialsPicks() {
-  const [open, setOpen] = useState(false);
+/* ---------------- Especiales por participante (admin) ---------------- */
+
+/** Celda "Nombre + (Selección)" para una respuesta de especial en texto libre. */
+function SpecialAnswer({ text }: { text: string | null }) {
+  if (!text) return <span className="text-muted-foreground">—</span>;
+  const { nombre, seleccion } = parseSpecial(text);
+  return (
+    <span>
+      {nombre}
+      {seleccion && <span className="text-xs text-muted-foreground"> · {seleccion}</span>}
+    </span>
+  );
+}
+
+/** Tabla de lo que escribió cada participante aprobado (goleador / arquero). */
+function SpecialsTable() {
+  const t = useT();
   const { data, isLoading } = useQuery({
     queryKey: ["admin-specials-picks"],
     queryFn: async () => {
@@ -1144,6 +1067,45 @@ function ParticipantSpecialsPicks() {
     staleTime: 30_000,
   });
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-6">
+        <Loader2 className="size-4 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+  if (!data || data.length === 0) {
+    return <p className="px-3 py-4 text-xs text-muted-foreground">{t("admin.t.esp.empty")}</p>;
+  }
+  return (
+    <table className="w-full text-sm">
+      <thead>
+        <tr className="border-b border-border bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
+          <th className="p-2">{t("admin.t.esp.colPart")}</th>
+          <th className="p-2">{t("admin.t.esp.colGol")}</th>
+          <th className="p-2">{t("admin.t.esp.colArq")}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((r) => (
+          <tr key={r.id} className="border-b border-border/60">
+            <td className="p-2 font-medium">{r.nombre}</td>
+            <td className="p-2">
+              <SpecialAnswer text={r.goleador} />
+            </td>
+            <td className="p-2">
+              <SpecialAnswer text={r.arquero} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+/** Versión plegable de la tabla, embebida en Resultados como apoyo al resultado oficial. */
+function ParticipantSpecialsPicks() {
+  const [open, setOpen] = useState(false);
   return (
     <div className="mt-5 border-t border-border pt-4">
       <button
@@ -1156,36 +1118,7 @@ function ParticipantSpecialsPicks() {
       </button>
       {open && (
         <div className="mt-3 overflow-x-auto rounded-md border border-border">
-          {isLoading ? (
-            <div className="flex justify-center py-6">
-              <Loader2 className="size-4 animate-spin text-muted-foreground" />
-            </div>
-          ) : !data || data.length === 0 ? (
-            <p className="px-3 py-4 text-xs text-muted-foreground">Sin participantes aprobados.</p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                  <th className="p-2">Participante</th>
-                  <th className="p-2">Goleador</th>
-                  <th className="p-2">Arquero</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((r) => (
-                  <tr key={r.id} className="border-b border-border/60">
-                    <td className="p-2 font-medium">{r.nombre}</td>
-                    <td className="p-2">
-                      {r.goleador ?? <span className="text-muted-foreground">—</span>}
-                    </td>
-                    <td className="p-2">
-                      {r.arquero ?? <span className="text-muted-foreground">—</span>}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <SpecialsTable />
         </div>
       )}
     </div>

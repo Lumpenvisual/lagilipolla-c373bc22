@@ -4,7 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type ExcelJS from "exceljs";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
-import type { TournamentState, PickRow } from "@/lib/polla";
+import { parseSpecial, type TournamentState, type PickRow } from "@/lib/polla";
 
 type AdminContext = { supabase: SupabaseClient<Database>; userId: string };
 
@@ -309,9 +309,10 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     y -= 14;
     page.drawText("SELECCIONES ESPECIALES", { x: 40, y, size: 10, font: helvBold, color: blue });
     y -= 14;
-    const gol = tournament.goleadores.find((p) => p.id === myPick.goleador_id);
-    const arq = tournament.arqueros.find((p) => p.id === myPick.arquero_id);
-    page.drawText(`Goleador del Mundial: ${gol ? `${gol.nombre} (${gol.seleccion})` : "—"}`, {
+    // goleador_id/arquero_id son texto libre del participante: "Nombre (Selección)".
+    const golText = myPick.goleador_id?.trim() || null;
+    const arqText = myPick.arquero_id?.trim() || null;
+    page.drawText(`Goleador del Mundial: ${golText ?? "—"}`, {
       x: 40,
       y,
       size: 9,
@@ -319,7 +320,7 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       color: dark,
     });
     y -= 12;
-    page.drawText(`Mejor arquero:        ${arq ? `${arq.nombre} (${arq.seleccion})` : "—"}`, {
+    page.drawText(`Mejor arquero:        ${arqText ?? "—"}`, {
       x: 40,
       y,
       size: 9,
@@ -441,10 +442,11 @@ export const generateMyPlanillaXlsx = createServerFn({ method: "POST" })
 
     const ws3 = wb.addWorksheet("Especiales");
     ws3.addRow(["Categoría", "Mi elección", "Selección"]);
-    const gol = tournament.goleadores.find((p) => p.id === myPick.goleador_id);
-    const arq = tournament.arqueros.find((p) => p.id === myPick.arquero_id);
-    ws3.addRow(["Goleador", gol?.nombre ?? "—", gol?.seleccion ?? ""]);
-    ws3.addRow(["Arquero", arq?.nombre ?? "—", arq?.seleccion ?? ""]);
+    // goleador_id/arquero_id son texto libre del participante: "Nombre (Selección)".
+    const gol = parseSpecial(myPick.goleador_id);
+    const arq = parseSpecial(myPick.arquero_id);
+    ws3.addRow(["Goleador", gol.nombre || "—", gol.seleccion]);
+    ws3.addRow(["Arquero", arq.nombre || "—", arq.seleccion]);
 
     return {
       filename: `gilipolla-planilla-${slugify(part.nombre)}-${nowStamp()}.xlsx`,

@@ -23,7 +23,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerificarCodigoRouteImport } from './routes/verificar.$codigo'
 import { Route as AdminResultadosRouteImport } from './routes/admin.resultados'
 import { Route as AdminReportesRouteImport } from './routes/admin.reportes'
-import { Route as AdminListasRouteImport } from './routes/admin.listas'
+import { Route as AdminEspecialesRouteImport } from './routes/admin.especiales'
 import { Route as AdminCronogramaRouteImport } from './routes/admin.cronograma'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -96,9 +96,9 @@ const AdminReportesRoute = AdminReportesRouteImport.update({
   path: '/reportes',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminListasRoute = AdminListasRouteImport.update({
-  id: '/listas',
-  path: '/listas',
+const AdminEspecialesRoute = AdminEspecialesRouteImport.update({
+  id: '/especiales',
+  path: '/especiales',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminCronogramaRoute = AdminCronogramaRouteImport.update({
@@ -119,7 +119,7 @@ export interface FileRoutesByFullPath {
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
-  '/admin/listas': typeof AdminListasRoute
+  '/admin/especiales': typeof AdminEspecialesRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
@@ -136,7 +136,7 @@ export interface FileRoutesByTo {
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
-  '/admin/listas': typeof AdminListasRoute
+  '/admin/especiales': typeof AdminEspecialesRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
@@ -155,7 +155,7 @@ export interface FileRoutesById {
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
-  '/admin/listas': typeof AdminListasRoute
+  '/admin/especiales': typeof AdminEspecialesRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
@@ -175,7 +175,7 @@ export interface FileRouteTypes {
     | '/reglas'
     | '/sitemap.xml'
     | '/admin/cronograma'
-    | '/admin/listas'
+    | '/admin/especiales'
     | '/admin/reportes'
     | '/admin/resultados'
     | '/verificar/$codigo'
@@ -192,7 +192,7 @@ export interface FileRouteTypes {
     | '/reglas'
     | '/sitemap.xml'
     | '/admin/cronograma'
-    | '/admin/listas'
+    | '/admin/especiales'
     | '/admin/reportes'
     | '/admin/resultados'
     | '/verificar/$codigo'
@@ -210,7 +210,7 @@ export interface FileRouteTypes {
     | '/reglas'
     | '/sitemap.xml'
     | '/admin/cronograma'
-    | '/admin/listas'
+    | '/admin/especiales'
     | '/admin/reportes'
     | '/admin/resultados'
     | '/verificar/$codigo'
@@ -331,11 +331,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/listas': {
-      id: '/admin/listas'
-      path: '/listas'
-      fullPath: '/admin/listas'
-      preLoaderRoute: typeof AdminListasRouteImport
+    '/admin/especiales': {
+      id: '/admin/especiales'
+      path: '/especiales'
+      fullPath: '/admin/especiales'
+      preLoaderRoute: typeof AdminEspecialesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/cronograma': {
@@ -350,7 +350,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminCronogramaRoute: typeof AdminCronogramaRoute
-  AdminListasRoute: typeof AdminListasRoute
+  AdminEspecialesRoute: typeof AdminEspecialesRoute
   AdminReportesRoute: typeof AdminReportesRoute
   AdminResultadosRoute: typeof AdminResultadosRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -358,7 +358,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCronogramaRoute: AdminCronogramaRoute,
-  AdminListasRoute: AdminListasRoute,
+  AdminEspecialesRoute: AdminEspecialesRoute,
   AdminReportesRoute: AdminReportesRoute,
   AdminResultadosRoute: AdminResultadosRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -382,3 +382,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
