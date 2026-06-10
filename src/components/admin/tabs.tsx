@@ -377,7 +377,12 @@ export function ResultadosTab() {
       <Card className="border-info/30 bg-card p-5 card-shadow">
         <h2 className="font-display text-xl text-info">{t("admin.t.res.markK")}</h2>
         <div className="mt-4 divide-y divide-border">
-          {draft.group_k_matches.map((m) => {
+          {(() => {
+            const kIds = new Set(draft.groups.K.teams.map((t) => t.id));
+            return draft.group_k_matches.filter(
+              (m) => kIds.has(m.local) && kIds.has(m.visitante),
+            );
+          })().map((m) => {
             const lName = draft.groups.K.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
             const vName =
               draft.groups.K.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
