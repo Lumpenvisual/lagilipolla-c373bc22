@@ -3,9 +3,19 @@ import { Card } from "@/components/ui/card";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import heroStadium from "@/assets/hero-stadium.jpg";
 
-const HIGHLIGHTS = [
+const HIGHLIGHTS: Array<{
+  icon: typeof Users;
+  value: string;
+  label: string;
+  sub?: string;
+}> = [
   { icon: Users, value: "48", label: "selecciones · 12 grupos" },
-  { icon: Trophy, value: "60 / 20", label: "premio 1° y 2° lugar" },
+  {
+    icon: Trophy,
+    value: "60% / 20%",
+    label: "1° y 2° lugar",
+    sub: "20% administración",
+  },
   { icon: CalendarDays, value: "Jun–Jul", label: "todo el Mundial 2026" },
 ];
 
@@ -38,11 +48,16 @@ export function AboutSection() {
           </p>
 
           <div className="mt-6 grid grid-cols-3 gap-3">
-            {HIGHLIGHTS.map(({ icon: Icon, value, label }) => (
+            {HIGHLIGHTS.map(({ icon: Icon, value, label, sub }) => (
               <Card key={label} className="border-border bg-card p-4 text-center card-shadow">
                 <Icon className="mx-auto size-5 text-gold" />
                 <p className="mt-2 font-display text-2xl leading-none">{value}</p>
                 <p className="mt-1 text-[11px] leading-tight text-muted-foreground">{label}</p>
+                {sub && (
+                  <p className="mt-0.5 text-[9px] leading-tight text-muted-foreground/70">
+                    {sub}
+                  </p>
+                )}
               </Card>
             ))}
           </div>
