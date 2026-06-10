@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useTournamentState } from "@/hooks/usePolla";
 import {
   isMatchLocked,
+  isSectionVisible,
   FASE_LABEL,
   GROUP_KEYS,
   type ExtraMatch,
@@ -149,11 +150,6 @@ function Cronograma() {
   const [dateJump, setDateJump] = useState<string>("all");
   const dayRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  // Una fase solo aparece en el cronograma si el admin la dejó activa (visible).
-  const visibility =
-    (ts as unknown as { visibility?: Record<string, boolean> } | undefined)?.visibility ?? {};
-  const isVisible = (k: string) => visibility[k] !== false;
-
   const rows = useMemo<Row[]>(() => {
     if (!ts) return [];
     /* Registro de todos los equipos en los 12 grupos para resolver nombres + grupo. */
@@ -193,10 +189,10 @@ function Cronograma() {
       groupKey: null,
       badge: badgeFor(m.fase, null),
     }));
+    // Una fase solo aparece en el cronograma si el admin la dejó activa (visible).
     return [...groupK, ...extra]
-      .filter((r) => isVisible(r.fase))
+      .filter((r) => isSectionVisible(ts.visibility, r.fase))
       .sort((a, b) => sortMs(a.fecha) - sortMs(b.fecha));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ts]);
 
   const byDay = useMemo(() => {

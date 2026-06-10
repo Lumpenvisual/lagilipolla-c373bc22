@@ -6,7 +6,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePollaLeaderboard, useTournamentState } from "@/hooks/usePolla";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import { GROUP_KEYS, FASE_LABEL, type ExtraMatch, type GroupKey } from "@/lib/polla";
+import {
+  GROUP_KEYS,
+  FASE_LABEL,
+  isSectionVisible,
+  type ExtraMatch,
+  type GroupKey,
+  type VisibilityKey,
+} from "@/lib/polla";
 
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
@@ -34,10 +41,8 @@ function Lb() {
   const { data: ts } = useTournamentState();
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const visibilityTs =
-    ((ts as unknown as { visibility?: Record<string, boolean> } | undefined)?.visibility) ?? {};
-  const showGoleador = visibilityTs.goleador !== false && !!ts?.goleador_id?.trim();
-  const showArquero = visibilityTs.arquero !== false && !!ts?.arquero_id?.trim();
+  const showGoleador = isSectionVisible(ts?.visibility, "goleador") && !!ts?.goleador_id?.trim();
+  const showArquero = isSectionVisible(ts?.visibility, "arquero") && !!ts?.arquero_id?.trim();
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:py-10">
@@ -180,9 +185,7 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
     return <p className="text-xs text-muted-foreground">Sin planilla guardada todavía.</p>;
   }
 
-  const visibility =
-    ((ts as unknown as { visibility?: Record<string, boolean> } | undefined)?.visibility) ?? {};
-  const isVisible = (k: string) => visibility[k] !== false;
+  const isVisible = (k: VisibilityKey) => isSectionVisible(ts?.visibility, k);
 
   const teamLabelInGroup = (k: GroupKey, id: string | null): string => {
     if (!id || !ts) return "—";

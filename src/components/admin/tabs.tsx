@@ -543,8 +543,10 @@ export function CronogramaTab() {
       } as Phases);
       setExtras(ts.extra_matches ?? []);
       setGroupMatches(ts.group_k_matches ?? []);
-      const v = (ts as unknown as { visibility?: Record<string, unknown> }).visibility ?? {};
-      setVisibility({ ...DEFAULT_VISIBILITY, ...normObj(v) });
+      setVisibility({
+        ...DEFAULT_VISIBILITY,
+        ...normObj((ts.visibility ?? {}) as Record<string, unknown>),
+      });
     }
   }, [ts]);
 

@@ -59,12 +59,23 @@ export type Phases = Record<Exclude<Fase, "grupos" | "tercero">, boolean> & {
   tercero?: boolean;
 };
 
+export type VisibilityKey = Fase | "goleador" | "arquero" | "historico";
+/** Flags de visibilidad por fase/bloque. Ausente = visible. */
+export type Visibility = Partial<Record<VisibilityKey, boolean>>;
+
+/** Visible salvo apagado explícito. Tolera "false"/"true" string de registros jsonb antiguos. */
+export function isSectionVisible(v: Visibility | undefined, key: VisibilityKey): boolean {
+  const val = v?.[key] as boolean | string | undefined;
+  return val !== false && val !== "false";
+}
+
 export type TournamentState = {
   id: number;
   groups: Groups;
   group_k_matches: GroupMatch[];
   extra_matches?: ExtraMatch[];
   phases?: Phases;
+  visibility?: Visibility;
   goleadores: SpecialPlayer[];
   arqueros: SpecialPlayer[];
   goleador_id: string | null;

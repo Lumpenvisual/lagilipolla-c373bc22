@@ -32,12 +32,14 @@ import {
   slotOptions,
   fmtFecha,
   isMatchLocked,
+  isSectionVisible,
   FASE_LABEL,
   type Fase,
   type ExtraMatch,
   type GroupKey,
   type PickGroups,
   type PickMatches,
+  type VisibilityKey,
 } from "@/lib/polla";
 
 export const Route = createFileRoute("/planilla")({
@@ -143,9 +145,8 @@ function Planilla() {
   }
   if (!ts) return null;
 
-  const visibility = ((ts as unknown as { visibility?: Record<string, boolean> }).visibility) ?? {};
-  const isVisible = (k: string) => visibility[k] !== false;
-  const extraMatches: ExtraMatch[] = (ts.extra_matches ?? []) as ExtraMatch[];
+  const isVisible = (k: VisibilityKey) => isSectionVisible(ts.visibility, k);
+  const extraMatches: ExtraMatch[] = ts.extra_matches ?? [];
     const phaseOrder: Fase[] = ["grupos", "dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
   const matchesByPhase = phaseOrder
     .filter((f) => isVisible(f))
