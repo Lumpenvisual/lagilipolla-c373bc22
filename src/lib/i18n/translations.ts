@@ -633,7 +633,8 @@ export const translations: Record<Lang, Dict> = {
 
     // ---------- Planilla ----------
     "planilla.title": "📝 Mi planilla",
-    "planilla.subtitle": "Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.",
+    "planilla.subtitle":
+      "Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.",
     "planilla.closedBanner": "La planilla está cerrada. Solo lectura.",
     "planilla.notApproved": "Aún no tienes el pago aprobado.",
     "planilla.goAccount": "Ir a mi cuenta",
@@ -649,7 +650,8 @@ export const translations: Record<Lang, Dict> = {
     "planilla.group.candidate": "(candidato)",
     "planilla.k.title": "Grupo K · Marcadores 🇨🇴",
     "planilla.k.progress": "{done} / 6 partidos",
-    "planilla.k.hint": "Predice el resultado exacto. Si Colombia juega de visitante, va a la derecha.",
+    "planilla.k.hint":
+      "Predice el resultado exacto. Si Colombia juega de visitante, va a la derecha.",
     "planilla.k.blocked": "Bloqueado · faltan menos de 24h",
     "planilla.esp.title": "Especiales",
     "planilla.esp.progress": "{done} / 2",
@@ -663,7 +665,8 @@ export const translations: Record<Lang, Dict> = {
     "planilla.extra.progress": "{done} / {total} partidos",
     "planilla.extra.empty": "El admin aún no ha agregado partidos para esta fase.",
     "planilla.confirm.title": "Confirmar cambios",
-    "planilla.confirm.desc": "Vas a guardar {groups} grupos, {matches} marcadores de grupo K, {extras} marcadores eliminatorios y {esp} especiales. ¿Confirmas?",
+    "planilla.confirm.desc":
+      "Vas a guardar {groups} grupos, {matches} marcadores de grupo K, {extras} marcadores eliminatorios y {esp} especiales. ¿Confirmas?",
     "planilla.confirm.cta": "Sí, guardar",
 
     // ---------- Admin tabs (sub-rutas) ----------
@@ -679,12 +682,14 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.toast.backupDeleted": "Eliminado",
     "admin.t.toast.locked": "Planillas cerradas",
     "admin.t.toast.unlocked": "Planillas reabiertas",
-    "admin.t.confirm.deletePart": "¿Eliminar a \"{name}\"? Se borrarán también su planilla y comprobantes. Esta acción no se puede deshacer.",
+    "admin.t.confirm.deletePart":
+      '¿Eliminar a "{name}"? Se borrarán también su planilla y comprobantes. Esta acción no se puede deshacer.',
     "admin.t.confirm.deleteBackup": "¿Eliminar respaldo {path}?",
     "admin.t.confirm.lockNow": "¿Cerrar planillas ahora? Los usuarios no podrán editar.",
     "admin.t.confirm.unlock": "¿Reabrir planillas?",
     "admin.t.pagos.emptyTitle": "Sin inscritos todavía",
-    "admin.t.pagos.emptyDesc": "Cuando alguien se registre y suba su comprobante, aparecerá aquí para aprobar o rechazar.",
+    "admin.t.pagos.emptyDesc":
+      "Cuando alguien se registre y suba su comprobante, aparecerá aquí para aprobar o rechazar.",
     "admin.t.pagos.loading": "Cargando inscritos…",
     "admin.t.pagos.pending": "🟡 {n} pendientes",
     "admin.t.pagos.approved": "✅ {n} aprobados",
@@ -694,7 +699,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Acciones",
     "admin.t.pagos.deleteTitle": "Mover a la papelera (eliminar)",
     "admin.t.res.repechajes": "Repechajes",
-    "admin.t.res.repechajesHint": "Cuando se resuelva un repechaje, edita el nombre del equipo \"Ganador Repechaje X\". Si en un partido de eliminatorias hay repechaje (alargue o penales), solo se tendrá en cuenta el marcador de los primeros 90 minutos, no el del repechaje.",
+    "admin.t.res.repechajesHint":
+      'Cuando se resuelva un repechaje, edita el nombre del equipo "Ganador Repechaje X". Si en un partido de eliminatorias hay repechaje (alargue o penales), solo se tendrá en cuenta el marcador de los primeros 90 minutos, no el del repechaje.',
     "admin.t.res.groups": "Resultados de grupos · 1° y 2°",
     "admin.t.res.markK": "Marcadores Grupo K",
     "admin.t.res.especiales": "Especiales (resultado oficial)",
@@ -708,7 +714,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.list.namePh": "Nombre",
     "admin.t.list.selPh": "Selección",
     "admin.t.cron.phasesTitle": "Activar fases del torneo",
-    "admin.t.cron.phasesHint": "Activa una fase para que los participantes puedan marcar sus pronósticos. Los puntos ya calculados no se ven afectados.",
+    "admin.t.cron.phasesHint":
+      "Cada fase tiene un solo interruptor: activarla la hace visible en el cronograma y la planilla y habilita a los participantes para cargar sus marcadores; desactivarla la oculta. Los puntos ya calculados no se ven afectados.",
     "admin.t.cron.addMatch": "Agregar partido",
     "admin.t.cron.empty": "Sin partidos. Cuando se definan los cruces, agrégalos aquí.",
     "admin.t.cron.phLocal": "Local (ej: 1A o Colombia)",
@@ -718,8 +725,9 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.cron.scoreLabel": "Marcador",
     "admin.t.cron.deleteMatch": "Eliminar partido",
     "admin.t.cron.save": "Guardar cronograma",
-    "admin.t.cron.visTitle": "Mostrar / ocultar en la planilla",
-    "admin.t.cron.visHint": "Decide qué fases y bloques ven los participantes en su planilla y reportes. Apagar una fase no borra los marcadores; solo la oculta.",
+    "admin.t.cron.visTitle": "Premios especiales",
+    "admin.t.cron.visHint":
+      "Muestra u oculta los bloques de goleador, arquero e histórico en la planilla y reportes. Las fases del torneo se controlan arriba con su interruptor.",
     "admin.t.cron.vis.grupos": "Fase de grupos",
     "admin.t.cron.vis.dieciseisavos": "Dieciseisavos de final",
     "admin.t.cron.vis.octavos": "Octavos de final",
@@ -738,10 +746,12 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.rep.leaderboard": "Leaderboard",
     "admin.t.rep.participants": "Participantes y pagos",
     "admin.t.rep.backupTitle": "💾 Backup completo",
-    "admin.t.rep.backupDesc": "Descarga un Excel con todas las tablas (participants, picks, tournament_state, user_roles, admin_audit). Guárdalo en un lugar seguro como respaldo o para recuperación de desastres.",
+    "admin.t.rep.backupDesc":
+      "Descarga un Excel con todas las tablas (participants, picks, tournament_state, user_roles, admin_audit). Guárdalo en un lugar seguro como respaldo o para recuperación de desastres.",
     "admin.t.rep.backupBtn": "Descargar backup completo",
     "history.title": "🕘 Histórico de marcadores",
-    "history.descMine": "Cada cambio que haces en tus marcadores queda registrado. Descárgalo cuando quieras.",
+    "history.descMine":
+      "Cada cambio que haces en tus marcadores queda registrado. Descárgalo cuando quieras.",
     "history.descAll": "Auditoría completa de cambios de marcadores de todos los participantes.",
     "history.empty": "Aún no hay cambios registrados.",
     "history.csv": "Descargar CSV",
@@ -753,7 +763,8 @@ export const translations: Record<Lang, Dict> = {
     "history.col.to": "Nuevo",
     "history.hidden": "El admin ha desactivado la visualización del histórico.",
     "admin.t.cloud.title": "Respaldos en la nube",
-    "admin.t.cloud.desc": "Genera un respaldo .xlsx y guárdalo en el bucket privado backups. Solo el admin puede ver, descargar o eliminar estos archivos.",
+    "admin.t.cloud.desc":
+      "Genera un respaldo .xlsx y guárdalo en el bucket privado backups. Solo el admin puede ver, descargar o eliminar estos archivos.",
     "admin.t.cloud.create": "Crear respaldo ahora",
     "admin.t.cloud.history": "Historial",
     "admin.t.cloud.loading": "Cargando…",
@@ -989,7 +1000,8 @@ export const translations: Record<Lang, Dict> = {
 
     // ---------- Registration ----------
     "reg.title": "Sign up",
-    "reg.subtitle": "Pick an alias and a 4-digit PIN. That's all you need to access your predictions.",
+    "reg.subtitle":
+      "Pick an alias and a 4-digit PIN. That's all you need to access your predictions.",
     "reg.alias": "Name or alias",
     "reg.aliasPh": "Your alias",
     "reg.pin": "PIN (4 digits)",
@@ -1054,8 +1066,7 @@ export const translations: Record<Lang, Dict> = {
     "pred.defaultContest": "Contest",
     "pred.progress": "Progress",
     "pred.ai.title": "AI auto-prediction",
-    "pred.ai.subtitle":
-      "The AI will analyze team stats and complete {n} match(es) for you.",
+    "pred.ai.subtitle": "The AI will analyze team stats and complete {n} match(es) for you.",
     "pred.ai.none": "No open matches to auto-fill right now.",
     "pred.ai.cta": "Auto-predict with AI",
     "pred.ai.running": "Analyzing matches…",
@@ -1066,8 +1077,7 @@ export const translations: Record<Lang, Dict> = {
     "pred.ai.success": "Done! The AI predicted {n} match(es).",
     "pred.ai.error": "Couldn't generate predictions. Try again.",
     "pred.importantTitle": "Important:",
-    "pred.important":
-      "enter the score and press Save. Once saved, the prediction can't be edited.",
+    "pred.important": "enter the score and press Save. Once saved, the prediction can't be edited.",
     "pred.tbaNote_one":
       "{n} match with TBA teams will be predictable once the qualifiers are known.",
     "pred.tbaNote_other":
@@ -1245,7 +1255,8 @@ export const translations: Record<Lang, Dict> = {
       "or in cash to the organizer. Include your alias in the message so we can match your payment.",
     "reglas.ins.li4a": "The organizer marks your payment as",
     "reglas.ins.li4b": "approved",
-    "reglas.ins.li4c": ". Only then do you appear on that contest's table and become eligible for the prize.",
+    "reglas.ins.li4c":
+      ". Only then do you appear on that contest's table and become eligible for the prize.",
     "reglas.ins.li5":
       "Each contest closes for sign-ups when its first in-scope match starts (the deadline is shown on the contest).",
     "reglas.pro.title": "Predictions",
@@ -1291,8 +1302,7 @@ export const translations: Record<Lang, Dict> = {
     "reglas.prizes.tie":
       "In case of ties on points, the pot is redistributed according to the tiebreaker rules below.",
     "reglas.tie.title": "Tiebreakers",
-    "reglas.tie.intro":
-      "If players are tied on points, these criteria are applied in order:",
+    "reglas.tie.intro": "If players are tied on points, these criteria are applied in order:",
     "reglas.tie.li1": "Most exact scores",
     "reglas.tie.li1b": "(3 points).",
     "reglas.tie.li2a": "If still tied, the tied players",
@@ -1303,8 +1313,7 @@ export const translations: Record<Lang, Dict> = {
     "reglas.gen.title": "General Rules",
     "reglas.gen.li1":
       "You can enter as many contests as you like; each is paid for and awarded separately.",
-    "reglas.gen.li2":
-      "A match score is the same across all your contests: captured only once.",
+    "reglas.gen.li2": "A match score is the same across all your contests: captured only once.",
     "reglas.gen.li3":
       "The organizer may resolve any situation not covered by these rules, and their decisions are final.",
     "reglas.gen.li4":
@@ -1316,8 +1325,7 @@ export const translations: Record<Lang, Dict> = {
     "reglas.cal.li2b":
       "when its first in-scope match starts. No sign-ups accepted after that time.",
     "reglas.cal.li3a": "During the tournament:",
-    "reglas.cal.li3b":
-      "each score can be saved up until kickoff; once saved it can't be edited.",
+    "reglas.cal.li3b": "each score can be saved up until kickoff; once saved it can't be edited.",
     "reglas.cal.li4a": "When a contest closes:",
     "reglas.cal.li4b": "points are tallied and its table and pot distribution are settled.",
     "reglas.footer.viewContests": "View contests",
@@ -1415,7 +1423,8 @@ export const translations: Record<Lang, Dict> = {
     "planilla.extra.progress": "{done} / {total} matches",
     "planilla.extra.empty": "Admin hasn't added matches for this phase yet.",
     "planilla.confirm.title": "Confirm changes",
-    "planilla.confirm.desc": "You'll save {groups} groups, {matches} group K scores, {extras} knockout scores and {esp} specials. Confirm?",
+    "planilla.confirm.desc":
+      "You'll save {groups} groups, {matches} group K scores, {extras} knockout scores and {esp} specials. Confirm?",
     "planilla.confirm.cta": "Yes, save",
 
     // ---------- Admin tabs ----------
@@ -1431,7 +1440,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.toast.backupDeleted": "Deleted",
     "admin.t.toast.locked": "Ballots closed",
     "admin.t.toast.unlocked": "Ballots reopened",
-    "admin.t.confirm.deletePart": "Delete \"{name}\"? Their ballot and receipts will also be removed. This cannot be undone.",
+    "admin.t.confirm.deletePart":
+      'Delete "{name}"? Their ballot and receipts will also be removed. This cannot be undone.',
     "admin.t.confirm.deletePartTitle": "Delete participant",
     "admin.t.confirm.deletePartType": "To confirm, type the exact name: {name}",
     "admin.t.confirm.deletePartCta": "Delete permanently",
@@ -1439,7 +1449,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.confirm.lockNow": "Close ballots now? Users won't be able to edit.",
     "admin.t.confirm.unlock": "Reopen ballots?",
     "admin.t.pagos.emptyTitle": "No registrants yet",
-    "admin.t.pagos.emptyDesc": "Once someone registers and uploads their receipt, they'll appear here to approve or reject.",
+    "admin.t.pagos.emptyDesc":
+      "Once someone registers and uploads their receipt, they'll appear here to approve or reject.",
     "admin.t.pagos.loading": "Loading registrants…",
     "admin.t.pagos.pending": "🟡 {n} pending",
     "admin.t.pagos.approved": "✅ {n} approved",
@@ -1449,7 +1460,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Actions",
     "admin.t.pagos.deleteTitle": "Move to trash (delete)",
     "admin.t.res.repechajes": "Play-offs",
-    "admin.t.res.repechajesHint": "Once a play-off is resolved, edit the \"Play-off X Winner\" team name. In knockout matches with a tie-breaker (extra time or penalty shoot-out), only the 90-minute score counts — not the shoot-out result.",
+    "admin.t.res.repechajesHint":
+      'Once a play-off is resolved, edit the "Play-off X Winner" team name. In knockout matches with a tie-breaker (extra time or penalty shoot-out), only the 90-minute score counts — not the shoot-out result.',
     "admin.t.res.groups": "Group results · 1st and 2nd",
     "admin.t.res.markK": "Group K scores",
     "admin.t.res.especiales": "Specials (official result)",
@@ -1463,7 +1475,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.list.namePh": "Name",
     "admin.t.list.selPh": "National team",
     "admin.t.cron.phasesTitle": "Activate tournament phases",
-    "admin.t.cron.phasesHint": "Activate a phase so participants can submit picks for it. Already-computed points are not affected.",
+    "admin.t.cron.phasesHint":
+      "Each phase has a single switch: turning it on makes it visible on the schedule and ballot and lets participants submit their scores; turning it off hides it. Already-computed points are not affected.",
     "admin.t.cron.addMatch": "Add match",
     "admin.t.cron.empty": "No matches. When fixtures are set, add them here.",
     "admin.t.cron.phLocal": "Home (e.g. 1A or Colombia)",
@@ -1473,8 +1486,9 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.cron.scoreLabel": "Score",
     "admin.t.cron.deleteMatch": "Delete match",
     "admin.t.cron.save": "Save schedule",
-    "admin.t.cron.visTitle": "Show / hide on the ballot",
-    "admin.t.cron.visHint": "Choose which phases and blocks participants can see on their ballot and reports. Hiding a phase does not delete scores; it just hides it.",
+    "admin.t.cron.visTitle": "Special awards",
+    "admin.t.cron.visHint":
+      "Show or hide the top scorer, goalkeeper and history blocks on the ballot and reports. Tournament phases are controlled above with their own switch.",
     "admin.t.cron.vis.grupos": "Group stage",
     "admin.t.cron.vis.dieciseisavos": "Round of 16",
     "admin.t.cron.vis.octavos": "Round of 16",
@@ -1490,7 +1504,8 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.rep.leaderboard": "Leaderboard",
     "admin.t.rep.participants": "Participants and payments",
     "admin.t.rep.backupTitle": "💾 Full backup",
-    "admin.t.rep.backupDesc": "Download an Excel with every table (participants, picks, tournament_state, user_roles, admin_audit). Keep it safe as a backup or for disaster recovery.",
+    "admin.t.rep.backupDesc":
+      "Download an Excel with every table (participants, picks, tournament_state, user_roles, admin_audit). Keep it safe as a backup or for disaster recovery.",
     "admin.t.rep.backupBtn": "Download full backup",
     "history.title": "🕘 Score history",
     "history.descMine": "Every change you make to your scores is logged. Download anytime.",
@@ -1505,7 +1520,8 @@ export const translations: Record<Lang, Dict> = {
     "history.col.to": "New",
     "history.hidden": "Admin has disabled history visualization.",
     "admin.t.cloud.title": "Cloud backups",
-    "admin.t.cloud.desc": "Generate an .xlsx backup and store it in the private backups bucket. Only the admin can view, download or delete these files.",
+    "admin.t.cloud.desc":
+      "Generate an .xlsx backup and store it in the private backups bucket. Only the admin can view, download or delete these files.",
     "admin.t.cloud.create": "Create backup now",
     "admin.t.cloud.history": "History",
     "admin.t.cloud.loading": "Loading…",
