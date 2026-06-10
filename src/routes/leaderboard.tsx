@@ -52,7 +52,8 @@ function Lb() {
         {rows.length} participantes · LA GILIPOLLA 2026
       </p>
       <p className="mt-2 text-xs text-muted-foreground">
-        Toca el nombre de un participante para ver su planilla. Desempates: aciertos de 5, luego 3, luego 2.
+        Toca el nombre de un participante para ver su planilla. Desempates: aciertos de 5, luego 3,
+        luego 2.
       </p>
 
       {(showGoleador || showArquero) && (
@@ -113,7 +114,9 @@ function Lb() {
                       className={`border-b border-border/60 cursor-pointer hover:bg-muted/30 ${bg} ${me ? "outline outline-1 -outline-offset-1 outline-info" : ""}`}
                       onClick={() => setOpenId(isOpen ? null : r.participant_id)}
                     >
-                      <td className="p-2 sm:p-3 font-display text-lg">{MEDAL[r.posicion] ?? r.posicion}</td>
+                      <td className="p-2 sm:p-3 font-display text-lg">
+                        {MEDAL[r.posicion] ?? r.posicion}
+                      </td>
                       <td className="p-2 sm:p-3 font-medium">
                         <div className="flex items-center gap-1.5 truncate">
                           {isOpen ? (
@@ -164,9 +167,12 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
   const { data, isLoading } = useQuery({
     queryKey: ["public-pick", participantId],
     queryFn: async (): Promise<PublicPick | null> => {
-      const { data, error } = await supabase.rpc("get_public_pick" as never, {
-        _participant_id: participantId,
-      } as never);
+      const { data, error } = await supabase.rpc(
+        "get_public_pick" as never,
+        {
+          _participant_id: participantId,
+        } as never,
+      );
       if (error) throw error;
       const row = Array.isArray(data) ? (data as PublicPick[])[0] : (data as PublicPick | null);
       return row ?? null;
@@ -206,64 +212,79 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
   return (
     <div className="space-y-4 text-sm">
       {(isVisible("goleador") || isVisible("arquero")) && (
-      <section>
-        <h4 className="font-display text-xs uppercase tracking-wider text-destructive">Especiales</h4>
-        <ul className="mt-1 grid gap-1 sm:grid-cols-2">
-          {isVisible("goleador") && (
-            <li><span className="text-muted-foreground">Goleador:</span> {data.goleador_id || "—"}</li>
-          )}
-          {isVisible("arquero") && (
-            <li><span className="text-muted-foreground">Arquero:</span> {data.arquero_id || "—"}</li>
-          )}
-        </ul>
-      </section>
+        <section>
+          <h4 className="font-display text-xs uppercase tracking-wider text-destructive">
+            Especiales
+          </h4>
+          <ul className="mt-1 grid gap-1 sm:grid-cols-2">
+            {isVisible("goleador") && (
+              <li>
+                <span className="text-muted-foreground">Goleador:</span> {data.goleador_id || "—"}
+              </li>
+            )}
+            {isVisible("arquero") && (
+              <li>
+                <span className="text-muted-foreground">Arquero:</span> {data.arquero_id || "—"}
+              </li>
+            )}
+          </ul>
+        </section>
       )}
 
       {isVisible("grupos") && (
-      <section>
-        <h4 className="font-display text-xs uppercase tracking-wider text-gold">Clasificados por grupo</h4>
-        <div className="mt-1 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-          {GROUP_KEYS.map((k) => {
-            const sel = data.groups?.[k];
-            return (
-              <div key={k} className="rounded-md border border-border bg-muted/20 px-2 py-1">
-                <div className="text-[11px] uppercase text-muted-foreground">Grupo {k}</div>
-                <div>1º {teamLabelInGroup(k, sel?.pos1 ?? null)}</div>
-                <div>2º {teamLabelInGroup(k, sel?.pos2 ?? null)}</div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-      )}
-
-      {ts && isVisible("grupos") && (() => {
-        const kIds = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
-        const kMatches = ts.group_k_matches.filter(
-          (m) => kIds.has(m.local) && kIds.has(m.visitante),
-        );
-        if (kMatches.length === 0) return null;
-        return (
         <section>
-          <h4 className="font-display text-xs uppercase tracking-wider text-info">Marcadores · Grupo K</h4>
-          <ul className="mt-1 divide-y divide-border/60">
-            {kMatches.map((m) => {
-              const lName = ts.groups.K?.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
-              const vName = ts.groups.K?.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
-              const p = data.group_k_matches?.[m.id];
+          <h4 className="font-display text-xs uppercase tracking-wider text-gold">
+            Clasificados por grupo
+          </h4>
+          <div className="mt-1 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
+            {GROUP_KEYS.map((k) => {
+              const sel = data.groups?.[k];
               return (
-                <li key={m.id} className="flex items-center justify-between gap-2 py-1">
-                  <span className="truncate">{lName} vs {vName}</span>
-                  <span className="font-mono text-gold">
-                    {p?.gh ?? "—"}–{p?.ga ?? "—"}
-                  </span>
-                </li>
+                <div key={k} className="rounded-md border border-border bg-muted/20 px-2 py-1">
+                  <div className="text-[11px] uppercase text-muted-foreground">Grupo {k}</div>
+                  <div>1º {teamLabelInGroup(k, sel?.pos1 ?? null)}</div>
+                  <div>2º {teamLabelInGroup(k, sel?.pos2 ?? null)}</div>
+                </div>
               );
             })}
-          </ul>
+          </div>
         </section>
-        );
-      })()}
+      )}
+
+      {ts &&
+        isVisible("grupos") &&
+        (() => {
+          const kIds = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
+          const kMatches = ts.group_k_matches.filter(
+            (m) => kIds.has(m.local) && kIds.has(m.visitante),
+          );
+          if (kMatches.length === 0) return null;
+          return (
+            <section>
+              <h4 className="font-display text-xs uppercase tracking-wider text-info">
+                Marcadores · Grupo K
+              </h4>
+              <ul className="mt-1 divide-y divide-border/60">
+                {kMatches.map((m) => {
+                  const lName = ts.groups.K?.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
+                  const vName =
+                    ts.groups.K?.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
+                  const p = data.group_k_matches?.[m.id];
+                  return (
+                    <li key={m.id} className="flex items-center justify-between gap-2 py-1">
+                      <span className="truncate">
+                        {lName} vs {vName}
+                      </span>
+                      <span className="font-mono text-gold">
+                        {p?.gh ?? "—"}–{p?.ga ?? "—"}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })()}
 
       {phaseOrder.map((fase) => {
         if (!isVisible(fase)) return null;
@@ -271,13 +292,17 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
         if (list.length === 0) return null;
         return (
           <section key={fase}>
-            <h4 className="font-display text-xs uppercase tracking-wider text-info">{FASE_LABEL[fase]}</h4>
+            <h4 className="font-display text-xs uppercase tracking-wider text-info">
+              {FASE_LABEL[fase]}
+            </h4>
             <ul className="mt-1 divide-y divide-border/60">
               {list.map((m) => {
                 const p = data.extra_matches?.[m.id];
                 return (
                   <li key={m.id} className="flex items-center justify-between gap-2 py-1">
-                    <span className="truncate">{m.local} vs {m.visitante}</span>
+                    <span className="truncate">
+                      {m.local} vs {m.visitante}
+                    </span>
                     <span className="font-mono text-gold">
                       {p?.gh ?? "—"}–{p?.ga ?? "—"}
                     </span>

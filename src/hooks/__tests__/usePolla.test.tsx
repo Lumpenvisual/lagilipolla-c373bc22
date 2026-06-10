@@ -42,7 +42,9 @@ const fromMock = vi.fn((table: string) => {
       upsert: upsertMock,
     };
   }
-  return { select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }) }) };
+  return {
+    select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }) }),
+  };
 });
 
 vi.mock("@/integrations/supabase/client", () => ({
@@ -52,12 +54,7 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 
-import {
-  useTournamentState,
-  useMyPick,
-  useSavePick,
-  usePollaLeaderboard,
-} from "@/hooks/usePolla";
+import { useTournamentState, useMyPick, useSavePick, usePollaLeaderboard } from "@/hooks/usePolla";
 
 function makeWrapper() {
   const qc = new QueryClient({
@@ -129,9 +126,42 @@ describe("usePollaLeaderboard", () => {
   it("calls the RPC and sorts rows by posicion ascending", async () => {
     rpcMock.mockResolvedValueOnce({
       data: [
-        { participant_id: "b", nombre: "B", posicion: 3, puntos_total: 10, puntos_grupos: 0, puntos_partidos: 0, puntos_especiales: 0, aciertos_5: 0, aciertos_3: 0, aciertos_2: 0 },
-        { participant_id: "a", nombre: "A", posicion: 1, puntos_total: 30, puntos_grupos: 0, puntos_partidos: 0, puntos_especiales: 0, aciertos_5: 0, aciertos_3: 0, aciertos_2: 0 },
-        { participant_id: "c", nombre: "C", posicion: 2, puntos_total: 20, puntos_grupos: 0, puntos_partidos: 0, puntos_especiales: 0, aciertos_5: 0, aciertos_3: 0, aciertos_2: 0 },
+        {
+          participant_id: "b",
+          nombre: "B",
+          posicion: 3,
+          puntos_total: 10,
+          puntos_grupos: 0,
+          puntos_partidos: 0,
+          puntos_especiales: 0,
+          aciertos_5: 0,
+          aciertos_3: 0,
+          aciertos_2: 0,
+        },
+        {
+          participant_id: "a",
+          nombre: "A",
+          posicion: 1,
+          puntos_total: 30,
+          puntos_grupos: 0,
+          puntos_partidos: 0,
+          puntos_especiales: 0,
+          aciertos_5: 0,
+          aciertos_3: 0,
+          aciertos_2: 0,
+        },
+        {
+          participant_id: "c",
+          nombre: "C",
+          posicion: 2,
+          puntos_total: 20,
+          puntos_grupos: 0,
+          puntos_partidos: 0,
+          puntos_especiales: 0,
+          aciertos_5: 0,
+          aciertos_3: 0,
+          aciertos_2: 0,
+        },
       ],
       error: null,
     });

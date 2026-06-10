@@ -3,6 +3,7 @@
 Cuatro frentes en este orden. Todos son cambios frontend/SEO — no toco la base de datos ni reglas de negocio.
 
 ### 1. Partir `admin.tsx` en sub-rutas
+
 Hoy es un monolito de 974 líneas. Lo convierto en layout + 4 hijos:
 
 ```text
@@ -18,17 +19,20 @@ src/routes/
 Cada hijo importa solo lo que necesita → bundle del admin se parte automáticamente. La lógica actual se mueve **tal cual** a cada archivo, sin cambiar queries ni mutations.
 
 ### 2. SEO + `<html lang>` dinámico
+
 - `head()` único por ruta pública (`index`, `reglas`, `cronograma`, `leaderboard`, `dashboard`, `planilla`, `registro`, `login`, `verificar.$codigo`) con `title`, `description`, `og:title`, `og:description`, `og:url` y `canonical` por hoja. Sin `og:image` salvo que existan imágenes reales.
 - Rutas privadas (`admin*`, `dashboard`) reciben `robots: noindex`.
 - `__root.tsx`: el `<html>` toma `lang` del A11yProvider (`lang === 'en' ? 'en' : 'es'`). Lo expongo vía `document.documentElement.lang` en un `useEffect` dentro del provider (compatible con SSR — el initial es `es`, hidrata al idioma elegido).
 - JSON-LD `Organization` en `__root.tsx`, `FAQPage` en `reglas`.
 
 ### 3. Completar i18n
+
 - Auditoría con `rg` para detectar strings literales en JSX/JSX-attrs (`>texto<`, `title=`, `aria-label=`, `placeholder=`) en `admin*`, `reglas.tsx`, `planilla.tsx`, `cronograma.tsx`, `leaderboard.tsx`, `dashboard.tsx`.
 - Agrego claves faltantes a `translations.ts` (ES + EN) y reemplazo con `t()`.
 - Toasts (`sonner`) también pasan por `t()`.
 
 ### 4. UX admin: tablas legibles + empty/loading states
+
 - Componente compartido `<DataTable>` en `src/components/admin/DataTable.tsx` con: zebra (`odd:bg-muted/30`), `sticky top-0` en `thead`, `max-h` + scroll, hover row.
 - `<EmptyState icon title description action?>` reutilizable.
 - `<LoadingState>` con skeleton (shadcn `Skeleton`).

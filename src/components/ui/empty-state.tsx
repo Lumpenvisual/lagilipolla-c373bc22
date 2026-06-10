@@ -18,11 +18,13 @@ export function EmptyState({ icon, title, description, action, className }: Empt
       )}
       role="status"
     >
-      {icon && <div className="text-muted-foreground" aria-hidden>{icon}</div>}
-      <h3 className="font-display text-base text-foreground">{title}</h3>
-      {description && (
-        <p className="max-w-sm text-sm text-muted-foreground">{description}</p>
+      {icon && (
+        <div className="text-muted-foreground" aria-hidden>
+          {icon}
+        </div>
       )}
+      <h3 className="font-display text-base text-foreground">{title}</h3>
+      {description && <p className="max-w-sm text-sm text-muted-foreground">{description}</p>}
       {action && <div className="mt-1">{action}</div>}
     </div>
   );
