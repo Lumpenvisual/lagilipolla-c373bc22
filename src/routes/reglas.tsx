@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import { useLanguage } from "@/lib/i18n";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/reglas")({
   head: () => ({
@@ -189,9 +190,11 @@ function ReglasPage() {
         <Button asChild variant="hero" size="lg">
           <Link to="/registro">{L.ctaRegister}</Link>
         </Button>
-        <Button asChild variant="secondary" size="lg">
-          <Link to="/planilla">{L.ctaSheet}</Link>
-        </Button>
+        {user && (
+          <Button asChild variant="secondary" size="lg">
+            <Link to="/planilla">{L.ctaSheet}</Link>
+          </Button>
+        )}
         <Button asChild variant="ghost" size="lg">
           <Link to="/">{L.ctaHome}</Link>
         </Button>
