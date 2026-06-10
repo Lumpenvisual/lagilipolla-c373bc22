@@ -44,6 +44,8 @@ import {
   parseSpecial,
   GROUP_KEYS,
   FASE_LABEL,
+  clampGol,
+  scoreState,
   type ExtraMatch,
   type Fase,
   type GroupMatch,
@@ -56,6 +58,8 @@ import {
   generateLeaderboardXlsx,
   generateParticipantesXlsx,
   generateBackupXlsx,
+  generateUserPlanillaXlsx,
+  generateAllPlanillasXlsx,
   uploadBackupToStorage,
   listBackups,
   getBackupSignedUrl,
@@ -174,6 +178,15 @@ export function PagosTab() {
                   </td>
                   <td className="p-2 sm:p-3 text-right">
                     <div className="flex flex-wrap justify-end gap-1">
+                      {p.estado_pago === "aprobado" && (
+                        <DownloadButton
+                          fn={generateUserPlanillaXlsx}
+                          args={{ data: { participantId: p.id } }}
+                          label={t("admin.t.pagos.downloadPlanilla")}
+                          size="sm"
+                          icon={<Download className="mr-2 size-4" />}
+                        />
+                      )}
                       <Button
                         size="sm"
                         variant="hero"
@@ -265,12 +278,64 @@ export function ResultadosTab() {
 
   if (!draft) return <Loader2 className="mx-auto size-6 animate-spin text-muted-foreground" />;
 
+  /**
+   * Valida los resultados oficiales antes de guardar/recalcular:
+   *  - marcadores de un solo dígito (0–9) y con AMBOS campos llenos (parcial = inválido);
+   *  - ningún grupo con 1º y 2º repetidos.
+   * Los partidos sin jugar (ambos vacíos) se permiten. Devuelve lista de errores.
+   * Mismo criterio que el guard del servidor (recalc_all_picks).
+   */
+  const validateOfficial = (d: TournamentState): string[] => {
+    const errors: string[] = [];
+    const badMatches: string[] = [];
+    d.group_k_matches.forEach((m) => {
+      if (scoreState(m) === "invalido") badMatches.push(`${m.local}–${m.visitante}`);
+    });
+    (d.extra_matches ?? []).forEach((m) => {
+      if (scoreState(m) === "invalido") badMatches.push(`${m.local}–${m.visitante}`);
+    });
+    if (badMatches.length)
+      errors.push(t("admin.t.res.invalidScore", { matches: badMatches.join(", ") }));
+
+    const dup = GROUP_KEYS.filter((k) => {
+      const g = d.groups[k];
+      return g?.pos1 && g?.pos2 && g.pos1 === g.pos2;
+    });
+    if (dup.length) errors.push(t("admin.t.res.dupGroups", { groups: dup.join(", ") }));
+    return errors;
+  };
+
+  const runRecalc = async () => {
+    const { error } = await supabase.rpc("recalc_all_picks");
+    if (error) toast.error(t("admin.t.toast.recalcFail", { err: error.message }));
+    else toast.success(t("admin.t.toast.recalcOk"));
+    qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+  };
+
+  // Botón "Recalcular puntos" independiente: bloqueado si hay resultados inválidos.
+  const recalcOnly = async () => {
+    if (!draft) return;
+    const errors = validateOfficial(draft);
+    if (errors.length) {
+      toast.error(errors.join(" · "), { duration: 6000 });
+      return;
+    }
+    await runRecalc();
+  };
+
   const save = async () => {
+    if (!draft) return;
+    const errors = validateOfficial(draft);
+    if (errors.length) {
+      toast.error(errors.join(" · "), { duration: 6000 });
+      return;
+    }
     const { error } = await supabase
       .from("tournament_state")
       .update({
         groups: draft.groups as never,
         group_k_matches: draft.group_k_matches as never,
+        extra_matches: (draft.extra_matches ?? []) as never,
         goleador_id: draft.goleador_id,
         arquero_id: draft.arquero_id,
       })
@@ -280,11 +345,8 @@ export function ResultadosTab() {
       return;
     }
     toast.success(t("admin.t.toast.resultsSaved"));
-    const { error: e2 } = await supabase.rpc("recalc_all_picks");
-    if (e2) toast.error(t("admin.t.toast.recalcFail", { err: e2.message }));
-    else toast.success(t("admin.t.toast.recalcOk"));
+    await runRecalc();
     qc.invalidateQueries({ queryKey: ["tournament-state"] });
-    qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
   };
 
   const updateGroup = (k: (typeof GROUP_KEYS)[number], field: "pos1" | "pos2", v: string) => {
@@ -301,7 +363,7 @@ export function ResultadosTab() {
     });
   };
   const updateMatch = (id: string, field: "gh" | "ga", v: string) => {
-    const n = v === "" ? null : Math.max(0, parseInt(v, 10) || 0);
+    const n = clampGol(v);
     setDraft((d) =>
       d
         ? {
@@ -311,6 +373,27 @@ export function ResultadosTab() {
         : d,
     );
   };
+  const updateExtraScore = (id: string, field: "gh" | "ga", v: string) => {
+    const n = clampGol(v);
+    setDraft((d) =>
+      d
+        ? {
+            ...d,
+            extra_matches: (d.extra_matches ?? []).map((m) =>
+              m.id === id ? { ...m, [field]: n } : m,
+            ),
+          }
+        : d,
+    );
+  };
+
+  // Grupos con 1º y 2º repetidos (para avisar en la UI).
+  const dupGroupSet = new Set(
+    GROUP_KEYS.filter((k) => {
+      const g = draft.groups[k];
+      return g?.pos1 && g?.pos2 && g.pos1 === g.pos2;
+    }),
+  );
 
   return (
     <div className="space-y-8">
@@ -347,9 +430,18 @@ export function ResultadosTab() {
           {GROUP_KEYS.map((k) => {
             const g = draft.groups[k];
             const opts = g.teams.map((team) => ({ id: team.id, label: team.nombre }));
+            const isDup = dupGroupSet.has(k);
             return (
-              <div key={k} className="rounded-lg border border-border bg-muted/30 p-3">
+              <div
+                key={k}
+                className={`rounded-lg border bg-muted/30 p-3 ${isDup ? "border-destructive" : "border-border"}`}
+              >
                 <p className="font-display text-lg">{t("planilla.group.label", { k })}</p>
+                {isDup && (
+                  <p className="text-[11px] font-medium text-destructive">
+                    {t("admin.t.res.dupHint")}
+                  </p>
+                )}
                 <div className="mt-2 space-y-1.5">
                   <select
                     value={g.pos1 ?? ""}
@@ -398,6 +490,7 @@ export function ResultadosTab() {
                 <Input
                   type="number"
                   min={0}
+                  max={9}
                   value={m.gh ?? ""}
                   onChange={(e) => updateMatch(m.id, "gh", e.target.value)}
                   className="h-8 w-14 text-center"
@@ -406,6 +499,7 @@ export function ResultadosTab() {
                 <Input
                   type="number"
                   min={0}
+                  max={9}
                   value={m.ga ?? ""}
                   onChange={(e) => updateMatch(m.id, "ga", e.target.value)}
                   className="h-8 w-14 text-center"
@@ -416,6 +510,67 @@ export function ResultadosTab() {
           })}
         </div>
       </Card>
+
+      {(() => {
+        const fasesKO: Fase[] = [
+          "dieciseisavos",
+          "octavos",
+          "cuartos",
+          "semis",
+          "tercero",
+          "final",
+        ];
+        const all = draft.extra_matches ?? [];
+        const fasesConPartidos = fasesKO.filter((f) => all.some((m) => m.fase === f));
+        if (fasesConPartidos.length === 0) return null;
+        return (
+          <Card className="border-info/30 bg-card p-5 card-shadow">
+            <h2 className="font-display text-xl text-info">{t("admin.t.res.markKnockout")}</h2>
+            <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.res.knockoutHint")}</p>
+            <div className="mt-4 space-y-5">
+              {fasesConPartidos.map((fase) => {
+                const list = all
+                  .filter((m) => m.fase === fase)
+                  .sort((a, b) => (a.fecha || "").localeCompare(b.fecha || ""));
+                return (
+                  <div key={fase}>
+                    <h3 className="font-display text-sm uppercase tracking-wider text-muted-foreground">
+                      {FASE_LABEL[fase]}
+                    </h3>
+                    <div className="mt-2 divide-y divide-border">
+                      {list.map((m) => (
+                        <div key={m.id} className="flex items-center gap-2 py-2">
+                          <span className="flex-1 truncate text-right text-sm">
+                            {m.local || "—"}
+                          </span>
+                          <Input
+                            type="number"
+                            min={0}
+                            max={9}
+                            value={m.gh ?? ""}
+                            onChange={(e) => updateExtraScore(m.id, "gh", e.target.value)}
+                            className="h-8 w-14 text-center"
+                          />
+                          <span className="text-muted-foreground">–</span>
+                          <Input
+                            type="number"
+                            min={0}
+                            max={9}
+                            value={m.ga ?? ""}
+                            onChange={(e) => updateExtraScore(m.id, "ga", e.target.value)}
+                            className="h-8 w-14 text-center"
+                          />
+                          <span className="flex-1 truncate text-sm">{m.visitante || "—"}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+        );
+      })()}
 
       <Card className="border-destructive/30 bg-card p-5 card-shadow">
         <h2 className="font-display text-xl text-destructive">{t("admin.t.res.especiales")}</h2>
@@ -449,9 +604,12 @@ export function ResultadosTab() {
         <ParticipantSpecialsPicks />
       </Card>
 
-      <div className="sticky bottom-4 flex justify-center">
+      <div className="sticky bottom-4 flex flex-wrap items-center justify-center gap-3">
         <Button onClick={save} variant="hero" size="lg" className="shadow-2xl">
           <RefreshCw className="mr-2 size-4" /> {t("admin.t.res.save")}
+        </Button>
+        <Button onClick={recalcOnly} variant="outline" size="lg" className="shadow-lg">
+          <RefreshCw className="mr-2 size-4" /> {t("admin.t.res.recalc")}
         </Button>
       </div>
     </div>
@@ -706,40 +864,9 @@ export function CronogramaTab() {
                                 }
                               />
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Label className="text-[11px] uppercase text-muted-foreground">
-                                {t("admin.t.cron.scoreLabel")}
-                              </Label>
-                              <Input
-                                type="number"
-                                min={0}
-                                value={m.gh ?? ""}
-                                onChange={(e) =>
-                                  updateMatch(fase, m.id, {
-                                    gh:
-                                      e.target.value === ""
-                                        ? null
-                                        : Math.max(0, parseInt(e.target.value, 10) || 0),
-                                  })
-                                }
-                                className="h-9 w-16 text-center"
-                              />
-                              <span>–</span>
-                              <Input
-                                type="number"
-                                min={0}
-                                value={m.ga ?? ""}
-                                onChange={(e) =>
-                                  updateMatch(fase, m.id, {
-                                    ga:
-                                      e.target.value === ""
-                                        ? null
-                                        : Math.max(0, parseInt(e.target.value, 10) || 0),
-                                  })
-                                }
-                                className="h-9 w-16 text-center"
-                              />
-                            </div>
+                            <p className="text-[11px] text-muted-foreground">
+                              {t("admin.t.cron.scoreInResultados")}
+                            </p>
                           </div>
                           <Button
                             size="sm"
@@ -820,6 +947,11 @@ export function ReportesTab() {
           <DownloadButton
             fn={generateParticipantesXlsx}
             label={t("admin.t.rep.participants")}
+            icon={<FileSpreadsheet className="mr-2 size-4" />}
+          />
+          <DownloadButton
+            fn={generateAllPlanillasXlsx}
+            label={t("admin.t.rep.allPlanillas")}
             icon={<FileSpreadsheet className="mr-2 size-4" />}
           />
         </div>

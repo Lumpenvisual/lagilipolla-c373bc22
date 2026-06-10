@@ -167,3 +167,43 @@ export function isMatchLocked(iso: string, nowMs: number = Date.now()): boolean 
   const start = new Date(iso).getTime();
   return start - nowMs <= 24 * 60 * 60 * 1000;
 }
+
+/* ---- Validación de marcadores (reglamento: un solo dígito, 0–9) ----
+ * Se usa tanto en la planilla del usuario como en los resultados del admin,
+ * y se refleja en el servidor (trigger picks_validate + guard recalc_all_picks). */
+export const MAX_GOLES = 9;
+
+/** Un marcador válido es un entero entre 0 y 9 (un dígito). */
+export function isValidGol(n: number | null | undefined): boolean {
+  return n != null && Number.isInteger(n) && n >= 0 && n <= MAX_GOLES;
+}
+
+/** Limita la entrada de un marcador a 0–9; "" → null. */
+export function clampGol(v: string): number | null {
+  if (v === "") return null;
+  const n = parseInt(v, 10);
+  if (Number.isNaN(n)) return null;
+  return Math.max(0, Math.min(MAX_GOLES, n));
+}
+
+export type ScoreState = "vacio" | "completo" | "invalido";
+
+/**
+ * Estado de un marcador (gh/ga):
+ *  - "vacio": ambos null (partido sin pronosticar / sin jugar) → permitido.
+ *  - "completo": ambos enteros 0–9 → permitido.
+ *  - "invalido": parcial (uno lleno y el otro no) o fuera de rango → se bloquea.
+ */
+export function scoreState(
+  p: { gh: number | null; ga: number | null } | null | undefined,
+): ScoreState {
+  if (!p || (p.gh == null && p.ga == null)) return "vacio";
+  return isValidGol(p.gh) && isValidGol(p.ga) ? "completo" : "invalido";
+}
+
+/** Un grupo tiene 1º y 2º repetidos (ambos elegidos e iguales). */
+export function groupHasDup(
+  sel: { pos1: string | null; pos2: string | null } | null | undefined,
+): boolean {
+  return !!(sel && sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2);
+}

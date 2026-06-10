@@ -31,6 +31,9 @@ import {
   parseSpecial,
   isMatchLocked,
   isSectionVisible,
+  clampGol,
+  scoreState,
+  groupHasDup,
   FASE_LABEL,
   type Fase,
   type ExtraMatch,
@@ -184,16 +187,27 @@ function Planilla() {
   /** Valida la planilla antes de guardar. Devuelve lista de errores legibles. */
   const validate = (): string[] => {
     const errors: string[] = [];
+    // 1) Grupos: 1º y 2º no pueden repetirse.
     const dup: string[] = [];
     GROUP_KEYS.forEach((k) => {
-      const g = ts.groups[k];
-      if (!g) return;
-      const sel = groups[k] ?? { pos1: null, pos2: null };
-      if (sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2) {
-        dup.push(k);
-      }
+      if (!ts.groups[k]) return;
+      if (groupHasDup(groups[k])) dup.push(k);
     });
-    if (dup.length) errors.push(`Grupos con equipo repetido (1º y 2º iguales): ${dup.join(", ")}`);
+    if (dup.length) errors.push(t("planilla.toast.dupGroups", { groups: dup.join(", ") }));
+
+    // 2) Marcadores: deben ser de un solo dígito (0–9) y con AMBOS campos llenos.
+    //    Los partidos sin pronosticar (ambos vacíos) se permiten. Parcial o fuera
+    //    de rango bloquea el guardado (mismo criterio que el trigger del servidor).
+    const badMatches: string[] = [];
+    grupoKMatches.forEach((m) => {
+      if (scoreState(matches[m.id]) === "invalido") badMatches.push(`${m.local}–${m.visitante}`);
+    });
+    extraMatches.forEach((m) => {
+      if (scoreState(extra[m.id]) === "invalido") badMatches.push(`${m.local}–${m.visitante}`);
+    });
+    if (badMatches.length)
+      errors.push(t("planilla.toast.invalidScore", { matches: badMatches.join(", ") }));
+
     return errors;
   };
 
@@ -245,14 +259,14 @@ function Planilla() {
     }));
   };
   const setMatch = (id: string, field: "gh" | "ga", v: string) => {
-    const n = v === "" ? null : Math.max(0, Math.min(20, parseInt(v, 10) || 0));
+    const n = clampGol(v);
     setMatches((m) => ({
       ...m,
       [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
     }));
   };
   const setExtraScore = (id: string, field: "gh" | "ga", v: string) => {
-    const n = v === "" ? null : Math.max(0, Math.min(20, parseInt(v, 10) || 0));
+    const n = clampGol(v);
     setExtra((m) => ({
       ...m,
       [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
@@ -537,7 +551,7 @@ function Planilla() {
                       <Input
                         type="number"
                         min={0}
-                        max={20}
+                        max={9}
                         disabled={ghDisabled}
                         value={p.gh ?? ""}
                         onChange={(e) => setMatch(m.id, "gh", e.target.value)}
@@ -547,7 +561,7 @@ function Planilla() {
                       <Input
                         type="number"
                         min={0}
-                        max={20}
+                        max={9}
                         disabled={gaDisabled}
                         value={p.ga ?? ""}
                         onChange={(e) => setMatch(m.id, "ga", e.target.value)}
@@ -634,7 +648,7 @@ function Planilla() {
                         <Input
                           type="number"
                           min={0}
-                          max={20}
+                          max={9}
                           disabled={ghDisabled}
                           value={p.gh ?? ""}
                           onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
@@ -644,7 +658,7 @@ function Planilla() {
                         <Input
                           type="number"
                           min={0}
-                          max={20}
+                          max={9}
                           disabled={gaDisabled}
                           value={p.ga ?? ""}
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}

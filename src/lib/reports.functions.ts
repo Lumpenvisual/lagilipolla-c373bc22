@@ -4,7 +4,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type ExcelJS from "exceljs";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
-import { parseSpecial, type TournamentState, type PickRow } from "@/lib/polla";
+import {
+  parseSpecial,
+  FASE_LABEL,
+  type TournamentState,
+  type PickRow,
+  type Fase,
+} from "@/lib/polla";
 
 type AdminContext = { supabase: SupabaseClient<Database>; userId: string };
 
@@ -74,6 +80,114 @@ function teamName(group: Group, id: string | null | undefined): string {
     if (cand) return cand.n;
   }
   return id;
+}
+
+/** Puntos de un grupo (1º/2º) — espejo de calc_pick_points en SQL (5/3/1). */
+function groupPts(
+  o1: string | null,
+  o2: string | null,
+  p1: string | null | undefined,
+  p2: string | null | undefined,
+): number {
+  if (!o1 || !o2 || !p1 || !p2) return 0;
+  if (p1 === o1 && p2 === o2) return 5;
+  if (p1 === o2 && p2 === o1) return 3;
+  if ([p1, p2].some((x) => x === o1 || x === o2)) return 1;
+  return 0;
+}
+
+/** Puntos de un marcador — espejo de calc_pick_points en SQL (5/3/2/1). */
+function matchPts(
+  oh: number | null,
+  oa: number | null,
+  ph: number | null | undefined,
+  pa: number | null | undefined,
+): number {
+  if (oh == null || oa == null || ph == null || pa == null) return 0;
+  const so = Math.sign(oh - oa);
+  const sp = Math.sign(ph - pa);
+  if (ph === oh && pa === oa) return 5;
+  if (so !== 0 && sp === so) return ph === oh || pa === oa ? 3 : 2;
+  if (so === 0 && sp === 0) return 1;
+  if (ph === oh || pa === oa) return 1;
+  return 0;
+}
+
+/**
+ * Escribe la planilla completa de un participante en UNA hoja compacta
+ * (grupos + Grupo K + eliminatorias + especiales, con puntos por línea).
+ * Reutilizado por los exports admin (por usuario y consolidado).
+ */
+function writePlanillaSheet(
+  ws: ExcelJS.Worksheet,
+  tournament: TournamentState,
+  pick: PickRow,
+): void {
+  ws.columns = [
+    { header: "", key: "a", width: 26 },
+    { header: "", key: "b", width: 18 },
+    { header: "", key: "c", width: 26 },
+    { header: "", key: "d", width: 14 },
+    { header: "Puntos", key: "pts", width: 10 },
+  ];
+  const section = (title: string) => {
+    const row = ws.addRow({ a: title });
+    row.font = { bold: true };
+  };
+
+  section("GRUPOS — 1º y 2º");
+  ws.addRow({ a: "Grupo", b: "Mi 1º / 2º", c: "Oficial 1º / 2º", d: "", pts: "Pts" });
+  for (const k of GROUP_KEYS) {
+    const g = tournament.groups[k];
+    const p = pick.groups?.[k] ?? { pos1: null, pos2: null };
+    ws.addRow({
+      a: `Grupo ${k}`,
+      b: `${teamName(g, p.pos1)} / ${teamName(g, p.pos2)}`,
+      c: `${teamName(g, g.pos1)} / ${teamName(g, g.pos2)}`,
+      pts: groupPts(g.pos1, g.pos2, p.pos1, p.pos2),
+    });
+  }
+
+  section("GRUPO K — marcadores");
+  for (const m of tournament.group_k_matches) {
+    const pr = pick.group_k_matches?.[m.id];
+    ws.addRow({
+      a: teamName(tournament.groups.K, m.local),
+      b: `${pr?.gh ?? "-"} - ${pr?.ga ?? "-"}`,
+      c: teamName(tournament.groups.K, m.visitante),
+      d: m.gh != null && m.ga != null ? `${m.gh}-${m.ga}` : "",
+      pts: matchPts(m.gh, m.ga, pr?.gh, pr?.ga),
+    });
+  }
+
+  const extras = tournament.extra_matches ?? [];
+  if (extras.length) {
+    section("ELIMINATORIAS — marcadores");
+    const fases: Fase[] = ["dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
+    for (const fase of fases) {
+      const list = extras.filter((m) => m.fase === fase);
+      if (!list.length) continue;
+      const h = ws.addRow({ a: FASE_LABEL[fase] });
+      h.font = { italic: true };
+      for (const m of list) {
+        const pr = pick.extra_matches?.[m.id];
+        ws.addRow({
+          a: m.local || "—",
+          b: `${pr?.gh ?? "-"} - ${pr?.ga ?? "-"}`,
+          c: m.visitante || "—",
+          d: m.gh != null && m.ga != null ? `${m.gh}-${m.ga}` : "",
+          pts: matchPts(m.gh, m.ga, pr?.gh, pr?.ga),
+        });
+      }
+    }
+  }
+
+  section("ESPECIALES");
+  const gol = parseSpecial(pick.goleador_id);
+  const arq = parseSpecial(pick.arquero_id);
+  ws.addRow({ a: "Goleador", b: gol.nombre || "—", c: gol.seleccion });
+  ws.addRow({ a: "Arquero", b: arq.nombre || "—", c: arq.seleccion });
+  section(`TOTAL: ${pick.puntos_total ?? 0} pts`);
 }
 
 // ============== USER: PDF comprobante ==============
@@ -440,6 +554,34 @@ export const generateMyPlanillaXlsx = createServerFn({ method: "POST" })
       });
     }
 
+    // Eliminatorias (extra_matches): marcador propio vs oficial + puntos.
+    const extras = tournament.extra_matches ?? [];
+    if (extras.length) {
+      const wsKO = wb.addWorksheet("Eliminatorias");
+      wsKO.columns = [
+        { header: "Fase", key: "f", width: 20 },
+        { header: "Local", key: "l", width: 22 },
+        { header: "Mi marcador", key: "p", width: 14 },
+        { header: "Visitante", key: "v", width: 22 },
+        { header: "Oficial", key: "o", width: 12 },
+        { header: "Puntos", key: "pts", width: 10 },
+      ];
+      const fases: Fase[] = ["dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
+      for (const fase of fases) {
+        for (const m of extras.filter((x) => x.fase === fase)) {
+          const p = myPick.extra_matches?.[m.id];
+          wsKO.addRow({
+            f: FASE_LABEL[fase],
+            l: m.local || "—",
+            p: `${p?.gh ?? "-"} - ${p?.ga ?? "-"}`,
+            v: m.visitante || "—",
+            o: m.gh != null && m.ga != null ? `${m.gh}-${m.ga}` : "",
+            pts: matchPts(m.gh, m.ga, p?.gh, p?.ga),
+          });
+        }
+      }
+    }
+
     const ws3 = wb.addWorksheet("Especiales");
     ws3.addRow(["Categoría", "Mi elección", "Selección"]);
     // goleador_id/arquero_id son texto libre del participante: "Nombre (Selección)".
@@ -525,6 +667,101 @@ export const generateParticipantesXlsx = createServerFn({ method: "POST" })
       filename: `gilipolla-participantes-${nowStamp()}.xlsx`,
       base64: await workbookToBase64(wb),
       mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    };
+  });
+
+// ============== ADMIN: planilla de un participante ==============
+
+const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+/** Nombre de hoja Excel válido (≤31 chars, sin caracteres prohibidos), único en el set. */
+function safeSheetName(raw: string, used: Set<string>): string {
+  const base =
+    (raw || "planilla")
+      .replace(/[\\/?*[\]:]/g, "")
+      .slice(0, 28)
+      .trim() || "planilla";
+  let name = base.slice(0, 31);
+  let i = 1;
+  while (used.has(name)) name = `${base.slice(0, 26)}~${i++}`;
+  used.add(name);
+  return name;
+}
+
+export const generateUserPlanillaXlsx = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ participantId: z.string().uuid() }).strict().parse(d))
+  .handler(async ({ context, data }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const [{ data: part }, { data: pick }, { data: ts }] = await Promise.all([
+      supabaseAdmin.from("participants").select("*").eq("id", data.participantId).maybeSingle(),
+      supabaseAdmin
+        .from("picks")
+        .select("*")
+        .eq("participant_id", data.participantId)
+        .maybeSingle(),
+      supabaseAdmin.from("tournament_state").select("*").eq("id", 1).maybeSingle(),
+    ]);
+    if (!part) throw new Error("Participante no encontrado.");
+    if (!pick) throw new Error("Este participante no tiene planilla guardada.");
+    const { wb } = await makeWorkbook();
+    const ws = wb.addWorksheet(safeSheetName(part.nombre, new Set()));
+    writePlanillaSheet(ws, ts as unknown as TournamentState, pick as unknown as PickRow);
+    return {
+      filename: `gilipolla-planilla-${slugify(part.nombre)}-${nowStamp()}.xlsx`,
+      base64: await workbookToBase64(wb),
+      mime: XLSX_MIME,
+    };
+  });
+
+// ============== ADMIN: todas las planillas ==============
+
+export const generateAllPlanillasXlsx = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const [{ data: ts }, { data: parts, error }, { data: picks }] = await Promise.all([
+      supabaseAdmin.from("tournament_state").select("*").eq("id", 1).maybeSingle(),
+      supabaseAdmin
+        .from("participants")
+        .select("*")
+        .eq("estado_pago", "aprobado")
+        .order("nombre", { ascending: true }),
+      supabaseAdmin.from("picks").select("*"),
+    ]);
+    if (error) throw new Error(error.message);
+    const tournament = ts as unknown as TournamentState;
+    const pickById = new Map((picks ?? []).map((p) => [p.participant_id, p as unknown as PickRow]));
+
+    const { wb } = await makeWorkbook();
+    const sum = wb.addWorksheet("Resumen");
+    sum.columns = [
+      { header: "Participante", key: "n", width: 28 },
+      { header: "Grupos", key: "pg", width: 10 },
+      { header: "Partidos", key: "pp", width: 10 },
+      { header: "Especiales", key: "pe", width: 12 },
+      { header: "Total", key: "tot", width: 10 },
+    ];
+    const used = new Set<string>(["Resumen"]);
+    for (const part of parts ?? []) {
+      const pick = pickById.get(part.id);
+      sum.addRow({
+        n: part.nombre,
+        pg: pick?.puntos_grupos ?? 0,
+        pp: pick?.puntos_partidos ?? 0,
+        pe: pick?.puntos_especiales ?? 0,
+        tot: pick?.puntos_total ?? 0,
+      });
+      if (!pick) continue;
+      const ws = wb.addWorksheet(safeSheetName(part.nombre, used));
+      writePlanillaSheet(ws, tournament, pick);
+    }
+    return {
+      filename: `gilipolla-todas-planillas-${nowStamp()}.xlsx`,
+      base64: await workbookToBase64(wb),
+      mime: XLSX_MIME,
     };
   });
 

@@ -8,6 +8,7 @@ type FnResult = { filename: string; base64: string; mime: string };
 
 export function DownloadButton({
   fn,
+  args,
   label,
   variant = "secondary",
   size = "default",
@@ -15,6 +16,8 @@ export function DownloadButton({
   className,
 }: {
   fn: () => Promise<FnResult>;
+  /** Argumentos para server fns con inputValidator, p.ej. { data: { participantId } }. */
+  args?: unknown;
   label: string;
   variant?: ButtonProps["variant"];
   size?: ButtonProps["size"];
@@ -28,7 +31,7 @@ export function DownloadButton({
     setBusy(true);
     const tid = toast.loading("Generando archivo…");
     try {
-      const out = (await run()) as FnResult;
+      const out = (await (run as (a?: unknown) => Promise<FnResult>)(args)) as FnResult;
       const bin = atob(out.base64);
       const u8 = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
