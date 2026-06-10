@@ -320,7 +320,7 @@ const RULES_ES: Rules = {
   regPayList: [
     "Inscripciones desde el 20 de mayo hasta el 11 de junio de 2026, 10:00 a.m. COT.",
     "Pago de inscripción solamente con FIFA Uribe y El Rojo.",
-    "Paopollas y Eduardo Colina se ocupan solo del fixture.",
+    "Paopollas y Hackidevs se ocupan solo del fixture.",
     "Cada formulario será sellado con fecha y hora de entrega.",
     "No se aceptan tachones ni enmendaduras: debe venir con nombre y firma del participante, e incluir el sello de pago.",
     "Después del cierre no se aceptan cambios.",
@@ -401,7 +401,7 @@ const RULES_EN: Rules = {
   regPayList: [
     "Registrations open May 20 through June 11, 2026, 10:00 a.m. COT.",
     "Registration payment only with FIFA Uribe and El Rojo.",
-    "Paopollas and Eduardo Colina only handle the fixture.",
+    "Paopollas and Hackidevs only handle the fixture.",
     "Each form is stamped with the date and time of delivery.",
     "No cross-outs or amendments: it must include the participant's name and signature, plus the payment stamp.",
     "No changes accepted after the deadline.",
