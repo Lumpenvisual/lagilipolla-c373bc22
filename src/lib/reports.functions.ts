@@ -6,6 +6,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
 import {
   parseSpecial,
+  groupPts,
+  matchPts,
   FASE_LABEL,
   type TournamentState,
   type PickRow,
@@ -80,37 +82,6 @@ function teamName(group: Group, id: string | null | undefined): string {
     if (cand) return cand.n;
   }
   return id;
-}
-
-/** Puntos de un grupo (1º/2º) — espejo de calc_pick_points en SQL (5/3/1). */
-function groupPts(
-  o1: string | null,
-  o2: string | null,
-  p1: string | null | undefined,
-  p2: string | null | undefined,
-): number {
-  if (!o1 || !o2 || !p1 || !p2) return 0;
-  if (p1 === o1 && p2 === o2) return 5;
-  if (p1 === o2 && p2 === o1) return 3;
-  if ([p1, p2].some((x) => x === o1 || x === o2)) return 1;
-  return 0;
-}
-
-/** Puntos de un marcador — espejo de calc_pick_points en SQL (5/3/2/1). */
-function matchPts(
-  oh: number | null,
-  oa: number | null,
-  ph: number | null | undefined,
-  pa: number | null | undefined,
-): number {
-  if (oh == null || oa == null || ph == null || pa == null) return 0;
-  const so = Math.sign(oh - oa);
-  const sp = Math.sign(ph - pa);
-  if (ph === oh && pa === oa) return 5;
-  if (so !== 0 && sp === so) return ph === oh || pa === oa ? 3 : 2;
-  if (so === 0 && sp === 0) return 1;
-  if (ph === oh || pa === oa) return 1;
-  return 0;
 }
 
 /**

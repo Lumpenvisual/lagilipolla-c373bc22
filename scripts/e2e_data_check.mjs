@@ -34,7 +34,7 @@ const check = (name, cond, extra = "") => {
 // 1) tournament_state (public read)
 const { data: ts, error: e1 } = await sb
   .from("tournament_state")
-  .select("groups, group_k_matches, deadline, cuota_cop")
+  .select("groups, group_k_matches, extra_matches, deadline, cuota_cop")
   .eq("id", 1)
   .single();
 check("Lee tournament_state", !e1 && !!ts, e1?.message);
@@ -54,11 +54,27 @@ if (ts) {
         : "Grupo K aún no tiene RD Congo",
   );
 
+  // group_k_matches contiene los 72 partidos de fase de grupos (calendario FIFA completo).
+  // Partido 6 (id interno) = Brasil vs Marruecos en MetLife — verificado contra el fixture FIFA.
   const m6 = ts.group_k_matches.find((x) => x.id === "6");
   console.log("   Partido 6:", m6?.local, "vs", m6?.visitante, "·", m6?.sede);
   check(
-    "Partido 6 corregido (RD Congo vs Uzbekistán en Atlanta)",
-    m6 && m6.local === "COD" && m6.visitante === "UZB" && /Atlanta/.test(m6.sede || ""),
+    "Partido 6 según fixture FIFA (BRA vs MAR en MetLife)",
+    m6 && m6.local === "BRA" && m6.visitante === "MAR" && /MetLife/.test(m6.sede || ""),
+  );
+
+  // Integridad: un partido con fecha futura no puede tener marcador.
+  const now = Date.now();
+  const allMatches = [...ts.group_k_matches, ...(ts.extra_matches ?? [])];
+  const phantom = allMatches.filter(
+    (m) => m.fecha && new Date(m.fecha).getTime() > now && (m.gh != null || m.ga != null),
+  );
+  check(
+    "Sin marcadores fantasma (ningún partido futuro tiene resultado)",
+    phantom.length === 0,
+    phantom.length
+      ? `${phantom.length} partidos futuros con marcador: ${phantom.map((m) => m.id).join(", ")}`
+      : "",
   );
 
   check("Cuota en COP = 100000", ts.cuota_cop === 100000, "cuota=" + ts.cuota_cop);

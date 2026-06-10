@@ -1,5 +1,14 @@
 import { describe, it, expect } from "vitest";
-import { isValidGol, clampGol, scoreState, groupHasDup, MAX_GOLES } from "@/lib/polla";
+import {
+  isValidGol,
+  clampGol,
+  scoreState,
+  groupHasDup,
+  groupPts,
+  matchPts,
+  normEspecial,
+  MAX_GOLES,
+} from "@/lib/polla";
 
 describe("isValidGol — un solo dígito (0–9)", () => {
   it("acepta enteros 0–9", () => {
@@ -57,5 +66,45 @@ describe("groupHasDup — 1º y 2º repetidos", () => {
     expect(groupHasDup({ pos1: "COL", pos2: null })).toBe(false);
     expect(groupHasDup({ pos1: null, pos2: null })).toBe(false);
     expect(groupHasDup(null)).toBe(false);
+  });
+});
+
+describe("groupPts — reglamento 5/3/1 (espejo de calc_pick_points)", () => {
+  it("5 por exacto, 3 por invertido, 1 por uno acertado, 0 sin aciertos", () => {
+    expect(groupPts("COL", "POR", "COL", "POR")).toBe(5);
+    expect(groupPts("COL", "POR", "POR", "COL")).toBe(3);
+    expect(groupPts("COL", "POR", "COL", "UZB")).toBe(1);
+    expect(groupPts("COL", "POR", "UZB", "COD")).toBe(0);
+  });
+  it("0 si falta el oficial o el pick", () => {
+    expect(groupPts(null, "POR", "COL", "POR")).toBe(0);
+    expect(groupPts("COL", "POR", null, "POR")).toBe(0);
+  });
+});
+
+describe("matchPts — reglamento 5/3/2/1/1/0 (espejo de calc_pick_points)", () => {
+  it("5 marcador exacto", () => expect(matchPts(2, 1, 2, 1)).toBe(5));
+  it("3 ganador + goles de un equipo", () => expect(matchPts(2, 1, 2, 0)).toBe(3));
+  it("2 solo ganador", () => expect(matchPts(2, 1, 3, 0)).toBe(2));
+  it("1 empate acertado (otro marcador)", () => expect(matchPts(1, 1, 2, 2)).toBe(1));
+  it("1 goles de un equipo sin acertar resultado", () => expect(matchPts(2, 1, 2, 3)).toBe(1));
+  it("0 ningún acierto", () => expect(matchPts(2, 1, 0, 3)).toBe(0));
+  it("0 si falta oficial o pick", () => {
+    expect(matchPts(null, 1, 2, 1)).toBe(0);
+    expect(matchPts(2, 1, null, 1)).toBe(0);
+  });
+});
+
+describe("normEspecial — espejo de norm_especial en SQL", () => {
+  it("tolera mayúsculas, acentos y espacios extra", () => {
+    expect(normEspecial("  KYLIAN  Mbappé (Francia) ")).toBe("kylian mbappe (francia)");
+    expect(normEspecial("Ñoño Çelik")).toBe("nono celik");
+  });
+  it("null/undefined → null", () => {
+    expect(normEspecial(null)).toBeNull();
+    expect(normEspecial(undefined)).toBeNull();
+  });
+  it("dos escrituras distintas del mismo nombre coinciden", () => {
+    expect(normEspecial("HARRY KANE  (Inglaterra)")).toBe(normEspecial("harry kane (inglaterra)"));
   });
 });

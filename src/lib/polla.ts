@@ -207,3 +207,52 @@ export function groupHasDup(
 ): boolean {
   return !!(sel && sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2);
 }
+
+/* ---- Puntuación (espejos TS de calc_pick_points en SQL) ----
+ * La fuente de verdad de los puntos es SQL; estos espejos se usan solo para
+ * MOSTRAR el puntaje (leaderboard, exports). Mantener sincronizados. */
+
+/** Puntos de un grupo (1º/2º) según el reglamento: 5 exacto / 3 invertido / 1 uno acertado. */
+export function groupPts(
+  o1: string | null,
+  o2: string | null,
+  p1: string | null | undefined,
+  p2: string | null | undefined,
+): number {
+  if (!o1 || !o2 || !p1 || !p2) return 0;
+  if (p1 === o1 && p2 === o2) return 5;
+  if (p1 === o2 && p2 === o1) return 3;
+  if ([p1, p2].some((x) => x === o1 || x === o2)) return 1;
+  return 0;
+}
+
+/** Puntos de un marcador según el reglamento: 5 exacto / 3 ganador+goles de un equipo / 2 ganador / 1 empate o goles de un equipo. */
+export function matchPts(
+  oh: number | null,
+  oa: number | null,
+  ph: number | null | undefined,
+  pa: number | null | undefined,
+): number {
+  if (oh == null || oa == null || ph == null || pa == null) return 0;
+  const so = Math.sign(oh - oa);
+  const sp = Math.sign(ph - pa);
+  if (ph === oh && pa === oa) return 5;
+  if (so !== 0 && sp === so) return ph === oh || pa === oa ? 3 : 2;
+  if (so === 0 && sp === 0) return 1;
+  if (ph === oh || pa === oa) return 1;
+  return 0;
+}
+
+/**
+ * Normaliza el texto de un especial (goleador/arquero) para compararlo:
+ * minúsculas, sin acentos, espacios colapsados. Espejo de norm_especial en SQL.
+ */
+export function normEspecial(t: string | null | undefined): string | null {
+  if (t == null) return null;
+  return t
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(new RegExp("[\u0300-\u036f]", "g"), "")
+    .replace(/\s+/g, " ")
+    .trim();
+}

@@ -10,6 +10,9 @@ import {
   GROUP_KEYS,
   FASE_LABEL,
   isSectionVisible,
+  groupPts,
+  matchPts,
+  normEspecial,
   type ExtraMatch,
   type GroupKey,
   type VisibilityKey,
@@ -162,6 +165,16 @@ type PublicPick = {
   updated_at: string | null;
 };
 
+/** Badge rojo con el puntaje que equivale a un resultado según el reglamento.
+ *  Solo se muestra cuando existe el resultado oficial. */
+function PtsBadge({ pts }: { pts: number }) {
+  return (
+    <span className="ml-2 shrink-0 rounded-full border border-destructive/40 bg-destructive/10 px-1.5 py-0.5 text-[10px] font-bold text-destructive">
+      +{pts} pts
+    </span>
+  );
+}
+
 function ParticipantPickDetail({ participantId }: { participantId: string }) {
   const { data: ts } = useTournamentState();
   const { data, isLoading } = useQuery({
@@ -220,11 +233,21 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
             {isVisible("goleador") && (
               <li>
                 <span className="text-muted-foreground">Goleador:</span> {data.goleador_id || "—"}
+                {!!ts?.goleador_id?.trim() && !!data.goleador_id && (
+                  <PtsBadge
+                    pts={normEspecial(data.goleador_id) === normEspecial(ts.goleador_id) ? 10 : 0}
+                  />
+                )}
               </li>
             )}
             {isVisible("arquero") && (
               <li>
                 <span className="text-muted-foreground">Arquero:</span> {data.arquero_id || "—"}
+                {!!ts?.arquero_id?.trim() && !!data.arquero_id && (
+                  <PtsBadge
+                    pts={normEspecial(data.arquero_id) === normEspecial(ts.arquero_id) ? 10 : 0}
+                  />
+                )}
               </li>
             )}
           </ul>
@@ -239,9 +262,16 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
           <div className="mt-1 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
             {GROUP_KEYS.map((k) => {
               const sel = data.groups?.[k];
+              const og = ts?.groups?.[k];
+              const hasOfficial = !!(og?.pos1 && og?.pos2);
               return (
                 <div key={k} className="rounded-md border border-border bg-muted/20 px-2 py-1">
-                  <div className="text-[11px] uppercase text-muted-foreground">Grupo {k}</div>
+                  <div className="flex items-center text-[11px] uppercase text-muted-foreground">
+                    Grupo {k}
+                    {hasOfficial && sel?.pos1 && sel?.pos2 && (
+                      <PtsBadge pts={groupPts(og!.pos1, og!.pos2, sel.pos1, sel.pos2)} />
+                    )}
+                  </div>
                   <div>1º {teamLabelInGroup(k, sel?.pos1 ?? null)}</div>
                   <div>2º {teamLabelInGroup(k, sel?.pos2 ?? null)}</div>
                 </div>
@@ -270,13 +300,22 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
                   const vName =
                     ts.groups.K?.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
                   const p = data.group_k_matches?.[m.id];
+                  const hasOfficial = m.gh != null && m.ga != null;
                   return (
                     <li key={m.id} className="flex items-center justify-between gap-2 py-1">
                       <span className="truncate">
                         {lName} vs {vName}
+                        {hasOfficial && (
+                          <span className="ml-2 text-xs text-muted-foreground">
+                            (oficial {m.gh}–{m.ga})
+                          </span>
+                        )}
                       </span>
-                      <span className="font-mono text-gold">
+                      <span className="flex items-center font-mono text-gold">
                         {p?.gh ?? "—"}–{p?.ga ?? "—"}
+                        {hasOfficial && p?.gh != null && p?.ga != null && (
+                          <PtsBadge pts={matchPts(m.gh, m.ga, p.gh, p.ga)} />
+                        )}
                       </span>
                     </li>
                   );
@@ -298,13 +337,22 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
             <ul className="mt-1 divide-y divide-border/60">
               {list.map((m) => {
                 const p = data.extra_matches?.[m.id];
+                const hasOfficial = m.gh != null && m.ga != null;
                 return (
                   <li key={m.id} className="flex items-center justify-between gap-2 py-1">
                     <span className="truncate">
                       {m.local} vs {m.visitante}
+                      {hasOfficial && (
+                        <span className="ml-2 text-xs text-muted-foreground">
+                          (oficial {m.gh}–{m.ga})
+                        </span>
+                      )}
                     </span>
-                    <span className="font-mono text-gold">
+                    <span className="flex items-center font-mono text-gold">
                       {p?.gh ?? "—"}–{p?.ga ?? "—"}
+                      {hasOfficial && p?.gh != null && p?.ga != null && (
+                        <PtsBadge pts={matchPts(m.gh, m.ga, p.gh, p.ga)} />
+                      )}
                     </span>
                   </li>
                 );
