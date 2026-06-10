@@ -413,36 +413,31 @@ export function ResultadosTab() {
 
       <Card className="border-destructive/30 bg-card p-5 card-shadow">
         <h2 className="font-display text-xl text-destructive">{t("admin.t.res.especiales")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Escribe el nombre. Una vez guardado, queda bloqueado y no se puede modificar.
+        </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
             <Label className="text-xs">{t("admin.t.res.goleador")}</Label>
-            <select
+            <Input
               value={draft.goleador_id ?? ""}
               onChange={(e) => setDraft({ ...draft, goleador_id: e.target.value || null })}
-              className="mt-1 w-full rounded-md border border-input bg-background px-2 py-2 text-sm"
-            >
-              <option value="">{t("admin.t.res.undefined")}</option>
-              {draft.goleadores.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.nombre} · {p.seleccion}
-                </option>
-              ))}
-            </select>
+              disabled={!!(ts?.goleador_id && ts.goleador_id.trim())}
+              placeholder="Escribe el nombre del goleador oficial"
+              maxLength={80}
+              className="mt-1"
+            />
           </div>
           <div>
             <Label className="text-xs">{t("admin.t.res.arquero")}</Label>
-            <select
+            <Input
               value={draft.arquero_id ?? ""}
               onChange={(e) => setDraft({ ...draft, arquero_id: e.target.value || null })}
-              className="mt-1 w-full rounded-md border border-input bg-background px-2 py-2 text-sm"
-            >
-              <option value="">{t("admin.t.res.undefined")}</option>
-              {draft.arqueros.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.nombre} · {p.seleccion}
-                </option>
-              ))}
-            </select>
+              disabled={!!(ts?.arquero_id && ts.arquero_id.trim())}
+              placeholder="Escribe el nombre del arquero oficial"
+              maxLength={80}
+              className="mt-1"
+            />
           </div>
         </div>
       </Card>
