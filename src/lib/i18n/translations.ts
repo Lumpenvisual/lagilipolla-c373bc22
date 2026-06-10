@@ -717,6 +717,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.cron.phasesHint":
       "Cada fase tiene un solo interruptor: activarla la hace visible en el cronograma y la planilla y habilita a los participantes para cargar sus marcadores; desactivarla la oculta. Los puntos ya calculados no se ven afectados.",
     "admin.t.cron.addMatch": "Agregar partido",
+    "admin.t.cron.oneMatch": "1 partido",
+    "admin.t.cron.nMatches": "{n} partidos",
+    "admin.t.cron.phaseVisible": "Visible para participantes",
+    "admin.t.cron.phaseHidden": "Oculta para participantes",
     "admin.t.cron.empty": "Sin partidos. Cuando se definan los cruces, agrégalos aquí.",
     "admin.t.cron.phLocal": "Local (ej: 1A o Colombia)",
     "admin.t.cron.phVisitante": "Visitante (ej: 2B o España)",
@@ -1478,6 +1482,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.cron.phasesHint":
       "Each phase has a single switch: turning it on makes it visible on the schedule and ballot and lets participants submit their scores; turning it off hides it. Already-computed points are not affected.",
     "admin.t.cron.addMatch": "Add match",
+    "admin.t.cron.oneMatch": "1 match",
+    "admin.t.cron.nMatches": "{n} matches",
+    "admin.t.cron.phaseVisible": "Visible to participants",
+    "admin.t.cron.phaseHidden": "Hidden from participants",
     "admin.t.cron.empty": "No matches. When fixtures are set, add them here.",
     "admin.t.cron.phLocal": "Home (e.g. 1A or Colombia)",
     "admin.t.cron.phVisitante": "Away (e.g. 2B or Spain)",

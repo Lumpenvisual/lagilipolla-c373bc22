@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
+  ChevronDown,
   Loader2,
   Users,
   RefreshCw,
   Trash2,
   Plus,
+  Eye,
+  EyeOff,
   FileSpreadsheet,
   Database,
   Lock,
@@ -18,6 +21,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useTournamentState } from "@/hooks/usePolla";
 import { Card } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -633,34 +637,158 @@ export function CronogramaTab() {
 
   return (
     <div className="space-y-6">
-      <Card className="border-gold/30 bg-card p-5 card-shadow">
+      <div>
         <h2 className="font-display text-xl text-gold">{t("admin.t.cron.phasesTitle")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.phasesHint")}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {fasesEditables.map((f) => {
-            const active = !!phases[f];
-            return (
-              <button
-                key={f}
-                onClick={() => {
-                  const next = !active;
-                  // Un solo interruptor: activar/desactivar la fase la muestra u oculta
-                  // a los usuarios Y habilita/deshabilita la carga de marcadores.
-                  setPhases((p) => ({ ...p, [f]: next }));
-                  setVisibility((s) => ({ ...s, [f]: next }));
-                }}
-                className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-                  active
-                    ? "border-success/50 bg-success/15 text-success"
-                    : "border-border bg-muted text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {active ? "✅" : "⚪"} {FASE_LABEL[f]}
-              </button>
-            );
-          })}
-        </div>
-      </Card>
+      </div>
+
+      {fasesEditables.map((fase) => {
+        const active = !!phases[fase];
+        const list = grouped(fase);
+        return (
+          <Card
+            key={fase}
+            className={`bg-card p-0 card-shadow transition-colors ${
+              active ? "border-success/40" : "border-border"
+            }`}
+          >
+            <Collapsible>
+              <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
+                <CollapsibleTrigger asChild>
+                  <button
+                    type="button"
+                    className="group flex min-w-0 flex-1 items-center gap-2 text-left"
+                  >
+                    <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+                    <h3 className="truncate font-display text-lg">{FASE_LABEL[fase]}</h3>
+                    <span className="shrink-0 rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
+                      {list.length === 1
+                        ? t("admin.t.cron.oneMatch")
+                        : t("admin.t.cron.nMatches", { n: list.length })}
+                    </span>
+                  </button>
+                </CollapsibleTrigger>
+                <label className="flex shrink-0 cursor-pointer items-center gap-2">
+                  <span
+                    className={`hidden items-center gap-1 text-xs sm:flex ${
+                      active ? "text-success" : "text-muted-foreground"
+                    }`}
+                  >
+                    {active ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
+                    {active ? t("admin.t.cron.phaseVisible") : t("admin.t.cron.phaseHidden")}
+                  </span>
+                  <Switch
+                    checked={active}
+                    onCheckedChange={(next) => {
+                      // Un solo interruptor: activar/desactivar la fase la muestra u oculta
+                      // a los participantes Y habilita/deshabilita la carga de marcadores.
+                      setPhases((p) => ({ ...p, [fase]: next }));
+                      setVisibility((s) => ({ ...s, [fase]: next }));
+                    }}
+                  />
+                </label>
+              </div>
+              <CollapsibleContent>
+                <div className="border-t border-border/60 px-4 py-4 sm:px-5">
+                  <div className="flex justify-end">
+                    <Button size="sm" onClick={() => addMatch(fase)} variant="secondary">
+                      <Plus className="mr-1 size-4" /> {t("admin.t.cron.addMatch")}
+                    </Button>
+                  </div>
+                  {list.length === 0 ? (
+                    <p className="mt-3 text-xs text-muted-foreground">{t("admin.t.cron.empty")}</p>
+                  ) : (
+                    <div className="mt-3 space-y-3">
+                      {list.map((m) => (
+                        <div
+                          key={m.id}
+                          className="grid grid-cols-1 gap-2 rounded-md border border-border bg-muted/30 p-3 sm:grid-cols-[1fr_1fr_auto] sm:items-start"
+                        >
+                          <div className="space-y-2">
+                            <Input
+                              placeholder={t("admin.t.cron.phLocal")}
+                              value={m.local}
+                              onChange={(e) => updateMatch(fase, m.id, { local: e.target.value })}
+                            />
+                            <Input
+                              placeholder={t("admin.t.cron.phVisitante")}
+                              value={m.visitante}
+                              onChange={(e) =>
+                                updateMatch(fase, m.id, { visitante: e.target.value })
+                              }
+                            />
+                            <Input
+                              placeholder={t("admin.t.cron.phSede")}
+                              value={m.sede}
+                              onChange={(e) => updateMatch(fase, m.id, { sede: e.target.value })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <div>
+                              <Label className="text-[11px] uppercase text-muted-foreground">
+                                {t("admin.t.cron.dateLabel")}
+                              </Label>
+                              <Input
+                                type="datetime-local"
+                                value={toLocalInput(m.fecha)}
+                                onChange={(e) =>
+                                  updateMatch(fase, m.id, { fecha: fromLocalInput(e.target.value) })
+                                }
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Label className="text-[11px] uppercase text-muted-foreground">
+                                {t("admin.t.cron.scoreLabel")}
+                              </Label>
+                              <Input
+                                type="number"
+                                min={0}
+                                value={m.gh ?? ""}
+                                onChange={(e) =>
+                                  updateMatch(fase, m.id, {
+                                    gh:
+                                      e.target.value === ""
+                                        ? null
+                                        : Math.max(0, parseInt(e.target.value, 10) || 0),
+                                  })
+                                }
+                                className="h-9 w-16 text-center"
+                              />
+                              <span>–</span>
+                              <Input
+                                type="number"
+                                min={0}
+                                value={m.ga ?? ""}
+                                onChange={(e) =>
+                                  updateMatch(fase, m.id, {
+                                    ga:
+                                      e.target.value === ""
+                                        ? null
+                                        : Math.max(0, parseInt(e.target.value, 10) || 0),
+                                  })
+                                }
+                                className="h-9 w-16 text-center"
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => removeMatch(fase, m.id)}
+                            title={t("admin.t.cron.deleteMatch")}
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </Card>
+        );
+      })}
 
       <Card className="border-border bg-card p-5 card-shadow">
         <h2 className="font-display text-xl">{t("admin.t.cron.visTitle")}</h2>
@@ -680,103 +808,6 @@ export function CronogramaTab() {
           ))}
         </div>
       </Card>
-
-      {fasesEditables.map((fase) => (
-        <Card key={fase} className="border-border bg-card p-5 card-shadow">
-          <div className="flex items-center justify-between">
-            <h3 className="font-display text-lg">{FASE_LABEL[fase]}</h3>
-            <Button size="sm" onClick={() => addMatch(fase)} variant="secondary">
-              <Plus className="mr-1 size-4" /> {t("admin.t.cron.addMatch")}
-            </Button>
-          </div>
-          {grouped(fase).length === 0 ? (
-            <p className="mt-3 text-xs text-muted-foreground">{t("admin.t.cron.empty")}</p>
-          ) : (
-            <div className="mt-3 space-y-3">
-              {grouped(fase).map((m) => (
-                <div
-                  key={m.id}
-                  className="grid grid-cols-1 gap-2 rounded-md border border-border bg-muted/30 p-3 sm:grid-cols-[1fr_1fr_auto] sm:items-start"
-                >
-                  <div className="space-y-2">
-                    <Input
-                      placeholder={t("admin.t.cron.phLocal")}
-                      value={m.local}
-                      onChange={(e) => updateMatch(fase, m.id, { local: e.target.value })}
-                    />
-                    <Input
-                      placeholder={t("admin.t.cron.phVisitante")}
-                      value={m.visitante}
-                      onChange={(e) => updateMatch(fase, m.id, { visitante: e.target.value })}
-                    />
-                    <Input
-                      placeholder={t("admin.t.cron.phSede")}
-                      value={m.sede}
-                      onChange={(e) => updateMatch(fase, m.id, { sede: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <Label className="text-[11px] uppercase text-muted-foreground">
-                        {t("admin.t.cron.dateLabel")}
-                      </Label>
-                      <Input
-                        type="datetime-local"
-                        value={toLocalInput(m.fecha)}
-                        onChange={(e) =>
-                          updateMatch(fase, m.id, { fecha: fromLocalInput(e.target.value) })
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Label className="text-[11px] uppercase text-muted-foreground">
-                        {t("admin.t.cron.scoreLabel")}
-                      </Label>
-                      <Input
-                        type="number"
-                        min={0}
-                        value={m.gh ?? ""}
-                        onChange={(e) =>
-                          updateMatch(fase, m.id, {
-                            gh:
-                              e.target.value === ""
-                                ? null
-                                : Math.max(0, parseInt(e.target.value, 10) || 0),
-                          })
-                        }
-                        className="h-9 w-16 text-center"
-                      />
-                      <span>–</span>
-                      <Input
-                        type="number"
-                        min={0}
-                        value={m.ga ?? ""}
-                        onChange={(e) =>
-                          updateMatch(fase, m.id, {
-                            ga:
-                              e.target.value === ""
-                                ? null
-                                : Math.max(0, parseInt(e.target.value, 10) || 0),
-                          })
-                        }
-                        className="h-9 w-16 text-center"
-                      />
-                    </div>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => removeMatch(fase, m.id)}
-                    title={t("admin.t.cron.deleteMatch")}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
-      ))}
 
       <div className="sticky bottom-4 flex justify-center">
         <Button onClick={save} variant="hero" size="lg" className="shadow-2xl">
