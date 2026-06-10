@@ -307,7 +307,7 @@ function Planilla() {
                     >
                       <option value="">—</option>
                       {opts.map((o) => (
-                        <option key={o.id} value={o.id}>
+                        <option key={o.id} value={o.id} disabled={sel.pos2 === o.id}>
                           {o.label}
                           {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
                         </option>
@@ -324,7 +324,7 @@ function Planilla() {
                     >
                       <option value="">—</option>
                       {opts.map((o) => (
-                        <option key={o.id} value={o.id}>
+                        <option key={o.id} value={o.id} disabled={sel.pos1 === o.id}>
                           {o.label}
                           {o.isCandidate ? ` ${t("planilla.group.candidate")}` : ""}
                         </option>
@@ -332,6 +332,11 @@ function Planilla() {
                     </select>
                   </div>
                 </div>
+                {sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2 && (
+                  <p className="mt-2 text-[11px] font-medium text-destructive">
+                    1º y 2º no pueden ser el mismo equipo.
+                  </p>
+                )}
               </Card>
             );
           })}
