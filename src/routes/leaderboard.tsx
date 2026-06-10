@@ -194,11 +194,17 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
         </div>
       </section>
 
-      {ts && ts.group_k_matches.length > 0 && (
+      {ts && (() => {
+        const kIds = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
+        const kMatches = ts.group_k_matches.filter(
+          (m) => kIds.has(m.local) && kIds.has(m.visitante),
+        );
+        if (kMatches.length === 0) return null;
+        return (
         <section>
           <h4 className="font-display text-xs uppercase tracking-wider text-info">Marcadores · Grupo K</h4>
           <ul className="mt-1 divide-y divide-border/60">
-            {ts.group_k_matches.map((m) => {
+            {kMatches.map((m) => {
               const lName = ts.groups.K?.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
               const vName = ts.groups.K?.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
               const p = data.group_k_matches?.[m.id];
@@ -213,7 +219,8 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
             })}
           </ul>
         </section>
-      )}
+        );
+      })()}
 
       {phaseOrder.map((fase) => {
         const list = extras.filter((m) => m.fase === fase);
