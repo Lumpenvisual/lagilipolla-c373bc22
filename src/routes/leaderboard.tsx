@@ -152,6 +152,10 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
     return <p className="text-xs text-muted-foreground">Sin planilla guardada todavía.</p>;
   }
 
+  const visibility =
+    ((ts as unknown as { visibility?: Record<string, boolean> } | undefined)?.visibility) ?? {};
+  const isVisible = (k: string) => visibility[k] !== false;
+
   const teamLabelInGroup = (k: GroupKey, id: string | null): string => {
     if (!id || !ts) return "—";
     const g = ts.groups[k];
@@ -170,14 +174,21 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
 
   return (
     <div className="space-y-4 text-sm">
+      {(isVisible("goleador") || isVisible("arquero")) && (
       <section>
         <h4 className="font-display text-xs uppercase tracking-wider text-destructive">Especiales</h4>
         <ul className="mt-1 grid gap-1 sm:grid-cols-2">
-          <li><span className="text-muted-foreground">Goleador:</span> {data.goleador_id || "—"}</li>
-          <li><span className="text-muted-foreground">Arquero:</span> {data.arquero_id || "—"}</li>
+          {isVisible("goleador") && (
+            <li><span className="text-muted-foreground">Goleador:</span> {data.goleador_id || "—"}</li>
+          )}
+          {isVisible("arquero") && (
+            <li><span className="text-muted-foreground">Arquero:</span> {data.arquero_id || "—"}</li>
+          )}
         </ul>
       </section>
+      )}
 
+      {isVisible("grupos") && (
       <section>
         <h4 className="font-display text-xs uppercase tracking-wider text-gold">Clasificados por grupo</h4>
         <div className="mt-1 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -193,8 +204,9 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
           })}
         </div>
       </section>
+      )}
 
-      {ts && (() => {
+      {ts && isVisible("grupos") && (() => {
         const kIds = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
         const kMatches = ts.group_k_matches.filter(
           (m) => kIds.has(m.local) && kIds.has(m.visitante),
@@ -223,6 +235,7 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
       })()}
 
       {phaseOrder.map((fase) => {
+        if (!isVisible(fase)) return null;
         const list = extras.filter((m) => m.fase === fase);
         if (list.length === 0) return null;
         return (
