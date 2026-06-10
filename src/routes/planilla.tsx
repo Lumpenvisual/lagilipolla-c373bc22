@@ -249,6 +249,58 @@ function Planilla() {
         </Card>
       )}
 
+      {/* Bloque 0: Especiales (goleador / arquero) — texto libre */}
+      {(isVisible("goleador") || isVisible("arquero")) && (
+      <Collapsible defaultOpen className="mt-8 group/esp">
+        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-left transition-colors hover:bg-destructive/10">
+          <div className="flex items-center gap-3">
+            <h2 className="font-display text-lg sm:text-xl text-destructive uppercase tracking-wide">
+              {t("planilla.esp.title")}
+            </h2>
+            <span className="rounded-full border border-destructive/40 bg-destructive/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive">
+              {completedEsp}/2
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">
+              {t("planilla.esp.progress", { done: completedEsp })}
+            </span>
+            <ChevronDown className="size-4 text-destructive transition-transform group-data-[state=closed]/esp:rotate-[-90deg]" />
+          </div>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="data-[state=closed]:hidden">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {isVisible("goleador") && (
+            <Card className="border-border bg-card p-5 card-shadow">
+              <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
+              <Input
+                disabled={locked}
+                value={goleador ?? ""}
+                onChange={(e) => setGoleador(e.target.value || null)}
+                placeholder="Escribe el nombre del jugador"
+                maxLength={80}
+                className="mt-2"
+              />
+            </Card>
+            )}
+            {isVisible("arquero") && (
+            <Card className="border-border bg-card p-5 card-shadow">
+              <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
+              <Input
+                disabled={locked}
+                value={arquero ?? ""}
+                onChange={(e) => setArquero(e.target.value || null)}
+                placeholder="Escribe el nombre del arquero"
+                maxLength={80}
+                className="mt-2"
+              />
+            </Card>
+            )}
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+      )}
+
       {/* Bloque 1: Grupos */}
       {isVisible("grupos") && (
       <Collapsible defaultOpen className="mt-8 group/sec">
@@ -519,64 +571,7 @@ function Planilla() {
 
       {/* Bloque 3: Especiales */}
       {(isVisible("goleador") || isVisible("arquero")) && (
-      <Collapsible defaultOpen={false} className="mt-10 group/esp">
-        <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-left transition-colors hover:bg-destructive/10">
-          <div className="flex items-center gap-3">
-            <h2 className="font-display text-lg sm:text-xl text-destructive uppercase tracking-wide">
-              {t("planilla.esp.title")}
-            </h2>
-            <span className="rounded-full border border-destructive/40 bg-destructive/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-destructive">
-              {completedEsp}/2
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground">
-              {t("planilla.esp.progress", { done: completedEsp })}
-            </span>
-            <ChevronDown className="size-4 text-destructive transition-transform group-data-[state=closed]/esp:rotate-[-90deg]" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="data-[state=closed]:hidden">
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {isVisible("goleador") && (
-            <Card className="border-border bg-card p-5 card-shadow">
-              <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
-              <select
-                disabled={locked}
-                value={goleador ?? ""}
-                onChange={(e) => setGoleador(e.target.value || null)}
-                className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                <option value="">{t("planilla.esp.select")}</option>
-                {ts.goleadores.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nombre} · {p.seleccion}
-                  </option>
-                ))}
-              </select>
-            </Card>
-            )}
-            {isVisible("arquero") && (
-            <Card className="border-border bg-card p-5 card-shadow">
-              <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
-              <select
-                disabled={locked}
-                value={arquero ?? ""}
-                onChange={(e) => setArquero(e.target.value || null)}
-                className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                <option value="">{t("planilla.esp.select")}</option>
-                {ts.arqueros.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nombre} · {p.seleccion}
-                  </option>
-                ))}
-              </select>
-            </Card>
-            )}
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+      <></>
       )}
 
       <div className="sticky bottom-4 mt-10 flex justify-center px-4">
