@@ -86,6 +86,20 @@ function Planilla() {
   }, [ts?.picks_locked_at]);
   const locked = useMemo(() => Date.now() > lockAt.getTime(), [lockAt]);
 
+  // Bloqueo por campo: lo que ya está guardado en servidor no se puede modificar.
+  // El usuario sólo puede llenar campos en blanco.
+  const savedGroups = pick?.groups ?? {};
+  const savedMatches = pick?.group_k_matches ?? {};
+  const savedExtra = pick?.extra_matches ?? {};
+  const isPosLocked = (k: GroupKey, f: "pos1" | "pos2") =>
+    !!(savedGroups[k]?.[f]);
+  const isMatchFieldLocked = (id: string, f: "gh" | "ga") =>
+    savedMatches[id]?.[f] != null;
+  const isExtraFieldLocked = (id: string, f: "gh" | "ga") =>
+    savedExtra[id]?.[f] != null;
+  const goleadorLocked = !!(pick?.goleador_id && pick.goleador_id.trim() !== "");
+  const arqueroLocked = !!(pick?.arquero_id && pick.arquero_id.trim() !== "");
+
   if (loading || tsLoading || pickLoading) {
     return (
       <main className="flex min-h-[60vh] items-center justify-center">
@@ -161,18 +175,14 @@ function Planilla() {
   const validate = (): string[] => {
     const errors: string[] = [];
     const dup: string[] = [];
-    const incomp: string[] = [];
     GROUP_KEYS.forEach((k) => {
       const g = ts.groups[k];
       if (!g) return;
       const sel = groups[k] ?? { pos1: null, pos2: null };
-      if (!sel.pos1 || !sel.pos2) {
-        incomp.push(k);
-      } else if (sel.pos1 === sel.pos2) {
+      if (sel.pos1 && sel.pos2 && sel.pos1 === sel.pos2) {
         dup.push(k);
       }
     });
-    if (incomp.length) errors.push(`Grupos sin completar: ${incomp.join(", ")}`);
     if (dup.length) errors.push(`Grupos con equipo repetido (1º y 2º iguales): ${dup.join(", ")}`);
     return errors;
   };
@@ -274,7 +284,7 @@ function Planilla() {
             <Card className="border-border bg-card p-5 card-shadow">
               <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.goleador")}</Label>
               <Input
-                disabled={locked}
+                disabled={locked || goleadorLocked}
                 value={goleador ?? ""}
                 onChange={(e) => setGoleador(e.target.value || null)}
                 placeholder="Escribe el nombre del jugador"
@@ -287,7 +297,7 @@ function Planilla() {
             <Card className="border-border bg-card p-5 card-shadow">
               <Label className="text-xs uppercase text-muted-foreground">{t("planilla.esp.arquero")}</Label>
               <Input
-                disabled={locked}
+                disabled={locked || arqueroLocked}
                 value={arquero ?? ""}
                 onChange={(e) => setArquero(e.target.value || null)}
                 placeholder="Escribe el nombre del arquero"
@@ -351,7 +361,7 @@ function Planilla() {
                   <div>
                     <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos1")}</Label>
                     <select
-                      disabled={locked}
+                      disabled={locked || isPosLocked(key, "pos1")}
                       value={sel.pos1 ?? ""}
                       onChange={(e) => setGroup(key, "pos1", e.target.value)}
                       className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
@@ -368,7 +378,7 @@ function Planilla() {
                   <div>
                     <Label className="text-[11px] uppercase text-muted-foreground">{t("planilla.group.pos2")}</Label>
                     <select
-                      disabled={locked}
+                      disabled={locked || isPosLocked(key, "pos2")}
                       value={sel.pos2 ?? ""}
                       onChange={(e) => setGroup(key, "pos2", e.target.value)}
                       className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
@@ -425,7 +435,8 @@ function Planilla() {
             const colombia = m.local === "COL" || m.visitante === "COL";
             const p = matches[m.id] ?? { gh: null, ga: null };
             const matchLocked = isMatchLocked(m.fecha);
-            const disabled = locked || matchLocked;
+            const ghDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "gh");
+            const gaDisabled = locked || matchLocked || isMatchFieldLocked(m.id, "ga");
             const [stadium, city] = m.sede.split(" · ");
             return (
               <div
@@ -455,7 +466,7 @@ function Planilla() {
                     type="number"
                     min={0}
                     max={20}
-                    disabled={disabled}
+                    disabled={ghDisabled}
                     value={p.gh ?? ""}
                     onChange={(e) => setMatch(m.id, "gh", e.target.value)}
                     className="h-9 w-14 text-center"
@@ -465,7 +476,7 @@ function Planilla() {
                     type="number"
                     min={0}
                     max={20}
-                    disabled={disabled}
+                    disabled={gaDisabled}
                     value={p.ga ?? ""}
                     onChange={(e) => setMatch(m.id, "ga", e.target.value)}
                     className="h-9 w-14 text-center"
@@ -511,7 +522,8 @@ function Planilla() {
                 {list.map((m) => {
                   const p = extra[m.id] ?? { gh: null, ga: null };
                   const matchLocked = isMatchLocked(m.fecha);
-                  const disabled = locked || matchLocked;
+                  const ghDisabled = locked || matchLocked || isExtraFieldLocked(m.id, "gh");
+                  const gaDisabled = locked || matchLocked || isExtraFieldLocked(m.id, "ga");
                   const [stadium, city] = m.sede.split(" · ");
                   return (
                     <div
@@ -541,7 +553,7 @@ function Planilla() {
                           type="number"
                           min={0}
                           max={20}
-                          disabled={disabled}
+                          disabled={ghDisabled}
                           value={p.gh ?? ""}
                           onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
                           className="h-9 w-14 text-center"
@@ -551,7 +563,7 @@ function Planilla() {
                           type="number"
                           min={0}
                           max={20}
-                          disabled={disabled}
+                          disabled={gaDisabled}
                           value={p.ga ?? ""}
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
                           className="h-9 w-14 text-center"

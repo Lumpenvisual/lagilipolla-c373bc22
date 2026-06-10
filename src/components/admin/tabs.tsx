@@ -508,12 +508,12 @@ const DEFAULT_PHASES: Phases = {
 
 const DEFAULT_VISIBILITY: Record<string, boolean> = {
   grupos: true,
-  dieciseisavos: true,
-  octavos: true,
-  cuartos: true,
-  semis: true,
-  tercero: true,
-  final: true,
+  dieciseisavos: false,
+  octavos: false,
+  cuartos: false,
+  semis: false,
+  tercero: false,
+  final: false,
   goleador: true,
   arquero: true,
   historico: true,

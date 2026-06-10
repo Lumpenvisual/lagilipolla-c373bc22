@@ -279,6 +279,20 @@ export type Database = {
           puntos_total: number
         }[]
       }
+      get_public_pick: {
+        Args: { _participant_id: string }
+        Returns: {
+          arquero_id: string
+          extra_matches: Json
+          goleador_id: string
+          group_k_matches: Json
+          groups: Json
+          nombre: string
+          participant_id: string
+          puntos_total: number
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
