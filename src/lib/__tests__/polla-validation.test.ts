@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   isValidGol,
-  clampGol,
+  lastGol,
   scoreState,
   groupHasDup,
   groupPts,
@@ -24,17 +24,21 @@ describe("isValidGol — un solo dígito (0–9)", () => {
   });
 });
 
-describe("clampGol — limita la entrada a 0–9", () => {
-  it("vacío → null", () => expect(clampGol("")).toBeNull());
-  it("recorta a 9 los valores mayores", () => {
-    expect(clampGol("12")).toBe(9);
-    expect(clampGol("100")).toBe(9);
+describe("lastGol — un solo dígito, sin cero a la izquierda", () => {
+  it("vacío → null", () => expect(lastGol("")).toBeNull());
+  it("un dígito se conserva", () => {
+    expect(lastGol("5")).toBe(5);
+    expect(lastGol("0")).toBe(0);
   });
-  it("recorta a 0 los negativos y conserva 0–9", () => {
-    expect(clampGol("-3")).toBe(0);
-    expect(clampGol("5")).toBe(5);
+  it("toma el último dígito tecleado (cada tecla reemplaza)", () => {
+    expect(lastGol("05")).toBe(5); // escribió 5 sobre un 0 → 5, no 05
+    expect(lastGol("53")).toBe(3); // editó un 5 y tecleó 3 → 3, no 53
+    expect(lastGol("100")).toBe(0);
   });
-  it("no numérico → null", () => expect(clampGol("abc")).toBeNull());
+  it("ignora caracteres no numéricos", () => {
+    expect(lastGol("-3")).toBe(3);
+    expect(lastGol("abc")).toBeNull();
+  });
 });
 
 describe("scoreState — vacío / completo / inválido", () => {

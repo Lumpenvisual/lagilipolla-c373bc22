@@ -31,7 +31,7 @@ import {
   parseSpecial,
   isMatchLocked,
   isSectionVisible,
-  clampGol,
+  lastGol,
   scoreState,
   groupHasDup,
   FASE_LABEL,
@@ -259,14 +259,14 @@ function Planilla() {
     }));
   };
   const setMatch = (id: string, field: "gh" | "ga", v: string) => {
-    const n = clampGol(v);
+    const n = lastGol(v);
     setMatches((m) => ({
       ...m,
       [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },
     }));
   };
   const setExtraScore = (id: string, field: "gh" | "ga", v: string) => {
-    const n = clampGol(v);
+    const n = lastGol(v);
     setExtra((m) => ({
       ...m,
       [id]: { gh: m[id]?.gh ?? null, ga: m[id]?.ga ?? null, [field]: n },

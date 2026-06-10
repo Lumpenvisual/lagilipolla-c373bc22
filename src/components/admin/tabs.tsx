@@ -44,7 +44,7 @@ import {
   parseSpecial,
   GROUP_KEYS,
   FASE_LABEL,
-  clampGol,
+  lastGol,
   scoreState,
   type ExtraMatch,
   type Fase,
@@ -363,7 +363,7 @@ export function ResultadosTab() {
     });
   };
   const updateMatch = (id: string, field: "gh" | "ga", v: string) => {
-    const n = clampGol(v);
+    const n = lastGol(v);
     setDraft((d) =>
       d
         ? {
@@ -374,7 +374,7 @@ export function ResultadosTab() {
     );
   };
   const updateExtraScore = (id: string, field: "gh" | "ga", v: string) => {
-    const n = clampGol(v);
+    const n = lastGol(v);
     setDraft((d) =>
       d
         ? {

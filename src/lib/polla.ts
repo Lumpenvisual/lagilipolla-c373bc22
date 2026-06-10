@@ -178,12 +178,15 @@ export function isValidGol(n: number | null | undefined): boolean {
   return n != null && Number.isInteger(n) && n >= 0 && n <= MAX_GOLES;
 }
 
-/** Limita la entrada de un marcador a 0–9; "" → null. */
-export function clampGol(v: string): number | null {
-  if (v === "") return null;
-  const n = parseInt(v, 10);
-  if (Number.isNaN(n)) return null;
-  return Math.max(0, Math.min(MAX_GOLES, n));
+/**
+ * Marcador de un solo dígito a partir de lo que se escribe en el input.
+ * Toma el ÚLTIMO dígito tecleado, así cada tecla reemplaza al dígito anterior
+ * (sin ceros a la izquierda ni concatenar: "0"+"5" → 5, "5"+"3" → 3). "" → null.
+ */
+export function lastGol(v: string): number | null {
+  const digits = v.replace(/[^0-9]/g, "");
+  if (digits === "") return null;
+  return Number(digits[digits.length - 1]);
 }
 
 export type ScoreState = "vacio" | "completo" | "invalido";
