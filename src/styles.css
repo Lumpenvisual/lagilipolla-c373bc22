@@ -1,5 +1,4 @@
 @import "tailwindcss" source(none);
-@import "country-flag-icons/3x2/flags.css";
 @source "../src";
 @import "tw-animate-css";
 
