@@ -300,7 +300,7 @@ const RULES_ES: Rules = {
   sc1a: "Aciertas el empate (sin importar el número de goles).",
   sc1b: "Aciertas la cantidad de goles de un equipo (sin importar el resultado final).",
   sc0: "Ningún acierto.",
-  scoreNote: "Los marcadores se cuentan a los 90 minutos + reposición. No alargue.",
+  scoreNote: "Los marcadores se cuentan a los 90 minutos + reposición. Si hay repechaje (alargue o penales), no cuenta: solo vale el resultado de los primeros 90 minutos.",
   specialTitle: "Selecciones especiales",
   specialDesc: "Según los premios oficiales FIFA entregados en la final.",
   topScorer: "Goleador del Mundial.",
