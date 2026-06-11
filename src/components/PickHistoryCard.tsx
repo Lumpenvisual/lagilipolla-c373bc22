@@ -130,9 +130,11 @@ export function PickHistoryCard({
             {scope === "mine" ? t("history.descMine") : t("history.descAll")}
           </p>
         </div>
-        <Button onClick={downloadCsv} variant="secondary" size="sm" disabled={rows.length === 0}>
-          <Download className="mr-2 size-4" /> {t("history.csv")}
-        </Button>
+        {scope === "all" && (
+          <Button onClick={downloadCsv} variant="secondary" size="sm" disabled={rows.length === 0}>
+            <Download className="mr-2 size-4" /> {t("history.csv")}
+          </Button>
+        )}
       </div>
 
       <div className="mt-4 overflow-auto">

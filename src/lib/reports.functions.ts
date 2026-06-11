@@ -7,6 +7,7 @@ import type { Database } from "@/integrations/supabase/types";
 import {
   parseSpecial,
   groupPts,
+  groupKMatches,
   matchPts,
   FASE_LABEL,
   type TournamentState,
@@ -120,7 +121,7 @@ function writePlanillaSheet(
   }
 
   section("GRUPO K — marcadores");
-  for (const m of tournament.group_k_matches) {
+  for (const m of groupKMatches(tournament)) {
     const pr = pick.group_k_matches?.[m.id];
     ws.addRow({
       a: teamName(tournament.groups.K, m.local),
@@ -370,7 +371,7 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       color: red,
     });
     y -= 14;
-    for (const m of tournament.group_k_matches) {
+    for (const m of groupKMatches(tournament)) {
       const p = myPick.group_k_matches?.[m.id];
       const lName = teamName(tournament.groups.K, m.local);
       const vName = teamName(tournament.groups.K, m.visitante);
@@ -515,7 +516,7 @@ export const generateMyPlanillaXlsx = createServerFn({ method: "POST" })
       { header: "Visitante", key: "v", width: 24 },
       { header: "Oficial", key: "o", width: 12 },
     ];
-    for (const m of tournament.group_k_matches) {
+    for (const m of groupKMatches(tournament)) {
       const p = myPick.group_k_matches?.[m.id];
       ws2.addRow({
         l: teamName(tournament.groups.K, m.local),

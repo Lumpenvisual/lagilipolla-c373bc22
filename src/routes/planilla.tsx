@@ -25,6 +25,7 @@ import {
 import {
   POLLA,
   GROUP_KEYS,
+  groupKMatches,
   slotOptions,
   fmtFecha,
   composeSpecial,
@@ -166,10 +167,7 @@ function Planilla() {
     .filter((p) => p.list.length > 0);
 
   /* Reglamento: en 1ª ronda se predicen marcadores SOLO de los partidos del Grupo de Colombia (Grupo K). */
-  const groupKTeamIds = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
-  const grupoKMatches = ts.group_k_matches.filter(
-    (m) => groupKTeamIds.has(m.local) && groupKTeamIds.has(m.visitante),
-  );
+  const grupoKMatches = groupKMatches(ts);
 
   const completedGroups = GROUP_KEYS.filter(
     (k) => groups[k]?.pos1 && groups[k]?.pos2 && groups[k]?.pos1 !== groups[k]?.pos2,

@@ -162,6 +162,17 @@ export function fmtFecha(iso: string): string {
   return FECHA_FMT.format(new Date(iso)) + " COT";
 }
 
+/**
+ * Reglamento: en 1ª ronda solo se predicen marcadores del Grupo de Colombia (K).
+ * `group_k_matches` trae el fixture completo de la fase de grupos, así que se filtra
+ * a los partidos cuyos dos equipos pertenecen al Grupo K. Fuente única usada por la
+ * planilla y por los reportes (PDF/Excel) para no divergir.
+ */
+export function groupKMatches(ts: TournamentState): GroupMatch[] {
+  const ids = new Set((ts.groups.K?.teams ?? []).map((t) => t.id));
+  return ts.group_k_matches.filter((m) => ids.has(m.local) && ids.has(m.visitante));
+}
+
 /** Un partido queda bloqueado para edición de marcadores cuando faltan ≤ 24h para empezar. */
 export function isMatchLocked(iso: string, nowMs: number = Date.now()): boolean {
   const start = new Date(iso).getTime();
