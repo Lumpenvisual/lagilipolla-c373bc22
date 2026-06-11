@@ -23,7 +23,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
-  POLLA,
   GROUP_KEYS,
   groupKMatches,
   slotOptions,
@@ -89,12 +88,14 @@ function Planilla() {
     }
   }, [pick, pickLoading, ts, initialized]);
 
-  // Bloqueo: fuente de verdad es tournament_state.picks_locked_at; si no existe, deadline local.
+  // Cierre GLOBAL solo si el admin lo activa explícitamente (tournament_state.picks_locked_at).
+  // Sin cierre admin la edición está abierta: el único bloqueo por defecto es por campo ya
+  // guardado (inmutable) y el cierre por-partido 24h antes. No se usa POLLA.deadline como tope.
   const lockAt = useMemo(() => {
     const fromDb = ts?.picks_locked_at ? new Date(ts.picks_locked_at) : null;
-    return fromDb && !isNaN(fromDb.getTime()) ? fromDb : POLLA.deadline;
+    return fromDb && !isNaN(fromDb.getTime()) ? fromDb : null;
   }, [ts?.picks_locked_at]);
-  const locked = useMemo(() => Date.now() > lockAt.getTime(), [lockAt]);
+  const locked = useMemo(() => (lockAt ? Date.now() > lockAt.getTime() : false), [lockAt]);
 
   // Bloqueo por campo: lo que ya está guardado en servidor no se puede modificar.
   // El usuario sólo puede llenar campos en blanco.

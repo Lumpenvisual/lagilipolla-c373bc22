@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Coins, Calendar, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { POLLA, fmtCOP } from "@/lib/polla";
+import { POLLA, fmtCOP, fmtFecha } from "@/lib/polla";
 import { useAuth } from "@/hooks/useAuth";
+import { useTournamentState } from "@/hooks/usePolla";
 import { AboutSection } from "@/components/landing";
 
 export const Route = createFileRoute("/")({
@@ -64,8 +65,32 @@ function Unit({ v, label, accent }: { v: number; label: string; accent?: boolean
 
 function Landing() {
   const { user, participant } = useAuth();
-  const cd = useCountdown(POLLA.deadline);
+  const { data: ts } = useTournamentState();
   const approved = participant?.estado_pago === "aprobado";
+
+  // Próximo partido del Mundial (informativo): el de fecha futura más cercana.
+  // No condiciona llenar la planilla; solo es un dato destacado en el home.
+  const nextMatch = useMemo(() => {
+    if (!ts) return null;
+    const now = Date.now();
+    const all = [...(ts.group_k_matches ?? []), ...(ts.extra_matches ?? [])];
+    return (
+      all
+        .filter((m) => m.fecha && new Date(m.fecha).getTime() > now)
+        .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime())[0] ?? null
+    );
+  }, [ts]);
+
+  const teamName = (id: string) => {
+    if (!ts) return id;
+    for (const g of Object.values(ts.groups)) {
+      const t = g.teams.find((x) => x.id === id);
+      if (t) return t.nombre;
+    }
+    return id;
+  };
+
+  const cd = useCountdown(nextMatch ? new Date(nextMatch.fecha) : POLLA.mundialStart);
 
   return (
     <main>
@@ -97,21 +122,31 @@ function Landing() {
           </p>
 
           <p className="mt-8 text-[11px] uppercase tracking-[0.4em] text-muted-foreground">
-            Cierre de inscripciones
+            Próximo partido
           </p>
-          {cd.done ? (
-            <p className="mt-2 font-display text-3xl text-destructive">¡INSCRIPCIONES CERRADAS!</p>
+          {nextMatch ? (
+            <>
+              <p className="mt-2 font-display text-2xl sm:text-3xl">
+                <span className="text-gold">{teamName(nextMatch.local)}</span>
+                <span className="mx-2 text-muted-foreground">vs</span>
+                <span className="text-gold">{teamName(nextMatch.visitante)}</span>
+              </p>
+              <div className="mt-3 flex items-end justify-center gap-3 sm:gap-5">
+                <Unit v={cd.d} label="días" />
+                <Unit v={cd.h} label="horas" />
+                <Unit v={cd.m} label="min" />
+                <Unit v={cd.s} label="seg" accent />
+              </div>
+              <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Calendar className="size-3.5" /> {fmtFecha(nextMatch.fecha)}
+                {nextMatch.sede ? ` · ${nextMatch.sede}` : ""}
+              </p>
+            </>
           ) : (
-            <div className="mt-3 flex items-end justify-center gap-3 sm:gap-5">
-              <Unit v={cd.d} label="días" />
-              <Unit v={cd.h} label="horas" />
-              <Unit v={cd.m} label="min" />
-              <Unit v={cd.s} label="seg" accent />
-            </div>
+            <p className="mt-2 font-display text-2xl text-muted-foreground">
+              El Mundial ya terminó. ¡Gracias por jugar!
+            </p>
           )}
-          <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Calendar className="size-3.5" /> 11 jun 2026 · 10:00 a.m. (COT)
-          </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             {!user ? (

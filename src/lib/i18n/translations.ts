@@ -635,7 +635,7 @@ export const translations: Record<Lang, Dict> = {
     // ---------- Planilla ----------
     "planilla.title": "📝 Mi planilla",
     "planilla.subtitle":
-      "Llena los tres bloques y guarda. Puedes editar hasta el 11 de junio · 10:00 a.m.",
+      "Llena y guarda cuando quieras. Cada marcador se puede editar hasta 24 h antes de su partido; una vez guardado, queda fijo.",
     "planilla.closedBanner": "La planilla está cerrada. Solo lectura.",
     "planilla.notApproved": "Aún no tienes el pago aprobado.",
     "planilla.goAccount": "Ir a mi cuenta",
@@ -1416,7 +1416,8 @@ export const translations: Record<Lang, Dict> = {
 
     // ---------- Planilla ----------
     "planilla.title": "📝 My ballot",
-    "planilla.subtitle": "Fill the three blocks and save. You can edit until June 11 · 10:00 a.m.",
+    "planilla.subtitle":
+      "Fill in and save anytime. Each score can be edited until 24h before its match; once saved, it's locked.",
     "planilla.closedBanner": "The ballot is closed. Read only.",
     "planilla.notApproved": "Your payment hasn't been approved yet.",
     "planilla.goAccount": "Go to my account",
