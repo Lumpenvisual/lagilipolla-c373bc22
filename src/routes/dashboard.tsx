@@ -173,11 +173,13 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
         </Button>
       </div>
 
-      {planillaCompleta && (
+      {!!pick && (
         <Card className="mt-6 border-info/30 bg-card p-5 card-shadow">
-          <p className="font-display text-lg">📄 Comprobante</p>
+          <p className="font-display text-lg">📄 Comprobante oficial</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Descarga tu planilla como PDF profesional. Incluye un código QR para verificarlo.
+            Descarga tu comprobante oficial en PDF con los datos de tu planilla y un código QR de
+            verificación. Cada vez que actualices tu planilla puedes volver a descargarlo con los
+            datos al día.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <DownloadButton
