@@ -44,3 +44,12 @@ Predices el **marcador exacto** de cada partido del Grupo K (Colombia) y, en las
 |   0    | Ningún acierto.                                                               |
 
 > **Nota:** los marcadores se cuentan a los **90 minutos + reposición**. Si hay repechaje (alargue o penales), no cuenta: solo vale el resultado de los primeros 90 minutos.
+
+## Hecho (ronda 2 · jun 2026)
+
+- [x] **Comprobante oficial en PDF** descargable (Panel → "Descargar comprobante PDF"). Al actualizar la planilla se puede volver a descargar; lo ya guardado no se modifica (inmutabilidad). **Estable ante recálculos:** `picks_updated_at` ahora solo cambia cuando cambian las predicciones, no los puntos → el QR de un comprobante no se invalida cuando el admin recalcula.
+- [x] **QR funcional con check verde.** Apunta a `https://lagilipolla-c373bc22.vercel.app/verificar/<código>` (sin doble slash) y muestra "Comprobante válido" — verificado en producción.
+- [x] **Export de la BD al Storage** (bucket `backups`, Admin → Reportes → _Cloud Backups_).
+- [x] **Guardar planilla solo en Panel/mi planilla** (`/planilla`): el guardado vive únicamente ahí (verificado — el dashboard solo enlaza y descarga comprobante).
+- [x] **Panel "Actualizar y guardar planilla"**: aparece en la planilla cuando el admin habilita nuevos pronósticos (fases/partidos visibles aún sin llenar y no cerrados por 24h).
+- [x] **Edición extendida**: sin cierre global por fecha; solo bloquea lo ya guardado + cierre 24h por partido. El contador del home apunta al próximo partido (informativo).

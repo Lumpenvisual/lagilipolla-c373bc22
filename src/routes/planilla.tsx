@@ -183,6 +183,23 @@ function Planilla() {
   }).length;
   const completedEsp = (golNombre.trim() ? 1 : 0) + (arqNombre.trim() ? 1 : 0);
 
+  // Pendientes por pronosticar entre lo que el admin tiene HABILITADO (visible) y aún
+  // no está cerrado por 24h: si hay, mostramos el panel "actualizar y guardar planilla".
+  const filled = (p?: { gh: number | null; ga: number | null }) =>
+    p && p.gh != null && p.ga != null;
+  const pendientes =
+    (isVisible("grupos")
+      ? GROUP_KEYS.filter((k) => ts.groups[k] && (!groups[k]?.pos1 || !groups[k]?.pos2)).length +
+        grupoKMatches.filter((m) => !isMatchLocked(m.fecha) && !filled(matches[m.id])).length
+      : 0) +
+    matchesByPhase.reduce(
+      (acc, { list }) =>
+        acc + list.filter((m) => !isMatchLocked(m.fecha) && !filled(extra[m.id])).length,
+      0,
+    ) +
+    (isVisible("goleador") && !golNombre.trim() ? 1 : 0) +
+    (isVisible("arquero") && !arqNombre.trim() ? 1 : 0);
+
   /** Valida la planilla antes de guardar. Devuelve lista de errores legibles. */
   const validate = (): string[] => {
     const errors: string[] = [];
@@ -281,6 +298,18 @@ function Planilla() {
       {locked && (
         <Card className="mt-4 border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
           <Lock className="inline size-4 mr-1" /> {t("planilla.closedBanner")}
+        </Card>
+      )}
+
+      {!locked && pendientes > 0 && (
+        <Card className="mt-4 flex flex-wrap items-center justify-between gap-3 border-gold/40 bg-gold/10 p-4 card-shadow">
+          <p className="text-sm text-foreground">
+            <Save className="inline size-4 mr-1.5 text-gold" />
+            {t("planilla.updatePrompt", { n: pendientes })}
+          </p>
+          <Button variant="hero" size="sm" onClick={tryOpenConfirm}>
+            {t("planilla.updateCta")}
+          </Button>
         </Card>
       )}
 
