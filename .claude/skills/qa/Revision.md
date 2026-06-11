@@ -2,8 +2,8 @@
 
 ## Pendientes / observaciones
 
-- [ ] En **admin Gilipolla**, los marcadores solo deben permitir ingresar **un dígito**.
-- [ ] Agregar **debajo de la tabla de posiciones** el resumen de las reglas del sistema de puntos (ver abajo).
+- [x] En **admin Gilipolla**, los marcadores solo deben permitir ingresar **un dígito**. _(Hecho: `lastGol` en cliente — cada tecla reemplaza, sin cero a la izquierda — + trigger `picks_validate` en BD.)_
+- [x] Agregar **debajo de la tabla de posiciones** el resumen de las reglas del sistema de puntos (ver abajo). _(Hecho: `ScoringRulesPanel` compartido entre `/leaderboard` y `/reglas`.)_
 
 ---
 
@@ -37,5 +37,10 @@ Predices el **marcador exacto** de cada partido del Grupo K (Colombia) y, en las
 
 # Todo
 
-Actualiza el qr para la verificación de comprobante  http://localhost:8080/verificar/9ecf4ee69d33
+Actualiza el qr para la verificación de comprobante -  http://localhost:8080/verificar/9ecf4ee69d33 - cambiar el enpoint por .env
+
+en los comprobantes verifica que en los partidos del grupo K solamente salgan los que pertenecen oficialmente al grupo K. en .pdf y excel. 
+
+En los comprobantes agrega el nombre de cada participante al que pertenecen los resultados. 
+
 

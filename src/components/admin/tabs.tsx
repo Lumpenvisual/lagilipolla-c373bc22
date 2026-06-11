@@ -488,18 +488,18 @@ export function ResultadosTab() {
               <div key={m.id} className="flex items-center gap-2 py-2">
                 <span className="flex-1 text-right text-sm">{lName}</span>
                 <Input
-                  type="number"
-                  min={0}
-                  max={9}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]"
                   value={m.gh ?? ""}
                   onChange={(e) => updateMatch(m.id, "gh", e.target.value)}
                   className="h-8 w-14 text-center"
                 />
                 <span className="text-muted-foreground">–</span>
                 <Input
-                  type="number"
-                  min={0}
-                  max={9}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]"
                   value={m.ga ?? ""}
                   onChange={(e) => updateMatch(m.id, "ga", e.target.value)}
                   className="h-8 w-14 text-center"
@@ -544,18 +544,18 @@ export function ResultadosTab() {
                             {m.local || "—"}
                           </span>
                           <Input
-                            type="number"
-                            min={0}
-                            max={9}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]"
                             value={m.gh ?? ""}
                             onChange={(e) => updateExtraScore(m.id, "gh", e.target.value)}
                             className="h-8 w-14 text-center"
                           />
                           <span className="text-muted-foreground">–</span>
                           <Input
-                            type="number"
-                            min={0}
-                            max={9}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]"
                             value={m.ga ?? ""}
                             onChange={(e) => updateExtraScore(m.id, "ga", e.target.value)}
                             className="h-8 w-14 text-center"

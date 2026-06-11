@@ -549,9 +549,9 @@ function Planilla() {
                         />
                       </div>
                       <Input
-                        type="number"
-                        min={0}
-                        max={9}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]"
                         disabled={ghDisabled}
                         value={p.gh ?? ""}
                         onChange={(e) => setMatch(m.id, "gh", e.target.value)}
@@ -559,9 +559,9 @@ function Planilla() {
                       />
                       <span className="text-muted-foreground">–</span>
                       <Input
-                        type="number"
-                        min={0}
-                        max={9}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]"
                         disabled={gaDisabled}
                         value={p.ga ?? ""}
                         onChange={(e) => setMatch(m.id, "ga", e.target.value)}
@@ -646,9 +646,9 @@ function Planilla() {
                           />
                         </div>
                         <Input
-                          type="number"
-                          min={0}
-                          max={9}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]"
                           disabled={ghDisabled}
                           value={p.gh ?? ""}
                           onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
@@ -656,9 +656,9 @@ function Planilla() {
                         />
                         <span className="text-muted-foreground">–</span>
                         <Input
-                          type="number"
-                          min={0}
-                          max={9}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]"
                           disabled={gaDisabled}
                           value={p.ga ?? ""}
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}

@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePollaLeaderboard, useTournamentState } from "@/hooks/usePolla";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
+import { ScoringRulesPanel } from "@/components/ScoringRulesPanel";
 import {
   GROUP_KEYS,
   FASE_LABEL,
@@ -149,6 +150,15 @@ function Lb() {
           </table>
         </Card>
       )}
+
+      {/* Reglas del sistema de puntos (acuerdos del reglamento), debajo de la tabla */}
+      <section className="mt-10">
+        <h2 className="font-display text-2xl">📊 Sistema de puntos</h2>
+        <p className="mt-1 mb-4 text-xs text-muted-foreground">
+          Así se asigna el puntaje de cada resultado según el reglamento oficial.
+        </p>
+        <ScoringRulesPanel />
+      </section>
     </main>
   );
 }
