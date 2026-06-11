@@ -1,12 +1,12 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { Loader2, ArrowRight, Trophy, FileText, FileSpreadsheet } from "lucide-react";
+import { Loader2, ArrowRight, Trophy, FileText } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyPick, usePollaLeaderboard } from "@/hooks/usePolla";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import { DownloadButton } from "@/components/DownloadButton";
-import { generateComprobantePDF, generateMyPlanillaXlsx } from "@/lib/reports.functions";
+import { generateComprobantePDF } from "@/lib/reports.functions";
 import { PickHistoryCard } from "@/components/PickHistoryCard";
 
 export const Route = createFileRoute("/dashboard")({
@@ -175,10 +175,9 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
 
       {planillaCompleta && (
         <Card className="mt-6 border-info/30 bg-card p-5 card-shadow">
-          <p className="font-display text-lg">📄 Comprobantes</p>
+          <p className="font-display text-lg">📄 Comprobante</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Descarga tu planilla como PDF profesional o como Excel. El PDF incluye un código QR para
-            verificarlo.
+            Descarga tu planilla como PDF profesional. Incluye un código QR para verificarlo.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <DownloadButton
@@ -186,11 +185,6 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
               label="Descargar comprobante PDF"
               variant="hero"
               icon={<FileText className="mr-2 size-4" />}
-            />
-            <DownloadButton
-              fn={generateMyPlanillaXlsx}
-              label="Descargar planilla Excel"
-              icon={<FileSpreadsheet className="mr-2 size-4" />}
             />
           </div>
         </Card>
