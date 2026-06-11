@@ -385,6 +385,14 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
           font: helvObl,
           color: muted,
         });
+        const pts = matchPts(m.gh, m.ga, p?.gh, p?.ga);
+        page.drawText(`+${pts} pts`, {
+          x: A4.w - 70,
+          y,
+          size: 8,
+          font: helvBold,
+          color: pts > 0 ? blue : muted,
+        });
       }
       y -= 13;
     }
