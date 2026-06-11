@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
-import { Menu, LogOut } from "lucide-react";
+import { Menu, LogOut, KeyRound, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useT } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { ChangePinDialog } from "@/components/ChangePinDialog";
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const { user, isAdmin, participant } = useAuth();
@@ -50,6 +58,7 @@ export function Navbar() {
   const t = useT();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pinOpen, setPinOpen] = useState(false);
 
   const handleLogout = async () => {
     await signOut();
@@ -74,29 +83,37 @@ export function Navbar() {
 
         <div className="hidden items-center gap-3 md:flex">
           {user ? (
-            <>
-              <div className="flex items-center gap-2">
-                <div className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-                  {initial}
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="max-w-[160px] truncate text-sm text-foreground">{name}</span>
-                  {isAdmin && (
-                    <span className="text-[10px] uppercase tracking-wide text-gold">
-                      {t("nav.organizador")}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleLogout}
-                aria-label={t("nav.logout")}
-              >
-                <LogOut className="size-4" />
-              </Button>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <div className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                    {initial}
+                  </div>
+                  <div className="flex flex-col leading-tight text-left">
+                    <span className="max-w-[160px] truncate text-sm text-foreground">{name}</span>
+                    {isAdmin && (
+                      <span className="text-[10px] uppercase tracking-wide text-gold">
+                        {t("nav.organizador")}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown className="size-4 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {!isAdmin && (
+                  <>
+                    <DropdownMenuItem onSelect={() => setPinOpen(true)}>
+                      <KeyRound className="mr-2 size-4" /> {t("pin.title")}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem onSelect={handleLogout}>
+                  <LogOut className="mr-2 size-4" /> {t("nav.logout")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <>
               <Button asChild variant="ghost">
@@ -127,6 +144,18 @@ export function Navbar() {
                 {user ? (
                   <div className="space-y-3">
                     <p className="text-sm text-muted-foreground">{name}</p>
+                    {!isAdmin && (
+                      <Button
+                        variant="secondary"
+                        className="w-full"
+                        onClick={() => {
+                          setOpen(false);
+                          setPinOpen(true);
+                        }}
+                      >
+                        <KeyRound className="mr-2 size-4" /> {t("pin.title")}
+                      </Button>
+                    )}
                     <Button variant="secondary" className="w-full" onClick={handleLogout}>
                       <LogOut className="mr-2 size-4" /> {t("nav.logout")}
                     </Button>
@@ -156,6 +185,8 @@ export function Navbar() {
           </Sheet>
         </div>
       </nav>
+
+      <ChangePinDialog open={pinOpen} onOpenChange={setPinOpen} />
     </header>
   );
 }
