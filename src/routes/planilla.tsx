@@ -302,14 +302,11 @@ function Planilla() {
       )}
 
       {!locked && pendientes > 0 && (
-        <Card className="mt-4 flex flex-wrap items-center justify-between gap-3 border-gold/40 bg-gold/10 p-4 card-shadow">
+        <Card className="mt-4 border-gold/40 bg-gold/10 p-4 card-shadow">
           <p className="text-sm text-foreground">
             <Save className="inline size-4 mr-1.5 text-gold" />
             {t("planilla.updatePrompt", { n: pendientes })}
           </p>
-          <Button variant="hero" size="sm" onClick={tryOpenConfirm}>
-            {t("planilla.updateCta")}
-          </Button>
         </Card>
       )}
 
@@ -727,7 +724,7 @@ function Planilla() {
             ) : (
               <Save className="mr-2 size-4" />
             )}
-            {t("planilla.save")}
+            {t("planilla.updateCta")}
           </Button>
           <AlertDialogContent>
             <AlertDialogHeader>
