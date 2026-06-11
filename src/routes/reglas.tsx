@@ -21,9 +21,9 @@ export const Route = createFileRoute("/reglas")({
         content:
           "Cuota $100.000 COP, premio 60/20, cierre 11 de junio. Todas las reglas oficiales del Mundial 2026.",
       },
-      { property: "og:url", content: "https://lagilipolla.lovable.app/reglas" },
+      { property: "og:url", content: `${import.meta.env.VITE_APP_URL}/reglas` },
     ],
-    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/reglas" }],
+    links: [{ rel: "canonical", href: `${import.meta.env.VITE_APP_URL}/reglas` }],
   }),
   component: ReglasPage,
 });

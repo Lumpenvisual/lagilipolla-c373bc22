@@ -20,10 +20,10 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: `Polla del Mundial 2026 · cuota ${fmtCOP(POLLA.cuotaCOP)} COP · Bar El Guanábano.`,
       },
-      { property: "og:url", content: "https://lagilipolla.lovable.app/" },
+      { property: "og:url", content: `${import.meta.env.VITE_APP_URL}/` },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/" }],
+    links: [{ rel: "canonical", href: `${import.meta.env.VITE_APP_URL}/` }],
   }),
   component: Landing,
 });

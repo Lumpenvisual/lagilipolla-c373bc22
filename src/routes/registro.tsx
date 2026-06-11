@@ -9,9 +9,9 @@ export const Route = createFileRoute("/registro")({
       { name: "description", content: tStatic("reg.subtitle") },
       { property: "og:title", content: tStatic("reg.title") },
       { property: "og:description", content: tStatic("reg.subtitle") },
-      { property: "og:url", content: "https://lagilipolla.lovable.app/registro" },
+      { property: "og:url", content: `${import.meta.env.VITE_APP_URL}/registro` },
     ],
-    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/registro" }],
+    links: [{ rel: "canonical", href: `${import.meta.env.VITE_APP_URL}/registro` }],
   }),
   component: RegistroPage,
 });

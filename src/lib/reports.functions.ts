@@ -202,7 +202,7 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     // 3) Build QR PNG
     const { default: QRCode } = await import("qrcode");
     const qrDataUrl = await QRCode.toDataURL(
-      `https://lagilipolla.lovable.app/verificar/${codigo}`,
+      `${import.meta.env.VITE_APP_URL}/verificar/${codigo}`,
       { margin: 0, scale: 6 },
     );
     const qrPng = Uint8Array.from(atob(qrDataUrl.split(",")[1]), (c) => c.charCodeAt(0));
@@ -431,7 +431,7 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     });
     y -= 9;
     page.drawText(
-      `Verifica este comprobante en: https://lagilipolla.lovable.app/verificar/${codigo}`,
+      `Verifica este comprobante en: ${import.meta.env.VITE_APP_URL}/verificar/${codigo}`,
       { x: 40, y, size: 7, font: helv, color: blue },
     );
 

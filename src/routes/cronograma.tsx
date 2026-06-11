@@ -28,9 +28,9 @@ export const Route = createFileRoute("/cronograma")({
         property: "og:description",
         content: "Fechas, sedes y resultados del Mundial 2026 en hora Colombia.",
       },
-      { property: "og:url", content: "https://lagilipolla.lovable.app/cronograma" },
+      { property: "og:url", content: `${import.meta.env.VITE_APP_URL}/cronograma` },
     ],
-    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/cronograma" }],
+    links: [{ rel: "canonical", href: `${import.meta.env.VITE_APP_URL}/cronograma` }],
   }),
   component: Cronograma,
 });

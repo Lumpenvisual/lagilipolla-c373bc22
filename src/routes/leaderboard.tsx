@@ -30,9 +30,9 @@ export const Route = createFileRoute("/leaderboard")({
       },
       { property: "og:title", content: "Tabla de posiciones · LA GILIPOLLA 2026" },
       { property: "og:description", content: "Ranking en vivo de la polla del Mundial 2026." },
-      { property: "og:url", content: "https://lagilipolla.lovable.app/leaderboard" },
+      { property: "og:url", content: `${import.meta.env.VITE_APP_URL}/leaderboard` },
     ],
-    links: [{ rel: "canonical", href: "https://lagilipolla.lovable.app/leaderboard" }],
+    links: [{ rel: "canonical", href: `${import.meta.env.VITE_APP_URL}/leaderboard` }],
   }),
   component: Lb,
 });
