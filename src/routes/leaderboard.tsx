@@ -7,6 +7,7 @@ import { usePollaLeaderboard, useTournamentState } from "@/hooks/usePolla";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { ScoringRulesPanel } from "@/components/ScoringRulesPanel";
+import { OfficialResultsPanel } from "@/components/OfficialResultsPanel";
 import {
   GROUP_KEYS,
   FASE_LABEL,
@@ -42,11 +43,7 @@ const MEDAL: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
 function Lb() {
   const { participant } = useAuth();
   const { data: rows = [], isLoading } = usePollaLeaderboard();
-  const { data: ts } = useTournamentState();
   const [openId, setOpenId] = useState<string | null>(null);
-
-  const showGoleador = isSectionVisible(ts?.visibility, "goleador") && !!ts?.goleador_id?.trim();
-  const showArquero = isSectionVisible(ts?.visibility, "arquero") && !!ts?.arquero_id?.trim();
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 sm:py-10">
@@ -60,27 +57,9 @@ function Lb() {
         luego 2.
       </p>
 
-      {(showGoleador || showArquero) && (
-        <Card className="mt-4 border-destructive/30 bg-destructive/5 p-4 card-shadow">
-          <h2 className="font-display text-sm uppercase tracking-wider text-destructive">
-            Especiales · Resultado oficial
-          </h2>
-          <div className="mt-2 grid gap-1 sm:grid-cols-2 text-sm">
-            {showGoleador && (
-              <div>
-                <span className="text-muted-foreground">Goleador:</span>{" "}
-                <span className="font-medium">{ts!.goleador_id}</span>
-              </div>
-            )}
-            {showArquero && (
-              <div>
-                <span className="text-muted-foreground">Arquero:</span>{" "}
-                <span className="font-medium">{ts!.arquero_id}</span>
-              </div>
-            )}
-          </div>
-        </Card>
-      )}
+      <div className="mt-4">
+        <OfficialResultsPanel />
+      </div>
 
       {isLoading ? (
         <div className="flex justify-center py-16">

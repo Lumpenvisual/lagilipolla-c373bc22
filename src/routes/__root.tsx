@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider, tStatic } from "@/lib/i18n";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { RealtimeSync } from "@/components/RealtimeSync";
 import { A11yProvider } from "@/lib/a11y";
@@ -156,6 +157,7 @@ function RootComponent() {
             <RealtimeSync />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
+            <Footer />
             <AccessibilityPanel />
             <Toaster richColors position="top-center" />
           </AuthProvider>

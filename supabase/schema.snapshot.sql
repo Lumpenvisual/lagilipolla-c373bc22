@@ -1,4 +1,4 @@
--- AUTO-GENERATED snapshot · 2026-06-10T22:49:19Z
+-- AUTO-GENERATED snapshot · 2026-06-11T15:04:26Z
 -- Fuente única de verdad: supabase/migrations/*.sql (NO editar este archivo)
 -- Regenerar: bash scripts/dump_schema.sh
 
@@ -3035,4 +3035,66 @@ BEGIN
     aciertos_5 = c5, aciertos_3 = c3, aciertos_2 = c2
   WHERE participant_id = _pick_id;
 END;
+$$;
+
+-- ============================================================
+-- 20260611120000_leaderboard_excluir_admin.sql
+-- ============================================================
+-- El admin (Admin Guanábano) fija los resultados oficiales; NO compite en el ranking.
+-- get_polla_leaderboard excluye a cualquier participante cuyo user_id tenga rol 'admin'.
+CREATE OR REPLACE FUNCTION public.get_polla_leaderboard()
+ RETURNS TABLE(participant_id uuid, nombre text, puntos_grupos int, puntos_partidos int, puntos_especiales int, puntos_total int, aciertos_5 int, aciertos_3 int, aciertos_2 int, posicion bigint)
+ LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public'
+AS $function$
+  SELECT
+    pa.id, pa.nombre,
+    COALESCE(pk.puntos_grupos, 0),
+    COALESCE(pk.puntos_partidos, 0),
+    COALESCE(pk.puntos_especiales, 0),
+    COALESCE(pk.puntos_total, 0),
+    COALESCE(pk.aciertos_5, 0),
+    COALESCE(pk.aciertos_3, 0),
+    COALESCE(pk.aciertos_2, 0),
+    RANK() OVER (ORDER BY
+      COALESCE(pk.puntos_total,0) DESC,
+      COALESCE(pk.aciertos_5,0) DESC,
+      COALESCE(pk.aciertos_3,0) DESC,
+      COALESCE(pk.aciertos_2,0) DESC)
+  FROM public.participants pa
+  LEFT JOIN public.picks pk ON pk.participant_id = pa.id
+  WHERE pa.estado_pago = 'aprobado'
+    AND NOT EXISTS (
+      SELECT 1 FROM public.user_roles ur
+      WHERE ur.user_id = pa.user_id AND ur.role = 'admin'
+    );
+$function$;
+
+-- ============================================================
+-- 20260611130000_backups_bucket.sql
+-- ============================================================
+-- Bucket privado para los respaldos .xlsx que genera el admin (uploadBackupToStorage).
+-- Las funciones de backup usan service_role (saltan RLS), así que no requieren políticas.
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('backups', 'backups', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================
+-- 20260611140000_comprobante_code_epoch_entero.sql
+-- ============================================================
+-- Fix: el código del comprobante no coincidía entre el QR (cliente) y la verificación (SQL).
+-- El cliente usa Math.floor(epoch_ms/1000) = segundos ENTEROS; la función SQL usaba
+-- extract(epoch ...) con fracción de segundo, así que el QR nunca verificaba.
+-- Se alinea la función SQL a segundos enteros para que el QR del PDF "conecte".
+CREATE OR REPLACE FUNCTION public.comprobante_code(_pid uuid, _updated_at timestamptz)
+RETURNS text
+LANGUAGE sql
+IMMUTABLE
+SET search_path = public, extensions
+AS $$
+  SELECT substring(
+    encode(
+      digest(_pid::text || floor(extract(epoch from _updated_at))::bigint::text, 'sha256'),
+      'hex'
+    ) from 1 for 12
+  );
 $$;

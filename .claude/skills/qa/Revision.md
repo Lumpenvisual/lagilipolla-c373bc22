@@ -5,6 +5,16 @@
 - [x] En **admin Gilipolla**, los marcadores solo deben permitir ingresar **un dígito**. _(Hecho: `lastGol` en cliente — cada tecla reemplaza, sin cero a la izquierda — + trigger `picks_validate` en BD.)_
 - [x] Agregar **debajo de la tabla de posiciones** el resumen de las reglas del sistema de puntos (ver abajo). _(Hecho: `ScoringRulesPanel` compartido entre `/leaderboard` y `/reglas`.)_
 
+## Hecho (jun 2026)
+
+- [x] **Admin fuera del ranking** + módulo **"Resultados oficiales"** en la tabla. _(`get_polla_leaderboard` excluye rol admin; `OfficialResultsPanel` en `/leaderboard`.)_
+- [x] **Footer** "Desarrollado por Hackidevs · +57 323 437 42 00" global. _(`Footer.tsx` en `__root.tsx`, i18n ES/EN.)_
+- [x] **QR del comprobante** por `VITE_APP_URL` + fix de `comprobante_code` (epoch entero) para que la verificación coincida con el QR.
+- [x] **Comprobantes (PDF y Excel):** solo los partidos oficiales del **Grupo K** (helper `groupKMatches`).
+- [x] **Comprobantes:** nombre del participante en cada planilla (PDF y hojas Excel).
+- [x] **Comprobante PDF:** leyenda de equivalencia de puntaje de grupos (5/3/1/0).
+- [x] **Export de la BD al Storage:** bucket privado `backups`; Admin → Reportes → _Cloud Backups_.
+
 ---
 
 ## Sistema de puntos (reglas oficiales)
@@ -34,13 +44,3 @@ Predices el **marcador exacto** de cada partido del Grupo K (Colombia) y, en las
 |   0    | Ningún acierto.                                                               |
 
 > **Nota:** los marcadores se cuentan a los **90 minutos + reposición**. Si hay repechaje (alargue o penales), no cuenta: solo vale el resultado de los primeros 90 minutos.
-
-# Todo
-
-Actualiza el qr para la verificación de comprobante -  http://localhost:8080/verificar/9ecf4ee69d33 - cambiar el enpoint por .env
-
-en los comprobantes verifica que en los partidos del grupo K solamente salgan los que pertenecen oficialmente al grupo K. en .pdf y excel. 
-
-En los comprobantes agrega el nombre de cada participante al que pertenecen los resultados. 
-
-

@@ -94,6 +94,7 @@ function writePlanillaSheet(
   ws: ExcelJS.Worksheet,
   tournament: TournamentState,
   pick: PickRow,
+  participantName: string,
 ): void {
   ws.columns = [
     { header: "", key: "a", width: 26 },
@@ -106,6 +107,10 @@ function writePlanillaSheet(
     const row = ws.addRow({ a: title });
     row.font = { bold: true };
   };
+
+  const titleRow = ws.addRow({ a: `Participante: ${participantName}` });
+  titleRow.font = { bold: true, size: 13 };
+  ws.addRow({});
 
   section("GRUPOS — 1º y 2º");
   ws.addRow({ a: "Grupo", b: "Mi 1º / 2º", c: "Oficial 1º / 2º", d: "", pts: "Pts" });
@@ -315,6 +320,11 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       font: helvBold,
       color: blue,
     });
+    y -= 11;
+    page.drawText(
+      "Puntaje: 5 = aciertas en su orden · 3 = en desorden · 1 = solo uno · 0 = ninguno",
+      { x: 40, y, size: 7, font: helvObl, color: muted },
+    );
     y -= 4;
 
     // 3-column layout
@@ -498,6 +508,9 @@ export const generateMyPlanillaXlsx = createServerFn({ method: "POST" })
       { header: "Oficial 2°", key: "o2", width: 22 },
       { header: "Puntos", key: "pts", width: 10 },
     ];
+    // Nombre del participante al que pertenece la planilla (encima de los encabezados).
+    ws.spliceRows(1, 0, [`Participante: ${part.nombre}`]);
+    ws.getRow(1).font = { bold: true, size: 13 };
     for (const k of GROUP_KEYS) {
       const g = tournament.groups[k];
       const p = myPick.groups[k] ?? { pos1: null, pos2: null };
@@ -687,7 +700,12 @@ export const generateUserPlanillaXlsx = createServerFn({ method: "POST" })
     if (!pick) throw new Error("Este participante no tiene planilla guardada.");
     const { wb } = await makeWorkbook();
     const ws = wb.addWorksheet(safeSheetName(part.nombre, new Set()));
-    writePlanillaSheet(ws, ts as unknown as TournamentState, pick as unknown as PickRow);
+    writePlanillaSheet(
+      ws,
+      ts as unknown as TournamentState,
+      pick as unknown as PickRow,
+      part.nombre,
+    );
     return {
       filename: `gilipolla-planilla-${slugify(part.nombre)}-${nowStamp()}.xlsx`,
       base64: await workbookToBase64(wb),
@@ -736,7 +754,7 @@ export const generateAllPlanillasXlsx = createServerFn({ method: "POST" })
       });
       if (!pick) continue;
       const ws = wb.addWorksheet(safeSheetName(part.nombre, used));
-      writePlanillaSheet(ws, tournament, pick);
+      writePlanillaSheet(ws, tournament, pick, part.nombre);
     }
     return {
       filename: `gilipolla-todas-planillas-${nowStamp()}.xlsx`,

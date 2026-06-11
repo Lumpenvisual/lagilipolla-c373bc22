@@ -15,6 +15,7 @@ export const translations: Record<Lang, Dict> = {
   es: {
     // ---------- Nav ----------
     "nav.concursos": "Cronograma",
+    "footer.devBy": "Desarrollado por",
     "nav.home": "Inicio",
     "nav.tabla": "Tabla",
     "nav.reglas": "Reglas",
@@ -802,6 +803,7 @@ export const translations: Record<Lang, Dict> = {
   en: {
     // ---------- Nav ----------
     "nav.concursos": "Schedule",
+    "footer.devBy": "Developed by",
     "nav.home": "Home",
     "nav.tabla": "Standings",
     "nav.reglas": "Rules",
