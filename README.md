@@ -30,6 +30,45 @@ reglamento y mantiene una tabla de posiciones en vivo.
 
 > La **lógica de puntuación vive en SQL** (`calc_pick_points`), no en TypeScript, para que sea la única fuente de verdad.
 
+## 🏛️ Arquitectura
+
+App **full-stack sobre TanStack Start** (SSR + server functions) desplegada en **Vercel**, con
+**Supabase** como backend (Postgres + Auth + Storage). El navegador habla directo con Supabase para
+lecturas/escrituras del usuario (protegidas por RLS); las operaciones privilegiadas (PDF, backups,
+verificación pública) corren en **server functions** con la `service_role`.
+
+```mermaid
+flowchart TD
+  U["Usuario (navegador)"] -- "alias + PIN" --> V
+  A["Admin"] -- "email + password" --> V
+  V["Vercel · TanStack Start (SSR + React 19)"]
+  V -- "supabase-js (anon, RLS)" --> DB[("Postgres")]
+  V -- "server functions" --> SF["Server functions<br/>comprobante PDF · /verificar · backups"]
+  SF -- "service_role (salta RLS)" --> DB
+  V <--> AUTH["Supabase Auth"]
+  SF --> ST["Storage · bucket backups"]
+  DB -. "Realtime (RealtimeSync)" .-> V
+  subgraph Supabase
+    DB
+    AUTH
+    ST
+  end
+```
+
+**Flujos principales**
+
+- **Auth:** alias+PIN (participantes) / email+password (admin) → Supabase Auth. El PIN deriva el password de la cuenta (`src/lib/auth.ts`).
+- **Pronósticos:** el cliente guarda en la tabla `picks` (RLS por usuario). Triggers en BD **validan** (`picks_validate`: un dígito, inmutabilidad, sin grupos repetidos) y **recalculan** puntos (`calc_pick_points`); `get_polla_leaderboard` alimenta la tabla de posiciones.
+- **Resultados oficiales:** el admin escribe en el singleton `tournament_state`; `recalc_all_picks` actualiza los puntos de todos y **RealtimeSync** propaga los cambios a los clientes conectados.
+- **Comprobante / verificación:** una server function genera el PDF con QR a `${VITE_APP_URL}/verificar/<código>`; la página pública valida con el RPC `get_comprobante_public`.
+
+**Decisiones clave:** puntuación como **fuente única en SQL**; **RLS** + server functions con `service_role` para lo sensible; **migraciones versionadas** (`supabase/migrations/`) como fuente de verdad del esquema; **deploy continuo** (push a `main` → Vercel).
+
+**Capas del código**
+
+- **Rutas/UI** (`src/routes`, `src/components`) → **hooks de datos** (`src/hooks`: `useAuth`, `usePolla`) → **cliente Supabase** (`src/integrations`).
+- **Dominio** en `src/lib/polla.ts` (tipos, helpers y espejos TS de la puntuación) y `src/lib/reports.functions.ts` (server functions de PDF/Excel/backup).
+
 ## 🚀 Desarrollo local
 
 ```bash
