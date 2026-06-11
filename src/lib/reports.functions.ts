@@ -205,12 +205,16 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       .join("");
     const codigo = hex.slice(0, 12);
 
-    // 3) Build QR PNG
+    // 3) Build QR PNG. Base URL desde VITE_APP_URL (Vercel), sin barra final
+    // para no generar "//verificar" (que provoca un 308 al escanear el QR).
+    const appUrl = (import.meta.env.VITE_APP_URL || "https://lagilipolla-c373bc22.vercel.app")
+      .toString()
+      .replace(/\/+$/, "");
     const { default: QRCode } = await import("qrcode");
-    const qrDataUrl = await QRCode.toDataURL(
-      `${import.meta.env.VITE_APP_URL}/verificar/${codigo}`,
-      { margin: 0, scale: 6 },
-    );
+    const qrDataUrl = await QRCode.toDataURL(`${appUrl}/verificar/${codigo}`, {
+      margin: 0,
+      scale: 6,
+    });
     const qrPng = Uint8Array.from(atob(qrDataUrl.split(",")[1]), (c) => c.charCodeAt(0));
 
     // 4) Build PDF with pdf-lib
@@ -449,10 +453,13 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       color: muted,
     });
     y -= 9;
-    page.drawText(
-      `Verifica este comprobante en: ${import.meta.env.VITE_APP_URL}/verificar/${codigo}`,
-      { x: 40, y, size: 7, font: helv, color: blue },
-    );
+    page.drawText(`Verifica este comprobante en: ${appUrl}/verificar/${codigo}`, {
+      x: 40,
+      y,
+      size: 7,
+      font: helv,
+      color: blue,
+    });
 
     const bytes = await pdf.save();
     return {
