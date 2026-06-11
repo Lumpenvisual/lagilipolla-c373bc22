@@ -105,7 +105,7 @@ function Landing() {
           <img
             src="/mi-logo.png"
             alt="LA GILIPOLLA 2026"
-            className="mx-auto mb-5 h-16 w-auto sm:h-20"
+            className="mx-auto mb-6 h-28 w-auto sm:h-40 md:h-48 lg:h-56"
           />
           <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
             <Trophy className="size-3.5" /> POLLA OFICIAL DEL BAR
