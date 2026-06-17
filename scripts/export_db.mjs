@@ -42,7 +42,11 @@ const TABLES = [
   "tournament_state",
 ];
 
-const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "").replace(/(\d{8})(\d{4})/, "$1-$2");
+const stamp = new Date()
+  .toISOString()
+  .slice(0, 16)
+  .replace(/[-:T]/g, "")
+  .replace(/(\d{8})(\d{4})/, "$1-$2");
 const outDir = new URL(`supabase/db-export/${stamp}/`, root);
 mkdirSync(outDir, { recursive: true });
 
