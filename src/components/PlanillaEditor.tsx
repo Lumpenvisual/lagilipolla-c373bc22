@@ -41,6 +41,28 @@ import {
   type VisibilityKey,
 } from "@/lib/polla";
 
+/** Compara dos mapas de marcadores ignorando el orden de claves (gh/ga, null-safe). */
+function sameScoreMap(a?: PickMatches | null, b?: PickMatches | null): boolean {
+  const aa = a ?? {};
+  const bb = b ?? {};
+  for (const k of new Set([...Object.keys(aa), ...Object.keys(bb)])) {
+    if ((aa[k]?.gh ?? null) !== (bb[k]?.gh ?? null)) return false;
+    if ((aa[k]?.ga ?? null) !== (bb[k]?.ga ?? null)) return false;
+  }
+  return true;
+}
+
+/** Compara dos mapas de grupos ignorando el orden de claves (pos1/pos2, null-safe). */
+function sameGroupsMap(a?: PickGroups | null, b?: PickGroups | null): boolean {
+  const aa = a ?? {};
+  const bb = b ?? {};
+  for (const k of new Set([...Object.keys(aa), ...Object.keys(bb)]) as Set<GroupKey>) {
+    if ((aa[k]?.pos1 ?? null) !== (bb[k]?.pos1 ?? null)) return false;
+    if ((aa[k]?.pos2 ?? null) !== (bb[k]?.pos2 ?? null)) return false;
+  }
+  return true;
+}
+
 /**
  * Editor de planilla reutilizable.
  *
@@ -204,9 +226,24 @@ export function PlanillaEditor({
     return errors;
   };
 
+  /** ¿El formulario está idéntico a lo ya guardado? (usuario que no tiene nada nuevo que guardar) */
+  const noChanges = pick
+    ? sameGroupsMap(groups, pick.groups) &&
+      sameScoreMap(matches, pick.group_k_matches) &&
+      sameScoreMap(extra, pick.extra_matches) &&
+      (composeSpecial(golNombre, golSel) ?? "") === (pick.goleador_id ?? "").trim() &&
+      (composeSpecial(arqNombre, arqSel) ?? "") === (pick.arquero_id ?? "").trim()
+    : false;
+
   const tryOpenConfirm = () => {
     if (locked) {
       toast.error(t("planilla.toast.closed"));
+      return;
+    }
+    // Sin cambios (planilla ya guardada y/o todo bloqueado): no se intenta guardar,
+    // se muestra un aviso en verde en vez de un error.
+    if (!adminEdit && noChanges) {
+      toast.success(t("planilla.toast.alreadySaved"));
       return;
     }
     const errors = validate();

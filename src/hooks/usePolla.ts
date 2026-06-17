@@ -46,18 +46,36 @@ export function useSavePick(participantId: string | null | undefined) {
       >,
     ) => {
       if (!participantId) throw new Error("Sin participante");
-      const { error } = await supabase.from("picks").upsert(
-        {
-          participant_id: participantId,
-          groups: input.groups,
-          group_k_matches: input.group_k_matches,
-          extra_matches: input.extra_matches ?? {},
-          goleador_id: input.goleador_id,
-          arquero_id: input.arquero_id,
-        },
-        { onConflict: "participant_id" },
-      );
-      if (error) throw error;
+      const row = {
+        participant_id: participantId,
+        groups: input.groups,
+        group_k_matches: input.group_k_matches,
+        extra_matches: input.extra_matches ?? {},
+        goleador_id: input.goleador_id,
+        arquero_id: input.arquero_id,
+      };
+      // No usamos upsert: `INSERT ... ON CONFLICT DO UPDATE` dispara el trigger
+      // BEFORE INSERT (TG_OP='INSERT', OLD nulo) ANTES de resolver el conflicto, y
+      // enforce_picks_deadline trata cada marcador de un partido ya dentro de 24 h como
+      // "cambio nuevo" (porque OLD es null) y lanza excepción aunque el valor no cambie.
+      // Si la fila ya existe hacemos UPDATE (OLD real → los marcadores sin cambios no
+      // disparan el bloqueo); si no, INSERT.
+      const { data: existing, error: selErr } = await supabase
+        .from("picks")
+        .select("participant_id")
+        .eq("participant_id", participantId)
+        .maybeSingle();
+      if (selErr) throw new Error(selErr.message);
+      if (existing) {
+        const { error } = await supabase
+          .from("picks")
+          .update(row)
+          .eq("participant_id", participantId);
+        if (error) throw new Error(error.message);
+      } else {
+        const { error } = await supabase.from("picks").insert(row);
+        if (error) throw new Error(error.message);
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["my-pick", participantId] });

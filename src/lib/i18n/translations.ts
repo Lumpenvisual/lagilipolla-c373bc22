@@ -677,6 +677,7 @@ export const translations: Record<Lang, Dict> = {
     "planilla.save": "Guardar planilla",
     "planilla.toast.closed": "La planilla está cerrada.",
     "planilla.toast.saved": "Tu planilla ya fue actualizada y guardada con éxito.",
+    "planilla.toast.alreadySaved": "Tu planilla ya fue guardada.",
     "planilla.toast.saveFailed": "No se pudo guardar: {err}",
     "planilla.toast.dupGroups": "Grupos con equipo repetido (1º y 2º iguales): {groups}",
     "planilla.toast.invalidScore":
@@ -1484,6 +1485,7 @@ export const translations: Record<Lang, Dict> = {
     "planilla.save": "Save ballot",
     "planilla.toast.closed": "The ballot is closed.",
     "planilla.toast.saved": "Your ballot was successfully updated and saved.",
+    "planilla.toast.alreadySaved": "Your ballot is already saved.",
     "planilla.toast.saveFailed": "Couldn't save: {err}",
     "planilla.toast.dupGroups": "Groups with a repeated team (1st and 2nd are the same): {groups}",
     "planilla.toast.invalidScore":

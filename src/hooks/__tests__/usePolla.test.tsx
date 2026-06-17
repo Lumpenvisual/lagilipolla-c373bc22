@@ -5,8 +5,21 @@ import type { ReactNode } from "react";
 import { createElement } from "react";
 
 // --- Mock Supabase client BEFORE importing the hooks ---
-const upsertMock = vi.fn();
 const rpcMock = vi.fn();
+const updateEqMock = vi.fn(async () => ({ error: null }));
+const updateMock = vi.fn(() => ({ eq: updateEqMock }));
+const insertMock = vi.fn(async () => ({ error: null }));
+
+// Fila existente de picks que devuelve el chequeo de existencia (null = no existe).
+let existingPick: Record<string, unknown> | null = {
+  participant_id: "p1",
+  groups: { A: { pos1: "x", pos2: "y" } },
+  group_k_matches: {},
+  extra_matches: {},
+  goleador_id: null,
+  arquero_id: null,
+  puntos_total: 12,
+};
 
 const fromMock = vi.fn((table: string) => {
   if (table === "tournament_state") {
@@ -25,21 +38,11 @@ const fromMock = vi.fn((table: string) => {
     return {
       select: () => ({
         eq: () => ({
-          maybeSingle: async () => ({
-            data: {
-              participant_id: "p1",
-              groups: { A: { pos1: "x", pos2: "y" } },
-              group_k_matches: {},
-              extra_matches: {},
-              goleador_id: null,
-              arquero_id: null,
-              puntos_total: 12,
-            },
-            error: null,
-          }),
+          maybeSingle: async () => ({ data: existingPick, error: null }),
         }),
       }),
-      upsert: upsertMock,
+      update: updateMock,
+      insert: insertMock,
     };
   }
   return {
@@ -65,8 +68,19 @@ function makeWrapper() {
 }
 
 beforeEach(() => {
-  upsertMock.mockReset();
   rpcMock.mockReset();
+  updateMock.mockClear();
+  updateEqMock.mockClear();
+  insertMock.mockClear();
+  existingPick = {
+    participant_id: "p1",
+    groups: { A: { pos1: "x", pos2: "y" } },
+    group_k_matches: {},
+    extra_matches: {},
+    goleador_id: null,
+    arquero_id: null,
+    puntos_total: 12,
+  };
 });
 
 describe("useTournamentState", () => {
@@ -102,11 +116,12 @@ describe("useSavePick", () => {
         arquero_id: null,
       } as never),
     ).rejects.toThrow(/Sin participante/);
-    expect(upsertMock).not.toHaveBeenCalled();
+    expect(updateMock).not.toHaveBeenCalled();
+    expect(insertMock).not.toHaveBeenCalled();
   });
 
-  it("upserts picks for the given participant", async () => {
-    upsertMock.mockResolvedValueOnce({ error: null });
+  it("updates picks (not upsert) when the row already exists", async () => {
+    // existingPick != null por defecto → debe usar UPDATE, no INSERT.
     const { result } = renderHook(() => useSavePick("p1"), { wrapper: makeWrapper() });
     await result.current.mutateAsync({
       groups: { A: { pos1: "x", pos2: "y" } },
@@ -115,10 +130,25 @@ describe("useSavePick", () => {
       goleador_id: null,
       arquero_id: null,
     } as never);
-    expect(upsertMock).toHaveBeenCalledTimes(1);
-    const [payload, opts] = upsertMock.mock.calls[0];
-    expect(payload.participant_id).toBe("p1");
-    expect(opts).toEqual({ onConflict: "participant_id" });
+    expect(updateMock).toHaveBeenCalledTimes(1);
+    expect(insertMock).not.toHaveBeenCalled();
+    expect(updateMock.mock.calls[0][0].participant_id).toBe("p1");
+    expect(updateEqMock).toHaveBeenCalledWith("participant_id", "p1");
+  });
+
+  it("inserts picks when the row does not exist yet", async () => {
+    existingPick = null;
+    const { result } = renderHook(() => useSavePick("p2"), { wrapper: makeWrapper() });
+    await result.current.mutateAsync({
+      groups: {},
+      group_k_matches: {},
+      extra_matches: {},
+      goleador_id: null,
+      arquero_id: null,
+    } as never);
+    expect(insertMock).toHaveBeenCalledTimes(1);
+    expect(updateMock).not.toHaveBeenCalled();
+    expect(insertMock.mock.calls[0][0].participant_id).toBe("p2");
   });
 });
 
