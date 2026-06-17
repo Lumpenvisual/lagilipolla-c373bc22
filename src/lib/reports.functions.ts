@@ -15,7 +15,7 @@ import {
   type Fase,
 } from "@/lib/polla";
 
-type AdminContext = { supabase: SupabaseClient<Database>; userId: string };
+export type AdminContext = { supabase: SupabaseClient<Database>; userId: string };
 
 type LeaderboardRow = {
   posicion: number;
@@ -33,7 +33,7 @@ type LeaderboardRow = {
 
 type Group = TournamentState["groups"][keyof TournamentState["groups"]];
 
-async function requireAdmin(ctx: AdminContext) {
+export async function requireAdmin(ctx: AdminContext) {
   const { data, error } = await ctx.supabase
     .from("user_roles")
     .select("role")

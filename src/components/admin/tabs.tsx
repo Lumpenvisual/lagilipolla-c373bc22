@@ -17,6 +17,8 @@ import {
   Cloud,
   CloudUpload,
   Download,
+  Pencil,
+  KeyRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useTournamentState } from "@/hooks/usePolla";
@@ -36,8 +38,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { PlanillaEditor } from "@/components/PlanillaEditor";
+import { adminResetPin } from "@/lib/admin.functions";
+import { PIN_RE } from "@/lib/auth";
 import {
   POLLA,
   fmtCOP,
@@ -74,6 +87,11 @@ export function PagosTab() {
   const qc = useQueryClient();
   const [toDelete, setToDelete] = useState<{ id: string; nombre: string } | null>(null);
   const [typed, setTyped] = useState("");
+  const [editing, setEditing] = useState<{ id: string; nombre: string } | null>(null);
+  const [resetPin, setResetPin] = useState<{ userId: string; nombre: string } | null>(null);
+  const [pinValue, setPinValue] = useState("");
+  const [pinBusy, setPinBusy] = useState(false);
+  const runResetPin = useServerFn(adminResetPin);
   const { data: parts = [], isLoading } = useQuery({
     queryKey: ["admin-participants"],
     queryFn: async () => {
@@ -96,6 +114,25 @@ export function PagosTab() {
       toast.success(t("admin.t.toast.updated"));
       qc.invalidateQueries({ queryKey: ["admin-participants"] });
       qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+    }
+  };
+
+  const doResetPin = async () => {
+    if (!resetPin) return;
+    if (!PIN_RE.test(pinValue)) {
+      toast.error(t("admin.t.pin.invalid"));
+      return;
+    }
+    setPinBusy(true);
+    try {
+      await runResetPin({ data: { userId: resetPin.userId, newPin: pinValue } });
+      toast.success(t("admin.t.pin.ok", { name: resetPin.nombre }));
+      setResetPin(null);
+      setPinValue("");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error");
+    } finally {
+      setPinBusy(false);
     }
   };
 
@@ -187,6 +224,29 @@ export function PagosTab() {
                           icon={<Download className="mr-2 size-4" />}
                         />
                       )}
+                      {p.estado_pago === "aprobado" && (
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          title={t("admin.t.edit.btn")}
+                          onClick={() => setEditing({ id: p.id, nombre: p.nombre })}
+                        >
+                          <Pencil className="size-4" />
+                        </Button>
+                      )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        title={t("admin.t.pin.btn")}
+                        disabled={!p.user_id}
+                        onClick={() => {
+                          if (!p.user_id) return;
+                          setResetPin({ userId: p.user_id, nombre: p.nombre });
+                          setPinValue("");
+                        }}
+                      >
+                        <KeyRound className="size-4" />
+                      </Button>
                       <Button
                         size="sm"
                         variant="hero"
@@ -262,6 +322,81 @@ export function PagosTab() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Editar planilla de un participante (sin candados, solo admin) */}
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t("admin.t.edit.title")}</DialogTitle>
+            <DialogDescription>
+              {t("admin.t.edit.banner", { name: editing?.nombre ?? "" })}
+            </DialogDescription>
+          </DialogHeader>
+          {editing && (
+            <PlanillaEditor
+              key={editing.id}
+              participantId={editing.id}
+              participantName={editing.nombre}
+              adminEdit
+              onSaved={() => {
+                qc.invalidateQueries({ queryKey: ["admin-participants"] });
+                setEditing(null);
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Resetear el PIN de acceso de un usuario (solo admin) */}
+      <Dialog
+        open={!!resetPin}
+        onOpenChange={(o) => {
+          if (!o) {
+            setResetPin(null);
+            setPinValue("");
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("admin.t.pin.title")}</DialogTitle>
+            <DialogDescription>
+              {t("admin.t.pin.desc", { name: resetPin?.nombre ?? "" })}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">{t("admin.t.pin.label")}</Label>
+            <Input
+              value={pinValue}
+              onChange={(e) => setPinValue(e.target.value.replace(/\D/g, "").slice(0, 4))}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={4}
+              placeholder="••••"
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setResetPin(null);
+                setPinValue("");
+              }}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              variant="hero"
+              disabled={pinBusy || !PIN_RE.test(pinValue)}
+              onClick={doResetPin}
+            >
+              {pinBusy ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
+              {t("admin.t.pin.cta")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

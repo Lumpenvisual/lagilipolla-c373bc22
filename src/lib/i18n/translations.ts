@@ -717,6 +717,20 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Acciones",
     "admin.t.pagos.deleteTitle": "Mover a la papelera (eliminar)",
     "admin.t.pagos.downloadPlanilla": "Planilla",
+    "admin.t.edit.btn": "Editar planilla",
+    "admin.t.edit.title": "Editar planilla (admin)",
+    "admin.t.edit.banner":
+      "Estás editando la planilla de {name} como admin. Sin candados: puedes corregir cualquier marcador aunque el tiempo esté bloqueado.",
+    "admin.t.edit.cta": "Guardar cambios",
+    "admin.t.edit.saved": "Planilla actualizada",
+    "admin.t.pin.btn": "Resetear PIN",
+    "admin.t.pin.title": "Resetear PIN de acceso",
+    "admin.t.pin.desc":
+      "Asigna un nuevo PIN de 4 dígitos para {name}. El usuario entrará con su alias y este PIN.",
+    "admin.t.pin.label": "Nuevo PIN (4 dígitos)",
+    "admin.t.pin.cta": "Resetear PIN",
+    "admin.t.pin.ok": "PIN actualizado para {name}",
+    "admin.t.pin.invalid": "El PIN debe ser de 4 dígitos.",
     "admin.t.res.repechajes": "Repechajes",
     "admin.t.res.repechajesHint":
       'Cuando se resuelva un repechaje, edita el nombre del equipo "Ganador Repechaje X". Si en un partido de eliminatorias hay repechaje (alargue o penales), solo se tendrá en cuenta el marcador de los primeros 90 minutos, no el del repechaje.',
@@ -1513,6 +1527,20 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Actions",
     "admin.t.pagos.deleteTitle": "Move to trash (delete)",
     "admin.t.pagos.downloadPlanilla": "Ballot",
+    "admin.t.edit.btn": "Edit ballot",
+    "admin.t.edit.title": "Edit ballot (admin)",
+    "admin.t.edit.banner":
+      "You are editing {name}'s ballot as admin. No locks: you can fix any score even when time is locked.",
+    "admin.t.edit.cta": "Save changes",
+    "admin.t.edit.saved": "Ballot updated",
+    "admin.t.pin.btn": "Reset PIN",
+    "admin.t.pin.title": "Reset access PIN",
+    "admin.t.pin.desc":
+      "Set a new 4-digit PIN for {name}. The user will sign in with their alias and this PIN.",
+    "admin.t.pin.label": "New PIN (4 digits)",
+    "admin.t.pin.cta": "Reset PIN",
+    "admin.t.pin.ok": "PIN updated for {name}",
+    "admin.t.pin.invalid": "PIN must be 4 digits.",
     "admin.t.res.repechajes": "Play-offs",
     "admin.t.res.repechajesHint":
       'Once a play-off is resolved, edit the "Play-off X Winner" team name. In knockout matches with a tie-breaker (extra time or penalty shoot-out), only the 90-minute score counts — not the shoot-out result.',
