@@ -28,6 +28,7 @@ import {
   composeSpecial,
   parseSpecial,
   isMatchLocked,
+  isExtraPhaseLocked,
   isSectionVisible,
   lastGol,
   scoreState,
@@ -641,6 +642,9 @@ export function PlanillaEditor({
           const p = extra[m.id];
           return p && p.gh != null && p.ga != null;
         }).length;
+        // Eliminatorias: la RONDA completa se cierra 1 h antes de su primer partido
+        // (no candado por-partido). El admin lo salta.
+        const phaseLocked = adminEdit ? false : isExtraPhaseLocked(extraMatches, fase);
         return (
           <Collapsible key={fase} defaultOpen={false} className="mt-10 group/phase">
             <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 rounded-lg border border-info/30 bg-info/5 px-4 py-3 text-left transition-colors hover:bg-info/10">
@@ -663,9 +667,8 @@ export function PlanillaEditor({
               <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
                 {list.map((m) => {
                   const p = extra[m.id] ?? { gh: null, ga: null };
-                  const matchLocked = matchLockedFn(m.fecha);
-                  const ghDisabled = locked || matchLocked || isExtraFieldLocked(m.id, "gh");
-                  const gaDisabled = locked || matchLocked || isExtraFieldLocked(m.id, "ga");
+                  const ghDisabled = locked || phaseLocked || isExtraFieldLocked(m.id, "gh");
+                  const gaDisabled = locked || phaseLocked || isExtraFieldLocked(m.id, "ga");
                   const [stadium, city] = m.sede.split(" · ");
                   return (
                     <div
@@ -681,9 +684,9 @@ export function PlanillaEditor({
                           <span className="text-foreground/80">{stadium}</span>
                           {city && <span className="text-muted-foreground">· {city}</span>}
                         </span>
-                        {matchLocked && (
+                        {phaseLocked && (
                           <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                            <Lock className="size-3" /> {t("planilla.k.blocked")}
+                            <Lock className="size-3" /> {t("planilla.extra.roundClosed")}
                           </span>
                         )}
                       </div>

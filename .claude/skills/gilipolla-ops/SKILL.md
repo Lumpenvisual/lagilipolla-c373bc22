@@ -72,6 +72,14 @@ Backup de producción seguro: Admin → Reportes → **Cloud Backups** (`uploadB
 - **Resetear resultados oficiales:** en `tournament_state` poner `gh/ga=null` en `group_k_matches` y `extra_matches`, `pos1/pos2=null` por grupo, `goleador_id/arquero_id=null` — **preservando** equipos, fechas, sedes, deadline, fases y visibilidad.
 - **Reabrir edición:** `picks_locked_at` es NOT NULL → ponerlo a fecha futura (post-final) para no bloquear; el cierre real lo dan los locks por-partido 24 h.
 
+### Bracket de eliminatorias (KO)
+La estructura del KO (32 partidos M73–M104) vive en `tournament_state.extra_matches` (JSONB) y se puntúa por marcador 5/3/2/1 igual que grupos (no hay tablas nuevas ni scoring aparte). Fuente única en TS: `src/lib/knockout-bracket.ts`.
+- **Sembrar el bracket:** migración `…_seed_knockout_bracket.sql` (idempotente: solo siembra si `extra_matches` está vacío). Crea los 32 partidos (ids `m73`…`m104`) con etiquetas placeholder (`Segundo A`, `Ganador E`, `Mejor 3° (A/B/C/D/F)`, `Ganador Partido 74`, `Perdedor Partido 101`), con sedes y fechas oficiales (el admin puede ajustar en **Cronograma**). Es la copia versionada del bracket ya cargado en prod.
+- **Generar dieciseisavos:** Admin → **Cronograma** → "Generar cruces": rellena 1°/2° desde `groups.pos1/pos2` oficiales (cargados en Resultados) + asignación manual de los 8 mejores terceros (la app **no** guarda los 72 marcadores de grupos, así que los terceros no se auto-rankean). Revisar y **Guardar cronograma**.
+- **Activar la fase:** en Cronograma, el switch de cada fase la muestra al usuario y habilita la carga de marcadores (sincroniza `phases`+`visibility`).
+- **Avanzar ganadores:** Admin → **Resultados** → "Avanzar ganadores": tras cargar marcadores KO, rellena local/visitante de la ronda siguiente; en empates el admin designa el ganador por penales. Revisar y guardar.
+- **Regenerar a cero:** vaciar primero (`UPDATE tournament_state SET extra_matches='[]' WHERE id=1`) y volver a aplicar la migración / botón.
+
 ## Verificación antes de pushear
 
 `bunx tsc --noEmit` · `bun run lint` (0 errores; warnings react-refresh son preexistentes) · `bun run test` · `bun run build`. eslint ignora `dist/.output/.vinxi/.vercel/.nitro/.tanstack`.

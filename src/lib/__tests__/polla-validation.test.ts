@@ -7,7 +7,9 @@ import {
   groupPts,
   matchPts,
   normEspecial,
+  isExtraPhaseLocked,
   MAX_GOLES,
+  type ExtraMatch,
 } from "@/lib/polla";
 
 describe("isValidGol — un solo dígito (0–9)", () => {
@@ -96,6 +98,42 @@ describe("matchPts — reglamento 5/3/2/1/1/0 (espejo de calc_pick_points)", () 
   it("0 si falta oficial o pick", () => {
     expect(matchPts(null, 1, 2, 1)).toBe(0);
     expect(matchPts(2, 1, null, 1)).toBe(0);
+  });
+});
+
+describe("isExtraPhaseLocked — cierre por ronda 1h antes del primer partido", () => {
+  const mk = (id: string, fase: ExtraMatch["fase"], fecha: string): ExtraMatch => ({
+    id,
+    fase,
+    fecha,
+    local: "A",
+    visitante: "B",
+    sede: "",
+    gh: null,
+    ga: null,
+  });
+  // Ronda de dieciseisavos: primer partido el 1 jul 12:00Z, otro 3 días después.
+  const extra: ExtraMatch[] = [
+    mk("ko-73", "dieciseisavos", "2026-07-01T12:00:00Z"),
+    mk("ko-88", "dieciseisavos", "2026-07-03T20:00:00Z"),
+    mk("ko-104", "final", "2026-07-19T19:00:00Z"),
+  ];
+  const firstMs = new Date("2026-07-01T12:00:00Z").getTime();
+
+  it("abierta a más de 1h del primer partido", () => {
+    expect(isExtraPhaseLocked(extra, "dieciseisavos", firstMs - 61 * 60 * 1000)).toBe(false);
+  });
+  it("cerrada a 1h o menos del primer partido (toda la ronda, aunque otros sean días después)", () => {
+    expect(isExtraPhaseLocked(extra, "dieciseisavos", firstMs - 60 * 60 * 1000)).toBe(true);
+    expect(isExtraPhaseLocked(extra, "dieciseisavos", firstMs - 30 * 60 * 1000)).toBe(true);
+    expect(isExtraPhaseLocked(extra, "dieciseisavos", firstMs + 1)).toBe(true);
+  });
+  it("no bloquea si la fase no tiene fechas válidas (aún sin programar)", () => {
+    const sinFecha = [mk("ko-89", "octavos", ""), mk("ko-90", "octavos", "")];
+    expect(isExtraPhaseLocked(sinFecha, "octavos", firstMs)).toBe(false);
+  });
+  it("no bloquea una fase distinta a la del primer partido próximo", () => {
+    expect(isExtraPhaseLocked(extra, "final", firstMs)).toBe(false);
   });
 });
 

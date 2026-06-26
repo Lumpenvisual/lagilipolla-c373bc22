@@ -7,8 +7,8 @@ import { createElement } from "react";
 // --- Mock Supabase client BEFORE importing the hooks ---
 const rpcMock = vi.fn();
 const updateEqMock = vi.fn(async () => ({ error: null }));
-const updateMock = vi.fn(() => ({ eq: updateEqMock }));
-const insertMock = vi.fn(async () => ({ error: null }));
+const updateMock = vi.fn((_payload: { participant_id: string }) => ({ eq: updateEqMock }));
+const insertMock = vi.fn(async (_row: { participant_id: string }) => ({ error: null }));
 
 // Fila existente de picks que devuelve el chequeo de existencia (null = no existe).
 let existingPick: Record<string, unknown> | null = {
@@ -132,7 +132,7 @@ describe("useSavePick", () => {
     } as never);
     expect(updateMock).toHaveBeenCalledTimes(1);
     expect(insertMock).not.toHaveBeenCalled();
-    expect(updateMock.mock.calls[0][0].participant_id).toBe("p1");
+    expect(updateMock.mock.calls[0]?.[0]?.participant_id).toBe("p1");
     expect(updateEqMock).toHaveBeenCalledWith("participant_id", "p1");
   });
 
@@ -148,7 +148,7 @@ describe("useSavePick", () => {
     } as never);
     expect(insertMock).toHaveBeenCalledTimes(1);
     expect(updateMock).not.toHaveBeenCalled();
-    expect(insertMock.mock.calls[0][0].participant_id).toBe("p2");
+    expect(insertMock.mock.calls[0]?.[0]?.participant_id).toBe("p2");
   });
 });
 

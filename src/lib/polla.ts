@@ -179,6 +179,27 @@ export function isMatchLocked(iso: string, nowMs: number = Date.now()): boolean 
   return start - nowMs <= 24 * 60 * 60 * 1000;
 }
 
+/** Antelación con que se cierra una ronda de eliminatorias: 1 h antes de su primer partido. */
+export const KNOCKOUT_LOCK_BEFORE_MS = 60 * 60 * 1000;
+
+/**
+ * Reglamento eliminatorias: la RONDA completa se cierra 1 h antes de su primer partido
+ * (no candado por-partido). Espejo TS de `is_extra_phase_locked` en SQL. Si la fase no
+ * tiene ninguna fecha válida (aún sin programar), no bloquea.
+ */
+export function isExtraPhaseLocked(
+  extra: ExtraMatch[],
+  fase: Fase,
+  nowMs: number = Date.now(),
+): boolean {
+  const times = extra
+    .filter((m) => m.fase === fase)
+    .map((m) => new Date(m.fecha).getTime())
+    .filter((tms) => !Number.isNaN(tms));
+  if (times.length === 0) return false;
+  return nowMs >= Math.min(...times) - KNOCKOUT_LOCK_BEFORE_MS;
+}
+
 /* ---- Validación de marcadores (reglamento: un solo dígito, 0–9) ----
  * Se usa tanto en la planilla del usuario como en los resultados del admin,
  * y se refleja en el servidor (trigger picks_validate + guard recalc_all_picks). */

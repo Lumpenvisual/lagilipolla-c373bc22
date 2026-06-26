@@ -683,6 +683,7 @@ export const translations: Record<Lang, Dict> = {
     "planilla.toast.invalidScore":
       "Marcadores inválidos (usa un solo dígito 0–9 en ambos campos): {matches}",
     "planilla.extra.progress": "{done} / {total} partidos",
+    "planilla.extra.roundClosed": "Ronda cerrada · empezó su primer partido",
     "planilla.extra.empty": "El admin aún no ha agregado partidos para esta fase.",
     "planilla.confirm.title": "Confirmar cambios",
     "planilla.confirm.desc":
@@ -750,6 +751,14 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.dupGroups": "Grupos con 1º y 2º repetidos: {groups}",
     "admin.t.res.invalidScore":
       "Resultados oficiales inválidos (un solo dígito 0–9 en ambos campos): {matches}",
+    "admin.t.res.adv.title": "Avanzar ganadores a las siguientes rondas",
+    "admin.t.res.adv.hint":
+      "Toma los marcadores cargados arriba y rellena los cruces de la ronda siguiente (octavos → final y tercer puesto). En empates, designa el ganador por penales. Revisa y guarda para que los participantes los vean.",
+    "admin.t.res.adv.pensLabel": "Empates — define el ganador por penales",
+    "admin.t.res.adv.penPick": "Elige ganador",
+    "admin.t.res.adv.button": "Avanzar ganadores",
+    "admin.t.res.adv.afterHint": "Luego revisa los cruces y guarda.",
+    "admin.t.res.adv.done": "Ganadores avanzados. Revisa y guarda.",
     "admin.t.esp.title": "Especiales de los participantes",
     "admin.t.esp.hint":
       "Goleador y arquero los escribe cada participante en su planilla (nombre y selección). Aquí ves quién entregó qué. El resultado oficial se fija en la pestaña Resultados.",
@@ -760,6 +769,16 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.cron.phasesTitle": "Activar fases del torneo",
     "admin.t.cron.phasesHint":
       "Cada fase tiene un solo interruptor: activarla la hace visible en el cronograma y la planilla y habilita a los participantes para cargar sus marcadores; desactivarla la oculta. Los puntos ya calculados no se ven afectados.",
+    "admin.t.cron.gen.title": "Generar dieciseisavos desde clasificados",
+    "admin.t.cron.gen.hint":
+      "Arma los 16 cruces de dieciseisavos con los 1° y 2° oficiales de cada grupo (pestaña Resultados). Asigna a mano los 8 mejores terceros. Revisa y guarda abajo. No pisa marcadores ya cargados.",
+    "admin.t.cron.gen.missing":
+      "Faltan 1°/2° oficiales en los grupos: {groups}. Defínelos en Resultados antes de generar.",
+    "admin.t.cron.gen.thirdsLabel": "Mejores terceros (asignación manual)",
+    "admin.t.cron.gen.thirdNone": "Sin asignar",
+    "admin.t.cron.gen.button": "Generar cruces",
+    "admin.t.cron.gen.afterHint": "Revisa los cruces y guarda el cronograma.",
+    "admin.t.cron.gen.done": "Cruces generados. Revisa y guarda el cronograma.",
     "admin.t.cron.addMatch": "Agregar partido",
     "admin.t.cron.oneMatch": "1 partido",
     "admin.t.cron.nMatches": "{n} partidos",
@@ -1491,6 +1510,7 @@ export const translations: Record<Lang, Dict> = {
     "planilla.toast.invalidScore":
       "Invalid scores (use a single digit 0–9 in both fields): {matches}",
     "planilla.extra.progress": "{done} / {total} matches",
+    "planilla.extra.roundClosed": "Round closed · its first match has started",
     "planilla.extra.empty": "Admin hasn't added matches for this phase yet.",
     "planilla.confirm.title": "Confirm changes",
     "planilla.confirm.desc":
@@ -1561,6 +1581,14 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.dupGroups": "Groups with repeated 1st and 2nd: {groups}",
     "admin.t.res.invalidScore":
       "Invalid official results (use a single digit 0–9 in both fields): {matches}",
+    "admin.t.res.adv.title": "Advance winners to the next rounds",
+    "admin.t.res.adv.hint":
+      "Takes the scores entered above and fills the next round's match-ups (Round of 16 → Final and third place). On ties, set the penalty-shoot-out winner. Review and save so participants can see them.",
+    "admin.t.res.adv.pensLabel": "Ties — set the penalty-shoot-out winner",
+    "admin.t.res.adv.penPick": "Pick winner",
+    "admin.t.res.adv.button": "Advance winners",
+    "admin.t.res.adv.afterHint": "Then review the match-ups and save.",
+    "admin.t.res.adv.done": "Winners advanced. Review and save.",
     "admin.t.esp.title": "Participants' specials",
     "admin.t.esp.hint":
       "Each participant writes their top scorer and goalkeeper (name and national team) on their ballot. Here you see who submitted what. The official result is set in the Results tab.",
@@ -1571,6 +1599,16 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.cron.phasesTitle": "Activate tournament phases",
     "admin.t.cron.phasesHint":
       "Each phase has a single switch: turning it on makes it visible on the schedule and ballot and lets participants submit their scores; turning it off hides it. Already-computed points are not affected.",
+    "admin.t.cron.gen.title": "Generate Round of 32 from qualified teams",
+    "admin.t.cron.gen.hint":
+      "Builds the 16 Round-of-32 match-ups from each group's official 1st and 2nd (Results tab). Assign the 8 best third-placed teams by hand. Review and save below. Does not overwrite scores already entered.",
+    "admin.t.cron.gen.missing":
+      "Missing official 1st/2nd in groups: {groups}. Set them in Results before generating.",
+    "admin.t.cron.gen.thirdsLabel": "Best third-placed teams (manual assignment)",
+    "admin.t.cron.gen.thirdNone": "Unassigned",
+    "admin.t.cron.gen.button": "Generate match-ups",
+    "admin.t.cron.gen.afterHint": "Review the match-ups and save the schedule.",
+    "admin.t.cron.gen.done": "Match-ups generated. Review and save the schedule.",
     "admin.t.cron.addMatch": "Add match",
     "admin.t.cron.oneMatch": "1 match",
     "admin.t.cron.nMatches": "{n} matches",

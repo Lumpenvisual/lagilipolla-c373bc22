@@ -61,10 +61,17 @@ import {
   scoreState,
   type ExtraMatch,
   type Fase,
+  type GroupKey,
   type GroupMatch,
   type Phases,
   type TournamentState,
 } from "@/lib/polla";
+import {
+  KNOCKOUT_BRACKET,
+  applyAdvance,
+  applyRound32,
+  buildExtraMatchesFromBracket,
+} from "@/lib/knockout-bracket";
 import { DownloadButton } from "@/components/DownloadButton";
 import { PickHistoryCard } from "@/components/PickHistoryCard";
 import {
@@ -407,6 +414,8 @@ export function ResultadosTab() {
   const qc = useQueryClient();
   const { data: ts } = useTournamentState();
   const [draft, setDraft] = useState<TournamentState | null>(null);
+  // Ganador por penales (empate en 90'/prórroga) designado por el admin: id → código.
+  const [penWinners, setPenWinners] = useState<Record<string, string>>({});
   useEffect(() => {
     if (ts) setDraft(JSON.parse(JSON.stringify(ts)));
   }, [ts]);
@@ -482,6 +491,23 @@ export function ResultadosTab() {
     toast.success(t("admin.t.toast.resultsSaved"));
     await runRecalc();
     qc.invalidateQueries({ queryKey: ["tournament-state"] });
+  };
+
+  // Avanza ganadores a las rondas siguientes a partir de los marcadores cargados.
+  // Marcador claro → ganador por goles; empate → ganador por penales designado por el admin.
+  // Solo actualiza el borrador local (rellena local/visitante de la ronda siguiente); el admin guarda.
+  const advanceWinners = () => {
+    if (!draft) return;
+    const ex = draft.extra_matches ?? [];
+    const winners: Record<string, string> = {};
+    for (const m of ex) {
+      if (m.gh == null || m.ga == null) continue;
+      if (m.gh > m.ga) winners[m.id] = m.local;
+      else if (m.ga > m.gh) winners[m.id] = m.visitante;
+      else if (penWinners[m.id]) winners[m.id] = penWinners[m.id];
+    }
+    setDraft({ ...draft, extra_matches: applyAdvance(ex, winners) });
+    toast.success(t("admin.t.res.adv.done"));
   };
 
   const updateGroup = (k: (typeof GROUP_KEYS)[number], field: "pos1" | "pos2", v: string) => {
@@ -707,6 +733,49 @@ export function ResultadosTab() {
         );
       })()}
 
+      {(() => {
+        const ex = draft.extra_matches ?? [];
+        if (ex.length === 0) return null;
+        const draws = ex.filter((m) => m.gh != null && m.ga != null && m.gh === m.ga);
+        return (
+          <Card className="border-info/30 bg-card p-5 card-shadow">
+            <h2 className="font-display text-xl text-info">{t("admin.t.res.adv.title")}</h2>
+            <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.res.adv.hint")}</p>
+            {draws.length > 0 && (
+              <div className="mt-3 space-y-2">
+                <Label className="text-[11px] uppercase text-muted-foreground">
+                  {t("admin.t.res.adv.pensLabel")}
+                </Label>
+                {draws.map((m) => (
+                  <div key={m.id} className="flex items-center gap-2">
+                    <span className="flex-1 truncate text-sm">
+                      {m.local} {m.gh}–{m.ga} {m.visitante}
+                    </span>
+                    <select
+                      value={penWinners[m.id] ?? ""}
+                      onChange={(e) => setPenWinners((s) => ({ ...s, [m.id]: e.target.value }))}
+                      className="rounded-md border border-input bg-background px-2 py-1 text-sm"
+                    >
+                      <option value="">— {t("admin.t.res.adv.penPick")} —</option>
+                      <option value={m.local}>{m.local}</option>
+                      <option value={m.visitante}>{m.visitante}</option>
+                    </select>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="mt-4 flex items-center gap-3">
+              <Button onClick={advanceWinners} variant="secondary">
+                <RefreshCw className="mr-1 size-4" /> {t("admin.t.res.adv.button")}
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                {t("admin.t.res.adv.afterHint")}
+              </span>
+            </div>
+          </Card>
+        );
+      })()}
+
       <Card className="border-destructive/30 bg-card p-5 card-shadow">
         <h2 className="font-display text-xl text-destructive">{t("admin.t.res.especiales")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -797,6 +866,8 @@ export function CronogramaTab() {
   const [extras, setExtras] = useState<ExtraMatch[]>([]);
   const [groupMatches, setGroupMatches] = useState<GroupMatch[]>([]);
   const [visibility, setVisibility] = useState<Record<string, boolean>>(DEFAULT_VISIBILITY);
+  // Asignación manual de los 8 mejores terceros: id de partido R32 → código de equipo.
+  const [thirds, setThirds] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (ts) {
@@ -822,6 +893,26 @@ export function CronogramaTab() {
   const fases: Fase[] = ["dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
   const fasesEditables: Fase[] = ["grupos", ...fases];
 
+  // Slots de tercero del bracket (visitante = 3°), con sus grupos candidatos.
+  const thirdSlots = KNOCKOUT_BRACKET.filter(
+    (m) => m.fase === "dieciseisavos" && m.visitante.kind === "third",
+  ).map((m) => ({
+    id: m.id,
+    num: m.num,
+    groups: (m.visitante as { groups: GroupKey[] }).groups,
+  }));
+  // Grupos sin 1°/2° oficial definido todavía.
+  const missingGroups = GROUP_KEYS.filter((k) => !ts.groups[k]?.pos1 || !ts.groups[k]?.pos2);
+  // Candidatos a tercero de un slot: equipos de los grupos permitidos que NO son 1°/2°.
+  const thirdOptions = (groups: GroupKey[]) =>
+    groups.flatMap((g) => {
+      const grp = ts.groups[g];
+      if (!grp) return [];
+      return grp.teams
+        .filter((tm) => tm.id !== grp.pos1 && tm.id !== grp.pos2)
+        .map((tm) => ({ id: tm.id, label: `${tm.nombre} (${g})` }));
+    });
+
   const save = async () => {
     // La visibilidad de cada fase para los usuarios la dicta su toggle de activación:
     // mantenemos phases y visibility sincronizados para las 7 fases antes de persistir.
@@ -839,6 +930,16 @@ export function CronogramaTab() {
     if (error) return toast.error(error.message);
     toast.success(t("admin.t.toast.cronSaved"));
     qc.invalidateQueries({ queryKey: ["tournament-state"] });
+  };
+
+  // Rellena los cruces de dieciseisavos desde los 1°/2° oficiales de cada grupo
+  // (+ terceros asignados a mano). Solo actualiza el borrador local; el admin revisa
+  // y guarda con el botón inferior. Si aún no hay bracket sembrado, lo crea.
+  const generateR32 = () => {
+    if (!ts) return;
+    const base = extras.length ? extras : buildExtraMatchesFromBracket();
+    setExtras(applyRound32(base, ts.groups, thirds));
+    toast.success(t("admin.t.cron.gen.done"));
   };
 
   const addMatch = (fase: Fase) => {
@@ -904,6 +1005,51 @@ export function CronogramaTab() {
         <h2 className="font-display text-xl text-gold">{t("admin.t.cron.phasesTitle")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.phasesHint")}</p>
       </div>
+
+      <Card className="border-info/30 bg-card p-5 card-shadow">
+        <h2 className="font-display text-xl text-info">{t("admin.t.cron.gen.title")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.cron.gen.hint")}</p>
+
+        {missingGroups.length > 0 && (
+          <p className="mt-3 rounded-md border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning-foreground">
+            {t("admin.t.cron.gen.missing", { groups: missingGroups.join(", ") })}
+          </p>
+        )}
+
+        <div className="mt-4">
+          <Label className="text-[11px] uppercase text-muted-foreground">
+            {t("admin.t.cron.gen.thirdsLabel")}
+          </Label>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {thirdSlots.map((slot) => (
+              <div key={slot.id} className="rounded-md border border-border bg-muted/30 p-2">
+                <p className="text-[11px] text-muted-foreground">
+                  P{slot.num} · 3° ({slot.groups.join("/")})
+                </p>
+                <select
+                  value={thirds[slot.id] ?? ""}
+                  onChange={(e) => setThirds((s) => ({ ...s, [slot.id]: e.target.value }))}
+                  className="mt-1 w-full rounded-md border border-input bg-background px-2 py-1 text-sm"
+                >
+                  <option value="">— {t("admin.t.cron.gen.thirdNone")} —</option>
+                  {thirdOptions(slot.groups).map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center gap-3">
+          <Button onClick={generateR32} disabled={missingGroups.length > 0} variant="secondary">
+            <RefreshCw className="mr-1 size-4" /> {t("admin.t.cron.gen.button")}
+          </Button>
+          <span className="text-xs text-muted-foreground">{t("admin.t.cron.gen.afterHint")}</span>
+        </div>
+      </Card>
 
       {fasesEditables.map((fase) => {
         const active = !!phases[fase];
