@@ -78,6 +78,9 @@ La estructura del KO (32 partidos M73–M104) vive en `tournament_state.extra_ma
 - **Generar dieciseisavos:** Admin → **Cronograma** → "Generar cruces": rellena 1°/2° desde `groups.pos1/pos2` oficiales (cargados en Resultados) + asignación manual de los 8 mejores terceros (la app **no** guarda los 72 marcadores de grupos, así que los terceros no se auto-rankean). Revisar y **Guardar cronograma**.
 - **Activar la fase:** en Cronograma, el switch de cada fase la muestra al usuario y habilita la carga de marcadores (sincroniza `phases`+`visibility`).
 - **Avanzar ganadores:** Admin → **Resultados** → "Avanzar ganadores": tras cargar marcadores KO, rellena local/visitante de la ronda siguiente; en empates el admin designa el ganador por penales. Revisar y guardar.
+- **Candado POR-RONDA (eliminatorias):** desde jun-2026, el cierre de la planilla KO es **1 h antes del primer partido de la ronda** (toda la fase cierra junta), NO 24 h por partido. Aplica a participantes; **admin con bypass**. Grupo K sigue 24 h. SQL: migración `20260625130000_knockout_phase_lock.sql` → `is_extra_phase_locked(_match_id)` + `enforce_picks_deadline` (trigger `picks_enforce_deadline`). Espejo TS `isExtraPhaseLocked` (`src/lib/polla.ts`) → `PlanillaEditor` deshabilita inputs por fase. Si una fase no tiene fechas, no bloquea. Verificar en prod: `select public.is_extra_phase_locked('m73');` (false = abierto).
+- **Visibilidad por ronda:** activar el switch de la fase en Cronograma la hace **visible** al usuario; el candado solo deshabilita inputs, no oculta.
+- **Continuidad de puntos:** guardar resultados KO en Resultados llama `recalc_all_picks`; `get_polla_leaderboard` ya combina grupos+K+KO (`puntos_total`). No tocar scoring.
 - **Regenerar a cero:** vaciar primero (`UPDATE tournament_state SET extra_matches='[]' WHERE id=1`) y volver a aplicar la migración / botón.
 
 ## Verificación antes de pushear
