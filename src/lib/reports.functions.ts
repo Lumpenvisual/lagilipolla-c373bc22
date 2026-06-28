@@ -230,7 +230,7 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     const helvObl = await pdf.embedFont(StandardFonts.HelveticaOblique);
 
     const A4 = { w: 595.28, h: 841.89 };
-    const page = pdf.addPage([A4.w, A4.h]);
+    let page = pdf.addPage([A4.w, A4.h]);
     const yellow = rgb(1, 0.8, 0);
     const blue = rgb(0, 0.27, 0.67);
     const red = rgb(0.84, 0.13, 0.13);
@@ -291,6 +291,17 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     });
 
     let y = A4.h - 130;
+
+    // Salto de página cuando no queda espacio (el comprobante crece con el histórico KO).
+    const ensure = (needed: number) => {
+      if (y - needed < 50) {
+        page = pdf.addPage([A4.w, A4.h]);
+        page.drawRectangle({ x: 0, y: A4.h - 8, width: A4.w, height: 8, color: yellow });
+        page.drawRectangle({ x: 0, y: A4.h - 14, width: A4.w, height: 6, color: blue });
+        page.drawRectangle({ x: 0, y: A4.h - 20, width: A4.w, height: 6, color: red });
+        y = A4.h - 50;
+      }
+    };
 
     // Participant block
     page.drawLine({ start: { x: 40, y }, end: { x: A4.w - 40, y }, thickness: 0.5, color: line });
@@ -413,7 +424,67 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     }
     y -= 6;
 
+    // Eliminatorias — histórico completo de marcadores (rondas definidas / pronosticadas)
+    const extrasPdf = tournament.extra_matches ?? [];
+    const koName = (v: string) => teamNameByCode(tournament.groups, v);
+    const koShow = (m: (typeof extrasPdf)[number]) => {
+      const pr = myPick.extra_matches?.[m.id];
+      const predicted = !!pr && (pr.gh != null || pr.ga != null);
+      const official = m.gh != null && m.ga != null;
+      const resolved = koName(m.local) !== m.local && koName(m.visitante) !== m.visitante;
+      return predicted || official || resolved;
+    };
+    const koVisible = extrasPdf.filter(koShow);
+    if (koVisible.length) {
+      ensure(30);
+      page.drawLine({ start: { x: 40, y }, end: { x: A4.w - 40, y }, thickness: 0.5, color: line });
+      y -= 14;
+      page.drawText("ELIMINATORIAS — HISTORICO DE MARCADORES", {
+        x: 40,
+        y,
+        size: 10,
+        font: helvBold,
+        color: blue,
+      });
+      y -= 14;
+      const fasesPdf: Fase[] = ["dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
+      for (const fase of fasesPdf) {
+        const list = koVisible.filter((m) => m.fase === fase);
+        if (!list.length) continue;
+        ensure(24);
+        page.drawText(FASE_LABEL[fase], { x: 40, y, size: 9, font: helvBold, color: dark });
+        y -= 12;
+        for (const m of list) {
+          ensure(13);
+          const pr = myPick.extra_matches?.[m.id];
+          const txt = `${koName(m.local)}  ${pr?.gh ?? "-"} - ${pr?.ga ?? "-"}  ${koName(m.visitante)}`;
+          page.drawText(txt, { x: 48, y, size: 8, font: helv, color: dark });
+          if (m.gh != null && m.ga != null) {
+            page.drawText(`oficial: ${m.gh}-${m.ga}`, {
+              x: A4.w - 130,
+              y,
+              size: 8,
+              font: helvObl,
+              color: muted,
+            });
+            const pts = matchPts(m.gh, m.ga, pr?.gh, pr?.ga);
+            page.drawText(`+${pts} pts`, {
+              x: A4.w - 70,
+              y,
+              size: 8,
+              font: helvBold,
+              color: pts > 0 ? blue : muted,
+            });
+          }
+          y -= 12;
+        }
+        y -= 4;
+      }
+      y -= 2;
+    }
+
     // Specials
+    ensure(70);
     page.drawLine({ start: { x: 40, y }, end: { x: A4.w - 40, y }, thickness: 0.5, color: line });
     y -= 14;
     page.drawText("SELECCIONES ESPECIALES", { x: 40, y, size: 10, font: helvBold, color: blue });
@@ -439,6 +510,7 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
     y -= 18;
 
     // Footer
+    ensure(40);
     page.drawLine({ start: { x: 40, y }, end: { x: A4.w - 40, y }, thickness: 0.5, color: line });
     y -= 12;
     page.drawText(
