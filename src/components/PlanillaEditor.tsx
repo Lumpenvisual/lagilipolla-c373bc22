@@ -693,12 +693,13 @@ export function PlanillaEditor({
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                        <div className="flex w-[180px] justify-center">
+                      <div className="flex w-full items-center justify-center gap-2 sm:w-auto sm:shrink-0">
+                        <div className="flex min-w-0 flex-1 justify-center sm:w-[180px] sm:flex-none">
                           <TeamWithFlag
                             teamName={lName}
                             flagCode={getFlagCode(lName)}
                             size="sm"
+                            wrap
                             className="min-w-0 justify-center text-center"
                           />
                         </div>
@@ -709,7 +710,7 @@ export function PlanillaEditor({
                           disabled={ghDisabled}
                           value={p.gh ?? ""}
                           onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
-                          className="h-9 w-14 text-center"
+                          className="h-9 w-14 shrink-0 text-center"
                         />
                         <span className="text-muted-foreground">–</span>
                         <Input
@@ -719,13 +720,14 @@ export function PlanillaEditor({
                           disabled={gaDisabled}
                           value={p.ga ?? ""}
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
-                          className="h-9 w-14 text-center"
+                          className="h-9 w-14 shrink-0 text-center"
                         />
-                        <div className="flex w-[180px] justify-center">
+                        <div className="flex min-w-0 flex-1 justify-center sm:w-[180px] sm:flex-none">
                           <TeamWithFlag
                             teamName={vName}
                             flagCode={getFlagCode(vName)}
                             size="sm"
+                            wrap
                             className="min-w-0 justify-center text-center"
                           />
                         </div>

@@ -18,9 +18,17 @@ type TeamWithFlagProps = {
   flagCode?: string;
   size?: keyof typeof sizeClasses;
   className?: string;
+  /** Permite que el nombre envuelva en varias líneas (para columnas angostas en móvil). */
+  wrap?: boolean;
 };
 
-export const TeamWithFlag = ({ teamName, flagCode, size = "md", className }: TeamWithFlagProps) => {
+export const TeamWithFlag = ({
+  teamName,
+  flagCode,
+  size = "md",
+  className,
+  wrap = false,
+}: TeamWithFlagProps) => {
   const code = flagCode || getFlagCode(teamName);
 
   return (
@@ -28,13 +36,21 @@ export const TeamWithFlag = ({ teamName, flagCode, size = "md", className }: Tea
       <img
         src={`/flags/${code}.svg`}
         alt={teamName}
-        className={cn(sizeClasses[size], "object-cover rounded-sm")}
+        className={cn(sizeClasses[size], "shrink-0 object-cover rounded-sm")}
         onError={(e) => {
           e.currentTarget.style.display = "none";
         }}
         loading="lazy"
       />
-      <span className={cn("font-medium whitespace-nowrap", textSizeClasses[size])}>{teamName}</span>
+      <span
+        className={cn(
+          "font-medium",
+          wrap ? "min-w-0 whitespace-normal break-words" : "whitespace-nowrap",
+          textSizeClasses[size],
+        )}
+      >
+        {teamName}
+      </span>
     </div>
   );
 };
