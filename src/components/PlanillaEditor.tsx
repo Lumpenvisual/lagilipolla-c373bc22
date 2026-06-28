@@ -694,12 +694,12 @@ export function PlanillaEditor({
                         )}
                       </div>
                       <div className="flex items-center justify-center gap-2 sm:shrink-0">
-                        <div className="flex w-[180px] justify-end">
+                        <div className="flex w-[180px] justify-center">
                           <TeamWithFlag
                             teamName={lName}
                             flagCode={getFlagCode(lName)}
                             size="sm"
-                            className="truncate justify-end text-right"
+                            className="min-w-0 justify-center text-center"
                           />
                         </div>
                         <Input
@@ -721,12 +721,12 @@ export function PlanillaEditor({
                           onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
                           className="h-9 w-14 text-center"
                         />
-                        <div className="flex w-[180px] justify-start">
+                        <div className="flex w-[180px] justify-center">
                           <TeamWithFlag
                             teamName={vName}
                             flagCode={getFlagCode(vName)}
                             size="sm"
-                            className="truncate"
+                            className="min-w-0 justify-center text-center"
                           />
                         </div>
                       </div>
