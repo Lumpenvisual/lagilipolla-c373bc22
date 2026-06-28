@@ -9,6 +9,7 @@ import {
   groupPts,
   groupKMatches,
   matchPts,
+  teamNameByCode,
   FASE_LABEL,
   type TournamentState,
   type PickRow,
@@ -149,9 +150,9 @@ function writePlanillaSheet(
       for (const m of list) {
         const pr = pick.extra_matches?.[m.id];
         ws.addRow({
-          a: m.local || "—",
+          a: teamNameByCode(tournament.groups, m.local) || "—",
           b: `${pr?.gh ?? "-"} - ${pr?.ga ?? "-"}`,
-          c: m.visitante || "—",
+          c: teamNameByCode(tournament.groups, m.visitante) || "—",
           d: m.gh != null && m.ga != null ? `${m.gh}-${m.ga}` : "",
           pts: matchPts(m.gh, m.ga, pr?.gh, pr?.ga),
         });
@@ -572,9 +573,9 @@ export const generateMyPlanillaXlsx = createServerFn({ method: "POST" })
           const p = myPick.extra_matches?.[m.id];
           wsKO.addRow({
             f: FASE_LABEL[fase],
-            l: m.local || "—",
+            l: teamNameByCode(tournament.groups, m.local) || "—",
             p: `${p?.gh ?? "-"} - ${p?.ga ?? "-"}`,
-            v: m.visitante || "—",
+            v: teamNameByCode(tournament.groups, m.visitante) || "—",
             o: m.gh != null && m.ga != null ? `${m.gh}-${m.ga}` : "",
             pts: matchPts(m.gh, m.ga, p?.gh, p?.ga),
           });

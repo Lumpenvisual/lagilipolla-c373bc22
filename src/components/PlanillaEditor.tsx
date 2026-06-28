@@ -29,6 +29,7 @@ import {
   parseSpecial,
   isMatchLocked,
   isExtraPhaseLocked,
+  teamNameByCode,
   isSectionVisible,
   lastGol,
   scoreState,
@@ -667,6 +668,8 @@ export function PlanillaEditor({
               <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
                 {list.map((m) => {
                   const p = extra[m.id] ?? { gh: null, ga: null };
+                  const lName = teamNameByCode(ts.groups, m.local);
+                  const vName = teamNameByCode(ts.groups, m.visitante);
                   const ghDisabled = locked || phaseLocked || isExtraFieldLocked(m.id, "gh");
                   const gaDisabled = locked || phaseLocked || isExtraFieldLocked(m.id, "ga");
                   const [stadium, city] = m.sede.split(" · ");
@@ -693,8 +696,8 @@ export function PlanillaEditor({
                       <div className="flex items-center justify-center gap-2 sm:shrink-0">
                         <div className="flex w-[180px] justify-end">
                           <TeamWithFlag
-                            teamName={m.local}
-                            flagCode={getFlagCode(m.local)}
+                            teamName={lName}
+                            flagCode={getFlagCode(lName)}
                             size="sm"
                             className="truncate justify-end text-right"
                           />
@@ -720,8 +723,8 @@ export function PlanillaEditor({
                         />
                         <div className="flex w-[180px] justify-start">
                           <TeamWithFlag
-                            teamName={m.visitante}
-                            flagCode={getFlagCode(m.visitante)}
+                            teamName={vName}
+                            flagCode={getFlagCode(vName)}
                             size="sm"
                             className="truncate"
                           />

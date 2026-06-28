@@ -8,8 +8,10 @@ import {
   matchPts,
   normEspecial,
   isExtraPhaseLocked,
+  teamNameByCode,
   MAX_GOLES,
   type ExtraMatch,
+  type Groups,
 } from "@/lib/polla";
 
 describe("isValidGol — un solo dígito (0–9)", () => {
@@ -134,6 +136,32 @@ describe("isExtraPhaseLocked — cierre por ronda 1h antes del primer partido", 
   });
   it("no bloquea una fase distinta a la del primer partido próximo", () => {
     expect(isExtraPhaseLocked(extra, "final", firstMs)).toBe(false);
+  });
+});
+
+describe("teamNameByCode — código→nombre en todos los grupos (eliminatorias)", () => {
+  const groups = {
+    A: {
+      teams: [
+        { id: "MEX", nombre: "México" },
+        { id: "RSA", nombre: "Sudáfrica" },
+      ],
+      pos1: "MEX",
+      pos2: "RSA",
+    },
+    B: { teams: [{ id: "CAN", nombre: "Canadá" }], pos1: "CAN", pos2: null },
+  } as unknown as Groups;
+  it("resuelve un código a su nombre completo desde cualquier grupo", () => {
+    expect(teamNameByCode(groups, "RSA")).toBe("Sudáfrica");
+    expect(teamNameByCode(groups, "CAN")).toBe("Canadá");
+  });
+  it("devuelve el placeholder tal cual si no es un código conocido", () => {
+    expect(teamNameByCode(groups, "Ganador Partido 74")).toBe("Ganador Partido 74");
+    expect(teamNameByCode(groups, "Mejor 3° (A/B/C/D/F)")).toBe("Mejor 3° (A/B/C/D/F)");
+  });
+  it("vacío/null → cadena vacía", () => {
+    expect(teamNameByCode(groups, null)).toBe("");
+    expect(teamNameByCode(groups, "")).toBe("");
   });
 });
 

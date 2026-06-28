@@ -15,6 +15,7 @@ import {
   groupPts,
   matchPts,
   normEspecial,
+  teamNameByCode,
   type ExtraMatch,
   type GroupKey,
   type VisibilityKey,
@@ -330,7 +331,8 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
                 return (
                   <li key={m.id} className="flex items-center justify-between gap-2 py-1">
                     <span className="truncate">
-                      {m.local} vs {m.visitante}
+                      {ts ? teamNameByCode(ts.groups, m.local) : m.local} vs{" "}
+                      {ts ? teamNameByCode(ts.groups, m.visitante) : m.visitante}
                       {hasOfficial && (
                         <span className="ml-2 text-xs text-muted-foreground">
                           (oficial {m.gh}–{m.ga})

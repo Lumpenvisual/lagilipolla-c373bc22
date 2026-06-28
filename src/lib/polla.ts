@@ -149,6 +149,21 @@ export function slotOptions(team: Team): { id: string; label: string; isCandidat
   return [...base, ...team.candidatos.map((c) => ({ id: c.id, label: c.n, isCandidate: true }))];
 }
 
+/**
+ * Nombre completo de un equipo a partir de su código (ISO3), buscándolo en TODOS los grupos.
+ * Si el valor no es un código conocido (p.ej. un placeholder "Ganador Partido 74"), lo devuelve
+ * tal cual. Las eliminatorias guardan códigos en `extra_matches.local/visitante`; esto los
+ * resuelve a nombre para mostrar (mismo criterio que el Grupo K).
+ */
+export function teamNameByCode(groups: Groups, codeOrLabel: string | null | undefined): string {
+  if (codeOrLabel == null || codeOrLabel === "") return "";
+  for (const g of Object.values(groups)) {
+    const t = g.teams.find((tm) => tm.id === codeOrLabel);
+    if (t) return t.nombre;
+  }
+  return codeOrLabel;
+}
+
 export const FECHA_FMT = new Intl.DateTimeFormat("es-CO", {
   weekday: "short",
   day: "2-digit",
