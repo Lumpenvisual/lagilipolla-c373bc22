@@ -73,7 +73,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-display text-2xl tracking-wide">
-          <span className="bandera-stripe-h h-3 w-6 rounded-sm" aria-hidden />
+          <img src="/mi-logo.png" alt="" className="h-8 w-auto sm:h-9" />
           <span className="gold-gradient-text">LA GILIPOLLA 2026</span>
         </Link>
 
