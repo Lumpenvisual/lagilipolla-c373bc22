@@ -4,6 +4,7 @@ import {
   GROUP_KEYS,
   FASE_LABEL,
   isSectionVisible,
+  teamNameByCode,
   type Fase,
   type GroupKey,
   type Group,
@@ -125,7 +126,8 @@ export function OfficialResultsPanel() {
                 {list.map((m) => (
                   <li key={m.id} className="flex items-center justify-between gap-2 py-1 text-sm">
                     <span className="truncate">
-                      {m.local} vs {m.visitante}
+                      {teamNameByCode(ts.groups, m.local)} vs{" "}
+                      {teamNameByCode(ts.groups, m.visitante)}
                     </span>
                     <span className="font-mono font-semibold text-gold">
                       {m.gh}–{m.ga}

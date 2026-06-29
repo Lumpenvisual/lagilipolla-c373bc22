@@ -59,6 +59,7 @@ import {
   FASE_LABEL,
   lastGol,
   scoreState,
+  teamNameByCode,
   type ExtraMatch,
   type Fase,
   type GroupKey,
@@ -585,91 +586,120 @@ export function ResultadosTab() {
         </div>
       </Card>
 
-      <Card className="border-border bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl">{t("admin.t.res.groups")}</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {GROUP_KEYS.map((k) => {
-            const g = draft.groups[k];
-            const opts = g.teams.map((team) => ({ id: team.id, label: team.nombre }));
-            const isDup = dupGroupSet.has(k);
-            return (
-              <div
-                key={k}
-                className={`rounded-lg border bg-muted/30 p-3 ${isDup ? "border-destructive" : "border-border"}`}
-              >
-                <p className="font-display text-lg">{t("planilla.group.label", { k })}</p>
-                {isDup && (
-                  <p className="text-[11px] font-medium text-destructive">
-                    {t("admin.t.res.dupHint")}
-                  </p>
-                )}
-                <div className="mt-2 space-y-1.5">
-                  <select
-                    value={g.pos1 ?? ""}
-                    onChange={(e) => updateGroup(k, "pos1", e.target.value)}
-                    className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm"
+      <Card className="border-border bg-card p-0 card-shadow">
+        <Collapsible
+          defaultOpen={GROUP_KEYS.some((k) => !draft.groups[k]?.pos1 || !draft.groups[k]?.pos2)}
+        >
+          <CollapsibleTrigger className="group flex w-full items-center justify-between gap-3 px-5 py-4 text-left">
+            <span className="flex items-center gap-2">
+              <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+              <span className="font-display text-xl">{t("admin.t.res.groups")}</span>
+            </span>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="grid gap-3 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-3">
+              {GROUP_KEYS.map((k) => {
+                const g = draft.groups[k];
+                const opts = g.teams.map((team) => ({ id: team.id, label: team.nombre }));
+                const isDup = dupGroupSet.has(k);
+                return (
+                  <div
+                    key={k}
+                    className={`rounded-lg border bg-muted/30 p-3 ${isDup ? "border-destructive" : "border-border"}`}
                   >
-                    <option value="">— 1° —</option>
-                    {opts.map((o) => (
-                      <option key={o.id} value={o.id}>
-                        {o.label}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={g.pos2 ?? ""}
-                    onChange={(e) => updateGroup(k, "pos2", e.target.value)}
-                    className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm"
-                  >
-                    <option value="">— 2° —</option>
-                    {opts.map((o) => (
-                      <option key={o.id} value={o.id}>
-                        {o.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    <p className="font-display text-lg">{t("planilla.group.label", { k })}</p>
+                    {isDup && (
+                      <p className="text-[11px] font-medium text-destructive">
+                        {t("admin.t.res.dupHint")}
+                      </p>
+                    )}
+                    <div className="mt-2 space-y-1.5">
+                      <select
+                        value={g.pos1 ?? ""}
+                        onChange={(e) => updateGroup(k, "pos1", e.target.value)}
+                        className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm"
+                      >
+                        <option value="">— 1° —</option>
+                        {opts.map((o) => (
+                          <option key={o.id} value={o.id}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        value={g.pos2 ?? ""}
+                        onChange={(e) => updateGroup(k, "pos2", e.target.value)}
+                        className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm"
+                      >
+                        <option value="">— 2° —</option>
+                        {opts.map((o) => (
+                          <option key={o.id} value={o.id}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </Card>
 
-      <Card className="border-info/30 bg-card p-5 card-shadow">
-        <h2 className="font-display text-xl text-info">{t("admin.t.res.markK")}</h2>
-        <div className="mt-4 divide-y divide-border">
-          {(() => {
+      <Card className="border-info/30 bg-card p-0 card-shadow">
+        <Collapsible
+          defaultOpen={(() => {
             const kIds = new Set(draft.groups.K.teams.map((t) => t.id));
-            return draft.group_k_matches.filter((m) => kIds.has(m.local) && kIds.has(m.visitante));
-          })().map((m) => {
-            const lName = draft.groups.K.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
-            const vName =
-              draft.groups.K.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
-            return (
-              <div key={m.id} className="flex items-center gap-2 py-2">
-                <span className="flex-1 text-right text-sm">{lName}</span>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]"
-                  value={m.gh ?? ""}
-                  onChange={(e) => updateMatch(m.id, "gh", e.target.value)}
-                  className="h-8 w-14 text-center"
-                />
-                <span className="text-muted-foreground">–</span>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]"
-                  value={m.ga ?? ""}
-                  onChange={(e) => updateMatch(m.id, "ga", e.target.value)}
-                  className="h-8 w-14 text-center"
-                />
-                <span className="flex-1 text-sm">{vName}</span>
-              </div>
+            return draft.group_k_matches.some(
+              (m) => kIds.has(m.local) && kIds.has(m.visitante) && (m.gh == null || m.ga == null),
             );
-          })}
-        </div>
+          })()}
+        >
+          <CollapsibleTrigger className="group flex w-full items-center justify-between gap-3 px-5 py-4 text-left">
+            <span className="flex items-center gap-2">
+              <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+              <span className="font-display text-xl text-info">{t("admin.t.res.markK")}</span>
+            </span>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="divide-y divide-border px-5 pb-5">
+              {(() => {
+                const kIds = new Set(draft.groups.K.teams.map((t) => t.id));
+                return draft.group_k_matches.filter(
+                  (m) => kIds.has(m.local) && kIds.has(m.visitante),
+                );
+              })().map((m) => {
+                const lName = draft.groups.K.teams.find((t) => t.id === m.local)?.nombre ?? m.local;
+                const vName =
+                  draft.groups.K.teams.find((t) => t.id === m.visitante)?.nombre ?? m.visitante;
+                return (
+                  <div key={m.id} className="flex items-center gap-2 py-2">
+                    <span className="flex-1 text-right text-sm">{lName}</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]"
+                      value={m.gh ?? ""}
+                      onChange={(e) => updateMatch(m.id, "gh", e.target.value)}
+                      className="h-8 w-14 text-center"
+                    />
+                    <span className="text-muted-foreground">–</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]"
+                      value={m.ga ?? ""}
+                      onChange={(e) => updateMatch(m.id, "ga", e.target.value)}
+                      className="h-8 w-14 text-center"
+                    />
+                    <span className="flex-1 text-sm">{vName}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </Card>
 
       {(() => {
@@ -684,48 +714,70 @@ export function ResultadosTab() {
         const all = draft.extra_matches ?? [];
         const fasesConPartidos = fasesKO.filter((f) => all.some((m) => m.fase === f));
         if (fasesConPartidos.length === 0) return null;
+        // Fase activa por defecto: la primera (en orden) con algún partido sin resultado.
+        const activeFase = fasesConPartidos.find((f) =>
+          all.some((m) => m.fase === f && (m.gh == null || m.ga == null)),
+        );
         return (
           <Card className="border-info/30 bg-card p-5 card-shadow">
             <h2 className="font-display text-xl text-info">{t("admin.t.res.markKnockout")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.res.knockoutHint")}</p>
-            <div className="mt-4 space-y-5">
+            <div className="mt-4 space-y-3">
               {fasesConPartidos.map((fase) => {
                 const list = all
                   .filter((m) => m.fase === fase)
                   .sort((a, b) => (a.fecha || "").localeCompare(b.fecha || ""));
+                const conResultado = list.filter((m) => m.gh != null && m.ga != null).length;
                 return (
-                  <div key={fase}>
-                    <h3 className="font-display text-sm uppercase tracking-wider text-muted-foreground">
-                      {FASE_LABEL[fase]}
-                    </h3>
-                    <div className="mt-2 divide-y divide-border">
-                      {list.map((m) => (
-                        <div key={m.id} className="flex items-center gap-2 py-2">
-                          <span className="flex-1 truncate text-right text-sm">
-                            {m.local || "—"}
+                  <Collapsible key={fase} defaultOpen={fase === activeFase}>
+                    <Card className="border-border bg-muted/20 p-0">
+                      <CollapsibleTrigger className="group flex w-full items-center justify-between gap-3 px-4 py-3 text-left">
+                        <span className="flex min-w-0 items-center gap-2">
+                          <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+                          <span className="truncate font-display text-sm uppercase tracking-wider">
+                            {FASE_LABEL[fase]}
                           </span>
-                          <Input
-                            type="text"
-                            inputMode="numeric"
-                            pattern="[0-9]"
-                            value={m.gh ?? ""}
-                            onChange={(e) => updateExtraScore(m.id, "gh", e.target.value)}
-                            className="h-8 w-14 text-center"
-                          />
-                          <span className="text-muted-foreground">–</span>
-                          <Input
-                            type="text"
-                            inputMode="numeric"
-                            pattern="[0-9]"
-                            value={m.ga ?? ""}
-                            onChange={(e) => updateExtraScore(m.id, "ga", e.target.value)}
-                            className="h-8 w-14 text-center"
-                          />
-                          <span className="flex-1 truncate text-sm">{m.visitante || "—"}</span>
+                        </span>
+                        <span className="shrink-0 rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
+                          {t("admin.t.res.koPhaseCount", {
+                            done: conResultado,
+                            total: list.length,
+                          })}
+                        </span>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="divide-y divide-border border-t border-border/60 px-4 py-1">
+                          {list.map((m) => (
+                            <div key={m.id} className="flex items-center gap-2 py-2">
+                              <span className="flex-1 truncate text-right text-sm">
+                                {teamNameByCode(draft.groups, m.local) || "—"}
+                              </span>
+                              <Input
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]"
+                                value={m.gh ?? ""}
+                                onChange={(e) => updateExtraScore(m.id, "gh", e.target.value)}
+                                className="h-8 w-14 shrink-0 text-center"
+                              />
+                              <span className="text-muted-foreground">–</span>
+                              <Input
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]"
+                                value={m.ga ?? ""}
+                                onChange={(e) => updateExtraScore(m.id, "ga", e.target.value)}
+                                className="h-8 w-14 shrink-0 text-center"
+                              />
+                              <span className="flex-1 truncate text-sm">
+                                {teamNameByCode(draft.groups, m.visitante) || "—"}
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                      </CollapsibleContent>
+                    </Card>
+                  </Collapsible>
                 );
               })}
             </div>
@@ -749,7 +801,8 @@ export function ResultadosTab() {
                 {draws.map((m) => (
                   <div key={m.id} className="flex items-center gap-2">
                     <span className="flex-1 truncate text-sm">
-                      {m.local} {m.gh}–{m.ga} {m.visitante}
+                      {teamNameByCode(draft.groups, m.local)} {m.gh}–{m.ga}{" "}
+                      {teamNameByCode(draft.groups, m.visitante)}
                     </span>
                     <select
                       value={penWinners[m.id] ?? ""}
@@ -757,8 +810,10 @@ export function ResultadosTab() {
                       className="rounded-md border border-input bg-background px-2 py-1 text-sm"
                     >
                       <option value="">— {t("admin.t.res.adv.penPick")} —</option>
-                      <option value={m.local}>{m.local}</option>
-                      <option value={m.visitante}>{m.visitante}</option>
+                      <option value={m.local}>{teamNameByCode(draft.groups, m.local)}</option>
+                      <option value={m.visitante}>
+                        {teamNameByCode(draft.groups, m.visitante)}
+                      </option>
                     </select>
                   </div>
                 ))}

@@ -751,6 +751,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.dupGroups": "Grupos con 1º y 2º repetidos: {groups}",
     "admin.t.res.invalidScore":
       "Resultados oficiales inválidos (un solo dígito 0–9 en ambos campos): {matches}",
+    "admin.t.res.koPhaseCount": "{done}/{total} con resultado",
     "admin.t.res.adv.title": "Avanzar ganadores a las siguientes rondas",
     "admin.t.res.adv.hint":
       "Toma los marcadores cargados arriba y rellena los cruces de la ronda siguiente (octavos → final y tercer puesto). En empates, designa el ganador por penales. Revisa y guarda para que los participantes los vean.",
@@ -1581,6 +1582,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.dupGroups": "Groups with repeated 1st and 2nd: {groups}",
     "admin.t.res.invalidScore":
       "Invalid official results (use a single digit 0–9 in both fields): {matches}",
+    "admin.t.res.koPhaseCount": "{done}/{total} with result",
     "admin.t.res.adv.title": "Advance winners to the next rounds",
     "admin.t.res.adv.hint":
       "Takes the scores entered above and fills the next round's match-ups (Round of 16 → Final and third place). On ties, set the penalty-shoot-out winner. Review and save so participants can see them.",
