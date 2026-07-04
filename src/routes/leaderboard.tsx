@@ -16,6 +16,7 @@ import {
   matchPts,
   normEspecial,
   teamNameByCode,
+  isExtraPhaseRevealed,
   type ExtraMatch,
   type GroupKey,
   type VisibilityKey,
@@ -279,6 +280,23 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
             (m) => kIds.has(m.local) && kIds.has(m.visitante),
           );
           if (kMatches.length === 0) return null;
+          // Privacidad: los marcadores ajenos se ocultan hasta que inicia el primer partido del Grupo K.
+          const kTimes = kMatches
+            .map((m) => new Date(m.fecha).getTime())
+            .filter((tms) => !Number.isNaN(tms));
+          const kRevealed = kTimes.length > 0 && Date.now() >= Math.min(...kTimes);
+          if (!kRevealed) {
+            return (
+              <section>
+                <h4 className="font-display text-xs uppercase tracking-wider text-info">
+                  Marcadores · Grupo K
+                </h4>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  🔒 Marcadores ocultos hasta el inicio de la fase.
+                </p>
+              </section>
+            );
+          }
           return (
             <section>
               <h4 className="font-display text-xs uppercase tracking-wider text-info">
@@ -319,6 +337,19 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
         if (!isVisible(fase)) return null;
         const list = extras.filter((m) => m.fase === fase);
         if (list.length === 0) return null;
+        // Privacidad: los marcadores ajenos se ocultan hasta que inicia el primer partido de la ronda.
+        if (!isExtraPhaseRevealed(extras, fase)) {
+          return (
+            <section key={fase}>
+              <h4 className="font-display text-xs uppercase tracking-wider text-info">
+                {FASE_LABEL[fase]}
+              </h4>
+              <p className="mt-1 text-xs text-muted-foreground">
+                🔒 Marcadores ocultos hasta el inicio de la ronda.
+              </p>
+            </section>
+          );
+        }
         return (
           <section key={fase}>
             <h4 className="font-display text-xs uppercase tracking-wider text-info">

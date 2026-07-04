@@ -8,6 +8,7 @@ import {
   matchPts,
   normEspecial,
   isExtraPhaseLocked,
+  isExtraPhaseRevealed,
   teamNameByCode,
   MAX_GOLES,
   type ExtraMatch,
@@ -136,6 +137,40 @@ describe("isExtraPhaseLocked — cierre por ronda 1h antes del primer partido", 
   });
   it("no bloquea una fase distinta a la del primer partido próximo", () => {
     expect(isExtraPhaseLocked(extra, "final", firstMs)).toBe(false);
+  });
+});
+
+describe("isExtraPhaseRevealed — revela la fase recién al iniciar su primer partido", () => {
+  const mk = (id: string, fase: ExtraMatch["fase"], fecha: string): ExtraMatch => ({
+    id,
+    fase,
+    fecha,
+    local: "A",
+    visitante: "B",
+    sede: "",
+    gh: null,
+    ga: null,
+  });
+  const extra: ExtraMatch[] = [
+    mk("m73", "dieciseisavos", "2026-07-01T12:00:00Z"),
+    mk("m88", "dieciseisavos", "2026-07-03T20:00:00Z"),
+    mk("m104", "final", "2026-07-19T19:00:00Z"),
+  ];
+  const first = new Date("2026-07-01T12:00:00Z").getTime();
+
+  it("oculta antes del kickoff del primer partido de la fase", () => {
+    expect(isExtraPhaseRevealed(extra, "dieciseisavos", first - 1)).toBe(false);
+    expect(isExtraPhaseRevealed(extra, "dieciseisavos", first - 60 * 60 * 1000)).toBe(false);
+  });
+  it("revela exactamente desde el kickoff (aunque otros partidos sean días después)", () => {
+    expect(isExtraPhaseRevealed(extra, "dieciseisavos", first)).toBe(true);
+    expect(isExtraPhaseRevealed(extra, "dieciseisavos", first + 1)).toBe(true);
+  });
+  it("no revela una fase cuyo primer partido aún no llega", () => {
+    expect(isExtraPhaseRevealed(extra, "final", first)).toBe(false);
+  });
+  it("no revela si la fase no tiene fechas válidas", () => {
+    expect(isExtraPhaseRevealed([mk("m89", "octavos", "")], "octavos", first)).toBe(false);
   });
 });
 

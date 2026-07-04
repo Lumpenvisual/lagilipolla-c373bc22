@@ -215,6 +215,24 @@ export function isExtraPhaseLocked(
   return nowMs >= Math.min(...times) - KNOCKOUT_LOCK_BEFORE_MS;
 }
 
+/**
+ * Privacidad: una ronda KO se REVELA en la tabla pública recién cuando INICIA su primer
+ * partido (`now >= MIN(fecha de la fase)`). Si la fase no tiene fechas válidas, no se
+ * revela. Espejo de la redacción server-side en `get_public_pick`.
+ */
+export function isExtraPhaseRevealed(
+  extra: ExtraMatch[],
+  fase: Fase,
+  nowMs: number = Date.now(),
+): boolean {
+  const times = extra
+    .filter((m) => m.fase === fase)
+    .map((m) => new Date(m.fecha).getTime())
+    .filter((tms) => !Number.isNaN(tms));
+  if (times.length === 0) return false;
+  return nowMs >= Math.min(...times);
+}
+
 /* ---- Validación de marcadores (reglamento: un solo dígito, 0–9) ----
  * Se usa tanto en la planilla del usuario como en los resultados del admin,
  * y se refleja en el servidor (trigger picks_validate + guard recalc_all_picks). */
