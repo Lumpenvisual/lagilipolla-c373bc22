@@ -34,8 +34,9 @@ env vars y auth, ver la skill **`gilipolla-ops`**.
 
 1. **Generar dieciseisavos** — Admin → **Cronograma** → "Generar cruces": rellena 1°/2° desde `groups.pos1/pos2` oficiales (cargados en Resultados) + asignación **manual** de los 8 mejores terceros (cada slot restringe a sus grupos candidatos; la app **no** guarda los 72 marcadores de grupos, así que no se auto-rankean los terceros). Revisar y **Guardar cronograma**.
 2. **Activar/mostrar una ronda** — Cronograma: el switch de la fase la hace **visible** al participante y habilita la carga de marcadores (sincroniza `phases`+`visibility`). El candado solo **deshabilita inputs**, no oculta.
-3. **Cargar resultados** — Admin → **Resultados**: cada fase es un **Collapsible** (chip "N/total con resultado"; abre por defecto la primera fase con partidos sin resultado). Muestra **nombres completos**. Al guardar llama `recalc_all_picks` → puntos al día.
-4. **Avanzar ganadores** — Admin → **Resultados** → "Avanzar ganadores": tras cargar marcadores KO rellena `local/visitante` de la ronda siguiente; en **empate** el admin designa el ganador por penales. Revisar y guardar.
+3. **Cargar resultados + AUTO-AVANCE** — Admin → **Resultados**: cada fase es un **Collapsible** (chip "N/total con resultado"). Muestra **nombres completos**. Al **"Guardar y recalcular puntos"**: (a) `advanceAllRounds(extra, penWinners)` avanza los ganadores a la ronda siguiente (ganador por marcador; encadena rondas en un guardado; los partidos sin resultado o empate sin ganador designado quedan **placeholder**); (b) persiste `extra_matches` avanzado; (c) `recalc_all_picks`. El **cronograma** (público y admin) lee la misma `tournament_state.extra_matches` → refleja los equipos al instante.
+4. **Empate = definición MANUAL del ganador** — El puntaje solo cuenta el **marcador oficial de los 90'** (sin prórroga). Para AVANZAR, en la tarjeta "Empate en 90'" el admin **define manualmente** qué equipo ganó (prórroga/penales); se aplica al Guardar. `advanceAllRounds` usa ese ganador (`penWinners`); el `<select>` guarda el **código**, muestra el nombre.
+   - **Avance operativo one-shot** (aplicar a datos ya cargados sin esperar un nuevo guardado): correr `advanceAllRounds(extra, {})` sobre `tournament_state.extra_matches` con un script (`node`/`tsx` importando el helper) vía service_role. Preserva lo ya resuelto (usa `?? existente`), solo rellena slots `matchWinner/matchLoser` con ganadores nuevos.
 
 ## Candado POR-RONDA (eliminatorias)
 
@@ -43,6 +44,13 @@ env vars y auth, ver la skill **`gilipolla-ops`**.
 - **SQL (aplicado en prod):** `supabase/migrations/20260625130000_knockout_phase_lock.sql` → `is_extra_phase_locked(_match_id)` (`now() >= MIN(fecha de la fase) - 1h`; si la fase no tiene fechas, **no bloquea**) + `enforce_picks_deadline` (trigger `picks_enforce_deadline`; bucle `extra_matches` usa la nueva función, `group_k_matches` sigue `is_match_locked`).
 - **Espejo TS:** `isExtraPhaseLocked(extra, fase, nowMs?)` en `src/lib/polla.ts`; `PlanillaEditor` deshabilita inputs por fase (badge "ronda cerrada").
 - Verificar en prod (read-only): `select public.is_extra_phase_locked('m73');` → `false` = abierto.
+
+## Privacidad de marcadores en la tabla pública (anti-copia)
+
+- Los **marcadores ajenos** (predicciones de otros usuarios) **no se ven** en el leaderboard hasta que **inicia el primer partido de esa fase** (`now() >= MIN(fecha de la fase)`). El candado de edición cierra 1 h antes; la **revelación** abre en el **kickoff**.
+- **Server-side (garantía):** la RPC anon `get_public_pick` **redacta** — `extra_matches` solo devuelve las claves de fases ya iniciadas; `group_k_matches` solo si el Grupo K inició. `groups`/especiales/`puntos_total` no se ocultan. Migración `20260704120000_public_pick_hide_marcadores.sql`. Es el **único** camino público a picks ajenos (RLS de `picks`: anon sin acceso; authenticated solo su fila).
+- **Espejo TS:** `isExtraPhaseRevealed(extra, fase, nowMs?)` (`src/lib/polla.ts`); el leaderboard muestra "🔒 Marcadores ocultos hasta el inicio de la ronda".
+- Verificar (E2E real, como público): llamar `POST {url}/rest/v1/rpc/get_public_pick` con la **apikey anon** → `extra_matches` no debe traer claves de fases no iniciadas.
 
 ## Comprobante / histórico
 
