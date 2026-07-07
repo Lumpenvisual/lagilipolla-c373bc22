@@ -505,6 +505,39 @@ export function applyAdvance(
 }
 
 /**
+ * Auto-avance de TODAS las rondas a partir de los marcadores ya cargados:
+ * en cada pasada deriva los ganadores del estado ACTUAL (ganador por marcador; empate
+ * `gh==ga` → `penWinners[id]` designado por el admin) y aplica `applyAdvance`. Recalcular
+ * por pasada permite encadenar dieciseisavos→octavos→cuartos… en un solo guardado
+ * (una ronda recién avanzada expone los equipos reales para derivar la siguiente).
+ * Idempotente: itera hasta estabilizar (máx. 6 pasadas = profundidad del bracket).
+ */
+export function advanceAllRounds(
+  extras: ExtraMatch[],
+  penWinners: Record<string, string | null | undefined> = {},
+): ExtraMatch[] {
+  const slotKey = (arr: ExtraMatch[]) =>
+    arr.map((m) => `${m.id}:${m.local}|${m.visitante}`).join(";");
+  let cur = extras;
+  for (let pass = 0; pass < 6; pass++) {
+    const winners: Record<string, string> = {};
+    for (const m of cur) {
+      if (m.gh == null || m.ga == null) continue;
+      if (m.gh > m.ga) winners[m.id] = m.local;
+      else if (m.ga > m.gh) winners[m.id] = m.visitante;
+      else {
+        const pw = penWinners[m.id];
+        if (pw) winners[m.id] = pw;
+      }
+    }
+    const next = applyAdvance(cur, winners);
+    if (slotKey(next) === slotKey(cur)) break;
+    cur = next;
+  }
+  return cur;
+}
+
+/**
  * Un valor de local/visitante es un código de equipo real (p.ej. "MEX", "COL", "UEFA-D")
  * y no una etiqueta placeholder ("Segundo A", "Ganador Partido 74", "Mejor 3° (…)").
  */

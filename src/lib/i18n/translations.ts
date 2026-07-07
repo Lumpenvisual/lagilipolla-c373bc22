@@ -752,14 +752,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.invalidScore":
       "Resultados oficiales inválidos (un solo dígito 0–9 en ambos campos): {matches}",
     "admin.t.res.koPhaseCount": "{done}/{total} con resultado",
-    "admin.t.res.adv.title": "Avanzar ganadores a las siguientes rondas",
+    "admin.t.res.adv.title": "Empate en 90' · el admin define el ganador que avanza",
     "admin.t.res.adv.hint":
-      "Toma los marcadores cargados arriba y rellena los cruces de la ronda siguiente (octavos → final y tercer puesto). En empates, designa el ganador por penales. Revisa y guarda para que los participantes los vean.",
-    "admin.t.res.adv.pensLabel": "Empates — define el ganador por penales",
-    "admin.t.res.adv.penPick": "Elige ganador",
-    "admin.t.res.adv.button": "Avanzar ganadores",
-    "admin.t.res.adv.afterHint": "Luego revisa los cruces y guarda.",
-    "admin.t.res.adv.done": "Ganadores avanzados. Revisa y guarda.",
+      "El puntaje solo cuenta el marcador oficial de los 90 minutos (sin prórroga). Para AVANZAR de ronda, define manualmente qué equipo ganó (prórroga/penales). Se aplica al «Guardar y recalcular puntos».",
+    "admin.t.res.adv.penPick": "Definir ganador",
     "admin.t.esp.title": "Especiales de los participantes",
     "admin.t.esp.hint":
       "Goleador y arquero los escribe cada participante en su planilla (nombre y selección). Aquí ves quién entregó qué. El resultado oficial se fija en la pestaña Resultados.",
@@ -1583,14 +1579,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.invalidScore":
       "Invalid official results (use a single digit 0–9 in both fields): {matches}",
     "admin.t.res.koPhaseCount": "{done}/{total} with result",
-    "admin.t.res.adv.title": "Advance winners to the next rounds",
+    "admin.t.res.adv.title": "Draw at 90' · admin sets who advances",
     "admin.t.res.adv.hint":
-      "Takes the scores entered above and fills the next round's match-ups (Round of 16 → Final and third place). On ties, set the penalty-shoot-out winner. Review and save so participants can see them.",
-    "admin.t.res.adv.pensLabel": "Ties — set the penalty-shoot-out winner",
-    "admin.t.res.adv.penPick": "Pick winner",
-    "admin.t.res.adv.button": "Advance winners",
-    "admin.t.res.adv.afterHint": "Then review the match-ups and save.",
-    "admin.t.res.adv.done": "Winners advanced. Review and save.",
+      "Scoring only counts the official 90-minute score (no extra time). To ADVANCE to the next round, manually set which team won (extra time / penalties). Applied on “Save and recalculate points”.",
+    "admin.t.res.adv.penPick": "Set winner",
     "admin.t.esp.title": "Participants' specials",
     "admin.t.esp.hint":
       "Each participant writes their top scorer and goalkeeper (name and national team) on their ballot. Here you see who submitted what. The official result is set in the Results tab.",

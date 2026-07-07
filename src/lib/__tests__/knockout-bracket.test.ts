@@ -6,6 +6,7 @@ import {
   buildExtraMatchesFromBracket,
   applyRound32,
   applyAdvance,
+  advanceAllRounds,
   slotLabel,
 } from "../knockout-bracket";
 
@@ -162,5 +163,60 @@ describe("applyAdvance", () => {
     const m104 = ex.find((m) => m.id === "m104")!; // W101 vs W102
     expect(m104.local).toBe("AAA");
     expect(m104.visitante).toBe("DDD");
+  });
+});
+
+describe("advanceAllRounds — auto-avance al guardar (deriva ganadores del marcador)", () => {
+  const thirds: Record<string, string> = {
+    m74: "TGA",
+    m77: "TGB",
+    m79: "TGC",
+    m80: "TGD",
+    m81: "TGE",
+    m82: "TGF",
+    m85: "TGG",
+    m87: "TGH",
+  };
+  const seedR32 = () => applyRound32(buildExtraMatchesFromBracket(), makeGroups(), thirds);
+  const setScore = (ex: ReturnType<typeof seedR32>, id: string, gh: number, ga: number) => {
+    const m = ex.find((x) => x.id === id)!;
+    m.gh = gh;
+    m.ga = ga;
+  };
+
+  it("avanza los ganadores de dieciseisavos a octavos (por marcador)", () => {
+    const ex = seedR32(); // m74=EX vs TGA · m77=IX vs TGB
+    setScore(ex, "m74", 2, 0); // gana EX
+    setScore(ex, "m77", 1, 0); // gana IX
+    const out = advanceAllRounds(ex);
+    const m89 = out.find((m) => m.id === "m89")!; // W74 vs W77
+    expect(m89.local).toBe("EX");
+    expect(m89.visitante).toBe("IX");
+  });
+
+  it("encadena dos rondas en un solo guardado (dieciseisavos→octavos→cuartos)", () => {
+    const ex = seedR32();
+    setScore(ex, "m74", 2, 0); // EX
+    setScore(ex, "m77", 1, 0); // IX → m89 = EX vs IX
+    setScore(ex, "m89", 3, 1); // gana EX (aunque m89 arranca con placeholders)
+    const out = advanceAllRounds(ex);
+    const m97 = out.find((m) => m.id === "m97")!; // W89 vs W90
+    expect(m97.local).toBe("EX");
+  });
+
+  it("empate: usa el ganador por penales designado", () => {
+    const ex = seedR32(); // m73 = AY vs BY
+    setScore(ex, "m73", 1, 1);
+    const out = advanceAllRounds(ex, { m73: "BY" });
+    const m90 = out.find((m) => m.id === "m90")!; // W73 vs W75
+    expect(m90.local).toBe("BY");
+  });
+
+  it("empate sin penalti designado: deja el placeholder", () => {
+    const ex = seedR32();
+    setScore(ex, "m73", 1, 1);
+    const out = advanceAllRounds(ex, {});
+    const m90 = out.find((m) => m.id === "m90")!;
+    expect(m90.local).toBe("Ganador Partido 73");
   });
 });

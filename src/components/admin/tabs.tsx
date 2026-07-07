@@ -69,7 +69,7 @@ import {
 } from "@/lib/polla";
 import {
   KNOCKOUT_BRACKET,
-  applyAdvance,
+  advanceAllRounds,
   applyRound32,
   buildExtraMatchesFromBracket,
 } from "@/lib/knockout-bracket";
@@ -475,12 +475,15 @@ export function ResultadosTab() {
       toast.error(errors.join(" · "), { duration: 6000 });
       return;
     }
+    // Auto-avance: los ganadores (marcador; empate → penales designados) pasan a la
+    // ronda siguiente al guardar. El cronograma lee la misma tournament_state.extra_matches.
+    const advanced = advanceAllRounds(draft.extra_matches ?? [], penWinners);
     const { error } = await supabase
       .from("tournament_state")
       .update({
         groups: draft.groups as never,
         group_k_matches: draft.group_k_matches as never,
-        extra_matches: (draft.extra_matches ?? []) as never,
+        extra_matches: advanced as never,
         goleador_id: draft.goleador_id,
         arquero_id: draft.arquero_id,
       })
@@ -489,26 +492,10 @@ export function ResultadosTab() {
       toast.error(error.message);
       return;
     }
+    setDraft({ ...draft, extra_matches: advanced });
     toast.success(t("admin.t.toast.resultsSaved"));
     await runRecalc();
     qc.invalidateQueries({ queryKey: ["tournament-state"] });
-  };
-
-  // Avanza ganadores a las rondas siguientes a partir de los marcadores cargados.
-  // Marcador claro → ganador por goles; empate → ganador por penales designado por el admin.
-  // Solo actualiza el borrador local (rellena local/visitante de la ronda siguiente); el admin guarda.
-  const advanceWinners = () => {
-    if (!draft) return;
-    const ex = draft.extra_matches ?? [];
-    const winners: Record<string, string> = {};
-    for (const m of ex) {
-      if (m.gh == null || m.ga == null) continue;
-      if (m.gh > m.ga) winners[m.id] = m.local;
-      else if (m.ga > m.gh) winners[m.id] = m.visitante;
-      else if (penWinners[m.id]) winners[m.id] = penWinners[m.id];
-    }
-    setDraft({ ...draft, extra_matches: applyAdvance(ex, winners) });
-    toast.success(t("admin.t.res.adv.done"));
   };
 
   const updateGroup = (k: (typeof GROUP_KEYS)[number], field: "pos1" | "pos2", v: string) => {
@@ -787,45 +774,30 @@ export function ResultadosTab() {
 
       {(() => {
         const ex = draft.extra_matches ?? [];
-        if (ex.length === 0) return null;
         const draws = ex.filter((m) => m.gh != null && m.ga != null && m.gh === m.ga);
+        if (draws.length === 0) return null;
         return (
           <Card className="border-info/30 bg-card p-5 card-shadow">
             <h2 className="font-display text-xl text-info">{t("admin.t.res.adv.title")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.res.adv.hint")}</p>
-            {draws.length > 0 && (
-              <div className="mt-3 space-y-2">
-                <Label className="text-[11px] uppercase text-muted-foreground">
-                  {t("admin.t.res.adv.pensLabel")}
-                </Label>
-                {draws.map((m) => (
-                  <div key={m.id} className="flex items-center gap-2">
-                    <span className="flex-1 truncate text-sm">
-                      {teamNameByCode(draft.groups, m.local)} {m.gh}–{m.ga}{" "}
-                      {teamNameByCode(draft.groups, m.visitante)}
-                    </span>
-                    <select
-                      value={penWinners[m.id] ?? ""}
-                      onChange={(e) => setPenWinners((s) => ({ ...s, [m.id]: e.target.value }))}
-                      className="rounded-md border border-input bg-background px-2 py-1 text-sm"
-                    >
-                      <option value="">— {t("admin.t.res.adv.penPick")} —</option>
-                      <option value={m.local}>{teamNameByCode(draft.groups, m.local)}</option>
-                      <option value={m.visitante}>
-                        {teamNameByCode(draft.groups, m.visitante)}
-                      </option>
-                    </select>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="mt-4 flex items-center gap-3">
-              <Button onClick={advanceWinners} variant="secondary">
-                <RefreshCw className="mr-1 size-4" /> {t("admin.t.res.adv.button")}
-              </Button>
-              <span className="text-xs text-muted-foreground">
-                {t("admin.t.res.adv.afterHint")}
-              </span>
+            <div className="mt-3 space-y-2">
+              {draws.map((m) => (
+                <div key={m.id} className="flex items-center gap-2">
+                  <span className="flex-1 truncate text-sm">
+                    {teamNameByCode(draft.groups, m.local)} {m.gh}–{m.ga}{" "}
+                    {teamNameByCode(draft.groups, m.visitante)}
+                  </span>
+                  <select
+                    value={penWinners[m.id] ?? ""}
+                    onChange={(e) => setPenWinners((s) => ({ ...s, [m.id]: e.target.value }))}
+                    className="rounded-md border border-input bg-background px-2 py-1 text-sm"
+                  >
+                    <option value="">— {t("admin.t.res.adv.penPick")} —</option>
+                    <option value={m.local}>{teamNameByCode(draft.groups, m.local)}</option>
+                    <option value={m.visitante}>{teamNameByCode(draft.groups, m.visitante)}</option>
+                  </select>
+                </div>
+              ))}
             </div>
           </Card>
         );
