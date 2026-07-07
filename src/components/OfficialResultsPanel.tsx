@@ -1,4 +1,6 @@
+import { ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useTournamentState } from "@/hooks/usePolla";
 import {
   GROUP_KEYS,
@@ -65,102 +67,117 @@ export function OfficialResultsPanel() {
 
   return (
     <Card className="border-gold/40 bg-gold/5 p-6 card-shadow">
-      <h2 className="font-display text-2xl text-gold">🏁 Resultados oficiales</h2>
-      <p className="mt-1 text-xs text-muted-foreground">
-        Los fija el admin a medida que avanza el Mundial. Con estos datos se calcula el puntaje de
-        cada participante.
-      </p>
+      <Collapsible defaultOpen={false}>
+        <CollapsibleTrigger className="group flex w-full items-center justify-between gap-3 text-left">
+          <h2 className="font-display text-2xl text-gold">🏁 Resultados oficiales</h2>
+          <ChevronDown className="size-5 shrink-0 text-gold transition-transform group-data-[state=open]:rotate-180" />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Los fija el admin a medida que avanza el Mundial. Con estos datos se calcula el puntaje
+            de cada participante.
+          </p>
 
-      {nadaPublicado ? (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Aún no se han publicado resultados oficiales.
-        </p>
-      ) : (
-        <div className="mt-4 space-y-5">
-          {groupsConClasificados.length > 0 && (
-            <section>
-              <h3 className="font-display text-xs uppercase tracking-wider text-foreground">
-                Clasificados por grupo (1º y 2º)
-              </h3>
-              <div className="mt-2 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-                {groupsConClasificados.map((k) => {
-                  const g = ts.groups[k as GroupKey];
-                  return (
-                    <div key={k} className="rounded-md border border-border bg-card px-2 py-1">
-                      <div className="text-[11px] uppercase text-muted-foreground">Grupo {k}</div>
-                      <div>1º {teamLabel(g, g.pos1)}</div>
-                      <div>2º {teamLabel(g, g.pos2)}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {kMatches.length > 0 && (
-            <section>
-              <h3 className="font-display text-xs uppercase tracking-wider text-info">
-                Marcadores · Grupo K
-              </h3>
-              <ul className="mt-2 divide-y divide-border/60">
-                {kMatches.map((m) => (
-                  <li key={m.id} className="flex items-center justify-between gap-2 py-1 text-sm">
-                    <span className="truncate">
-                      {teamLabel(ts.groups.K, m.local)} vs {teamLabel(ts.groups.K, m.visitante)}
-                    </span>
-                    <span className="font-mono font-semibold text-gold">
-                      {m.gh}–{m.ga}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {koByPhase.map(({ fase, list }) => (
-            <section key={fase}>
-              <h3 className="font-display text-xs uppercase tracking-wider text-info">
-                {FASE_LABEL[fase]}
-              </h3>
-              <ul className="mt-2 divide-y divide-border/60">
-                {list.map((m) => (
-                  <li key={m.id} className="flex items-center justify-between gap-2 py-1 text-sm">
-                    <span className="truncate">
-                      {teamNameByCode(ts.groups, m.local)} vs{" "}
-                      {teamNameByCode(ts.groups, m.visitante)}
-                    </span>
-                    <span className="font-mono font-semibold text-gold">
-                      {m.gh}–{m.ga}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
-
-          {(showGoleador || showArquero) && (
-            <section>
-              <h3 className="font-display text-xs uppercase tracking-wider text-destructive">
-                Especiales
-              </h3>
-              <div className="mt-2 grid gap-1 sm:grid-cols-2 text-sm">
-                {showGoleador && (
-                  <div>
-                    <span className="text-muted-foreground">Goleador:</span>{" "}
-                    <span className="font-medium">{ts.goleador_id}</span>
+          {nadaPublicado ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              Aún no se han publicado resultados oficiales.
+            </p>
+          ) : (
+            <div className="mt-4 space-y-5">
+              {groupsConClasificados.length > 0 && (
+                <section>
+                  <h3 className="font-display text-xs uppercase tracking-wider text-foreground">
+                    Clasificados por grupo (1º y 2º)
+                  </h3>
+                  <div className="mt-2 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
+                    {groupsConClasificados.map((k) => {
+                      const g = ts.groups[k as GroupKey];
+                      return (
+                        <div key={k} className="rounded-md border border-border bg-card px-2 py-1">
+                          <div className="text-[11px] uppercase text-muted-foreground">
+                            Grupo {k}
+                          </div>
+                          <div>1º {teamLabel(g, g.pos1)}</div>
+                          <div>2º {teamLabel(g, g.pos2)}</div>
+                        </div>
+                      );
+                    })}
                   </div>
-                )}
-                {showArquero && (
-                  <div>
-                    <span className="text-muted-foreground">Arquero:</span>{" "}
-                    <span className="font-medium">{ts.arquero_id}</span>
+                </section>
+              )}
+
+              {kMatches.length > 0 && (
+                <section>
+                  <h3 className="font-display text-xs uppercase tracking-wider text-info">
+                    Marcadores · Grupo K
+                  </h3>
+                  <ul className="mt-2 divide-y divide-border/60">
+                    {kMatches.map((m) => (
+                      <li
+                        key={m.id}
+                        className="flex items-center justify-between gap-2 py-1 text-sm"
+                      >
+                        <span className="truncate">
+                          {teamLabel(ts.groups.K, m.local)} vs {teamLabel(ts.groups.K, m.visitante)}
+                        </span>
+                        <span className="font-mono font-semibold text-gold">
+                          {m.gh}–{m.ga}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {koByPhase.map(({ fase, list }) => (
+                <section key={fase}>
+                  <h3 className="font-display text-xs uppercase tracking-wider text-info">
+                    {FASE_LABEL[fase]}
+                  </h3>
+                  <ul className="mt-2 divide-y divide-border/60">
+                    {list.map((m) => (
+                      <li
+                        key={m.id}
+                        className="flex items-center justify-between gap-2 py-1 text-sm"
+                      >
+                        <span className="truncate">
+                          {teamNameByCode(ts.groups, m.local)} vs{" "}
+                          {teamNameByCode(ts.groups, m.visitante)}
+                        </span>
+                        <span className="font-mono font-semibold text-gold">
+                          {m.gh}–{m.ga}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+
+              {(showGoleador || showArquero) && (
+                <section>
+                  <h3 className="font-display text-xs uppercase tracking-wider text-destructive">
+                    Especiales
+                  </h3>
+                  <div className="mt-2 grid gap-1 sm:grid-cols-2 text-sm">
+                    {showGoleador && (
+                      <div>
+                        <span className="text-muted-foreground">Goleador:</span>{" "}
+                        <span className="font-medium">{ts.goleador_id}</span>
+                      </div>
+                    )}
+                    {showArquero && (
+                      <div>
+                        <span className="text-muted-foreground">Arquero:</span>{" "}
+                        <span className="font-medium">{ts.arquero_id}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </section>
+                </section>
+              )}
+            </div>
           )}
-        </div>
-      )}
+        </CollapsibleContent>
+      </Collapsible>
     </Card>
   );
 }
