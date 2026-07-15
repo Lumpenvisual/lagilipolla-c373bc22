@@ -9,10 +9,13 @@ import {
   normEspecial,
   isExtraPhaseLocked,
   isExtraPhaseRevealed,
+  isTournamentComplete,
   teamNameByCode,
+  GROUP_KEYS,
   MAX_GOLES,
   type ExtraMatch,
   type Groups,
+  type TournamentState,
 } from "@/lib/polla";
 
 describe("isValidGol — un solo dígito (0–9)", () => {
@@ -197,6 +200,99 @@ describe("teamNameByCode — código→nombre en todos los grupos (eliminatorias
   it("vacío/null → cadena vacía", () => {
     expect(teamNameByCode(groups, null)).toBe("");
     expect(teamNameByCode(groups, "")).toBe("");
+  });
+});
+
+describe("isTournamentComplete — el podio final solo se publica con TODOS los datos", () => {
+  /** Estado completo de referencia: grupos con 1º/2º, Grupo K jugado, 32 llaves KO con
+   *  resultado (incluida la final) y especiales oficiales. Cada test rompe UNA pieza. */
+  const mkComplete = (): TournamentState => {
+    const groups = Object.fromEntries(
+      GROUP_KEYS.map((k) => [
+        k,
+        {
+          teams: [
+            { id: `${k}1`, nombre: `Equipo ${k}1` },
+            { id: `${k}2`, nombre: `Equipo ${k}2` },
+          ],
+          pos1: `${k}1`,
+          pos2: `${k}2`,
+        },
+      ]),
+    ) as unknown as TournamentState["groups"];
+    const kMatch = (id: string): TournamentState["group_k_matches"][number] => ({
+      id,
+      fecha: "2026-06-15T18:00:00Z",
+      local: "K1",
+      visitante: "K2",
+      sede: "",
+      gh: 1,
+      ga: 0,
+    });
+    const ko = (id: string, fase: ExtraMatch["fase"]): ExtraMatch => ({
+      id,
+      fase,
+      fecha: "2026-07-10T18:00:00Z",
+      local: "A1",
+      visitante: "B1",
+      sede: "",
+      gh: 2,
+      ga: 1,
+    });
+    return {
+      id: 1,
+      groups,
+      group_k_matches: [kMatch("k1"), kMatch("k2")],
+      extra_matches: [ko("m73", "dieciseisavos"), ko("m103", "tercero"), ko("m104", "final")],
+      goleadores: [],
+      arqueros: [],
+      goleador_id: "Kylian Mbappé (Francia)",
+      arquero_id: "Emiliano Martínez (Argentina)",
+      deadline: "2026-06-11T15:00:00Z",
+      cuota_cop: 100000,
+      updated_at: "2026-07-19T23:00:00Z",
+    };
+  };
+
+  it("true cuando todos los datos oficiales están ingresados", () => {
+    expect(isTournamentComplete(mkComplete())).toBe(true);
+  });
+  it("false si a un grupo le falta 1º/2º oficial", () => {
+    const ts = mkComplete();
+    ts.groups.L.pos2 = null;
+    expect(isTournamentComplete(ts)).toBe(false);
+  });
+  it("false si un partido del Grupo K no tiene marcador", () => {
+    const ts = mkComplete();
+    ts.group_k_matches[1].ga = null;
+    expect(isTournamentComplete(ts)).toBe(false);
+  });
+  it("false si una llave KO (la que sea) no tiene resultado", () => {
+    const ts = mkComplete();
+    ts.extra_matches![0].gh = null;
+    expect(isTournamentComplete(ts)).toBe(false);
+  });
+  it("false si la final no tiene resultado o no existe la fase final", () => {
+    const conFinalVacia = mkComplete();
+    conFinalVacia.extra_matches![2].gh = null;
+    conFinalVacia.extra_matches![2].ga = null;
+    expect(isTournamentComplete(conFinalVacia)).toBe(false);
+    const sinFinal = mkComplete();
+    sinFinal.extra_matches = sinFinal.extra_matches!.filter((m) => m.fase !== "final");
+    expect(isTournamentComplete(sinFinal)).toBe(false);
+  });
+  it("false sin goleador o arquero oficial (aunque la final ya tenga marcador)", () => {
+    const sinGoleador = mkComplete();
+    sinGoleador.goleador_id = null;
+    expect(isTournamentComplete(sinGoleador)).toBe(false);
+    const arqueroVacio = mkComplete();
+    arqueroVacio.arquero_id = "   ";
+    expect(isTournamentComplete(arqueroVacio)).toBe(false);
+  });
+  it("false si el bracket KO aún no está sembrado (extra_matches vacío)", () => {
+    const ts = mkComplete();
+    ts.extra_matches = [];
+    expect(isTournamentComplete(ts)).toBe(false);
   });
 });
 

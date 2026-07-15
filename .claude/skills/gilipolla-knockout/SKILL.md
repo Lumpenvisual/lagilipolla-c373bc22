@@ -58,6 +58,10 @@ env vars y auth, ver la skill **`gilipolla-ops`**.
 - **Decisión UI:** el histórico de marcadores va **solo en el PDF descargable**, NO en la pantalla del dashboard (se quitó `PickHistoryCard` del perfil de usuario para evitar confusión). El admin sí ve el historial de cambios en `PickHistoryCard scope="all"`.
 - **Continuidad de puntos:** `get_polla_leaderboard` combina grupos+K+KO (`puntos_total`); `recalc_all_picks` se dispara al guardar resultados.
 
+## Podio final (cierre del campeonato)
+
+- Al quedar **TODOS** los datos oficiales ingresados (grupos 1º/2º + Grupo K + 32 llaves KO con la final + goleador y arquero), la pantalla de inicio publica **automáticamente** el podio de LA GILIPOLLA (1°, 2°, 3° con empates). Gate: `isTournamentComplete` (`src/lib/polla.ts`); UI: `FinalPodium` (`src/components/FinalPodium.tsx`). Detalle completo en la skill **`gilipolla-ops`** (sección "Podio final público").
+
 ## Pendiente MANUAL (fuera de alcance, por decisión del dueño)
 
 - Actualización por-partido de equipos/fechas cuando FIFA publique (sorteos/resultados): a mano en **Cronograma** (fechas/sedes/equipos) + **"Avanzar ganadores"** tras cada ronda.

@@ -3,10 +3,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Coins, Calendar, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { POLLA, fmtCOP, fmtFecha } from "@/lib/polla";
+import { POLLA, fmtCOP, fmtFecha, isTournamentComplete } from "@/lib/polla";
 import { useAuth } from "@/hooks/useAuth";
 import { useTournamentState } from "@/hooks/usePolla";
 import { AboutSection } from "@/components/landing";
+import { FinalPodium } from "@/components/FinalPodium";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -68,6 +69,10 @@ function Landing() {
   const { data: ts } = useTournamentState();
   const approved = participant?.estado_pago === "aprobado";
 
+  // Podio final: se publica SOLO cuando todos los datos oficiales están ingresados
+  // (grupos, Grupo K, las 32 llaves KO con la final, goleador y arquero).
+  const complete = !!ts && isTournamentComplete(ts);
+
   // Próximo partido del Mundial (informativo): el de fecha futura más cercana.
   // No condiciona llenar la planilla; solo es un dato destacado en el home.
   const nextMatch = useMemo(() => {
@@ -126,31 +131,37 @@ function Landing() {
             </span>
           </p>
 
-          <p className="mt-8 text-[11px] uppercase tracking-[0.4em] text-muted-foreground">
-            Próximo partido
-          </p>
-          {nextMatch ? (
-            <>
-              <p className="mt-2 font-display text-2xl sm:text-3xl">
-                <span className="text-gold">{teamName(nextMatch.local)}</span>
-                <span className="mx-2 text-muted-foreground">vs</span>
-                <span className="text-gold">{teamName(nextMatch.visitante)}</span>
-              </p>
-              <div className="mt-3 flex items-end justify-center gap-3 sm:gap-5">
-                <Unit v={cd.d} label="días" />
-                <Unit v={cd.h} label="horas" />
-                <Unit v={cd.m} label="min" />
-                <Unit v={cd.s} label="seg" accent />
-              </div>
-              <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Calendar className="size-3.5" /> {fmtFecha(nextMatch.fecha)}
-                {nextMatch.sede ? ` · ${nextMatch.sede}` : ""}
-              </p>
-            </>
+          {complete && ts ? (
+            <FinalPodium ts={ts} />
           ) : (
-            <p className="mt-2 font-display text-2xl text-muted-foreground">
-              El Mundial ya terminó. ¡Gracias por jugar!
-            </p>
+            <>
+              <p className="mt-8 text-[11px] uppercase tracking-[0.4em] text-muted-foreground">
+                Próximo partido
+              </p>
+              {nextMatch ? (
+                <>
+                  <p className="mt-2 font-display text-2xl sm:text-3xl">
+                    <span className="text-gold">{teamName(nextMatch.local)}</span>
+                    <span className="mx-2 text-muted-foreground">vs</span>
+                    <span className="text-gold">{teamName(nextMatch.visitante)}</span>
+                  </p>
+                  <div className="mt-3 flex items-end justify-center gap-3 sm:gap-5">
+                    <Unit v={cd.d} label="días" />
+                    <Unit v={cd.h} label="horas" />
+                    <Unit v={cd.m} label="min" />
+                    <Unit v={cd.s} label="seg" accent />
+                  </div>
+                  <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Calendar className="size-3.5" /> {fmtFecha(nextMatch.fecha)}
+                    {nextMatch.sede ? ` · ${nextMatch.sede}` : ""}
+                  </p>
+                </>
+              ) : (
+                <p className="mt-2 font-display text-2xl text-muted-foreground">
+                  El Mundial ya terminó. ¡Gracias por jugar!
+                </p>
+              )}
+            </>
           )}
 
           <div className="mt-10 flex flex-wrap justify-center gap-3">

@@ -86,6 +86,14 @@ La estructura del KO (32 partidos M73–M104) vive en `tournament_state.extra_ma
 - **UI planilla KO responsive:** columnas de equipo `flex-1` centradas en móvil / `w-[180px]` en desktop; `TeamWithFlag` admite `wrap` para nombres largos.
 - **Regenerar a cero:** vaciar primero (`UPDATE tournament_state SET extra_matches='[]' WHERE id=1`) y volver a aplicar la migración / botón.
 
+## Podio final público (cierre del campeonato)
+
+- **Qué es:** al terminar el campeonato, la pantalla de inicio (`/`) reemplaza el bloque "Próximo partido" por un **podio destacado** con el ganador de LA GILIPOLLA y el 2° y 3er lugar (`FinalPodium`, `src/components/FinalPodium.tsx`), más una línea con Campeón del Mundial, goleador y arquero oficiales, y botón a la tabla completa.
+- **Cuándo aparece (automático, sin acción del admin):** `isTournamentComplete(ts)` (`src/lib/polla.ts`) exige **TODOS** los datos oficiales: 1º/2º de los 12 grupos + marcadores de los 6 partidos del Grupo K + las **32 llaves KO con resultado (incluida la final)** + `goleador_id` y `arquero_id` oficiales. Falta cualquiera → sigue mostrándose el countdown normal. Tests en `src/lib/__tests__/polla-validation.test.ts`.
+- **Empates de podio:** el podio agrupa por `posicion` del leaderboard (RPC `get_polla_leaderboard`, público) — si hay empate en un puesto muestra todos los nombres separados por "·".
+- **Campeón del Mundial:** se deriva del marcador de la final (`fase: "final"`); si la final quedó empatada en 90' (penales), esa línea se **omite** porque el ganador por penales no se persiste en `extra_matches`.
+- **Disparador operativo:** basta con que el admin cargue el último dato pendiente (normalmente el resultado de la final y/o los especiales en Resultados/Especiales) — el home lo publica solo.
+
 ## Verificación antes de pushear
 
 `bunx tsc --noEmit` · `bun run lint` (0 errores; warnings react-refresh son preexistentes) · `bun run test` · `bun run build`. eslint ignora `dist/.output/.vinxi/.vercel/.nitro/.tanstack`.
