@@ -233,21 +233,87 @@ export function isExtraPhaseRevealed(
   return nowMs >= Math.min(...times);
 }
 
+/** Ítems del checklist de cierre del campeonato (ver `tournamentCompletion`). */
+export type CompletionItem = {
+  key: "grupos" | "grupoK" | Exclude<Fase, "grupos"> | "goleador" | "arquero";
+  label: string;
+  done: boolean;
+  /** Cuántos faltan (partidos sin resultado / grupos sin 1º-2º); 0 si done. */
+  pending: number;
+};
+
 /**
- * El campeonato está COMPLETO cuando TODOS los datos oficiales están ingresados:
+ * Checklist del cierre del campeonato: el podio de LA GILIPOLLA se publica en la
+ * pantalla de inicio SOLO cuando TODOS los datos oficiales están ingresados —
  * 1º/2º de los 12 grupos, marcadores del Grupo K, las 32 llaves de eliminatorias
- * (incluida la final) y los especiales (goleador y arquero oficiales). Recién
- * entonces se publica el podio de LA GILIPOLLA en la pantalla de inicio.
+ * (incluida la final) y los especiales (goleador y arquero oficiales).
+ * Devuelve el detalle por ítem para el banner del admin (`done` + faltantes).
+ */
+export function tournamentCompletion(ts: TournamentState): {
+  done: boolean;
+  items: CompletionItem[];
+} {
+  const items: CompletionItem[] = [];
+
+  const gruposPend = GROUP_KEYS.filter((k) => !ts.groups[k]?.pos1 || !ts.groups[k]?.pos2).length;
+  items.push({
+    key: "grupos",
+    label: "1º y 2º oficiales de los 12 grupos",
+    done: gruposPend === 0,
+    pending: gruposPend,
+  });
+
+  const kMatches = groupKMatches(ts);
+  const kPend = kMatches.filter((m) => m.gh == null || m.ga == null).length;
+  items.push({
+    key: "grupoK",
+    label: "Marcadores del Grupo K",
+    done: kMatches.length > 0 && kPend === 0,
+    pending: kMatches.length === 0 ? 1 : kPend,
+  });
+
+  const extra = ts.extra_matches ?? [];
+  const koFases: Exclude<Fase, "grupos">[] = [
+    "dieciseisavos",
+    "octavos",
+    "cuartos",
+    "semis",
+    "tercero",
+    "final",
+  ];
+  for (const fase of koFases) {
+    const list = extra.filter((m) => m.fase === fase);
+    const pend = list.filter((m) => m.gh == null || m.ga == null).length;
+    items.push({
+      key: fase,
+      label: `Resultados · ${FASE_LABEL[fase]}`,
+      done: list.length > 0 && pend === 0,
+      pending: list.length === 0 ? 1 : pend,
+    });
+  }
+
+  items.push({
+    key: "goleador",
+    label: "Goleador oficial",
+    done: !!ts.goleador_id?.trim(),
+    pending: ts.goleador_id?.trim() ? 0 : 1,
+  });
+  items.push({
+    key: "arquero",
+    label: "Arquero oficial",
+    done: !!ts.arquero_id?.trim(),
+    pending: ts.arquero_id?.trim() ? 0 : 1,
+  });
+
+  return { done: items.every((i) => i.done), items };
+}
+
+/**
+ * El campeonato está COMPLETO cuando TODOS los datos oficiales están ingresados
+ * (ver `tournamentCompletion`). Gate del podio final en la pantalla de inicio.
  */
 export function isTournamentComplete(ts: TournamentState): boolean {
-  const groupsDone = GROUP_KEYS.every((k) => !!ts.groups[k]?.pos1 && !!ts.groups[k]?.pos2);
-  const kMatches = groupKMatches(ts);
-  const kDone = kMatches.length > 0 && kMatches.every((m) => m.gh != null && m.ga != null);
-  const extra = ts.extra_matches ?? [];
-  const hasFinal = extra.some((m) => m.fase === "final");
-  const koDone = hasFinal && extra.every((m) => m.gh != null && m.ga != null);
-  const specialsDone = !!ts.goleador_id?.trim() && !!ts.arquero_id?.trim();
-  return groupsDone && kDone && koDone && specialsDone;
+  return tournamentCompletion(ts).done;
 }
 
 /* ---- Validación de marcadores (reglamento: un solo dígito, 0–9) ----

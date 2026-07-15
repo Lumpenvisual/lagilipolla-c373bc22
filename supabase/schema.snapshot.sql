@@ -1,4 +1,4 @@
--- AUTO-GENERATED snapshot · 2026-06-17T02:40:38Z
+-- AUTO-GENERATED snapshot · 2026-07-15T22:56:50Z
 -- Fuente única de verdad: supabase/migrations/*.sql (NO editar este archivo)
 -- Regenerar: bash scripts/dump_schema.sh
 
@@ -3202,3 +3202,364 @@ CREATE POLICY "picks_own_update" ON public.picks
         AND p.estado_pago = 'aprobado'
     )
   );
+
+-- ============================================================
+-- 20260625120000_seed_knockout_bracket.sql
+-- ============================================================
+-- Estructura CANÓNICA del bracket de eliminatorias (Mundial FIFA 2026, 48 equipos)
+-- en tournament_state.extra_matches: 32 partidos (M73–M104) con sus cruces (placeholders),
+-- sedes y fechas oficiales. Refleja exactamente el estado ya cargado en producción.
+--
+-- Fuente única en TS: src/lib/knockout-bracket.ts (buildExtraMatchesFromBracket()).
+-- Este JSON debe coincidir con esa salida.
+--
+-- Idempotente y NO destructivo: solo siembra si extra_matches está vacío, para no
+-- pisar cruces/marcadores ya cargados. Para REGENERAR a cero, el admin vacía primero
+-- (UPDATE ... SET extra_matches='[]') o usa el botón "Generar" desde la UI.
+--
+-- No toca phases/visibility: las fases KO arrancan ocultas y el admin las activa
+-- desde Cronograma cuando corresponda.
+
+UPDATE public.tournament_state SET
+  extra_matches = $JSON$
+  [
+    {"id":"m73","fase":"dieciseisavos","fecha":"2026-06-28T15:00:00-04:00","local":"Segundo A","visitante":"Segundo B","sede":"SoFi Stadium · Inglewood","gh":null,"ga":null},
+    {"id":"m74","fase":"dieciseisavos","fecha":"2026-06-29T16:30:00-04:00","local":"Ganador E","visitante":"Mejor 3° (A/B/C/D/F)","sede":"Gillette Stadium · Foxborough","gh":null,"ga":null},
+    {"id":"m75","fase":"dieciseisavos","fecha":"2026-06-29T21:00:00-04:00","local":"Ganador F","visitante":"Segundo C","sede":"Estadio BBVA · Monterrey","gh":null,"ga":null},
+    {"id":"m76","fase":"dieciseisavos","fecha":"2026-06-29T13:00:00-04:00","local":"Ganador C","visitante":"Segundo F","sede":"NRG Stadium · Houston","gh":null,"ga":null},
+    {"id":"m77","fase":"dieciseisavos","fecha":"2026-06-30T17:00:00-04:00","local":"Ganador I","visitante":"Mejor 3° (C/D/F/G/H)","sede":"MetLife Stadium · East Rutherford","gh":null,"ga":null},
+    {"id":"m78","fase":"dieciseisavos","fecha":"2026-06-30T13:00:00-04:00","local":"Segundo E","visitante":"Segundo I","sede":"AT&T Stadium · Arlington","gh":null,"ga":null},
+    {"id":"m79","fase":"dieciseisavos","fecha":"2026-06-30T21:00:00-04:00","local":"Ganador A","visitante":"Mejor 3° (C/E/F/H/I)","sede":"Estadio Azteca · Mexico City","gh":null,"ga":null},
+    {"id":"m80","fase":"dieciseisavos","fecha":"2026-07-01T12:00:00-04:00","local":"Ganador L","visitante":"Mejor 3° (E/H/I/J/K)","sede":"Mercedes-Benz Stadium · Atlanta","gh":null,"ga":null},
+    {"id":"m81","fase":"dieciseisavos","fecha":"2026-07-01T20:00:00-04:00","local":"Ganador D","visitante":"Mejor 3° (B/E/F/I/J)","sede":"Levi's Stadium · Santa Clara","gh":null,"ga":null},
+    {"id":"m82","fase":"dieciseisavos","fecha":"2026-07-01T16:00:00-04:00","local":"Ganador G","visitante":"Mejor 3° (A/E/H/I/J)","sede":"Lumen Field · Seattle","gh":null,"ga":null},
+    {"id":"m83","fase":"dieciseisavos","fecha":"2026-07-02T19:00:00-04:00","local":"Segundo K","visitante":"Segundo L","sede":"BMO Field · Toronto","gh":null,"ga":null},
+    {"id":"m84","fase":"dieciseisavos","fecha":"2026-07-02T15:00:00-04:00","local":"Ganador H","visitante":"Segundo J","sede":"SoFi Stadium · Inglewood","gh":null,"ga":null},
+    {"id":"m85","fase":"dieciseisavos","fecha":"2026-07-02T23:00:00-04:00","local":"Ganador B","visitante":"Mejor 3° (E/F/G/I/J)","sede":"BC Place · Vancouver","gh":null,"ga":null},
+    {"id":"m86","fase":"dieciseisavos","fecha":"2026-07-03T18:00:00-04:00","local":"Ganador J","visitante":"Segundo H","sede":"Hard Rock Stadium · Miami Gardens","gh":null,"ga":null},
+    {"id":"m87","fase":"dieciseisavos","fecha":"2026-07-03T21:30:00-04:00","local":"Ganador K","visitante":"Mejor 3° (D/E/I/J/L)","sede":"Arrowhead Stadium · Kansas City","gh":null,"ga":null},
+    {"id":"m88","fase":"dieciseisavos","fecha":"2026-07-03T14:00:00-04:00","local":"Segundo D","visitante":"Segundo G","sede":"AT&T Stadium · Arlington","gh":null,"ga":null},
+    {"id":"m89","fase":"octavos","fecha":"2026-07-04T17:00:00-04:00","local":"Ganador Partido 74","visitante":"Ganador Partido 77","sede":"Lincoln Financial Field · Philadelphia","gh":null,"ga":null},
+    {"id":"m90","fase":"octavos","fecha":"2026-07-04T13:00:00-04:00","local":"Ganador Partido 73","visitante":"Ganador Partido 75","sede":"NRG Stadium · Houston","gh":null,"ga":null},
+    {"id":"m91","fase":"octavos","fecha":"2026-07-05T16:00:00-04:00","local":"Ganador Partido 76","visitante":"Ganador Partido 78","sede":"MetLife Stadium · East Rutherford","gh":null,"ga":null},
+    {"id":"m92","fase":"octavos","fecha":"2026-07-05T20:00:00-04:00","local":"Ganador Partido 79","visitante":"Ganador Partido 80","sede":"Estadio Azteca · Mexico City","gh":null,"ga":null},
+    {"id":"m93","fase":"octavos","fecha":"2026-07-06T15:00:00-04:00","local":"Ganador Partido 83","visitante":"Ganador Partido 84","sede":"AT&T Stadium · Arlington","gh":null,"ga":null},
+    {"id":"m94","fase":"octavos","fecha":"2026-07-06T20:00:00-04:00","local":"Ganador Partido 81","visitante":"Ganador Partido 82","sede":"Lumen Field · Seattle","gh":null,"ga":null},
+    {"id":"m95","fase":"octavos","fecha":"2026-07-07T12:00:00-04:00","local":"Ganador Partido 86","visitante":"Ganador Partido 88","sede":"Mercedes-Benz Stadium · Atlanta","gh":null,"ga":null},
+    {"id":"m96","fase":"octavos","fecha":"2026-07-07T16:00:00-04:00","local":"Ganador Partido 85","visitante":"Ganador Partido 87","sede":"BC Place · Vancouver","gh":null,"ga":null},
+    {"id":"m97","fase":"cuartos","fecha":"2026-07-09T16:00:00-04:00","local":"Ganador Partido 89","visitante":"Ganador Partido 90","sede":"Gillette Stadium · Foxborough","gh":null,"ga":null},
+    {"id":"m98","fase":"cuartos","fecha":"2026-07-10T15:00:00-04:00","local":"Ganador Partido 93","visitante":"Ganador Partido 94","sede":"SoFi Stadium · Inglewood","gh":null,"ga":null},
+    {"id":"m99","fase":"cuartos","fecha":"2026-07-11T17:00:00-04:00","local":"Ganador Partido 91","visitante":"Ganador Partido 92","sede":"Hard Rock Stadium · Miami Gardens","gh":null,"ga":null},
+    {"id":"m100","fase":"cuartos","fecha":"2026-07-11T21:00:00-04:00","local":"Ganador Partido 95","visitante":"Ganador Partido 96","sede":"Arrowhead Stadium · Kansas City","gh":null,"ga":null},
+    {"id":"m101","fase":"semis","fecha":"2026-07-14T15:00:00-04:00","local":"Ganador Partido 97","visitante":"Ganador Partido 98","sede":"AT&T Stadium · Arlington","gh":null,"ga":null},
+    {"id":"m102","fase":"semis","fecha":"2026-07-15T15:00:00-04:00","local":"Ganador Partido 99","visitante":"Ganador Partido 100","sede":"Mercedes-Benz Stadium · Atlanta","gh":null,"ga":null},
+    {"id":"m103","fase":"tercero","fecha":"2026-07-18T17:00:00-04:00","local":"Perdedor Partido 101","visitante":"Perdedor Partido 102","sede":"Hard Rock Stadium · Miami Gardens","gh":null,"ga":null},
+    {"id":"m104","fase":"final","fecha":"2026-07-19T15:00:00-04:00","local":"Ganador Partido 101","visitante":"Ganador Partido 102","sede":"MetLife Stadium · East Rutherford","gh":null,"ga":null}
+  ]
+  $JSON$::jsonb,
+  updated_at = now()
+WHERE id = 1
+  AND (extra_matches IS NULL OR jsonb_array_length(extra_matches) = 0);
+
+-- ============================================================
+-- 20260625130000_knockout_phase_lock.sql
+-- ============================================================
+-- Plazo de eliminatorias POR RONDA (no por-partido).
+--
+-- Cambio de reglamento (solo eliminatorias): la planilla de una ronda KO se cierra para
+-- los participantes 1 HORA antes del PRIMER partido de esa ronda/fase (dieciseisavos,
+-- octavos, cuartos, semis, tercero, final). Antes era 24 h por partido.
+--
+-- - Grupos (group_k_matches): SIN CAMBIOS, sigue el candado de 24 h por partido (is_match_locked).
+-- - Admin: conserva su bypass total (cierre global + por-ronda), como hasta ahora.
+-- - Si una fase aún no tiene fechas cargadas, NO bloquea (la ronda queda abierta hasta que
+--   el admin programe en Cronograma).
+
+-- 1. ¿Está cerrada la RONDA que contiene este partido de eliminatorias?
+--    true si now() >= (primer fecha de la fase) - 1 hora.
+CREATE OR REPLACE FUNCTION public.is_extra_phase_locked(_match_id text)
+RETURNS boolean
+LANGUAGE sql
+STABLE SECURITY DEFINER
+SET search_path TO 'public'
+AS $function$
+  SELECT COALESCE(
+    now() >= MIN(NULLIF(m->>'fecha', '')::timestamptz) - interval '1 hour',
+    false
+  )
+  FROM public.tournament_state ts,
+       jsonb_array_elements(COALESCE(ts.extra_matches, '[]'::jsonb)) AS m
+  WHERE ts.id = 1
+    AND m->>'fase' = (
+      SELECT m2->>'fase'
+      FROM public.tournament_state ts2,
+           jsonb_array_elements(COALESCE(ts2.extra_matches, '[]'::jsonb)) AS m2
+      WHERE ts2.id = 1 AND m2->>'id' = _match_id
+      LIMIT 1
+    );
+$function$;
+
+-- 2. enforce_picks_deadline: el bucle de extra_matches pasa a candado POR-RONDA.
+--    (basado en 20260616120000_admin_bypass_match_lock.sql; group_k_matches sin cambios)
+CREATE OR REPLACE FUNCTION public.enforce_picks_deadline()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_lock TIMESTAMPTZ;
+  v_key  text;
+  v_old  jsonb;
+  v_new  jsonb;
+BEGIN
+  -- Cierre global: el admin lo salta.
+  IF NOT public.has_role(auth.uid(),'admin') THEN
+    SELECT picks_locked_at INTO v_lock FROM public.tournament_state WHERE id = 1;
+    IF v_lock IS NOT NULL AND now() >= v_lock THEN
+      RAISE EXCEPTION 'Las planillas están cerradas. Habla con el admin si necesitas un cambio.';
+    END IF;
+  END IF;
+
+  -- Bloqueos por tiempo: el admin también los salta.
+  IF (TG_OP = 'UPDATE' OR TG_OP = 'INSERT') AND NOT public.has_role(auth.uid(),'admin') THEN
+    -- Grupo K: candado por-partido (24 h antes del kickoff).
+    FOR v_key IN SELECT jsonb_object_keys(COALESCE(NEW.group_k_matches, '{}'::jsonb)) LOOP
+      v_new := NEW.group_k_matches -> v_key;
+      v_old := CASE WHEN TG_OP = 'UPDATE' THEN OLD.group_k_matches -> v_key ELSE NULL END;
+      IF v_new IS DISTINCT FROM v_old AND public.is_match_locked(v_key) THEN
+        RAISE EXCEPTION 'El partido % está bloqueado: faltan menos de 24 horas para que empiece.', v_key;
+      END IF;
+    END LOOP;
+
+    -- Eliminatorias: candado por-RONDA (1 h antes del primer partido de la fase).
+    FOR v_key IN SELECT jsonb_object_keys(COALESCE(NEW.extra_matches, '{}'::jsonb)) LOOP
+      v_new := NEW.extra_matches -> v_key;
+      v_old := CASE WHEN TG_OP = 'UPDATE' THEN OLD.extra_matches -> v_key ELSE NULL END;
+      IF v_new IS DISTINCT FROM v_old AND public.is_extra_phase_locked(v_key) THEN
+        RAISE EXCEPTION 'Esta ronda de eliminatorias está cerrada: empezó (o está por empezar) su primer partido.';
+      END IF;
+    END LOOP;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+-- ============================================================
+-- 20260704120000_public_pick_hide_marcadores.sql
+-- ============================================================
+-- Privacidad de la tabla pública: los MARCADORES de cada usuario no se ven en el
+-- leaderboard (RPC anon get_public_pick) hasta que INICIA el primer partido de esa fase.
+--
+-- Regla de revelación (kickoff, no el candado de edición que cierra 1h antes):
+--   una fase se revela cuando now() >= MIN(fecha de sus partidos). Si la fase no tiene
+--   fechas válidas → NO se revela (queda oculta).
+--
+-- Redacta antes de devolver:
+--   - extra_matches: solo las claves cuyo `fase` ya inició.
+--   - group_k_matches: solo si el Grupo K ya inició; si no, '{}'.
+-- No cambia: groups (posiciones), goleador_id, arquero_id, puntos_total, updated_at.
+-- Mantiene firma, SECURITY DEFINER, search_path y el GRANT a authenticated/anon.
+
+CREATE OR REPLACE FUNCTION public.get_public_pick(_participant_id uuid)
+RETURNS TABLE(
+  participant_id uuid,
+  nombre text,
+  groups jsonb,
+  group_k_matches jsonb,
+  extra_matches jsonb,
+  goleador_id text,
+  arquero_id text,
+  puntos_total integer,
+  updated_at timestamptz
+)
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  WITH ts AS (
+    SELECT group_k_matches, extra_matches
+    FROM public.tournament_state WHERE id = 1
+  ),
+  -- Ids de partidos KO cuya FASE ya inició (primer partido de la fase <= now()).
+  ko_revealed_ids AS (
+    SELECT m->>'id' AS id
+    FROM ts, jsonb_array_elements(COALESCE(ts.extra_matches, '[]'::jsonb)) m
+    WHERE m->>'fase' IN (
+      SELECT m2->>'fase'
+      FROM ts t2, jsonb_array_elements(COALESCE(t2.extra_matches, '[]'::jsonb)) m2
+      GROUP BY m2->>'fase'
+      HAVING now() >= MIN(NULLIF(m2->>'fecha', '')::timestamptz)
+    )
+  ),
+  -- ¿Ya inició el Grupo K? (primer partido de group_k_matches <= now())
+  gk_started AS (
+    SELECT COALESCE(now() >= MIN(NULLIF(m->>'fecha', '')::timestamptz), false) AS started
+    FROM ts, jsonb_array_elements(COALESCE(ts.group_k_matches, '[]'::jsonb)) m
+  )
+  SELECT
+    pa.id,
+    pa.nombre,
+    COALESCE(pk.groups, '{}'::jsonb),
+    CASE
+      WHEN (SELECT started FROM gk_started)
+      THEN COALESCE(pk.group_k_matches, '{}'::jsonb)
+      ELSE '{}'::jsonb
+    END,
+    COALESCE(
+      (
+        SELECT jsonb_object_agg(e.key, e.value)
+        FROM jsonb_each(COALESCE(pk.extra_matches, '{}'::jsonb)) e
+        WHERE e.key IN (SELECT id FROM ko_revealed_ids)
+      ),
+      '{}'::jsonb
+    ),
+    pk.goleador_id,
+    pk.arquero_id,
+    COALESCE(pk.puntos_total, 0),
+    pk.updated_at
+  FROM public.participants pa
+  LEFT JOIN public.picks pk ON pk.participant_id = pa.id
+  WHERE pa.id = _participant_id
+    AND pa.estado_pago = 'aprobado'
+  LIMIT 1;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.get_public_pick(uuid) TO authenticated, anon;
+
+-- ============================================================
+-- 20260715170000_auto_recalc_on_official_change.sql
+-- ============================================================
+-- ============================================================
+-- Recalculo AUTOMATICO de puntos al cambiar datos oficiales.
+--
+-- Problema: recalc_all_picks() solo se ejecutaba si el frontend lo llamaba
+-- tras guardar (ResultadosTab.save). Un UPDATE directo a tournament_state
+-- (script, SQL, Management API) dejaba los puntos desactualizados y el podio
+-- final podia publicarse con un leaderboard viejo.
+--
+-- Garantia: trigger AFTER UPDATE sobre tournament_state que recalcula todos
+-- los picks cuando cambian resultados oficiales (groups, group_k_matches,
+-- extra_matches) o los especiales (goleador_id, arquero_id).
+--
+-- Diseno:
+--  * recalc_all_picks_internal(): recalculo SIN check de rol y con SOFT-guard
+--    (si los datos oficiales son invalidos hace RAISE NOTICE y retorna 0, no
+--    aborta el UPDATE que lo disparo). La seguridad la da el RLS de
+--    tournament_state (solo admin/service_role pueden hacer UPDATE).
+--  * recalc_all_picks(): conserva el contrato de siempre para la UI
+--    (check has_role admin + guard DURO que lanza excepcion con mensaje
+--    legible) y delega el recalculo en la interna.
+--  * Recalcular dos veces (trigger + llamada explicita de la UI) es inocuo:
+--    calc_pick_points es idempotente.
+-- ============================================================
+
+-- 1) Recalculo interno: sin check de rol, soft-guard.
+CREATE OR REPLACE FUNCTION public.recalc_all_picks_internal()
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE r record; n int := 0; s record; m jsonb; k text; gobj jsonb;
+BEGIN
+  SELECT * INTO s FROM public.tournament_state WHERE id = 1;
+  IF FOUND THEN
+    FOR m IN SELECT jsonb_array_elements(COALESCE(s.group_k_matches,'[]'::jsonb)) LOOP
+      IF public._gp_score_invalid(m) THEN
+        RAISE NOTICE 'recalc omitido: marcador oficial invalido en group_k_matches';
+        RETURN 0;
+      END IF;
+    END LOOP;
+    FOR m IN SELECT jsonb_array_elements(COALESCE(s.extra_matches,'[]'::jsonb)) LOOP
+      IF public._gp_score_invalid(m) THEN
+        RAISE NOTICE 'recalc omitido: marcador oficial invalido en extra_matches';
+        RETURN 0;
+      END IF;
+    END LOOP;
+    FOR k IN SELECT jsonb_object_keys(COALESCE(s.groups,'{}'::jsonb)) LOOP
+      gobj := s.groups->k;
+      IF (gobj->>'pos1') IS NOT NULL AND (gobj->>'pos2') IS NOT NULL
+         AND (gobj->>'pos1') = (gobj->>'pos2') THEN
+        RAISE NOTICE 'recalc omitido: el grupo % tiene 1o y 2o repetidos', k;
+        RETURN 0;
+      END IF;
+    END LOOP;
+  END IF;
+
+  FOR r IN SELECT participant_id FROM public.picks LOOP
+    PERFORM public.calc_pick_points(r.participant_id);
+    n := n + 1;
+  END LOOP;
+  RETURN n;
+END; $$;
+
+REVOKE ALL ON FUNCTION public.recalc_all_picks_internal() FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.recalc_all_picks_internal() TO service_role;
+
+-- 2) recalc_all_picks(): mismo contrato para la UI (rol admin + guard duro),
+--    delega el recalculo en la interna.
+CREATE OR REPLACE FUNCTION public.recalc_all_picks()
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE s record; m jsonb; k text; gobj jsonb;
+BEGIN
+  IF NOT has_role(auth.uid(),'admin') THEN RAISE EXCEPTION 'forbidden'; END IF;
+
+  SELECT * INTO s FROM public.tournament_state WHERE id = 1;
+  IF FOUND THEN
+    FOR m IN SELECT jsonb_array_elements(COALESCE(s.group_k_matches,'[]'::jsonb)) LOOP
+      IF public._gp_score_invalid(m) THEN
+        RAISE EXCEPTION 'Resultados oficiales inválidos: hay un marcador de más de un dígito o incompleto.';
+      END IF;
+    END LOOP;
+    FOR m IN SELECT jsonb_array_elements(COALESCE(s.extra_matches,'[]'::jsonb)) LOOP
+      IF public._gp_score_invalid(m) THEN
+        RAISE EXCEPTION 'Resultados oficiales inválidos: hay un marcador de más de un dígito o incompleto.';
+      END IF;
+    END LOOP;
+    FOR k IN SELECT jsonb_object_keys(COALESCE(s.groups,'{}'::jsonb)) LOOP
+      gobj := s.groups->k;
+      IF (gobj->>'pos1') IS NOT NULL AND (gobj->>'pos2') IS NOT NULL
+         AND (gobj->>'pos1') = (gobj->>'pos2') THEN
+        RAISE EXCEPTION 'Resultados oficiales inválidos: el grupo % tiene 1º y 2º repetidos.', k;
+      END IF;
+    END LOOP;
+  END IF;
+
+  RETURN public.recalc_all_picks_internal();
+END; $$;
+
+REVOKE ALL ON FUNCTION public.recalc_all_picks() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.recalc_all_picks() TO authenticated, service_role;
+
+-- 3) Trigger: cualquier cambio real a datos oficiales/especiales recalcula.
+CREATE OR REPLACE FUNCTION public.ts_recalc_on_official_change()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  PERFORM public.recalc_all_picks_internal();
+  RETURN NEW;
+END; $$;
+
+DROP TRIGGER IF EXISTS ts_recalc_on_official_change ON public.tournament_state;
+CREATE TRIGGER ts_recalc_on_official_change
+AFTER UPDATE OF groups, group_k_matches, extra_matches, goleador_id, arquero_id
+ON public.tournament_state
+FOR EACH ROW
+WHEN (
+  NEW.groups IS DISTINCT FROM OLD.groups
+  OR NEW.group_k_matches IS DISTINCT FROM OLD.group_k_matches
+  OR NEW.extra_matches IS DISTINCT FROM OLD.extra_matches
+  OR NEW.goleador_id IS DISTINCT FROM OLD.goleador_id
+  OR NEW.arquero_id IS DISTINCT FROM OLD.arquero_id
+)
+EXECUTE FUNCTION public.ts_recalc_on_official_change();

@@ -60,6 +60,7 @@ import {
   lastGol,
   scoreState,
   teamNameByCode,
+  tournamentCompletion,
   type ExtraMatch,
   type Fase,
   type GroupKey,
@@ -546,6 +547,62 @@ export function ResultadosTab() {
 
   return (
     <div className="space-y-8">
+      {/* Cierre del campeonato: aparece cuando las semifinales ya tienen resultado.
+       * Checklist de todo lo que falta para publicar el podio en el home; destaca
+       * subir los especiales (goleador/arquero) porque sin ellos no hay podio. */}
+      {ts &&
+        (() => {
+          const semis = (ts.extra_matches ?? []).filter((m) => m.fase === "semis");
+          const semisDefinidas =
+            semis.length > 0 && semis.every((m) => m.gh != null && m.ga != null);
+          if (!semisDefinidas) return null;
+          const { done, items } = tournamentCompletion(ts);
+          if (done) {
+            return (
+              <Card className="border-success/50 bg-success/10 p-5 card-shadow">
+                <h2 className="font-display text-xl text-success">
+                  {t("admin.t.res.cierre.doneTitle")}
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t("admin.t.res.cierre.doneMsg")}
+                </p>
+                <Button asChild variant="secondary" size="sm" className="mt-3">
+                  <a href="/">{t("admin.t.res.cierre.verHome")}</a>
+                </Button>
+              </Card>
+            );
+          }
+          const faltanEspeciales = items.some(
+            (i) => (i.key === "goleador" || i.key === "arquero") && !i.done,
+          );
+          return (
+            <Card className="border-gold/50 bg-gold/5 p-5 card-shadow">
+              <h2 className="font-display text-xl text-gold">{t("admin.t.res.cierre.title")}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{t("admin.t.res.cierre.hint")}</p>
+              <ul className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
+                {items.map((i) => (
+                  <li key={i.key} className="flex items-center gap-2">
+                    <span aria-hidden>{i.done ? "✅" : "❌"}</span>
+                    <span className={i.done ? "text-muted-foreground" : "font-medium"}>
+                      {i.label}
+                      {!i.done && i.pending > 1 && (
+                        <span className="ml-1 text-xs text-destructive">
+                          ({t("admin.t.res.cierre.pendingN", { n: i.pending })})
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {faltanEspeciales && (
+                <p className="mt-3 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                  {t("admin.t.res.cierre.especialesCta")}
+                </p>
+              )}
+            </Card>
+          );
+        })()}
+
       <Card className="border-gold/30 bg-card p-5 card-shadow">
         <h2 className="font-display text-xl text-gold">{t("admin.t.res.repechajes")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.res.repechajesHint")}</p>

@@ -94,6 +94,7 @@ La estructura del KO (32 partidos M73–M104) vive en `tournament_state.extra_ma
 - **Empates de podio:** el podio agrupa por `posicion` del leaderboard (RPC `get_polla_leaderboard`, público) — si hay empate en un puesto muestra todos los nombres separados por "·".
 - **Campeón del Mundial:** se deriva del marcador de la final (`fase: "final"`); si la final quedó empatada en 90' (penales), esa línea se **omite** porque el ganador por penales no se persiste en `extra_matches`.
 - **Disparador operativo:** basta con que el admin cargue el último dato pendiente (normalmente el resultado de la final y/o los especiales en Resultados/Especiales) — el home lo publica solo.
+- **Garantías del cierre (jul-2026):** (1) trigger `ts_recalc_on_official_change` en `tournament_state` (migración `20260715170000`) recalcula puntos automáticamente al cambiar resultados/especiales — ya no depende solo de la UI; (2) banner-checklist "Cierre del campeonato" en ResultadosTab cuando las semis tienen resultado; (3) E2E transaccional `SUPABASE_PAT=… node scripts/e2e_final_flow.mjs` (ROLLBACK, no toca prod). Detalle completo en la skill **`gilipolla-cierre`**.
 
 ## Verificación antes de pushear
 

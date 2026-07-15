@@ -10,6 +10,7 @@ import {
   isExtraPhaseLocked,
   isExtraPhaseRevealed,
   isTournamentComplete,
+  tournamentCompletion,
   teamNameByCode,
   GROUP_KEYS,
   MAX_GOLES,
@@ -243,7 +244,14 @@ describe("isTournamentComplete — el podio final solo se publica con TODOS los 
       id: 1,
       groups,
       group_k_matches: [kMatch("k1"), kMatch("k2")],
-      extra_matches: [ko("m73", "dieciseisavos"), ko("m103", "tercero"), ko("m104", "final")],
+      extra_matches: [
+        ko("m73", "dieciseisavos"),
+        ko("m89", "octavos"),
+        ko("m97", "cuartos"),
+        ko("m101", "semis"),
+        ko("m103", "tercero"),
+        ko("m104", "final"),
+      ],
       goleadores: [],
       arqueros: [],
       goleador_id: "Kylian Mbappé (Francia)",
@@ -274,8 +282,9 @@ describe("isTournamentComplete — el podio final solo se publica con TODOS los 
   });
   it("false si la final no tiene resultado o no existe la fase final", () => {
     const conFinalVacia = mkComplete();
-    conFinalVacia.extra_matches![2].gh = null;
-    conFinalVacia.extra_matches![2].ga = null;
+    const finalMatch = conFinalVacia.extra_matches!.find((m) => m.fase === "final")!;
+    finalMatch.gh = null;
+    finalMatch.ga = null;
     expect(isTournamentComplete(conFinalVacia)).toBe(false);
     const sinFinal = mkComplete();
     sinFinal.extra_matches = sinFinal.extra_matches!.filter((m) => m.fase !== "final");
@@ -293,6 +302,38 @@ describe("isTournamentComplete — el podio final solo se publica con TODOS los 
     const ts = mkComplete();
     ts.extra_matches = [];
     expect(isTournamentComplete(ts)).toBe(false);
+  });
+
+  describe("tournamentCompletion — checklist con faltantes por ítem", () => {
+    it("todo completo: done=true y ningún ítem pendiente", () => {
+      const { done, items } = tournamentCompletion(mkComplete());
+      expect(done).toBe(true);
+      expect(items.every((i) => i.done && i.pending === 0)).toBe(true);
+      // Ítems clave presentes para el banner del admin.
+      const keys = items.map((i) => i.key);
+      expect(keys).toEqual(
+        expect.arrayContaining(["grupos", "grupoK", "final", "goleador", "arquero"]),
+      );
+    });
+    it("reporta cuántos faltan por ítem (2 grupos sin 1º/2º, especiales vacíos)", () => {
+      const ts = mkComplete();
+      ts.groups.A.pos1 = null;
+      ts.groups.L.pos2 = null;
+      ts.goleador_id = null;
+      const { done, items } = tournamentCompletion(ts);
+      expect(done).toBe(false);
+      expect(items.find((i) => i.key === "grupos")).toMatchObject({ done: false, pending: 2 });
+      expect(items.find((i) => i.key === "goleador")).toMatchObject({ done: false, pending: 1 });
+      expect(items.find((i) => i.key === "arquero")).toMatchObject({ done: true, pending: 0 });
+    });
+    it("cuenta llaves KO sin resultado por fase", () => {
+      const ts = mkComplete();
+      const fin = ts.extra_matches!.find((m) => m.fase === "final")!;
+      fin.gh = null;
+      const { items } = tournamentCompletion(ts);
+      expect(items.find((i) => i.key === "final")).toMatchObject({ done: false, pending: 1 });
+      expect(items.find((i) => i.key === "semis")).toMatchObject({ done: true, pending: 0 });
+    });
   });
 });
 

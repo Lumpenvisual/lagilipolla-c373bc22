@@ -756,6 +756,16 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.adv.hint":
       "El puntaje solo cuenta el marcador oficial de los 90 minutos (sin prórroga). Para AVANZAR de ronda, define manualmente qué equipo ganó (prórroga/penales). Se aplica al «Guardar y recalcular puntos».",
     "admin.t.res.adv.penPick": "Definir ganador",
+    "admin.t.res.cierre.title": "🏁 Cierre del campeonato",
+    "admin.t.res.cierre.hint":
+      "Las semifinales ya están definidas. Para publicar el podio (1°, 2° y 3er lugar) en la página de inicio deben quedar TODOS los datos oficiales ingresados:",
+    "admin.t.res.cierre.especialesCta":
+      "⚠️ Sube el goleador y el arquero oficiales en la sección «Especiales» de abajo y pulsa «Guardar y recalcular puntos» — sin ellos no se suman los 10+10 pts ni se publica el podio.",
+    "admin.t.res.cierre.pendingN": "faltan {n}",
+    "admin.t.res.cierre.doneTitle": "✅ Campeonato completo",
+    "admin.t.res.cierre.doneMsg":
+      "Todos los datos oficiales están ingresados y los puntos recalculados. El podio con el ganador de LA GILIPOLLA ya está publicado en la página de inicio.",
+    "admin.t.res.cierre.verHome": "Ver página de inicio",
     "admin.t.esp.title": "Especiales de los participantes",
     "admin.t.esp.hint":
       "Goleador y arquero los escribe cada participante en su planilla (nombre y selección). Aquí ves quién entregó qué. El resultado oficial se fija en la pestaña Resultados.",
@@ -1583,6 +1593,16 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.adv.hint":
       "Scoring only counts the official 90-minute score (no extra time). To ADVANCE to the next round, manually set which team won (extra time / penalties). Applied on “Save and recalculate points”.",
     "admin.t.res.adv.penPick": "Set winner",
+    "admin.t.res.cierre.title": "🏁 Tournament wrap-up",
+    "admin.t.res.cierre.hint":
+      "The semifinals are set. To publish the podium (1st, 2nd and 3rd place) on the home page, ALL official data must be entered:",
+    "admin.t.res.cierre.especialesCta":
+      "⚠️ Enter the official top scorer and goalkeeper in the “Specials” section below and press “Save and recalculate points” — without them the 10+10 pts are not added and the podium is not published.",
+    "admin.t.res.cierre.pendingN": "{n} missing",
+    "admin.t.res.cierre.doneTitle": "✅ Tournament complete",
+    "admin.t.res.cierre.doneMsg":
+      "All official data is entered and points recalculated. The podium with the winner of LA GILIPOLLA is now published on the home page.",
+    "admin.t.res.cierre.verHome": "View home page",
     "admin.t.esp.title": "Participants' specials",
     "admin.t.esp.hint":
       "Each participant writes their top scorer and goalkeeper (name and national team) on their ballot. Here you see who submitted what. The official result is set in the Results tab.",
