@@ -429,43 +429,73 @@ function levenshtein(a: string, b: string): number {
 
 const PAIS_ALIAS: Record<string, string> = { holanda: "paises bajos" };
 
+/** Motivo detallado de `especialMatchMotivo` \u2014 ver esa funci\u00f3n para la regla completa. */
+export type EspecialMatchMotivo =
+  | { tipo: "exacto" }
+  | { tipo: "typo"; distancia: number }
+  | { tipo: "parte-nombre" }
+  | {
+      tipo: "sin-acierto";
+      causa: "seleccion-distinta" | "nombre-distinto" | "ambiguo" | "vacio";
+    };
+
 /**
- * \u00bfEl especial de un pick acierta contra el oficial? Espejo de especial_matches en SQL
- * (migraci\u00f3n 20260720010000): compara POR PARTES (nombre + selecci\u00f3n, v\u00eda parseSpecial):
- *  a) nombre completo igual (normalizado);
- *  b) typo peque\u00f1o en el nombre (levenshtein \u2264 2) con la selecci\u00f3n coincidiendo;
- *  c) apellido solo / parte del nombre (palabras de un lado contenidas en el otro), con
- *     selecci\u00f3n presente en AMBOS lados y coincidente (sin selecci\u00f3n = ambiguo, no punt\u00faa).
- * Quien no coincide con el oficial tiene 0.
- * Alias "Holanda" \u2261 "Pa\u00edses Bajos"; typo de selecci\u00f3n tolerado (levenshtein \u2264 1).
- * Selecciones contradictorias \u2192 nunca acierta.
+ * Motivo del acierto/no-acierto de un especial — misma regla que `especialMatches`,
+ * pero explicando el POR QUÉ (para el chip de auditoría del admin). `especialMatches`
+ * delega en esta función (single source of truth: no mantener dos implementaciones
+ * paralelas que puedan divergir, como pasó con norm_especial/especial_matches).
+ *
+ *  - "exacto": nombre completo igual (normalizado).
+ *  - "typo": levenshtein(nombre) ≤ 2 con selección coincidente.
+ *  - "parte-nombre": apellido/subconjunto de palabras con selección coincidente en
+ *    AMBOS lados.
+ *  - "sin-acierto/seleccion-distinta": ambos traen selección pero no coinciden
+ *    (ni siquiera con typo ≤1) — nunca acierta, sin importar el nombre.
+ *  - "sin-acierto/ambiguo": el nombre calzaría por typo o por apellido/parte, pero
+ *    falta la selección en alguno de los dos lados — no se puede confirmar.
+ *  - "sin-acierto/nombre-distinto": ni el nombre ni la selección calzan.
+ *  - "sin-acierto/vacio": pick u oficial vacíos/solo espacios.
  */
-export function especialMatches(
+export function especialMatchMotivo(
   pick: string | null | undefined,
   oficial: string | null | undefined,
-): boolean {
-  if (!pick?.trim() || !oficial?.trim()) return false;
+): EspecialMatchMotivo {
+  if (!pick?.trim() || !oficial?.trim()) return { tipo: "sin-acierto", causa: "vacio" };
   const p = parseSpecial(pick);
   const o = parseSpecial(oficial);
   const pn = normEspecial(p.nombre) ?? "";
   const onm = normEspecial(o.nombre) ?? "";
   let ps = normEspecial(p.seleccion) ?? "";
   let os = normEspecial(o.seleccion) ?? "";
-  if (!pn || !onm) return false;
+  if (!pn || !onm) return { tipo: "sin-acierto", causa: "vacio" };
   ps = PAIS_ALIAS[ps] ?? ps;
   os = PAIS_ALIAS[os] ?? os;
 
   const selBoth = ps !== "" && os !== "";
   const selOk = selBoth && (ps === os || levenshtein(ps, os) <= 1);
-  if (selBoth && !selOk) return false;
+  if (selBoth && !selOk) return { tipo: "sin-acierto", causa: "seleccion-distinta" };
 
-  if (pn === onm) return true;
-  if (selOk && levenshtein(pn, onm) <= 2) return true;
+  if (pn === onm) return { tipo: "exacto" };
+
+  const distNombre = levenshtein(pn, onm);
+  if (selOk && distNombre <= 2) return { tipo: "typo", distancia: distNombre };
 
   const pw = pn.split(" ");
   const ow = onm.split(" ");
-  if (selOk && (pw.every((w) => ow.includes(w)) || ow.every((w) => pw.includes(w)))) {
-    return true;
+  const parteNombreCoincide = pw.every((w) => ow.includes(w)) || ow.every((w) => pw.includes(w));
+  if (selOk && parteNombreCoincide) return { tipo: "parte-nombre" };
+
+  // El nombre calzaría (por typo o por apellido/parte) si tuviéramos selección de
+  // ambos lados para confirmarlo — falta, así que queda ambiguo en vez de "distinto".
+  if (!selBoth && (parteNombreCoincide || distNombre <= 2)) {
+    return { tipo: "sin-acierto", causa: "ambiguo" };
   }
-  return false;
+  return { tipo: "sin-acierto", causa: "nombre-distinto" };
+}
+
+export function especialMatches(
+  pick: string | null | undefined,
+  oficial: string | null | undefined,
+): boolean {
+  return especialMatchMotivo(pick, oficial).tipo !== "sin-acierto";
 }

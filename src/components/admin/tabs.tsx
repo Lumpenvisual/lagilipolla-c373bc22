@@ -57,6 +57,7 @@ import {
   fmtCOP,
   parseSpecial,
   composeSpecial,
+  especialMatches,
   GROUP_KEYS,
   FASE_LABEL,
   lastGol,
@@ -78,6 +79,7 @@ import {
 } from "@/lib/knockout-bracket";
 import { DownloadButton } from "@/components/DownloadButton";
 import { PickHistoryCard } from "@/components/PickHistoryCard";
+import { EspecialAuditChip, especialMotivoPrioridad } from "@/components/EspecialAuditChip";
 import {
   generateLeaderboardXlsx,
   generateParticipantesXlsx,
@@ -1609,6 +1611,7 @@ function SpecialAnswer({ text }: { text: string | null }) {
 /** Tabla de lo que escribió cada participante aprobado (goleador / arquero). */
 function SpecialsTable() {
   const t = useT();
+  const { data: ts } = useTournamentState();
   const { data, isLoading } = useQuery({
     queryKey: ["admin-specials-picks"],
     queryFn: async () => {
@@ -1655,29 +1658,62 @@ function SpecialsTable() {
   if (!data || data.length === 0) {
     return <p className="px-3 py-4 text-xs text-muted-foreground">{t("admin.t.esp.empty")}</p>;
   }
+
+  const golOficial = ts?.goleador_id ?? null;
+  const arqOficial = ts?.arquero_id ?? null;
+  const aciertosGol = data.filter((r) => especialMatches(r.goleador, golOficial)).length;
+  const aciertosArq = data.filter((r) => especialMatches(r.arquero, arqOficial)).length;
+
+  // Primero los que valen la pena revisar (🟠 ambiguo, luego 🟡 typo/apellido);
+  // el resto (🟢 exacto, ⚪ sin acierto, sin oficial todavía) queda en orden alfabético.
+  const rows = [...data].sort((a, b) => {
+    const pa = Math.max(
+      especialMotivoPrioridad(a.goleador, golOficial),
+      especialMotivoPrioridad(a.arquero, arqOficial),
+    );
+    const pb = Math.max(
+      especialMotivoPrioridad(b.goleador, golOficial),
+      especialMotivoPrioridad(b.arquero, arqOficial),
+    );
+    return pb - pa || a.nombre.localeCompare(b.nombre);
+  });
+
   return (
-    <table className="w-full text-sm">
-      <thead>
-        <tr className="border-b border-border bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
-          <th className="p-2">{t("admin.t.esp.colPart")}</th>
-          <th className="p-2">{t("admin.t.esp.colGol")}</th>
-          <th className="p-2">{t("admin.t.esp.colArq")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((r) => (
-          <tr key={r.id} className="border-b border-border/60">
-            <td className="p-2 font-medium">{r.nombre}</td>
-            <td className="p-2">
-              <SpecialAnswer text={r.goleador} />
-            </td>
-            <td className="p-2">
-              <SpecialAnswer text={r.arquero} />
-            </td>
+    <div>
+      {(golOficial?.trim() || arqOficial?.trim()) && (
+        <p className="border-b border-border bg-muted/20 px-2 py-1.5 text-xs text-muted-foreground">
+          {t("admin.t.esp.chip.header", { gol: aciertosGol, arq: aciertosArq })}
+        </p>
+      )}
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-border bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
+            <th className="p-2">{t("admin.t.esp.colPart")}</th>
+            <th className="p-2">{t("admin.t.esp.colGol")}</th>
+            <th className="p-2">{t("admin.t.esp.colArq")}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id} className="border-b border-border/60">
+              <td className="p-2 font-medium">{r.nombre}</td>
+              <td className="p-2">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <SpecialAnswer text={r.goleador} />
+                  <EspecialAuditChip pick={r.goleador} oficial={golOficial} />
+                </div>
+              </td>
+              <td className="p-2">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <SpecialAnswer text={r.arquero} />
+                  <EspecialAuditChip pick={r.arquero} oficial={arqOficial} />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

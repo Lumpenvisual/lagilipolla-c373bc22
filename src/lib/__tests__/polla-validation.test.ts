@@ -8,6 +8,7 @@ import {
   matchPts,
   normEspecial,
   especialMatches,
+  especialMatchMotivo,
   isExtraPhaseLocked,
   isExtraPhaseRevealed,
   isTournamentComplete,
@@ -397,5 +398,144 @@ describe("especialMatches — espejo de especial_matches en SQL", () => {
     expect(especialMatches("", GOL)).toBe(false);
     expect(especialMatches(GOL, null)).toBe(false);
     expect(especialMatches("   ", GOL)).toBe(false);
+  });
+});
+
+describe("especialMatchMotivo — un caso por cada variante", () => {
+  const GOL = "Kylian Mbappé (Francia)";
+  const ARQ = "Unai Simón (España)";
+
+  it("exacto", () => {
+    expect(especialMatchMotivo("kylian mbappe (FRANCIA)", GOL)).toEqual({ tipo: "exacto" });
+  });
+  it("typo (con la distancia de edición)", () => {
+    expect(especialMatchMotivo("Kyllan Mbappé (Francia)", GOL)).toEqual({
+      tipo: "typo",
+      distancia: 1,
+    });
+  });
+  it("parte-nombre (apellido solo, selección confirmando en ambos lados)", () => {
+    expect(especialMatchMotivo("Mbappe (Francia)", GOL)).toEqual({ tipo: "parte-nombre" });
+    expect(especialMatchMotivo("Verbruggen (Holanda)", "Bart Verbruggen (Países Bajos)")).toEqual({
+      tipo: "parte-nombre",
+    });
+  });
+  it("sin-acierto/ambiguo (el nombre calzaría pero falta selección en un lado)", () => {
+    expect(especialMatchMotivo("Mbappe", GOL)).toEqual({
+      tipo: "sin-acierto",
+      causa: "ambiguo",
+    });
+    expect(especialMatchMotivo("Mbappe (Francia)", "Kylian Mbappé")).toEqual({
+      tipo: "sin-acierto",
+      causa: "ambiguo",
+    });
+  });
+  it("sin-acierto/seleccion-distinta (ambos traen selección pero no coinciden)", () => {
+    expect(especialMatchMotivo("Verbruggen (Holanda)", ARQ)).toEqual({
+      tipo: "sin-acierto",
+      causa: "seleccion-distinta",
+    });
+    expect(especialMatchMotivo("Harry Kane (Inglaterra)", GOL)).toEqual({
+      tipo: "sin-acierto",
+      causa: "seleccion-distinta",
+    });
+  });
+  it("sin-acierto/nombre-distinto (misma selección, otro jugador)", () => {
+    expect(especialMatchMotivo("Michael Akpovie Olise (Francia)", GOL)).toEqual({
+      tipo: "sin-acierto",
+      causa: "nombre-distinto",
+    });
+    expect(
+      especialMatchMotivo("Lautaro Martínez (Argentina)", "Emiliano Martínez (Argentina)"),
+    ).toEqual({ tipo: "sin-acierto", causa: "nombre-distinto" });
+  });
+  it("sin-acierto/vacio (null, vacío, o solo espacios en cualquier lado)", () => {
+    expect(especialMatchMotivo(null, GOL)).toEqual({ tipo: "sin-acierto", causa: "vacio" });
+    expect(especialMatchMotivo("", GOL)).toEqual({ tipo: "sin-acierto", causa: "vacio" });
+    expect(especialMatchMotivo(GOL, null)).toEqual({ tipo: "sin-acierto", causa: "vacio" });
+    expect(especialMatchMotivo("   ", GOL)).toEqual({ tipo: "sin-acierto", causa: "vacio" });
+  });
+
+  it("consistencia: especialMatches nunca contradice a especialMatchMotivo (tabla de casos existente)", () => {
+    const casos: [string | null, string | null][] = [
+      ["kylian mbappe (FRANCIA)", GOL],
+      ["Unai Simón (España)", ARQ],
+      ["Kylian Mbappé (Francia)", "Kylian Mbappé"],
+      ["Kyllan Mbappé (Francia)", GOL],
+      ["Mbappe (Francia)", GOL],
+      ["Mbappe", GOL],
+      ["Mbappe (Francia)", "Kylian Mbappé"],
+      ["Harry Edward Kane (Inglaterra)", "Harry Kane (Inglaterra)"],
+      ["Damián Emiliano Martínez (Argentina)", "Emiliano Martínez (Argentina)"],
+      ["Alisson Becker (Brasill)", "Alisson Becker (Brasil)"],
+      ["Verbruggen (Holanda)", "Bart Verbruggen (Países Bajos)"],
+      ["Harry Kane (Inglaterra)", GOL],
+      ["Erling Haaland (Noruega)", GOL],
+      ["Verbruggen (Holanda)", ARQ],
+      ["Emiliano Martínez (Argentina)", ARQ],
+      ["Lautaro Martínez (Argentina)", "Emiliano Martínez (Argentina)"],
+      ["Michael Akpovie Olise (Francia)", GOL],
+      [null, GOL],
+      ["", GOL],
+      [GOL, null],
+      ["   ", GOL],
+    ];
+    for (const [pick, oficial] of casos) {
+      const motivo = especialMatchMotivo(pick, oficial);
+      const acierto = motivo.tipo !== "sin-acierto";
+      expect(especialMatches(pick, oficial)).toBe(acierto);
+    }
+  });
+});
+
+describe("especialMatchMotivo — diferencial contra los 74 pares reales de producción", () => {
+  // Espejo de los datos que usa scripts/audit_especial_matches_diff.mjs (snapshot
+  // 2026-07-20): los 37 goleador_id/arquero_id de picks vs los oficiales vigentes.
+  // Verifica que ningún motivo sea incoherente con lo que la BD pagó — no repite
+  // el diferencial SQL (eso lo hace el script contra la BD real), solo la
+  // consistencia interna motivo↔booleano sobre el mismo dataset.
+  const GOL_OFICIAL = "Kylian Mbappé (Francia)";
+  const ARQ_OFICIAL = "Unai Simón (España)";
+  const goleadores = [
+    "Harry Kane (Inglaterra)",
+    "Kylian Mbappé (Francia)",
+    "Erling Haaland (Noruega)",
+    "Harry Edward Kane (Inglaterra)",
+    "Cristiano Ronaldo (Portugal)",
+    "Erling Braut Haaland (Noruega)",
+    "Kyllan Mbappé (Francia)",
+    "Mbappe (Francia)",
+    "Ferran Torres (España)",
+    "Michael Akpovie Olise (Francia)",
+  ];
+  const arqueros = [
+    "Emiliano Martínez (Argentina)",
+    "Alisson Becker (Brasil)",
+    "Unai Simón (España)",
+    "Manuel Neuer (Alemania)",
+    "David Raya (España)",
+    "Diogo Costa (Portugal)",
+    "Mike Maignan (Francia)",
+    "Bart Verbruggen (Países Bajos)",
+    "Thibaut Courtois (Bélgica)",
+    "Mike maignan (Francia)",
+    "Alisson Becker (Brasill)",
+    "Verbruggen (Holanda)",
+    "Damián Emiliano Martínez (Argentina)",
+    "Éverson Felipe Marques Pires (Brasil)",
+    "Jordan Pickford (Inglaterra)",
+  ];
+
+  it("cada goleador real: el motivo es coherente con especialMatches", () => {
+    for (const pick of goleadores) {
+      const motivo = especialMatchMotivo(pick, GOL_OFICIAL);
+      expect(especialMatches(pick, GOL_OFICIAL)).toBe(motivo.tipo !== "sin-acierto");
+    }
+  });
+  it("cada arquero real: el motivo es coherente con especialMatches", () => {
+    for (const pick of arqueros) {
+      const motivo = especialMatchMotivo(pick, ARQ_OFICIAL);
+      expect(especialMatches(pick, ARQ_OFICIAL)).toBe(motivo.tipo !== "sin-acierto");
+    }
   });
 });
