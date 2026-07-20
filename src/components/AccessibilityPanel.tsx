@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Accessibility, RotateCcw } from "lucide-react";
 import { useA11y } from "@/lib/a11y";
-import { useLanguage, LANGS, type Lang } from "@/lib/i18n";
+import { useLanguage, LANGS, ENGLISH_ENABLED, type Lang } from "@/lib/i18n";
 import { useT } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -46,29 +46,32 @@ export function AccessibilityPanel() {
         </SheetHeader>
 
         <div className="mt-6 space-y-6">
-          {/* Language */}
-          <section aria-labelledby="a11y-lang-label">
-            <Label id="a11y-lang-label" className="text-sm font-medium">
-              {t("a11y.language")}
-            </Label>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {LANGS.map((l) => (
-                <Button
-                  key={l.code}
-                  type="button"
-                  variant={l.code === lang ? "default" : "secondary"}
-                  onClick={() => setLang(l.code as Lang)}
-                  aria-pressed={l.code === lang}
-                  className="justify-start"
-                >
-                  <span className="mr-2" aria-hidden>
-                    {l.flag}
-                  </span>
-                  {l.label}
-                </Button>
-              ))}
-            </div>
-          </section>
+          {/* Language — oculto mientras el catálogo "en" esté incompleto (ver
+              ENGLISH_ENABLED en src/lib/i18n/index.tsx). */}
+          {ENGLISH_ENABLED && (
+            <section aria-labelledby="a11y-lang-label">
+              <Label id="a11y-lang-label" className="text-sm font-medium">
+                {t("a11y.language")}
+              </Label>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {LANGS.map((l) => (
+                  <Button
+                    key={l.code}
+                    type="button"
+                    variant={l.code === lang ? "default" : "secondary"}
+                    onClick={() => setLang(l.code as Lang)}
+                    aria-pressed={l.code === lang}
+                    className="justify-start"
+                  >
+                    <span className="mr-2" aria-hidden>
+                      {l.flag}
+                    </span>
+                    {l.label}
+                  </Button>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Font size */}
           <section aria-labelledby="a11y-size-label">

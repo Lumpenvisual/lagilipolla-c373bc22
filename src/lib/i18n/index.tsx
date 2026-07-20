@@ -14,9 +14,21 @@ export { LANGS, type Lang };
 const STORAGE_KEY = "polla-lang";
 const DEFAULT_LANG: Lang = "es";
 
+/**
+ * Interruptor del inglés (jul-2026): el catálogo en inglés cubre login/registro/
+ * planilla/admin pero NO la landing, reglas, cronograma, dashboard, leaderboard ni
+ * el podio (~115 literales sin clave), así que activarlo mostraba una app híbrida.
+ * Con el flag apagado el selector no se ofrece y quien tenía "en" guardado vuelve
+ * a español. Las claves "en" de translations.ts se conservan: para reactivar el
+ * inglés (tras completar las claves que faltan) basta poner esto en true.
+ */
+export const ENGLISH_ENABLED = false;
+
 function isLang(v: unknown): v is Lang {
   return v === "es" || v === "en";
 }
+
+const sanitizeLang = (l: Lang): Lang => (ENGLISH_ENABLED ? l : DEFAULT_LANG);
 
 function interpolate(str: string, vars?: Record<string, string | number>): string {
   if (!vars) return str;
@@ -29,7 +41,7 @@ export type TFunc = (key: string, vars?: Record<string, string | number>) => str
 export function readLang(): Lang {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (isLang(stored)) return stored;
+    if (isLang(stored)) return sanitizeLang(stored);
   } catch {
     /* ignore */
   }
@@ -60,8 +72,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (isLang(stored) && stored !== lang) {
-        setLangState(stored);
+      if (isLang(stored)) {
+        const next = sanitizeLang(stored);
+        if (next !== stored) localStorage.setItem(STORAGE_KEY, next); // migra "en" → "es"
+        if (next !== lang) setLangState(next);
       }
     } catch {
       /* ignore */
@@ -76,9 +90,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   const setLang = useCallback((next: Lang) => {
-    setLangState(next);
+    const safe = sanitizeLang(next);
+    setLangState(safe);
     try {
-      localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(STORAGE_KEY, safe);
     } catch {
       /* ignore */
     }
