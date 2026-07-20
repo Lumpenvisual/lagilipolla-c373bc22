@@ -7,6 +7,7 @@ import {
   groupPts,
   matchPts,
   normEspecial,
+  especialMatches,
   isExtraPhaseLocked,
   isExtraPhaseRevealed,
   isTournamentComplete,
@@ -348,5 +349,53 @@ describe("normEspecial — espejo de norm_especial en SQL", () => {
   });
   it("dos escrituras distintas del mismo nombre coinciden", () => {
     expect(normEspecial("HARRY KANE  (Inglaterra)")).toBe(normEspecial("harry kane (inglaterra)"));
+  });
+});
+
+describe("especialMatches — espejo de especial_matches en SQL", () => {
+  const GOL = "Kylian Mbappé (Francia)";
+  const ARQ = "Unai Simón (España)";
+
+  it("a) nombre completo igual (mayúsculas/acentos/espacios no rompen)", () => {
+    expect(especialMatches("kylian mbappe (FRANCIA)", GOL)).toBe(true);
+    expect(especialMatches("Unai Simón (España)", ARQ)).toBe(true);
+  });
+  it("a) nombre igual aunque un lado no traiga selección", () => {
+    expect(especialMatches("Kylian Mbappé (Francia)", "Kylian Mbappé")).toBe(true);
+  });
+  it("b) typo pequeño en el nombre con la selección confirmando", () => {
+    expect(especialMatches("Kyllan Mbappé (Francia)", GOL)).toBe(true);
+  });
+  it("c) apellido solo con selección coincidente", () => {
+    expect(especialMatches("Mbappe (Francia)", GOL)).toBe(true);
+  });
+  it("c) apellido solo SIN selección en un lado = ambiguo, no puntúa", () => {
+    expect(especialMatches("Mbappe", GOL)).toBe(false);
+    expect(especialMatches("Mbappe (Francia)", "Kylian Mbappé")).toBe(false);
+  });
+  it("nombre con palabras extra (nombre legal completo)", () => {
+    expect(especialMatches("Harry Edward Kane (Inglaterra)", "Harry Kane (Inglaterra)")).toBe(true);
+    expect(
+      especialMatches("Damián Emiliano Martínez (Argentina)", "Emiliano Martínez (Argentina)"),
+    ).toBe(true);
+  });
+  it("typo en la selección tolerado (Brasill) y alias Holanda ≡ Países Bajos", () => {
+    expect(especialMatches("Alisson Becker (Brasill)", "Alisson Becker (Brasil)")).toBe(true);
+    expect(especialMatches("Verbruggen (Holanda)", "Bart Verbruggen (Países Bajos)")).toBe(true);
+  });
+  it("otro jugador NO acierta (selecciones contradictorias o nombre distinto)", () => {
+    expect(especialMatches("Harry Kane (Inglaterra)", GOL)).toBe(false);
+    expect(especialMatches("Erling Haaland (Noruega)", GOL)).toBe(false);
+    expect(especialMatches("Verbruggen (Holanda)", ARQ)).toBe(false);
+    expect(especialMatches("Emiliano Martínez (Argentina)", ARQ)).toBe(false);
+    expect(especialMatches("Lautaro Martínez (Argentina)", "Emiliano Martínez (Argentina)")).toBe(
+      false,
+    );
+  });
+  it("vacíos/null nunca aciertan", () => {
+    expect(especialMatches(null, GOL)).toBe(false);
+    expect(especialMatches("", GOL)).toBe(false);
+    expect(especialMatches(GOL, null)).toBe(false);
+    expect(especialMatches("   ", GOL)).toBe(false);
   });
 });

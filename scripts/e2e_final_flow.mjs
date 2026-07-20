@@ -31,9 +31,7 @@ const SERVICE = env.SUPABASE_SERVICE_ROLE_KEY;
 const PAT = process.env.SUPABASE_PAT || env.SUPABASE_ACCESS_TOKEN;
 if (!URL_ || !SERVICE) fail("Faltan SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY en .env");
 if (!PAT)
-  fail(
-    "Falta el PAT: pásalo como SUPABASE_PAT=sbp_... o define SUPABASE_ACCESS_TOKEN en .env",
-  );
+  fail("Falta el PAT: pásalo como SUPABASE_PAT=sbp_... o define SUPABASE_ACCESS_TOKEN en .env");
 const REF = new URL(URL_).hostname.split(".")[0];
 
 function fail(msg) {

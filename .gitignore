@@ -26,6 +26,7 @@ dist-ssr
 # Dumps de la BD (contienen datos de usuarios reales — NO subir)
 exports/
 supabase/db-export/
+backups/
 
 # Claude Code: permisos/estado por máquina (no compartir)
 .claude/settings.json

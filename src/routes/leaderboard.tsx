@@ -14,7 +14,7 @@ import {
   isSectionVisible,
   groupPts,
   matchPts,
-  normEspecial,
+  especialMatches,
   teamNameByCode,
   isExtraPhaseRevealed,
   type ExtraMatch,
@@ -225,9 +225,7 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
               <li>
                 <span className="text-muted-foreground">Goleador:</span> {data.goleador_id || "—"}
                 {!!ts?.goleador_id?.trim() && !!data.goleador_id && (
-                  <PtsBadge
-                    pts={normEspecial(data.goleador_id) === normEspecial(ts.goleador_id) ? 10 : 0}
-                  />
+                  <PtsBadge pts={especialMatches(data.goleador_id, ts.goleador_id) ? 10 : 0} />
                 )}
               </li>
             )}
@@ -235,9 +233,7 @@ function ParticipantPickDetail({ participantId }: { participantId: string }) {
               <li>
                 <span className="text-muted-foreground">Arquero:</span> {data.arquero_id || "—"}
                 {!!ts?.arquero_id?.trim() && !!data.arquero_id && (
-                  <PtsBadge
-                    pts={normEspecial(data.arquero_id) === normEspecial(ts.arquero_id) ? 10 : 0}
-                  />
+                  <PtsBadge pts={especialMatches(data.arquero_id, ts.arquero_id) ? 10 : 0} />
                 )}
               </li>
             )}
