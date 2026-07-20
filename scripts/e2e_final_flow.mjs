@@ -113,23 +113,21 @@ BEGIN
     arquero_id  = test_arq
   WHERE id = 1;
 
-  -- ASSERT A: el trigger recalculó los especiales de TODOS los picks (10+10 con norm_especial).
+  -- ASSERT A: el trigger recalculó los especiales de TODOS los picks (10+10 con
+  -- especial_matches, la regla vigente: nombre igual, typo pequeño o apellido/parte
+  -- del nombre con selección coincidente).
   SELECT count(*) INTO bad FROM public.picks p
   WHERE p.puntos_especiales IS DISTINCT FROM (
-      (CASE WHEN p.goleador_id IS NOT NULL
-             AND public.norm_especial(p.goleador_id) = public.norm_especial(test_gol)
-            THEN 10 ELSE 0 END)
-    + (CASE WHEN p.arquero_id IS NOT NULL
-             AND public.norm_especial(p.arquero_id) = public.norm_especial(test_arq)
-            THEN 10 ELSE 0 END));
+      (CASE WHEN public.especial_matches(p.goleador_id, test_gol) THEN 10 ELSE 0 END)
+    + (CASE WHEN public.especial_matches(p.arquero_id, test_arq) THEN 10 ELSE 0 END));
   IF bad > 0 THEN
     RAISE EXCEPTION 'E2E_FAIL: % picks con puntos_especiales incorrectos tras el trigger', bad;
   END IF;
 
   SELECT count(*) INTO ganadores_gol FROM public.picks p
-  WHERE public.norm_especial(p.goleador_id) = public.norm_especial(test_gol);
+  WHERE public.especial_matches(p.goleador_id, test_gol);
   SELECT count(*) INTO ganadores_arq FROM public.picks p
-  WHERE public.norm_especial(p.arquero_id) = public.norm_especial(test_arq);
+  WHERE public.especial_matches(p.arquero_id, test_arq);
   IF ganadores_gol < 1 THEN
     RAISE EXCEPTION 'E2E_FAIL: nadie sumó los 10 pts de goleador (norm_especial no coincidió)';
   END IF;

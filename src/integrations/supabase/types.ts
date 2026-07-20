@@ -296,6 +296,7 @@ export type Database = {
       };
       is_match_locked: { Args: { _match_id: string }; Returns: boolean };
       recalc_all_picks: { Args: never; Returns: number };
+      recalc_all_picks_report: { Args: never; Returns: Json };
     };
     Enums: {
       app_role: "admin" | "user";

@@ -371,6 +371,7 @@ export function groupPts(
   p2: string | null | undefined,
 ): number {
   if (!o1 || !o2 || !p1 || !p2) return 0;
+  if (o1 === o2) return 0; // grupo oficial inválido (1º=2º): se omite, espejo de calc_pick_points
   if (p1 === o1 && p2 === o2) return 5;
   if (p1 === o2 && p2 === o1) return 3;
   if ([p1, p2].some((x) => x === o1 || x === o2)) return 1;
@@ -385,6 +386,8 @@ export function matchPts(
   pa: number | null | undefined,
 ): number {
   if (oh == null || oa == null || ph == null || pa == null) return 0;
+  // Marcador inválido (fuera de 0–9): se omite ese partido, espejo de _gp_score_invalid
+  if (![oh, oa, ph, pa].every(isValidGol)) return 0;
   const so = Math.sign(oh - oa);
   const sp = Math.sign(ph - pa);
   if (ph === oh && pa === oa) return 5;

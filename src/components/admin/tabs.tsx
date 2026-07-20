@@ -50,6 +50,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { PlanillaEditor } from "@/components/PlanillaEditor";
 import { adminResetPin } from "@/lib/admin.functions";
+import { parseRecalcReport, recalcToastPlan } from "@/lib/recalc-report";
 import { PIN_RE } from "@/lib/auth";
 import {
   POLLA,
@@ -452,14 +453,37 @@ export function ResultadosTab() {
     return errors;
   };
 
+  /** Recalcula vía RPC con reporte y muestra un toast VERAZ: éxito solo si se
+   * recalculó todo; advertencia (6s) listando partidos/grupos omitidos si el
+   * recálculo fue parcial; error si no se recalculó nadie. */
   const runRecalc = async () => {
-    const { error } = await supabase.rpc("recalc_all_picks");
-    if (error) toast.error(t("admin.t.toast.recalcFail", { err: error.message }));
-    else toast.success(t("admin.t.toast.recalcOk"));
+    const { data, error } = await supabase.rpc("recalc_all_picks_report");
+    if (error) {
+      toast.error(t("admin.t.toast.recalcFail", { err: error.message }), { duration: 6000 });
+    } else {
+      const plan = recalcToastPlan(parseRecalcReport(data));
+      if (plan.level === "success") {
+        toast.success(t("admin.t.toast.recalcOkN", { n: plan.participantes }));
+      } else if (plan.level === "warning") {
+        toast.warning(
+          t("admin.t.toast.recalcPartial", {
+            n: plan.participantes,
+            items: plan.omitidos.join(" · "),
+          }),
+          { duration: 6000 },
+        );
+      } else {
+        toast.error(t("admin.t.toast.recalcZero"), { duration: 6000 });
+      }
+    }
     qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+    qc.invalidateQueries({ queryKey: ["tournament-state"] });
+    qc.invalidateQueries({ queryKey: ["admin-specials-picks"] });
+    qc.invalidateQueries({ queryKey: ["public-pick"] });
   };
 
-  // Botón "Recalcular puntos" independiente: bloqueado si hay resultados inválidos.
+  // Botón "Recalcular puntos" independiente: conserva el guard duro con mensaje
+  // legible (no recalcula si hay resultados inválidos; el detalle sale listado).
   const recalcOnly = async () => {
     if (!draft) return;
     const errors = validateOfficial(draft);
@@ -472,11 +496,10 @@ export function ResultadosTab() {
 
   const save = async () => {
     if (!draft) return;
-    const errors = validateOfficial(draft);
-    if (errors.length) {
-      toast.error(errors.join(" · "), { duration: 6000 });
-      return;
-    }
+    // Guardar NO se bloquea por un marcador a medio llenar en otra fase: el
+    // recálculo es por categoría (el partido/grupo inválido solo se omite a sí
+    // mismo) y el toast del reporte lista lo omitido. validateOfficial sigue
+    // bloqueando únicamente el botón "Recalcular" (guard duro conservado).
     // Auto-avance: los ganadores (marcador; empate → penales designados) pasan a la
     // ronda siguiente al guardar. El cronograma lee la misma tournament_state.extra_matches.
     const advanced = advanceAllRounds(draft.extra_matches ?? [], penWinners);

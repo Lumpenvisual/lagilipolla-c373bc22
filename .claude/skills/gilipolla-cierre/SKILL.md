@@ -33,15 +33,22 @@ Para deploy/DB general ver `gilipolla-ops`; para el bracket KO ver `gilipolla-kn
 
 ## Las 3 garantías
 
-1. **Recálculo automático en BD** — migración `20260715170000_auto_recalc_on_official_change.sql`:
-   trigger `ts_recalc_on_official_change` (AFTER UPDATE de `groups`,
-   `group_k_matches`, `extra_matches`, `goleador_id`, `arquero_id` en
-   `tournament_state`) → `recalc_all_picks_internal()` (SECURITY DEFINER, sin
-   check de rol, **soft-guard**: con datos inválidos hace NOTICE y no recalcula,
-   nunca aborta el UPDATE). Los puntos se suman **aunque el dato entre por
-   script/SQL**, no solo desde la UI. `recalc_all_picks()` (la que llama la UI)
-   conserva el check admin + guard duro y delega en la interna. Recalcular dos
-   veces es inocuo. Verificar:
+1. **Recálculo automático en BD** — trigger `ts_recalc_on_official_change` (AFTER
+   UPDATE de `groups`, `group_k_matches`, `extra_matches`, `goleador_id`,
+   `arquero_id` en `tournament_state`, migración `20260715170000`) →
+   `recalc_all_picks_internal()`. Desde la migración `20260720120000` el recálculo
+   es **POR CATEGORÍA** (ya no hay soft-guard global que abortara todo por un solo
+   marcador a medias): `calc_pick_points` omite con CONTINUE cada partido oficial
+   inválido y cada grupo con 1º=2º, y los **especiales se calculan siempre**.
+   `recalc_all_picks_internal()` devuelve **jsonb** `{participantes,
+   partidos_omitidos:[{id,motivo}], grupos_omitidos, aciertos_especiales}`.
+   `recalc_all_picks()` conserva su contrato (integer + check admin + guard duro,
+   ahora ENUMERANDO los datos inválidos en la excepción); el admin usa el RPC
+   `recalc_all_picks_report()` (jsonb) y el toast muestra advertencia con lo
+   omitido, éxito con el conteo, y nunca "recalculado" si fue 0
+   (`src/lib/recalc-report.ts`). E2E transaccional de la separación:
+   `node scripts/e2e_recalc_categorias.mjs` (ROLLBACK). Recalcular dos veces es
+   inocuo. Verificar trigger:
    `select tgname from pg_trigger where tgrelid='public.tournament_state'::regclass;`
 2. **Checklist "Cierre del campeonato" en el admin** — banner al tope de
    ResultadosTab (`src/components/admin/tabs.tsx`), aparece cuando las **semis ya

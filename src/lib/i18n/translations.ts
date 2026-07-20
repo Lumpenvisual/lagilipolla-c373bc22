@@ -695,7 +695,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.toast.partDeleted": "Participante eliminado",
     "admin.t.toast.resultsSaved": "Resultados guardados. Recalculando puntos…",
     "admin.t.toast.recalcFail": "Guardado pero no se pudo recalcular: {err}",
-    "admin.t.toast.recalcOk": "Puntos recalculados",
+    "admin.t.toast.recalcOkN": "Puntos recalculados para {n} participantes",
+    "admin.t.toast.recalcPartial":
+      "Recalculado para {n} participantes, pero se omitió: {items}. Completa esos datos y vuelve a guardar.",
+    "admin.t.toast.recalcZero": "No se recalculó ningún participante. Revisa los datos oficiales.",
     "admin.t.toast.cronSaved": "Cronograma guardado",
     "admin.t.toast.backupCreating": "Creando respaldo en la nube…",
     "admin.t.toast.backupCreated": "Respaldo creado: {name}",
@@ -1529,7 +1532,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.toast.partDeleted": "Participant removed",
     "admin.t.toast.resultsSaved": "Results saved. Recalculating points…",
     "admin.t.toast.recalcFail": "Saved but couldn't recalculate: {err}",
-    "admin.t.toast.recalcOk": "Points recalculated",
+    "admin.t.toast.recalcOkN": "Points recalculated for {n} participants",
+    "admin.t.toast.recalcPartial":
+      "Recalculated for {n} participants, but skipped: {items}. Complete that data and save again.",
+    "admin.t.toast.recalcZero": "No participants were recalculated. Check the official results.",
     "admin.t.toast.cronSaved": "Schedule saved",
     "admin.t.toast.backupCreating": "Creating cloud backup…",
     "admin.t.toast.backupCreated": "Backup created: {name}",
