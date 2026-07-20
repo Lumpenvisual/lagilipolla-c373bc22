@@ -16,7 +16,7 @@ reglamento y mantiene una tabla de posiciones en vivo.
 - **Resultados oficiales** que carga el admin; el cálculo de puntos se actualiza solo.
 - **Comprobante oficial en PDF** con **código QR** verificable en `/verificar/<código>`.
 - **Panel de administración:** pagos, resultados, cronograma/fases, especiales y reportes (Excel + backups en la nube).
-- **i18n** español / inglés.
+- **i18n** en español (el catálogo en inglés existe pero el selector está apagado hasta completarlo — ver `ENGLISH_ENABLED` en `src/lib/i18n/index.tsx`).
 
 ## 🧱 Stack
 
@@ -132,6 +132,12 @@ scripts/         # utilidades de operación/verificación
 
 Los marcadores se cuentan a los 90 min + reposición. Cada marcador se puede editar hasta **24 h antes**
 del partido; una vez guardado, queda fijo.
+
+**Goleador/Arquero — cómo se compara un nombre escrito contra el jugador oficial:** el
+reglamento fija los 10 puntos, pero no dice cómo se decide si el nombre coincide. Esa regla
+(tolera typo pequeño y apellido solo, siempre que el equipo confirme) vive en el código
+(`especialMatches` en `src/lib/polla.ts` + `especial_matches()` en SQL) y está documentada
+para el admin/participantes en [`reglas/ACLARACIONES.md`](reglas/ACLARACIONES.md).
 
 ## 🗄️ Base de datos y deploy
 
