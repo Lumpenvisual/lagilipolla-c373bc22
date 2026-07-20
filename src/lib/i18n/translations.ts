@@ -831,6 +831,17 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.rep.leaderboard": "Leaderboard",
     "admin.t.rep.participants": "Participantes y pagos",
     "admin.t.rep.allPlanillas": "Todas las planillas",
+    "admin.t.rep.marcadoresPorPartido": "Marcadores por partido",
+    "admin.t.rep.marcadoresTitle": "🏟️ Marcadores por partido",
+    "admin.t.rep.marcadoresDesc":
+      "Quién puso qué en cada partido — una fila por partido, todos los participantes al lado. Útil para revisar en vivo con el bar lleno.",
+    "admin.t.rep.marcadoresEmpty": "Todavía no hay partidos ni participantes para mostrar.",
+    "admin.t.rep.modoPartido": "Un partido a la vez",
+    "admin.t.rep.modoMatriz": "Matriz completa",
+    "admin.t.rep.sinJugar": "sin jugar",
+    "admin.t.rep.colPartido": "Partido",
+    "admin.t.rep.matrizHint":
+      'Vista compacta para revisar rápido — con 37 columnas no es para leer en voz alta; usa "Un partido a la vez" para eso.',
     "admin.t.rep.backupTitle": "💾 Backup completo",
     "admin.t.rep.backupDesc":
       "Descarga un Excel con todas las tablas (participants, picks, tournament_state, user_roles, admin_audit). Guárdalo en un lugar seguro como respaldo o para recuperación de desastres.",
@@ -1676,6 +1687,17 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.rep.leaderboard": "Leaderboard",
     "admin.t.rep.participants": "Participants and payments",
     "admin.t.rep.allPlanillas": "All ballots",
+    "admin.t.rep.marcadoresPorPartido": "Scores by match",
+    "admin.t.rep.marcadoresTitle": "🏟️ Scores by match",
+    "admin.t.rep.marcadoresDesc":
+      "Who put what for each match — one row per match, every participant side by side. Handy for a live review with a packed bar.",
+    "admin.t.rep.marcadoresEmpty": "No matches or participants to show yet.",
+    "admin.t.rep.modoPartido": "One match at a time",
+    "admin.t.rep.modoMatriz": "Full matrix",
+    "admin.t.rep.sinJugar": "not played",
+    "admin.t.rep.colPartido": "Match",
+    "admin.t.rep.matrizHint":
+      'Compact view for a quick check — with 37 columns it\'s not meant to be read aloud; use "One match at a time" for that.',
     "admin.t.rep.backupTitle": "💾 Full backup",
     "admin.t.rep.backupDesc":
       "Download an Excel with every table (participants, picks, tournament_state, user_roles, admin_audit). Keep it safe as a backup or for disaster recovery.",

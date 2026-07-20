@@ -10,11 +10,19 @@ import {
   groupKMatches,
   matchPts,
   teamNameByCode,
+  fmtFecha,
   FASE_LABEL,
   type TournamentState,
   type PickRow,
+  type PickMatches,
   type Fase,
 } from "@/lib/polla";
+import {
+  celdasDelPartido,
+  oficialTexto,
+  resumenDePartido,
+  formatCelda,
+} from "@/lib/marcadores-matrix";
 
 export type AdminContext = { supabase: SupabaseClient<Database>; userId: string };
 
@@ -838,6 +846,170 @@ export const generateAllPlanillasXlsx = createServerFn({ method: "POST" })
     }
     return {
       filename: `gilipolla-todas-planillas-${nowStamp()}.xlsx`,
+      base64: await workbookToBase64(wb),
+      mime: XLSX_MIME,
+    };
+  });
+
+// ============== ADMIN: marcadores por partido (matriz transpuesta) ==============
+// Una fila por partido, una columna por participante — para responder "¿qué puso cada
+// uno en el Colombia-Brasil?" sin abrir 37 hojas. ADMIN-ONLY (requireAdmin + supabaseAdmin,
+// que salta RLS): no exportar ni reutilizar desde ninguna ruta pública/participante — los
+// marcadores ajenos están ocultos al público hasta el kickoff de cada fase
+// (20260704120000_public_pick_hide_marcadores.sql), y este export los muestra todos.
+
+type ParticipantesConPicks = {
+  ids: string[];
+  nombres: Map<string, string>;
+  gkPicksById: Map<string, PickMatches | null | undefined>;
+  koPicksById: Map<string, PickMatches | null | undefined>;
+};
+
+async function loadParticipantesConPicks(
+  supabaseAdmin: SupabaseClient<Database>,
+): Promise<ParticipantesConPicks> {
+  const [{ data: parts, error }, { data: picks }] = await Promise.all([
+    supabaseAdmin
+      .from("participants")
+      .select("id, nombre")
+      .eq("estado_pago", "aprobado")
+      .order("nombre", { ascending: true }),
+    supabaseAdmin.from("picks").select("participant_id, group_k_matches, extra_matches"),
+  ]);
+  if (error) throw new Error(error.message);
+  const ids = (parts ?? []).map((p) => p.id);
+  const nombres = new Map((parts ?? []).map((p) => [p.id, p.nombre]));
+  const gkPicksById = new Map<string, PickMatches | null | undefined>(
+    (picks ?? []).map((p) => [p.participant_id, p.group_k_matches as unknown as PickMatches]),
+  );
+  const koPicksById = new Map<string, PickMatches | null | undefined>(
+    (picks ?? []).map((p) => [p.participant_id, p.extra_matches as unknown as PickMatches]),
+  );
+  return { ids, nombres, gkPicksById, koPicksById };
+}
+
+export const generateMarcadoresPorPartidoXlsx = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: ts } = await supabaseAdmin
+      .from("tournament_state")
+      .select("*")
+      .eq("id", 1)
+      .maybeSingle();
+    const tournament = ts as unknown as TournamentState;
+    const { ids, nombres, gkPicksById, koPicksById } =
+      await loadParticipantesConPicks(supabaseAdmin);
+
+    const fixedCols = [
+      { header: "Fase", key: "fase", width: 16 },
+      { header: "Fecha", key: "fecha", width: 20 },
+      { header: "Local", key: "local", width: 16 },
+      { header: "Visitante", key: "visitante", width: 16 },
+      { header: "Sede", key: "sede", width: 16 },
+      { header: "Oficial", key: "oficial", width: 9 },
+    ];
+    const participantCols = ids.map((id, i) => ({
+      header: nombres.get(id) ?? "",
+      key: `p${i}`,
+      width: 11,
+    }));
+
+    const { wb } = await makeWorkbook();
+    const sumWs = wb.addWorksheet("Resumen");
+    sumWs.columns = [
+      ...fixedCols,
+      { header: "5 pts", key: "c5", width: 8 },
+      { header: "3 pts", key: "c3", width: 8 },
+      { header: "2 pts", key: "c2", width: 8 },
+      { header: "1 pt", key: "c1", width: 8 },
+      { header: "0 pts", key: "c0", width: 8 },
+    ];
+
+    const addRows = (
+      ws: ExcelJS.Worksheet,
+      fase: string,
+      local: string,
+      visitante: string,
+      sede: string,
+      match: { id: string; gh: number | null; ga: number | null; fecha: string },
+      picksById: Map<string, PickMatches | null | undefined>,
+    ) => {
+      const oficial = oficialTexto(match);
+      const celdas = celdasDelPartido(match, ids, picksById);
+      const row: Record<string, string> = {
+        fase,
+        fecha: fmtFecha(match.fecha),
+        local,
+        visitante,
+        sede,
+        oficial,
+      };
+      ids.forEach((id, i) => {
+        row[`p${i}`] = formatCelda(celdas.get(id)!, !!oficial);
+      });
+      ws.addRow(row);
+      const r = resumenDePartido(celdas);
+      sumWs.addRow({
+        fase,
+        fecha: fmtFecha(match.fecha),
+        local,
+        visitante,
+        sede,
+        oficial,
+        c5: r.c5,
+        c3: r.c3,
+        c2: r.c2,
+        c1: r.c1,
+        c0: r.c0,
+      });
+    };
+
+    // ---- Grupo K ----
+    const wsGK = wb.addWorksheet("Grupo K");
+    wsGK.columns = [...fixedCols, ...participantCols];
+    const gkMatches = [...groupKMatches(tournament)].sort(
+      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime(),
+    );
+    for (const m of gkMatches) {
+      addRows(
+        wsGK,
+        "Grupo K",
+        teamName(tournament.groups.K, m.local),
+        teamName(tournament.groups.K, m.visitante),
+        m.sede,
+        m,
+        gkPicksById,
+      );
+    }
+
+    // ---- Eliminatorias ----
+    const extras = tournament.extra_matches ?? [];
+    if (extras.length) {
+      const wsKO = wb.addWorksheet("Eliminatorias");
+      wsKO.columns = [...fixedCols, ...participantCols];
+      const fases: Fase[] = ["dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
+      for (const fase of fases) {
+        const list = [...extras.filter((m) => m.fase === fase)].sort(
+          (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime(),
+        );
+        for (const m of list) {
+          addRows(
+            wsKO,
+            FASE_LABEL[fase],
+            teamNameByCode(tournament.groups, m.local) || "—",
+            teamNameByCode(tournament.groups, m.visitante) || "—",
+            m.sede,
+            m,
+            koPicksById,
+          );
+        }
+      }
+    }
+
+    return {
+      filename: `gilipolla-marcadores-por-partido-${nowStamp()}.xlsx`,
       base64: await workbookToBase64(wb),
       mime: XLSX_MIME,
     };

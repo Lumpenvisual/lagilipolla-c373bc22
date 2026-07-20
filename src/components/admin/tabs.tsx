@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -64,13 +64,22 @@ import {
   scoreState,
   teamNameByCode,
   tournamentCompletion,
+  groupKMatches,
+  fmtFecha,
   type ExtraMatch,
   type Fase,
   type GroupKey,
   type GroupMatch,
   type Phases,
+  type PickMatches,
   type TournamentState,
 } from "@/lib/polla";
+import {
+  celdasDelPartido,
+  oficialTexto,
+  formatCelda,
+  type MatrizCelda,
+} from "@/lib/marcadores-matrix";
 import {
   KNOCKOUT_BRACKET,
   advanceAllRounds,
@@ -86,6 +95,7 @@ import {
   generateBackupXlsx,
   generateUserPlanillaXlsx,
   generateAllPlanillasXlsx,
+  generateMarcadoresPorPartidoXlsx,
   uploadBackupToStorage,
   listBackups,
   getBackupSignedUrl,
@@ -1402,8 +1412,14 @@ export function ReportesTab() {
             label={t("admin.t.rep.allPlanillas")}
             icon={<FileSpreadsheet className="mr-2 size-4" />}
           />
+          <DownloadButton
+            fn={generateMarcadoresPorPartidoXlsx}
+            label={t("admin.t.rep.marcadoresPorPartido")}
+            icon={<FileSpreadsheet className="mr-2 size-4" />}
+          />
         </div>
       </Card>
+      <MarcadoresPorPartidoCard />
       <Card className="border-gold/30 bg-card p-6 card-shadow">
         <h2 className="font-display text-xl text-gold">{t("admin.t.rep.backupTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("admin.t.rep.backupDesc")}</p>
@@ -1418,6 +1434,306 @@ export function ReportesTab() {
       </Card>
       <CloudBackupCard />
       <PickHistoryCard scope="all" />
+    </div>
+  );
+}
+
+/* ---------------- Marcadores por partido (matriz transpuesta) ----------------
+ * Solo admin: consulta directa al cliente (RLS picks_admin_all ya da acceso completo
+ * al admin, mismo patrón que SpecialsTable) — no pasa por get_public_pick ni por ningún
+ * hook compartido con /leaderboard, así que no reabre la privacidad de marcadores ajenos
+ * que 20260704120000_public_pick_hide_marcadores.sql cerró al público. */
+
+type FilaMatriz = {
+  id: string;
+  faseKey: string;
+  faseLabel: string;
+  fecha: string;
+  local: string;
+  visitante: string;
+  sede: string;
+  oficial: string;
+  celdas: Map<string, MatrizCelda>;
+};
+
+const FASES_KO_ORDEN: Fase[] = ["dieciseisavos", "octavos", "cuartos", "semis", "tercero", "final"];
+
+function useMarcadoresMatrix(): {
+  isLoading: boolean;
+  participantes: { id: string; nombre: string }[];
+  fases: { key: string; label: string }[];
+  filas: FilaMatriz[];
+} {
+  const { data: ts } = useTournamentState();
+  const { data, isLoading: queryLoading } = useQuery({
+    queryKey: ["admin-marcadores-por-partido"],
+    queryFn: async () => {
+      const [{ data: parts, error: e1 }, { data: picks, error: e2 }] = await Promise.all([
+        supabase
+          .from("participants")
+          .select("id, nombre")
+          .eq("estado_pago", "aprobado")
+          .order("nombre"),
+        supabase.from("picks").select("participant_id, group_k_matches, extra_matches"),
+      ]);
+      if (e1) throw e1;
+      if (e2) throw e2;
+      return { participantes: parts ?? [], picks: picks ?? [] };
+    },
+    staleTime: 30_000,
+  });
+
+  return useMemo(() => {
+    if (!ts || !data) return { isLoading: true, participantes: [], fases: [], filas: [] };
+    const participantes = data.participantes;
+    const ids = participantes.map((p) => p.id);
+    const gkPicksById = new Map<string, PickMatches | null | undefined>(
+      data.picks.map((p) => [p.participant_id, p.group_k_matches as unknown as PickMatches]),
+    );
+    const koPicksById = new Map<string, PickMatches | null | undefined>(
+      data.picks.map((p) => [p.participant_id, p.extra_matches as unknown as PickMatches]),
+    );
+
+    const nombre = (code: string) => teamNameByCode(ts.groups, code) || code;
+    const filas: FilaMatriz[] = [];
+    const gkMatches = [...groupKMatches(ts)].sort(
+      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime(),
+    );
+    for (const m of gkMatches) {
+      filas.push({
+        id: m.id,
+        faseKey: "grupoK",
+        faseLabel: "Grupo K",
+        fecha: m.fecha,
+        local: nombre(m.local),
+        visitante: nombre(m.visitante),
+        sede: m.sede,
+        oficial: oficialTexto(m),
+        celdas: celdasDelPartido(m, ids, gkPicksById),
+      });
+    }
+    const extras = ts.extra_matches ?? [];
+    for (const fase of FASES_KO_ORDEN) {
+      const list = [...extras.filter((m) => m.fase === fase)].sort(
+        (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime(),
+      );
+      for (const m of list) {
+        filas.push({
+          id: m.id,
+          faseKey: fase,
+          faseLabel: FASE_LABEL[fase],
+          fecha: m.fecha,
+          local: nombre(m.local),
+          visitante: nombre(m.visitante),
+          sede: m.sede,
+          oficial: oficialTexto(m),
+          celdas: celdasDelPartido(m, ids, koPicksById),
+        });
+      }
+    }
+
+    const fases = [
+      ...(gkMatches.length ? [{ key: "grupoK", label: "Grupo K" }] : []),
+      ...FASES_KO_ORDEN.filter((f) => extras.some((m) => m.fase === f)).map((f) => ({
+        key: f,
+        label: FASE_LABEL[f],
+      })),
+    ];
+
+    return { isLoading: false, participantes, fases, filas };
+  }, [ts, data]);
+}
+
+/** Verde por nivel de acierto (5 fuerte, 3 y 2 en tono suave) — no toca 1/0. */
+function celdaColorClasses(pts: number): string {
+  if (pts === 5) return "bg-success/25 text-success font-semibold";
+  if (pts === 3) return "bg-success/10 text-success";
+  if (pts === 2) return "bg-success/5 text-success";
+  return "text-muted-foreground";
+}
+
+function MarcadoresPorPartidoCard() {
+  const t = useT();
+  const { isLoading, participantes, fases, filas } = useMarcadoresMatrix();
+  const [faseSel, setFaseSel] = useState("");
+  const [modo, setModo] = useState<"partido" | "matriz">("partido");
+  const [partidoSel, setPartidoSel] = useState("");
+
+  const faseActiva = faseSel || fases[0]?.key || "";
+  const filasFase = useMemo(
+    () => filas.filter((f) => f.faseKey === faseActiva),
+    [filas, faseActiva],
+  );
+  const partidoActivo = filasFase.find((f) => f.id === partidoSel) ?? filasFase[0];
+
+  return (
+    <Card className="border-border bg-card p-6 card-shadow">
+      <h2 className="font-display text-xl">{t("admin.t.rep.marcadoresTitle")}</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{t("admin.t.rep.marcadoresDesc")}</p>
+
+      {isLoading ? (
+        <div className="flex justify-center py-6">
+          <Loader2 className="size-4 animate-spin text-muted-foreground" />
+        </div>
+      ) : filas.length === 0 ? (
+        <p className="mt-4 text-xs text-muted-foreground">{t("admin.t.rep.marcadoresEmpty")}</p>
+      ) : (
+        <>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <select
+              value={faseActiva}
+              onChange={(e) => {
+                setFaseSel(e.target.value);
+                setPartidoSel("");
+              }}
+              className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              {fases.map((f) => (
+                <option key={f.key} value={f.key}>
+                  {f.label}
+                </option>
+              ))}
+            </select>
+            <div className="ml-auto flex gap-1 rounded-md border border-border p-1">
+              <button
+                type="button"
+                onClick={() => setModo("partido")}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${modo === "partido" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t("admin.t.rep.modoPartido")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setModo("matriz")}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${modo === "matriz" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t("admin.t.rep.modoMatriz")}
+              </button>
+            </div>
+          </div>
+
+          {modo === "partido" ? (
+            <div className="mt-4">
+              <select
+                value={partidoActivo?.id ?? ""}
+                onChange={(e) => setPartidoSel(e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              >
+                {filasFase.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.local} vs {f.visitante}{" "}
+                    {f.oficial ? `· ${f.oficial}` : `· ${t("admin.t.rep.sinJugar")}`}
+                  </option>
+                ))}
+              </select>
+              {partidoActivo && (
+                <PartidoDetalle fila={partidoActivo} participantes={participantes} />
+              )}
+            </div>
+          ) : (
+            <MatrizCompleta filas={filasFase} participantes={participantes} />
+          )}
+        </>
+      )}
+    </Card>
+  );
+}
+
+function PartidoDetalle({
+  fila,
+  participantes,
+}: {
+  fila: FilaMatriz;
+  participantes: { id: string; nombre: string }[];
+}) {
+  const t = useT();
+  return (
+    <div className="mt-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-muted/20 p-4">
+        <div>
+          <p className="font-display text-2xl">
+            {fila.local} <span className="text-muted-foreground">vs</span> {fila.visitante}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {fmtFecha(fila.fecha)} · {fila.sede}
+          </p>
+        </div>
+        <p className="font-display text-3xl text-gold">
+          {fila.oficial || t("admin.t.rep.sinJugar")}
+        </p>
+      </div>
+      <div className="mt-3 divide-y divide-border/60 rounded-lg border border-border">
+        {participantes.map((p) => {
+          const c = fila.celdas.get(p.id);
+          return (
+            <div key={p.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+              <span className="font-medium">{p.nombre}</span>
+              <span
+                className={`rounded-full border border-current/20 px-3 py-1 font-display text-lg tabular-nums ${celdaColorClasses(c?.pts ?? 0)}`}
+              >
+                {c?.marcador ?? "—"}
+                {fila.oficial && c?.marcador && (
+                  <span className="ml-1.5 text-xs opacity-80">+{c.pts}</span>
+                )}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function MatrizCompleta({
+  filas,
+  participantes,
+}: {
+  filas: FilaMatriz[];
+  participantes: { id: string; nombre: string }[];
+}) {
+  const t = useT();
+  return (
+    <div className="mt-4">
+      <p className="mb-2 text-xs text-muted-foreground">{t("admin.t.rep.matrizHint")}</p>
+      <div className="max-h-[70vh] overflow-auto rounded-lg border border-border">
+        <table className="w-full border-collapse text-xs">
+          <thead>
+            <tr>
+              <th className="sticky left-0 top-0 z-20 border-b border-r border-border bg-muted/50 p-2 text-left">
+                {t("admin.t.rep.colPartido")}
+              </th>
+              {participantes.map((p) => (
+                <th
+                  key={p.id}
+                  className="sticky top-0 z-10 whitespace-nowrap border-b border-border bg-muted/50 p-2 text-left font-medium"
+                >
+                  {p.nombre}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filas.map((f) => (
+              <tr key={f.id} className="border-b border-border/60">
+                <td className="sticky left-0 z-10 whitespace-nowrap border-r border-border bg-card p-2 font-medium">
+                  {f.local} v {f.visitante}
+                  <div className="text-[10px] font-normal text-muted-foreground">
+                    {f.oficial || "—"}
+                  </div>
+                </td>
+                {participantes.map((p) => {
+                  const c = f.celdas.get(p.id);
+                  return (
+                    <td key={p.id} className={`p-2 tabular-nums ${celdaColorClasses(c?.pts ?? 0)}`}>
+                      {(c && formatCelda(c, !!f.oficial)) || "—"}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
