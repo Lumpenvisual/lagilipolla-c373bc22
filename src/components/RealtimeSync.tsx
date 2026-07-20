@@ -33,6 +33,7 @@ export function RealtimeSync() {
       })
       .on("postgres_changes", { event: "*", schema: "public", table: "picks" }, (payload) => {
         scheduleLb();
+        qc.invalidateQueries({ queryKey: ["admin-specials-picks"] });
         const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
         if (myId && row?.participant_id === myId) {
           qc.invalidateQueries({ queryKey: ["my-pick", myId] });
