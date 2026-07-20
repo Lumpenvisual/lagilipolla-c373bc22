@@ -22,7 +22,13 @@ Para deploy/DB general ver `gilipolla-ops`; para el bracket KO ver `gilipolla-kn
 2. **Tercer puesto (m103) y Final (m104)**: cargar marcadores → Guardar.
 3. **Especiales**: escribir **goleador y arquero oficiales** en la Card "Especiales"
    (misma pestaña Resultados; la ruta /admin/especiales es solo lectura de picks)
-   → Guardar. ⚠️ Una vez guardados quedan **bloqueados** (no editables).
+   → Guardar. Desde jul-2026 la card tiene **dos campos separados: nombre y equipo**
+   (`SpecialEdit` en tabs.tsx) que se persisten compuestos en el **formato canónico
+   `"Nombre (Equipo)"`** que exige `especial_matches`, y son **siempre editables**:
+   volver a guardar recalcula los puntos (trigger `ts_recalc_on_official_change`).
+   Regla de acierto (migración `20260720010000`): 10 pts por nombre igual, typo
+   pequeño (levenshtein ≤2) con equipo coincidente, o apellido/parte del nombre con
+   equipo en ambos lados; quien no coincide tiene 0. Detalle en `gilipolla-ops`.
 4. Nada más: el podio del home se publica automáticamente al quedar todo completo.
 
 ## Las 3 garantías

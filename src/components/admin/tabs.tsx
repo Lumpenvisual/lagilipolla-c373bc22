@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -55,6 +55,7 @@ import {
   POLLA,
   fmtCOP,
   parseSpecial,
+  composeSpecial,
   GROUP_KEYS,
   FASE_LABEL,
   lastGol,
@@ -863,31 +864,24 @@ export function ResultadosTab() {
       <Card className="border-destructive/30 bg-card p-5 card-shadow">
         <h2 className="font-display text-xl text-destructive">{t("admin.t.res.especiales")}</h2>
         <p className="mt-1 text-xs text-muted-foreground">
-          Escribe el nombre. Una vez guardado, queda bloqueado y no se puede modificar.
+          Nombre y equipo por separado; se guardan como «Nombre (Equipo)». Puedes editarlos y volver
+          a guardar cuando quieras: los puntos se recalculan solos.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div>
-            <Label className="text-xs">{t("admin.t.res.goleador")}</Label>
-            <Input
-              value={draft.goleador_id ?? ""}
-              onChange={(e) => setDraft({ ...draft, goleador_id: e.target.value || null })}
-              disabled={!!(ts?.goleador_id && ts.goleador_id.trim())}
-              placeholder="Escribe el nombre del goleador oficial"
-              maxLength={80}
-              className="mt-1"
-            />
-          </div>
-          <div>
-            <Label className="text-xs">{t("admin.t.res.arquero")}</Label>
-            <Input
-              value={draft.arquero_id ?? ""}
-              onChange={(e) => setDraft({ ...draft, arquero_id: e.target.value || null })}
-              disabled={!!(ts?.arquero_id && ts.arquero_id.trim())}
-              placeholder="Escribe el nombre del arquero oficial"
-              maxLength={80}
-              className="mt-1"
-            />
-          </div>
+          <SpecialEdit
+            label={t("admin.t.res.goleador")}
+            value={draft.goleador_id}
+            onChange={(v) => setDraft({ ...draft, goleador_id: v })}
+            phNombre="Nombre (ej. Kylian Mbappé)"
+            phEquipo="Equipo (ej. Francia)"
+          />
+          <SpecialEdit
+            label={t("admin.t.res.arquero")}
+            value={draft.arquero_id}
+            onChange={(v) => setDraft({ ...draft, arquero_id: v })}
+            phNombre="Nombre (ej. Unai Simón)"
+            phEquipo="Equipo (ej. España)"
+          />
         </div>
         <ParticipantSpecialsPicks />
       </Card>
@@ -899,6 +893,70 @@ export function ResultadosTab() {
         <Button onClick={recalcOnly} variant="outline" size="lg" className="shadow-lg">
           <RefreshCw className="mr-2 size-4" /> {t("admin.t.res.recalc")}
         </Button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Editor de un especial oficial (nombre + equipo) ----------------
+ * Dos campos separados que se persisten compuestos como "Nombre (Equipo)" (el formato
+ * canónico que exige especial_matches). Siempre editable: al volver a guardar, el
+ * trigger ts_recalc_on_official_change recalcula los puntos. */
+function SpecialEdit({
+  label,
+  value,
+  onChange,
+  phNombre,
+  phEquipo,
+}: {
+  label: string;
+  value: string | null;
+  onChange: (v: string | null) => void;
+  phNombre: string;
+  phEquipo: string;
+}) {
+  const parts = parseSpecial(value);
+  const [nombre, setNombre] = useState(parts.nombre);
+  const [equipo, setEquipo] = useState(parts.seleccion);
+  // Resincroniza si el valor cambia desde afuera (carga inicial / reset del draft).
+  const pushed = useRef<string | null>(value ?? null);
+  useEffect(() => {
+    if ((value ?? null) !== pushed.current) {
+      const p = parseSpecial(value);
+      setNombre(p.nombre);
+      setEquipo(p.seleccion);
+      pushed.current = value ?? null;
+    }
+  }, [value]);
+  const push = (n: string, e: string) => {
+    const v = composeSpecial(n, e);
+    pushed.current = v;
+    onChange(v);
+  };
+  return (
+    <div>
+      <Label className="text-xs">{label}</Label>
+      <div className="mt-1 grid grid-cols-[1fr_130px] gap-2">
+        <Input
+          value={nombre}
+          onChange={(e) => {
+            setNombre(e.target.value);
+            push(e.target.value, equipo);
+          }}
+          placeholder={phNombre}
+          maxLength={60}
+          aria-label={`${label} · nombre`}
+        />
+        <Input
+          value={equipo}
+          onChange={(e) => {
+            setEquipo(e.target.value);
+            push(nombre, e.target.value);
+          }}
+          placeholder={phEquipo}
+          maxLength={30}
+          aria-label={`${label} · equipo`}
+        />
       </div>
     </div>
   );
