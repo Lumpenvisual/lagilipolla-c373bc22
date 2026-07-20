@@ -1596,7 +1596,7 @@ function DeadlineLockCardImpl() {
 
 /** Celda "Nombre + (Selección)" para una respuesta de especial en texto libre. */
 function SpecialAnswer({ text }: { text: string | null }) {
-  if (!text) return <span className="text-muted-foreground">—</span>;
+  if (!text?.trim()) return <span className="text-muted-foreground">—</span>;
   const { nombre, seleccion } = parseSpecial(text);
   return (
     <span>
