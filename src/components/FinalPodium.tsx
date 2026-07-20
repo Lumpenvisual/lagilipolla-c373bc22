@@ -3,7 +3,18 @@ import { Link } from "@tanstack/react-router";
 import { Crown, Trophy, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePollaLeaderboard, type LbRow } from "@/hooks/usePolla";
-import { teamNameByCode, type TournamentState } from "@/lib/polla";
+import { parseSpecial, teamNameByCode, type TournamentState } from "@/lib/polla";
+
+/** "Nombre (Equipo)" oficial → nombre + equipo atenuado ("Kylian Mbappé · Francia"). */
+function SpecialName({ text }: { text: string }) {
+  const { nombre, seleccion } = parseSpecial(text);
+  return (
+    <>
+      {nombre}
+      {seleccion && <span className="opacity-70"> · {seleccion}</span>}
+    </>
+  );
+}
 
 /** Grupos de podio: filas del leaderboard agrupadas por posición (soporta empates). */
 function podiumGroups(rows: LbRow[]): { posicion: number; rows: LbRow[] }[] {
@@ -92,8 +103,16 @@ export function FinalPodium({ ts }: { ts: TournamentState }) {
 
       <p className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
         {champTeam && <span>🏆 Campeón del Mundial: {champTeam}</span>}
-        {ts.goleador_id?.trim() && <span>⚽ Goleador: {ts.goleador_id}</span>}
-        {ts.arquero_id?.trim() && <span>🧤 Arquero: {ts.arquero_id}</span>}
+        {ts.goleador_id?.trim() && (
+          <span>
+            ⚽ Goleador: <SpecialName text={ts.goleador_id} />
+          </span>
+        )}
+        {ts.arquero_id?.trim() && (
+          <span>
+            🧤 Arquero: <SpecialName text={ts.arquero_id} />
+          </span>
+        )}
       </p>
 
       <div className="mt-5">

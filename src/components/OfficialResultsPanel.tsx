@@ -6,11 +6,23 @@ import {
   GROUP_KEYS,
   FASE_LABEL,
   isSectionVisible,
+  parseSpecial,
   teamNameByCode,
   type Fase,
   type GroupKey,
   type Group,
 } from "@/lib/polla";
+
+/** "Nombre (Equipo)" oficial → nombre + equipo atenuado ("Kylian Mbappé · Francia"). */
+function SpecialName({ text }: { text: string }) {
+  const { nombre, seleccion } = parseSpecial(text);
+  return (
+    <>
+      {nombre}
+      {seleccion && <span className="text-muted-foreground"> · {seleccion}</span>}
+    </>
+  );
+}
 
 /* Módulo "Resultados oficiales": lo que el admin fijó en tournament_state
  * (clasificados 1º/2º por grupo, marcadores del Grupo K, eliminatorias y
@@ -162,13 +174,17 @@ export function OfficialResultsPanel() {
                     {showGoleador && (
                       <div>
                         <span className="text-muted-foreground">Goleador:</span>{" "}
-                        <span className="font-medium">{ts.goleador_id}</span>
+                        <span className="font-medium">
+                          <SpecialName text={ts.goleador_id!} />
+                        </span>
                       </div>
                     )}
                     {showArquero && (
                       <div>
                         <span className="text-muted-foreground">Arquero:</span>{" "}
-                        <span className="font-medium">{ts.arquero_id}</span>
+                        <span className="font-medium">
+                          <SpecialName text={ts.arquero_id!} />
+                        </span>
                       </div>
                     )}
                   </div>
