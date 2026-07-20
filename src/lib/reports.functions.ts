@@ -9,6 +9,7 @@ import {
   groupPts,
   groupKMatches,
   matchPts,
+  especialMatches,
   teamNameByCode,
   fmtFecha,
   FASE_LABEL,
@@ -82,6 +83,20 @@ function slugify(s: string): string {
 }
 
 const GROUP_KEYS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] as const;
+
+/**
+ * Puntos de un especial (goleador/arquero), o `null` si todavía no hay oficial
+ * o el participante no escribió nada — mismo criterio que omite el "(0)" en la
+ * matriz de marcadores sin resultado oficial (ver `formatCelda` en
+ * marcadores-matrix.ts): sin oficial no es "falló", es "todavía no se sabe".
+ */
+function especialPts(
+  pick: string | null | undefined,
+  oficial: string | null | undefined,
+): number | null {
+  if (!oficial?.trim() || !pick?.trim()) return null;
+  return especialMatches(pick, oficial) ? 10 : 0;
+}
 
 function teamName(group: Group, id: string | null | undefined): string {
   if (!id) return "—";
@@ -171,8 +186,18 @@ function writePlanillaSheet(
   section("ESPECIALES");
   const gol = parseSpecial(pick.goleador_id);
   const arq = parseSpecial(pick.arquero_id);
-  ws.addRow({ a: "Goleador", b: gol.nombre || "—", c: gol.seleccion });
-  ws.addRow({ a: "Arquero", b: arq.nombre || "—", c: arq.seleccion });
+  ws.addRow({
+    a: "Goleador",
+    b: gol.nombre || "—",
+    c: gol.seleccion,
+    pts: especialPts(pick.goleador_id, tournament.goleador_id) ?? "",
+  });
+  ws.addRow({
+    a: "Arquero",
+    b: arq.nombre || "—",
+    c: arq.seleccion,
+    pts: especialPts(pick.arquero_id, tournament.arquero_id) ?? "",
+  });
   section(`TOTAL: ${pick.puntos_total ?? 0} pts`);
 }
 
@@ -507,6 +532,16 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       font: helv,
       color: dark,
     });
+    const golPts = especialPts(myPick.goleador_id, tournament.goleador_id);
+    if (golPts != null) {
+      page.drawText(`+${golPts} pts`, {
+        x: A4.w - 70,
+        y,
+        size: 8,
+        font: helvBold,
+        color: golPts > 0 ? blue : muted,
+      });
+    }
     y -= 12;
     page.drawText(`Mejor arquero:        ${arqText ?? "—"}`, {
       x: 40,
@@ -515,6 +550,16 @@ export const generateComprobantePDF = createServerFn({ method: "POST" })
       font: helv,
       color: dark,
     });
+    const arqPts = especialPts(myPick.arquero_id, tournament.arquero_id);
+    if (arqPts != null) {
+      page.drawText(`+${arqPts} pts`, {
+        x: A4.w - 70,
+        y,
+        size: 8,
+        font: helvBold,
+        color: arqPts > 0 ? blue : muted,
+      });
+    }
     y -= 18;
 
     // Footer
@@ -664,12 +709,22 @@ export const generateMyPlanillaXlsx = createServerFn({ method: "POST" })
     }
 
     const ws3 = wb.addWorksheet("Especiales");
-    ws3.addRow(["Categoría", "Mi elección", "Selección"]);
+    ws3.addRow(["Categoría", "Mi elección", "Selección", "Puntos"]);
     // goleador_id/arquero_id son texto libre del participante: "Nombre (Selección)".
     const gol = parseSpecial(myPick.goleador_id);
     const arq = parseSpecial(myPick.arquero_id);
-    ws3.addRow(["Goleador", gol.nombre || "—", gol.seleccion]);
-    ws3.addRow(["Arquero", arq.nombre || "—", arq.seleccion]);
+    ws3.addRow([
+      "Goleador",
+      gol.nombre || "—",
+      gol.seleccion,
+      especialPts(myPick.goleador_id, tournament.goleador_id) ?? "",
+    ]);
+    ws3.addRow([
+      "Arquero",
+      arq.nombre || "—",
+      arq.seleccion,
+      especialPts(myPick.arquero_id, tournament.arquero_id) ?? "",
+    ]);
 
     return {
       filename: `gilipolla-planilla-${slugify(part.nombre)}-${nowStamp()}.xlsx`,
