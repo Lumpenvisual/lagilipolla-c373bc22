@@ -13,6 +13,7 @@ import {
   isExtraPhaseRevealed,
   isTournamentComplete,
   tournamentCompletion,
+  marcadoresOficialesInvalidos,
   teamNameByCode,
   GROUP_KEYS,
   MAX_GOLES,
@@ -335,6 +336,81 @@ describe("isTournamentComplete — el podio final solo se publica con TODOS los 
       const { items } = tournamentCompletion(ts);
       expect(items.find((i) => i.key === "final")).toMatchObject({ done: false, pending: 1 });
       expect(items.find((i) => i.key === "semis")).toMatchObject({ done: true, pending: 0 });
+    });
+
+    describe("invalid — distingue 'sin jugar' (ambos null) de 'a medio llenar' (uno solo)", () => {
+      it("un partido sin jugar (ambos null) cuenta como pending, NO como invalid", () => {
+        const ts = mkComplete();
+        ts.group_k_matches[1].gh = null;
+        ts.group_k_matches[1].ga = null;
+        const { items } = tournamentCompletion(ts);
+        expect(items.find((i) => i.key === "grupoK")).toMatchObject({ pending: 1, invalid: 0 });
+        expect(marcadoresOficialesInvalidos(ts)).toEqual([]);
+      });
+      it("un partido a medio llenar (uno solo null) cuenta como pending Y como invalid", () => {
+        const ts = mkComplete();
+        ts.group_k_matches[1].ga = null; // gh sigue en 0, ga queda vacío
+        const { items } = tournamentCompletion(ts);
+        expect(items.find((i) => i.key === "grupoK")).toMatchObject({ pending: 1, invalid: 1 });
+      });
+      it("invalid es subconjunto de pending: mezcla de un partido vacío y uno a medias", () => {
+        const ts = mkComplete();
+        ts.group_k_matches.push({
+          id: "k3",
+          fecha: "2026-06-16T18:00:00Z",
+          local: "K1",
+          visitante: "K2",
+          sede: "",
+          gh: null,
+          ga: null,
+        });
+        ts.group_k_matches[1].ga = null; // el original: a medias
+        const { items } = tournamentCompletion(ts);
+        // k1 completo, k2 a medias, k3 vacío → 2 pendientes, 1 de ellos inválido.
+        expect(items.find((i) => i.key === "grupoK")).toMatchObject({ pending: 2, invalid: 1 });
+      });
+      it("marcador fuera de rango (no solo parcial) también cuenta como invalid", () => {
+        const ts = mkComplete();
+        (ts.group_k_matches[1] as { gh: number }).gh = 12;
+        const { items } = tournamentCompletion(ts);
+        expect(items.find((i) => i.key === "grupoK")).toMatchObject({ invalid: 1 });
+      });
+      it("marcadoresOficialesInvalidos lista los partidos a medias con su fase, equipos y valor parcial", () => {
+        const ts = mkComplete();
+        ts.group_k_matches[1].ga = null;
+        const koFinal = ts.extra_matches!.find((m) => m.fase === "final")!;
+        koFinal.ga = null;
+        const invalidos = marcadoresOficialesInvalidos(ts);
+        expect(invalidos).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: "k2",
+              fase: "grupoK",
+              local: "K1",
+              visitante: "K2",
+              gh: 1,
+              ga: null,
+            }),
+            expect.objectContaining({ id: "m104", fase: "final", gh: 2, ga: null }),
+          ]),
+        );
+        expect(invalidos).toHaveLength(2);
+      });
+      it("grupos, goleador y arquero nunca tienen estado 'a medias' → invalid siempre 0", () => {
+        const ts = mkComplete();
+        ts.groups.A.pos1 = null;
+        ts.goleador_id = null;
+        const { items } = tournamentCompletion(ts);
+        expect(items.find((i) => i.key === "grupos")).toMatchObject({ invalid: 0 });
+        expect(items.find((i) => i.key === "goleador")).toMatchObject({ invalid: 0 });
+        expect(items.find((i) => i.key === "arquero")).toMatchObject({ invalid: 0 });
+      });
+      it("todo completo y válido: invalid=0 en todos los ítems y marcadoresOficialesInvalidos vacío", () => {
+        const ts = mkComplete();
+        const { items } = tournamentCompletion(ts);
+        expect(items.every((i) => i.invalid === 0)).toBe(true);
+        expect(marcadoresOficialesInvalidos(ts)).toEqual([]);
+      });
     });
   });
 });

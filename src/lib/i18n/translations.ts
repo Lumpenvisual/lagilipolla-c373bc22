@@ -740,6 +740,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.repechajesHint":
       'Cuando se resuelva un repechaje, edita el nombre del equipo "Ganador Repechaje X". Si en un partido de eliminatorias hay repechaje (alargue o penales), solo se tendrá en cuenta el marcador de los primeros 90 minutos, no el del repechaje.',
     "admin.t.res.groups": "Resultados de grupos · 1° y 2°",
+    "admin.t.res.grupoK": "Grupo K",
     "admin.t.res.markK": "Marcadores Grupo K",
     "admin.t.res.markKnockout": "Marcadores — Eliminatorias",
     "admin.t.res.knockoutHint":
@@ -755,6 +756,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.invalidScore":
       "Resultados oficiales inválidos (un solo dígito 0–9 en ambos campos): {matches}",
     "admin.t.res.koPhaseCount": "{done}/{total} con resultado",
+    "admin.t.res.invalidBanner.titleOne": "1 marcador oficial a medio llenar",
+    "admin.t.res.invalidBanner.titleOther": "{n} marcadores oficiales a medio llenar",
+    "admin.t.res.invalidBanner.hint":
+      "Un solo gol escrito no es un partido sin jugar: es un error de tipeo. Ese partido no puntúa para NADIE hasta que completes ambos campos y guardes. Corrígelo abajo.",
     "admin.t.res.adv.title": "Empate en 90' · el admin define el ganador que avanza",
     "admin.t.res.adv.hint":
       "El puntaje solo cuenta el marcador oficial de los 90 minutos (sin prórroga). Para AVANZAR de ronda, define manualmente qué equipo ganó (prórroga/penales). Se aplica al «Guardar y recalcular puntos».",
@@ -765,6 +770,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.cierre.especialesCta":
       "⚠️ Sube el goleador y el arquero oficiales en la sección «Especiales» de abajo y pulsa «Guardar y recalcular puntos» — sin ellos no se suman los 10+10 pts ni se publica el podio.",
     "admin.t.res.cierre.pendingN": "faltan {n}",
+    "admin.t.res.cierre.invalidN": "{n} a medio llenar",
     "admin.t.res.cierre.doneTitle": "✅ Campeonato completo",
     "admin.t.res.cierre.doneMsg":
       "Todos los datos oficiales están ingresados y los puntos recalculados. El podio con el ganador de LA GILIPOLLA ya está publicado en la página de inicio.",
@@ -1599,6 +1605,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.repechajesHint":
       'Once a play-off is resolved, edit the "Play-off X Winner" team name. In knockout matches with a tie-breaker (extra time or penalty shoot-out), only the 90-minute score counts — not the shoot-out result.',
     "admin.t.res.groups": "Group results · 1st and 2nd",
+    "admin.t.res.grupoK": "Group K",
     "admin.t.res.markK": "Group K scores",
     "admin.t.res.markKnockout": "Scores — Knockout stage",
     "admin.t.res.knockoutHint":
@@ -1614,6 +1621,10 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.invalidScore":
       "Invalid official results (use a single digit 0–9 in both fields): {matches}",
     "admin.t.res.koPhaseCount": "{done}/{total} with result",
+    "admin.t.res.invalidBanner.titleOne": "1 official score half-filled",
+    "admin.t.res.invalidBanner.titleOther": "{n} official scores half-filled",
+    "admin.t.res.invalidBanner.hint":
+      "A single goal entered isn't an unplayed match — it's a typo. That match scores 0 for EVERYONE until you fill both fields and save. Fix it below.",
     "admin.t.res.adv.title": "Draw at 90' · admin sets who advances",
     "admin.t.res.adv.hint":
       "Scoring only counts the official 90-minute score (no extra time). To ADVANCE to the next round, manually set which team won (extra time / penalties). Applied on “Save and recalculate points”.",
@@ -1624,6 +1635,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.cierre.especialesCta":
       "⚠️ Enter the official top scorer and goalkeeper in the “Specials” section below and press “Save and recalculate points” — without them the 10+10 pts are not added and the podium is not published.",
     "admin.t.res.cierre.pendingN": "{n} missing",
+    "admin.t.res.cierre.invalidN": "{n} half-filled",
     "admin.t.res.cierre.doneTitle": "✅ Tournament complete",
     "admin.t.res.cierre.doneMsg":
       "All official data is entered and points recalculated. The podium with the winner of LA GILIPOLLA is now published on the home page.",

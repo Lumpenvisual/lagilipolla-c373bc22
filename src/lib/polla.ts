@@ -242,7 +242,67 @@ export type CompletionItem = {
   done: boolean;
   /** Cuántos faltan (partidos sin resultado / grupos sin 1º-2º); 0 si done. */
   pending: number;
+  /**
+   * De esos `pending`, cuántos NO están simplemente sin jugar sino A MEDIO LLENAR
+   * (`scoreState` "invalido": un solo campo de gh/ga escrito). Es un subconjunto de
+   * `pending`, no una cuenta aparte — un marcador a medias sigue contando como
+   * pendiente para el gate del podio, pero además es un error de tipeo que congela
+   * los puntos de ese partido para todos hasta que se corrija, y eso hay que
+   * distinguirlo de "todavía no se jugó" (que es normal a mitad de torneo).
+   * 0 en ítems sin marcadores (grupos/goleador/arquero: no tienen estado parcial).
+   */
+  invalid: number;
 };
+
+/**
+ * Marcadores oficiales A MEDIO LLENAR (`scoreState` "invalido": un campo de gh/ga
+ * escrito y el otro no) en `group_k_matches`/`extra_matches` — nunca en `groups`
+ * (posiciones) ni en especiales, que no tienen estado parcial. Espejo TS de
+ * `_gp_score_invalid` en SQL. Fuente única para el banner persistente del admin y
+ * para los conteos de `invalid` en `tournamentCompletion`.
+ */
+export function marcadoresOficialesInvalidos(ts: TournamentState): {
+  id: string;
+  fase: "grupoK" | Fase;
+  local: string;
+  visitante: string;
+  gh: number | null;
+  ga: number | null;
+}[] {
+  const out: {
+    id: string;
+    fase: "grupoK" | Fase;
+    local: string;
+    visitante: string;
+    gh: number | null;
+    ga: number | null;
+  }[] = [];
+  for (const m of groupKMatches(ts)) {
+    if (scoreState(m) === "invalido") {
+      out.push({
+        id: m.id,
+        fase: "grupoK",
+        local: m.local,
+        visitante: m.visitante,
+        gh: m.gh,
+        ga: m.ga,
+      });
+    }
+  }
+  for (const m of ts.extra_matches ?? []) {
+    if (scoreState(m) === "invalido") {
+      out.push({
+        id: m.id,
+        fase: m.fase,
+        local: m.local,
+        visitante: m.visitante,
+        gh: m.gh,
+        ga: m.ga,
+      });
+    }
+  }
+  return out;
+}
 
 /**
  * Checklist del cierre del campeonato: el podio de LA GILIPOLLA se publica en la
@@ -256,6 +316,9 @@ export function tournamentCompletion(ts: TournamentState): {
   items: CompletionItem[];
 } {
   const items: CompletionItem[] = [];
+  const invalidos = marcadoresOficialesInvalidos(ts);
+  const invalidosPorFase = (fase: "grupoK" | Fase) =>
+    invalidos.filter((m) => m.fase === fase).length;
 
   const gruposPend = GROUP_KEYS.filter((k) => !ts.groups[k]?.pos1 || !ts.groups[k]?.pos2).length;
   items.push({
@@ -263,6 +326,7 @@ export function tournamentCompletion(ts: TournamentState): {
     label: "1º y 2º oficiales de los 12 grupos",
     done: gruposPend === 0,
     pending: gruposPend,
+    invalid: 0,
   });
 
   const kMatches = groupKMatches(ts);
@@ -272,6 +336,7 @@ export function tournamentCompletion(ts: TournamentState): {
     label: "Marcadores del Grupo K",
     done: kMatches.length > 0 && kPend === 0,
     pending: kMatches.length === 0 ? 1 : kPend,
+    invalid: invalidosPorFase("grupoK"),
   });
 
   const extra = ts.extra_matches ?? [];
@@ -291,6 +356,7 @@ export function tournamentCompletion(ts: TournamentState): {
       label: `Resultados · ${FASE_LABEL[fase]}`,
       done: list.length > 0 && pend === 0,
       pending: list.length === 0 ? 1 : pend,
+      invalid: invalidosPorFase(fase),
     });
   }
 
@@ -299,12 +365,14 @@ export function tournamentCompletion(ts: TournamentState): {
     label: "Goleador oficial",
     done: !!ts.goleador_id?.trim(),
     pending: ts.goleador_id?.trim() ? 0 : 1,
+    invalid: 0,
   });
   items.push({
     key: "arquero",
     label: "Arquero oficial",
     done: !!ts.arquero_id?.trim(),
     pending: ts.arquero_id?.trim() ? 0 : 1,
+    invalid: 0,
   });
 
   return { done: items.every((i) => i.done), items };

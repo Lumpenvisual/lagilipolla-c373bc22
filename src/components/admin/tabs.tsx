@@ -62,6 +62,7 @@ import {
   FASE_LABEL,
   lastGol,
   scoreState,
+  marcadoresOficialesInvalidos,
   teamNameByCode,
   tournamentCompletion,
   groupKMatches,
@@ -424,6 +425,50 @@ export function PagosTab() {
   );
 }
 
+/**
+ * Banner PERSISTENTE (no un toast) de marcadores oficiales a medio llenar. Refleja
+ * `ts` — el estado ya guardado en BD, no el `draft` en edición — así que sobrevive a
+ * una recarga de página y desaparece únicamente cuando el dato queda corregido y
+ * guardado (nunca por un `dismiss` de sesión/localStorage).
+ */
+export function MarcadoresInvalidosBanner({ ts }: { ts: TournamentState }) {
+  const t = useT();
+  const invalidos = marcadoresOficialesInvalidos(ts);
+  if (invalidos.length === 0) return null;
+  const faseLabel = (f: "grupoK" | Fase) =>
+    f === "grupoK" ? t("admin.t.res.grupoK") : FASE_LABEL[f];
+  return (
+    <Card className="border-destructive bg-destructive/10 p-5 card-shadow">
+      <h2 className="font-display text-xl text-destructive">
+        ⚠️{" "}
+        {invalidos.length === 1
+          ? t("admin.t.res.invalidBanner.titleOne")
+          : t("admin.t.res.invalidBanner.titleOther", { n: invalidos.length })}
+      </h2>
+      <p className="mt-1 text-sm text-destructive/90">{t("admin.t.res.invalidBanner.hint")}</p>
+      <ul className="mt-3 space-y-1.5 text-sm">
+        {invalidos.map((m) => (
+          <li
+            key={m.id}
+            className="flex flex-wrap items-center gap-2 rounded-md bg-background/60 px-3 py-2"
+          >
+            <span className="text-xs uppercase tracking-wide text-destructive/70">
+              {faseLabel(m.fase)}
+            </span>
+            <span className="font-medium">
+              {teamNameByCode(ts.groups, m.local)} <span className="text-muted-foreground">vs</span>{" "}
+              {teamNameByCode(ts.groups, m.visitante)}
+            </span>
+            <span className="ml-auto font-display text-lg tabular-nums text-destructive">
+              {m.gh ?? "—"}-{m.ga ?? "—"}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
+
 /* ---------------- Resultados ---------------- */
 export function ResultadosTab() {
   const t = useT();
@@ -583,6 +628,12 @@ export function ResultadosTab() {
 
   return (
     <div className="space-y-8">
+      {/* Marcador oficial a medio llenar: banner persistente (no un toast) — un solo
+       * campo de gh/ga escrito es un error de tipeo, no un partido sin jugar. Refleja
+       * `ts` (lo ya guardado, no el draft en edición), así que sobrevive a recargas y
+       * solo desaparece cuando el dato queda corregido y guardado. */}
+      {ts && <MarcadoresInvalidosBanner ts={ts} />}
+
       {/* Cierre del campeonato: aparece cuando las semifinales ya tienen resultado.
        * Checklist de todo lo que falta para publicar el podio en el home; destaca
        * subir los especiales (goleador/arquero) porque sin ellos no hay podio. */}
@@ -624,6 +675,11 @@ export function ResultadosTab() {
                       {!i.done && i.pending > 1 && (
                         <span className="ml-1 text-xs text-destructive">
                           ({t("admin.t.res.cierre.pendingN", { n: i.pending })})
+                        </span>
+                      )}
+                      {i.invalid > 0 && (
+                        <span className="ml-1.5 rounded bg-destructive px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-destructive-foreground">
+                          {t("admin.t.res.cierre.invalidN", { n: i.invalid })}
                         </span>
                       )}
                     </span>
