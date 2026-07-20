@@ -426,11 +426,11 @@ const PAIS_ALIAS: Record<string, string> = { holanda: "paises bajos" };
 
 /**
  * \u00bfEl especial de un pick acierta contra el oficial? Espejo de especial_matches en SQL
- * (migraci\u00f3n 20260719220000): compara POR PARTES (nombre + selecci\u00f3n, v\u00eda parseSpecial):
+ * (migraci\u00f3n 20260720000000): compara POR PARTES (nombre + selecci\u00f3n, v\u00eda parseSpecial):
  *  a) nombre completo igual (normalizado);
- *  b) typo peque\u00f1o en el nombre (levenshtein \u2264 2) con la selecci\u00f3n coincidiendo;
- *  c) apellido solo / palabras de un lado contenidas en el otro, con selecci\u00f3n presente
- *     en AMBOS lados y coincidente (sin selecci\u00f3n en alguno = ambiguo, no punt\u00faa).
+ *  c) apellido solo / parte del nombre (palabras de un lado contenidas en el otro), con
+ *     selecci\u00f3n presente en AMBOS lados y coincidente (sin selecci\u00f3n = ambiguo, no punt\u00faa).
+ * El typo de escritura del nombre NO punt\u00faa (regla del admin, 19-jul-2026).
  * Alias "Holanda" \u2261 "Pa\u00edses Bajos"; typo de selecci\u00f3n tolerado (levenshtein \u2264 1).
  * Selecciones contradictorias \u2192 nunca acierta.
  */
@@ -454,7 +454,6 @@ export function especialMatches(
   if (selBoth && !selOk) return false;
 
   if (pn === onm) return true;
-  if (selOk && levenshtein(pn, onm) <= 2) return true;
 
   const pw = pn.split(" ");
   const ow = onm.split(" ");

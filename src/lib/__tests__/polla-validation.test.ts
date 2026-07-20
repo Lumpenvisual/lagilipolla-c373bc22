@@ -363,8 +363,8 @@ describe("especialMatches — espejo de especial_matches en SQL", () => {
   it("a) nombre igual aunque un lado no traiga selección", () => {
     expect(especialMatches("Kylian Mbappé (Francia)", "Kylian Mbappé")).toBe(true);
   });
-  it("b) typo pequeño en el nombre con la selección confirmando", () => {
-    expect(especialMatches("Kyllan Mbappé (Francia)", GOL)).toBe(true);
+  it("typo de escritura del nombre NO puntúa (regla del admin 19-jul-2026)", () => {
+    expect(especialMatches("Kyllan Mbappé (Francia)", GOL)).toBe(false);
   });
   it("c) apellido solo con selección coincidente", () => {
     expect(especialMatches("Mbappe (Francia)", GOL)).toBe(true);
