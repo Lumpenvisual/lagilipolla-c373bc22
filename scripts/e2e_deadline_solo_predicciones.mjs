@@ -2,21 +2,22 @@
  * E2E DEL ARREGLO — candado de picks_locked_at bloqueando recálculos sin sesión.
  * Transaccional, con ROLLBACK garantizado (patrón scripts/e2e_recalc_categorias.mjs):
  * un request al Management API = una transacción; termina con RAISE EXCEPTION →
- * ROLLBACK; NADA queda escrito, ni la migración de prueba ni los UPDATE de los casos.
+ * ROLLBACK; NADA queda escrito.
+ *
+ * Verifica el estado VIGENTE de producción (con la migración
+ * 20260722000000_deadline_solo_predicciones.sql ya aplicada — no la reaplica; si
+ * algún día se ejecuta contra un entorno donde falte, el caso 1 fallará y lo dirá).
  *
  * Dentro de UNA transacción:
- *   0. Reproduce el bug ACTUAL (sin el parche): calc_pick_points() sin sesión, con
- *      picks_locked_at en el pasado, debe FALLAR con el error del candado — confirma
- *      que el test arranca desde el estado real, no uno imaginado.
- *   1. Aplica la migración propuesta (supabase/migrations_propuestas/
- *      20260722000000_deadline_solo_predicciones_propuesta.sql) DENTRO de la misma
- *      transacción — se revierte junto con todo lo demás al hacer ROLLBACK.
- *   2. Los 4 casos pedidos:
- *      a. Sin sesión, candado pasado: calc_pick_points() (UPDATE de solo puntaje) PASA.
- *      b. Sin sesión: UPDATE que toca goleador_id SIGUE rechazado.
- *      c. Como participante real (no admin), tras el cierre: SIGUE rechazado.
- *      d. Como admin: SIGUE pasando (bypass intacto).
- *   3. RAISE EXCEPTION 'E2E_OK {...}' → ROLLBACK: migración de prueba y datos intactos.
+ *   0. Diagnóstico (no un assert duro): ¿el bug ORIGINAL sigue reproduciéndose?
+ *      Se espera que NO — que calc_pick_points() sin sesión ya no dispare el
+ *      candado. Se reporta en el payload final para que quede a la vista.
+ *   1-4. Los 4 casos pedidos:
+ *      1. Sin sesión, candado pasado: calc_pick_points() (UPDATE de solo puntaje) PASA.
+ *      2. Sin sesión: UPDATE que toca goleador_id SIGUE rechazado.
+ *      3. Como participante real (no admin), tras el cierre: SIGUE rechazado.
+ *      4. Como admin: SIGUE pasando (bypass intacto).
+ *   5. RAISE EXCEPTION 'E2E_OK {...}' → ROLLBACK: nada queda escrito.
  * Post-check por REST (service_role): totales de los 37 participantes idénticos.
  *
  * Uso: SUPABASE_PAT=sbp_... node scripts/e2e_deadline_solo_predicciones.mjs
@@ -70,17 +71,9 @@ async function sums() {
   };
 }
 
-console.log("== E2E: candado de picks_locked_at bloqueando recálculos sin sesión ==\n");
+console.log("== E2E: candado de picks_locked_at vs. recálculos sin sesión (post-fix) ==\n");
 const before = await sums();
 console.log(`✓ Sumas reales antes: ${JSON.stringify(before)}\n`);
-
-const MIGRATION_SQL = readFileSync(
-  join(
-    root,
-    "supabase/migrations_propuestas/20260722000000_deadline_solo_predicciones_propuesta.sql",
-  ),
-  "utf8",
-);
 
 const TEST_SQL = `
 DO $e2e$
@@ -91,36 +84,26 @@ DECLARE
   v_lock timestamptz;
   caught boolean;
   errmsg text;
+  bug_reproduce boolean;
   payload jsonb;
 BEGIN
   -- Confirmar que el candado global está realmente activo (si no, el test no
   -- reproduce el escenario real).
   SELECT picks_locked_at INTO v_lock FROM public.tournament_state WHERE id = 1;
   IF v_lock IS NULL OR now() < v_lock THEN
-    RAISE EXCEPTION 'E2E_FAIL: picks_locked_at no está en el pasado (%), no reproduce el bug', v_lock;
+    RAISE EXCEPTION 'E2E_FAIL: picks_locked_at no está en el pasado (%), no reproduce el escenario', v_lock;
   END IF;
 
   PERFORM set_config('request.jwt.claim.sub', '', true); -- sin sesión (como Management API)
 
-  -- CASO 0: reproduce el bug ACTUAL (sin parche todavía) — debe FALLAR hoy.
-  caught := false;
+  -- CASO 0 (diagnóstico, no assert duro): ¿el bug ORIGINAL sigue reproduciéndose?
+  -- Se espera que NO (la migración ya está aplicada) — se reporta en el payload.
+  bug_reproduce := false;
   BEGIN
     PERFORM public.calc_pick_points(test_pick_id);
   EXCEPTION WHEN OTHERS THEN
-    caught := true; errmsg := SQLERRM;
+    IF SQLERRM LIKE '%planillas están cerradas%' THEN bug_reproduce := true; END IF;
   END;
-  IF NOT caught THEN
-    RAISE EXCEPTION 'E2E_FAIL caso0: calc_pick_points() sin sesión NO falló — el bug ya no está presente o el entorno no lo reproduce';
-  END IF;
-  IF errmsg NOT LIKE '%planillas están cerradas%' THEN
-    RAISE EXCEPTION 'E2E_FAIL caso0: falló pero por otra razón (no es el bug reportado): %', errmsg;
-  END IF;
-
-  ------------------------------------------------------------------
-  -- Aplica la migración propuesta DENTRO de esta transacción.
-  ------------------------------------------------------------------
-${MIGRATION_SQL.replace(/^--.*$/gm, "").trim()}
-  ------------------------------------------------------------------
 
   -- CASO 1: sin sesión, candado pasado, UPDATE de solo puntaje -> debe PASAR.
   caught := false;
@@ -130,7 +113,7 @@ ${MIGRATION_SQL.replace(/^--.*$/gm, "").trim()}
     caught := true; errmsg := SQLERRM;
   END;
   IF caught THEN
-    RAISE EXCEPTION 'E2E_FAIL caso1: calc_pick_points() sin sesión SIGUE fallando tras el parche: %', errmsg;
+    RAISE EXCEPTION 'E2E_FAIL caso1: calc_pick_points() sin sesión SIGUE fallando (¿migración no aplicada?): %', errmsg;
   END IF;
 
   -- CASO 2: sin sesión, UPDATE que toca goleador_id -> debe SEGUIR rechazado.
@@ -176,7 +159,7 @@ ${MIGRATION_SQL.replace(/^--.*$/gm, "").trim()}
 
   payload := jsonb_build_object(
     'picks_locked_at', v_lock,
-    'caso0_bug_reproducido', true,
+    'bug_original_reproduce_hoy', bug_reproduce,
     'caso1_recalc_sin_sesion', 'pass',
     'caso2_prediccion_sin_sesion_rechazada', 'pass',
     'caso3_prediccion_participante_rechazada', 'pass',
@@ -188,14 +171,16 @@ END $e2e$;
 
 const run = await mgmtQuery(TEST_SQL);
 if (run.text.includes("E2E_OK")) {
-  console.log("✅ E2E OK — los 5 casos verificados y transacción revertida (ROLLBACK):");
+  console.log("✅ E2E OK — los 4 casos verificados y transacción revertida (ROLLBACK):");
   const m = run.text.match(/E2E_OK\s*(\{.*?\})\s*(?:\\n|\n)CONTEXT/s);
   if (m) {
     try {
       const p = JSON.parse(m[1].replace(/\\"/g, '"'));
       console.log(`   · picks_locked_at (candado activo): ${p.picks_locked_at}`);
-      console.log(`   · caso 0 — bug reproducido SIN el parche: ${p.caso0_bug_reproducido}`);
-      console.log(`   · caso 1 — recálculo sin sesión ahora PASA: ${p.caso1_recalc_sin_sesion}`);
+      console.log(
+        `   · caso 0 (diagnóstico) — ¿el bug original sigue reproduciéndose?: ${p.bug_original_reproduce_hoy ? "SÍ ⚠️ (la migración NO está aplicada)" : "NO ✅ (arreglado)"}`,
+      );
+      console.log(`   · caso 1 — recálculo sin sesión PASA: ${p.caso1_recalc_sin_sesion}`);
       console.log(
         `   · caso 2 — predicción sin sesión SIGUE rechazada: ${p.caso2_prediccion_sin_sesion_rechazada}`,
       );

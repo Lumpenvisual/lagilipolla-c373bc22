@@ -1,4 +1,4 @@
--- PROPUESTA — NO APLICADA. Arregla el hallazgo: el candado de picks_locked_at bloquea
+-- Arregla el hallazgo: el candado de picks_locked_at bloquea
 -- CUALQUIER recálculo (UPDATE de solo puntaje) hecho sin sesión de admin autenticada —
 -- p. ej. cualquier migración/script vía Management API que dispare
 -- ts_recalc_on_official_change, que encadena hasta calc_pick_points, que hace
@@ -47,10 +47,17 @@ CREATE TRIGGER picks_enforce_deadline_insert
   BEFORE INSERT ON public.picks
   FOR EACH ROW EXECUTE FUNCTION public.enforce_picks_deadline();
 
+-- OJO al tocar esta lista de columnas: picks_updated_at
+-- (20260611160000_picks_updated_at_solo_predicciones.sql) usa EXACTAMENTE la misma
+-- lista para decidir cuándo se mueve picks.updated_at (y por lo tanto el código del
+-- comprobante QR). Si algún día se añade una columna de predicción nueva, hay que
+-- actualizar AMBOS triggers — si solo se actualiza aquél, el candado de cierre deja
+-- de proteger ese campo nuevo en silencio.
 CREATE TRIGGER picks_enforce_deadline_predicciones
   BEFORE UPDATE OF groups, group_k_matches, extra_matches, goleador_id, arquero_id
   ON public.picks
   FOR EACH ROW EXECUTE FUNCTION public.enforce_picks_deadline();
 
--- Recordatorio: NO aplicada a producción. Ver el E2E transaccional
--- (scripts/e2e_deadline_solo_predicciones.mjs, patrón ROLLBACK) antes de aplicar.
+-- Verificado con E2E transaccional (scripts/e2e_deadline_solo_predicciones.mjs, ROLLBACK)
+-- antes de aplicar: reproduce el bug sin el parche, confirma los 4 casos con el parche
+-- dentro de la misma transacción, y verifica que las sumas de puntaje no cambian.
