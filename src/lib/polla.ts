@@ -40,8 +40,10 @@ export type SpecialPlayer = { id: string; nombre: string; seleccion: string };
  * así el cálculo de puntos en SQL (igualdad de texto con el oficial) no cambia. */
 
 export function composeSpecial(nombre: string, seleccion: string): string | null {
-  const n = nombre.trim();
-  const s = seleccion.trim();
+  // Bordes recortados y espacios internos colapsados: lo que se persiste queda
+  // limpio para PDF/Excel/podio (norm_especial ya lo toleraba al comparar).
+  const n = nombre.replace(/\s+/g, " ").trim();
+  const s = seleccion.replace(/\s+/g, " ").trim();
   if (!n) return null;
   return s ? `${n} (${s})` : n;
 }
