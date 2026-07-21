@@ -117,11 +117,6 @@ function ReglasPage() {
             <p className="text-sm font-semibold text-foreground">{L.specialHow}</p>
             <p className="mt-1.5 text-sm text-muted-foreground">{L.specialHowAnswer}</p>
           </div>
-          <div className="mt-3 rounded-lg border border-info/30 bg-info/5 p-3">
-            <p className="text-xs text-muted-foreground">
-              <strong className="text-foreground">{L.specialNoteLabel}</strong> {L.specialNote}
-            </p>
-          </div>
         </Card>
       </div>
 
@@ -205,8 +200,6 @@ type Rules = {
   topKeeper: string;
   specialHow: string;
   specialHowAnswer: string;
-  specialNoteLabel: string;
-  specialNote: string;
   prizesTitle: string;
   prizesList: string[];
   prizesCeremony: string;
@@ -257,9 +250,6 @@ const RULES_ES: Rules = {
   specialHow: "¿Y si escribiste el nombre distinto al oficial?",
   specialHowAnswer:
     'Vale igual. Si pusiste el equipo correcto, aceptamos errores pequeños de escritura ("Mbape", "Kyllan Mbappé") y también que hayas puesto solo el apellido ("Mbappé" a secas). Lo que no vale es un jugador de otro equipo: ahí el equipo manda.',
-  specialNoteLabel: "Nota de transparencia (19-jul-2026):",
-  specialNote:
-    "hasta esa fecha, un error técnico impedía reconocer CUALQUIER acierto de Goleador/Arquero — ni siquiera a quien escribió el nombre exacto. Ya se corrigió. El ajuste solo sumó puntos a quien había acertado; a nadie se le quitó nada.",
   prizesTitle: "Premios y reparto del pozo",
   prizesList: [
     "60% para el puntaje más alto.",
@@ -328,9 +318,6 @@ const RULES_EN: Rules = {
   specialHow: "What if you wrote the name differently from the official one?",
   specialHowAnswer:
     'It still counts. If you got the team right, we accept small spelling mistakes ("Mbape", "Kyllan Mbappé") and also just the last name on its own ("Mbappé"). What doesn\'t count is a player from another team — there, the team decides.',
-  specialNoteLabel: "Transparency note (Jul 19, 2026):",
-  specialNote:
-    "until that date, a technical bug meant NO Top Scorer/Goalkeeper pick was ever recognized as correct — not even an exact match. It's now fixed. The fix only added points to people who had gotten it right; nobody lost any.",
   prizesTitle: "Prizes and pot split",
   prizesList: [
     "60% for the highest score.",
