@@ -775,9 +775,6 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.cierre.doneMsg":
       "Todos los datos oficiales están ingresados y los puntos recalculados. El podio con el ganador de LA GILIPOLLA ya está publicado en la página de inicio.",
     "admin.t.res.cierre.verHome": "Ver página de inicio",
-    "admin.t.esp.title": "Especiales de los participantes",
-    "admin.t.esp.hint":
-      "Goleador y arquero los escribe cada participante en su planilla (nombre y selección). Aquí ves quién entregó qué. El resultado oficial se fija en la pestaña Resultados.",
     "admin.t.esp.empty": "Sin participantes aprobados.",
     "admin.t.esp.colPart": "Participante",
     "admin.t.esp.colGol": "Goleador",
@@ -1640,9 +1637,6 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.res.cierre.doneMsg":
       "All official data is entered and points recalculated. The podium with the winner of LA GILIPOLLA is now published on the home page.",
     "admin.t.res.cierre.verHome": "View home page",
-    "admin.t.esp.title": "Participants' specials",
-    "admin.t.esp.hint":
-      "Each participant writes their top scorer and goalkeeper (name and national team) on their ballot. Here you see who submitted what. The official result is set in the Results tab.",
     "admin.t.esp.empty": "No approved participants.",
     "admin.t.esp.colPart": "Participant",
     "admin.t.esp.colGol": "Top scorer",

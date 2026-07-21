@@ -23,8 +23,8 @@ export function RealtimeSync() {
     // de una por evento. `admin-specials-picks` no tiene el problema de
     // concurrencia de 50+ usuarios que motivó esto (es una vista admin de una
     // sola sesión), pero sí el mismo desperdicio mecánico: hasta 37 refetches
-    // seguidos de la misma tabla cuando el admin la tiene abierta en
-    // /admin/especiales durante un recálculo.
+    // seguidos de la misma tabla cuando el admin la tiene desplegada en
+    // /admin/resultados ("Apuestas de participantes") durante un recálculo.
     const timers = new Map<string, ReturnType<typeof setTimeout>>();
     const scheduleInvalidate = (key: string, delayMs = 1500) => {
       if (timers.has(key)) return;

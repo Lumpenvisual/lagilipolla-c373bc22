@@ -1053,20 +1053,6 @@ function SpecialEdit({
   );
 }
 
-/* ---------------- Especiales (respuestas de los participantes) ---------------- */
-export function EspecialesTab() {
-  const t = useT();
-  return (
-    <Card className="border-border bg-card p-5 card-shadow">
-      <h2 className="font-display text-xl">{t("admin.t.esp.title")}</h2>
-      <p className="mt-1 text-xs text-muted-foreground">{t("admin.t.esp.hint")}</p>
-      <div className="mt-4 overflow-x-auto rounded-md border border-border">
-        <SpecialsTable />
-      </div>
-    </Card>
-  );
-}
-
 /* ---------------- Cronograma (fases + extra_matches) ---------------- */
 const DEFAULT_PHASES: Phases = {
   grupos: true,

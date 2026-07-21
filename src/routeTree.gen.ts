@@ -23,7 +23,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerificarCodigoRouteImport } from './routes/verificar.$codigo'
 import { Route as AdminResultadosRouteImport } from './routes/admin.resultados'
 import { Route as AdminReportesRouteImport } from './routes/admin.reportes'
-import { Route as AdminEspecialesRouteImport } from './routes/admin.especiales'
 import { Route as AdminCronogramaRouteImport } from './routes/admin.cronograma'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -96,11 +95,6 @@ const AdminReportesRoute = AdminReportesRouteImport.update({
   path: '/reportes',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminEspecialesRoute = AdminEspecialesRouteImport.update({
-  id: '/especiales',
-  path: '/especiales',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminCronogramaRoute = AdminCronogramaRouteImport.update({
   id: '/cronograma',
   path: '/cronograma',
@@ -119,7 +113,6 @@ export interface FileRoutesByFullPath {
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
-  '/admin/especiales': typeof AdminEspecialesRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
@@ -136,7 +129,6 @@ export interface FileRoutesByTo {
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
-  '/admin/especiales': typeof AdminEspecialesRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
@@ -155,7 +147,6 @@ export interface FileRoutesById {
   '/reglas': typeof ReglasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
-  '/admin/especiales': typeof AdminEspecialesRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
@@ -175,7 +166,6 @@ export interface FileRouteTypes {
     | '/reglas'
     | '/sitemap.xml'
     | '/admin/cronograma'
-    | '/admin/especiales'
     | '/admin/reportes'
     | '/admin/resultados'
     | '/verificar/$codigo'
@@ -192,7 +182,6 @@ export interface FileRouteTypes {
     | '/reglas'
     | '/sitemap.xml'
     | '/admin/cronograma'
-    | '/admin/especiales'
     | '/admin/reportes'
     | '/admin/resultados'
     | '/verificar/$codigo'
@@ -210,7 +199,6 @@ export interface FileRouteTypes {
     | '/reglas'
     | '/sitemap.xml'
     | '/admin/cronograma'
-    | '/admin/especiales'
     | '/admin/reportes'
     | '/admin/resultados'
     | '/verificar/$codigo'
@@ -331,13 +319,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/especiales': {
-      id: '/admin/especiales'
-      path: '/especiales'
-      fullPath: '/admin/especiales'
-      preLoaderRoute: typeof AdminEspecialesRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/cronograma': {
       id: '/admin/cronograma'
       path: '/cronograma'
@@ -350,7 +331,6 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminCronogramaRoute: typeof AdminCronogramaRoute
-  AdminEspecialesRoute: typeof AdminEspecialesRoute
   AdminReportesRoute: typeof AdminReportesRoute
   AdminResultadosRoute: typeof AdminResultadosRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -358,7 +338,6 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCronogramaRoute: AdminCronogramaRoute,
-  AdminEspecialesRoute: AdminEspecialesRoute,
   AdminReportesRoute: AdminReportesRoute,
   AdminResultadosRoute: AdminResultadosRoute,
   AdminIndexRoute: AdminIndexRoute,
