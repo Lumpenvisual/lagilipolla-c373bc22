@@ -1,42 +1,34 @@
 /**
- * E2E de la migración PROPUESTA (no aplicada) del esquema del Repechaje —
- * supabase/migrations_propuestas/20260725000000_repechaje_schema_propuesta.sql.
+ * E2E de la migración de renombrado (aún no aplicada al momento de escribir esto) —
+ * supabase/migrations/20260726000000_repechaje_a_revancha.sql.
  *
- * Transaccional, con ROLLBACK garantizado (patrón scripts/e2e_ts_validate_scores.mjs):
- * Management API = 1 request : 1 transacción implícita. El archivo de la migración entero
- * (leído del disco, no retranscrito) viaja como DDL de nivel superior en el MISMO request
- * que el DO final que fuerza el rollback — si el DO termina en RAISE EXCEPTION, la migración
- * completa (tabla nueva, columnas nuevas, funciones, triggers, RLS) se revierte con todo lo
- * demás. Verificado en la tarea anterior que ese patrón funciona (DDL + DO-que-falla en un
- * solo request = ninguno de los dos sobrevive).
+ * Transaccional, con ROLLBACK garantizado (mismo patrón de siempre): el archivo de la
+ * migración entero (leído del disco) viaja como DDL de nivel superior en el MISMO request
+ * que el DO final que fuerza el rollback — todos los ALTER/DROP/CREATE de la migración se
+ * revierten junto con el resto si el DO termina en RAISE EXCEPTION.
  *
- * Dentro de esa transacción:
- *   0. Captura el leaderboard principal y las sumas de `picks` ANTES de tocar nada (tablas
- *      temporales, viven en la misma transacción).
- *   1. Aplica la migración completa.
- *   2. CASO 1 — los 37 actuales, fila por fila, idénticos en get_polla_leaderboard() tras
- *      agregar la guarda B (en_polla_original) y el backfill. Sumas de picks: 1285/2381/
- *      180/3846.
- *   3. CASO 2 — participante ficticio SOLO-repechaje (en_polla_original=false, la fila nace
- *      así por default): con estado_pago_repechaje='aprobado' y una planilla de repechaje,
- *      NO aparece en get_polla_leaderboard(), SÍ en get_repechaje_leaderboard() con los
- *      puntos correctos (verificados a mano y contra _match_pts).
- *   4. CASO 3 — el error humano: a esa misma persona se le aprueba por error el
- *      estado_pago PRINCIPAL. Sigue sin aparecer en get_polla_leaderboard() porque
- *      en_polla_original sigue en false — esta es la guarda B haciendo su trabajo.
- *   5. CASO 4 — un participante REAL de la polla (La Floresta) que ADEMÁS paga repechaje:
- *      aparece en ambos leaderboards, con puntuaciones independientes; su puntos_total de
- *      la polla principal no se mueve ni un punto.
- *   6. Hallazgo #20, probado en vivo (no solo por diseño): sin sesión y con el repechaje
- *      cerrado (repechaje_abierto=false), un UPDATE de SOLO puntaje pasa igual (no dispara
- *      el candado); un UPDATE que sí toca extra_matches sigue rechazado.
- *   7. Bonus — repechaje_picks_validate rechaza un partido que no es semis/final (m103,
- *      tercer puesto).
- *   8. RAISE EXCEPTION 'E2E_OK {...}' → ROLLBACK de TODO.
- * Post-check por REST: sumas de picks intactas, y repechaje_picks/las columnas nuevas NO
- * existen (confirma que ni la migración quedó aplicada).
+ * A diferencia del E2E anterior (scripts/e2e_repechaje_schema.mjs, que creaba el esquema
+ * desde cero), esta vez el esquema `repechaje_*` YA existe en producción (aplicado en la
+ * tarea anterior) — esta migración solo lo renombra. El E2E aplica el rename dentro de la
+ * transacción y vuelve a correr EXACTAMENTE los mismos casos de aislamiento que ya se
+ * probaron para el esquema viejo, pero con los nombres nuevos, para confirmar que el
+ * renombrado no rompió nada:
+ *   1. Los 37 actuales, fila por fila, idénticos en get_polla_leaderboard() (no debería
+ *      moverse nada: esta migración no la toca, solo referencia en_polla_original que no
+ *      se renombra). Sumas: 1285/2381/180/3846.
+ *   2. Participante ficticio SOLO-revancha: estado_pago_revancha='aprobado', una planilla en
+ *      revancha_picks, calc_revancha_points() calcula bien, no aparece en
+ *      get_polla_leaderboard(), sí en get_revancha_leaderboard().
+ *   3. El error humano: aprueban por error su estado_pago PRINCIPAL -> sigue sin aparecer.
+ *   4. Un participante real (La Floresta) que además paga revancha: aparece en ambos, con
+ *      puntuaciones independientes; su puntaje principal no se mueve.
+ *   5. Hallazgo #20 sigue intacto con los nombres nuevos: UPDATE de solo puntaje pasa con la
+ *      revancha cerrada; UPDATE de predicción sigue rechazado.
+ *   6. revancha_picks_validate rechaza un partido que no es semis/final (m103).
+ * Post-check por REST: sumas de picks intactas. Post-check por Management API: los nombres
+ * VIEJOS (repechaje_*) siguen existiendo (nada se aplicó todavía) y los NUEVOS no.
  *
- * Uso: SUPABASE_PAT=sbp_... node scripts/e2e_repechaje_schema.mjs
+ * Uso: SUPABASE_PAT=sbp_... node scripts/e2e_revancha_schema.mjs
  * (o con SUPABASE_ACCESS_TOKEN en .env)
  */
 import { readFileSync } from "node:fs";
@@ -89,28 +81,27 @@ async function sums() {
   };
 }
 
-console.log("== E2E migración propuesta del esquema de Repechaje (transaccional, ROLLBACK) ==\n");
+console.log("== E2E migración de renombrado repechaje→revancha (transaccional, ROLLBACK) ==\n");
 const before = await sums();
 console.log(
   `✓ Sumas reales antes: grupos=${before.grupos} partidos=${before.partidos} especiales=${before.especiales} total=${before.total} (${before.filas} filas)\n`,
 );
 
 const migrationSql = readFileSync(
-  join(root, "supabase/migrations_propuestas/20260725000000_repechaje_schema_propuesta.sql"),
+  join(root, "supabase/migrations/20260726000000_repechaje_a_revancha.sql"),
   "utf8",
 );
 
-// La Floresta: participante real de la polla (37 actuales), usado en el CASO 4.
 const LA_FLORESTA_ID = "06d42e5f-d3a7-487d-bbc8-a93e03d771fd";
 
 const TEST_SQL = `
--- 0) Snapshot PRE-migración (tablas temporales: viven y mueren con esta transacción).
+-- 0) Snapshot PRE-rename.
 CREATE TEMP TABLE _pre_lb AS SELECT * FROM public.get_polla_leaderboard();
 CREATE TEMP TABLE _pre_floresta_picks AS
   SELECT puntos_grupos, puntos_partidos, puntos_especiales, puntos_total
   FROM public.picks WHERE participant_id = '${LA_FLORESTA_ID}';
 
--- 1) La migración propuesta completa, tal cual el archivo.
+-- 1) La migración de renombrado, tal cual el archivo.
 ${migrationSql}
 
 -- 2) El resto del E2E, en un DO que termina forzando ROLLBACK de TODO lo anterior.
@@ -118,13 +109,12 @@ DO $e2e$
 DECLARE
   admin_uuid uuid := '1e1fc0d6-c5c3-4a5f-90b1-9771538faab3';
   diff_a int; diff_b int;
-  pre_sum record; post_sum record;
+  post_sum record;
   ghost_id uuid;
   rep_row record;
   ghost_puntos int;
   caught boolean; errmsg text;
   puntos_antes int;
-  m101 jsonb; m102 jsonb; m104 jsonb; m103 jsonb;
 BEGIN
   -- ===== CASO 1: los 37 actuales, fila por fila, idénticos =====
   SELECT count(*) INTO diff_a FROM ((SELECT * FROM _pre_lb) EXCEPT (SELECT * FROM public.get_polla_leaderboard())) d;
@@ -142,21 +132,13 @@ BEGIN
       post_sum.g, post_sum.m, post_sum.e, post_sum.t;
   END IF;
 
-  -- ===== Datos reales de semis/final para los picks de repechaje =====
-  SELECT m INTO m101 FROM jsonb_array_elements((SELECT extra_matches FROM public.tournament_state WHERE id=1)) m WHERE m->>'id'='m101';
-  SELECT m INTO m102 FROM jsonb_array_elements((SELECT extra_matches FROM public.tournament_state WHERE id=1)) m WHERE m->>'id'='m102';
-  SELECT m INTO m103 FROM jsonb_array_elements((SELECT extra_matches FROM public.tournament_state WHERE id=1)) m WHERE m->>'id'='m103';
-  SELECT m INTO m104 FROM jsonb_array_elements((SELECT extra_matches FROM public.tournament_state WHERE id=1)) m WHERE m->>'id'='m104';
-
-  -- El repechaje arranca CERRADO (repechaje_abierto=false por default) -- toda la carga de
-  -- datos de prueba (casos 2-4) se hace como admin, que ya salta ese candado por diseño
-  -- (igual que enforce_picks_deadline). El candado en sí se prueba aparte, explícitamente,
-  -- en el bloque "HALLAZGO #20" más abajo.
+  -- La revancha arranca CERRADA (revancha_abierta=false, el rename no cambia el valor) --
+  -- toda la carga de datos de prueba se hace como admin, que salta ese candado por diseño.
   PERFORM set_config('request.jwt.claim.sub', admin_uuid::text, true);
 
-  -- ===== CASO 2: participante ficticio SOLO-repechaje =====
-  INSERT INTO public.participants (nombre, estado_pago, estado_pago_repechaje)
-  VALUES ('E2E Fantasma Repechaje', 'pendiente', 'aprobado')
+  -- ===== CASO 2: participante ficticio SOLO-revancha =====
+  INSERT INTO public.participants (nombre, estado_pago, estado_pago_revancha)
+  VALUES ('E2E Fantasma Revancha', 'pendiente', 'aprobado')
   RETURNING id INTO ghost_id;
 
   IF (SELECT en_polla_original FROM public.participants WHERE id = ghost_id) <> false THEN
@@ -165,7 +147,7 @@ BEGIN
 
   -- m101 FRA 0-2 ESP -> predicho 0-2 exacto (5). m102 ENG 1-2 ARG -> predicho 1-3 (3).
   -- m104 ESP 0-0 ARG -> predicho 1-1 (1). Esperado: 9 pts, aciertos_5=1, aciertos_3=1.
-  INSERT INTO public.repechaje_picks (participant_id, extra_matches)
+  INSERT INTO public.revancha_picks (participant_id, extra_matches)
   VALUES (
     ghost_id,
     jsonb_build_object(
@@ -174,9 +156,9 @@ BEGIN
       'm104', jsonb_build_object('gh', 1, 'ga', 1)
     )
   );
-  PERFORM public.calc_repechaje_points(ghost_id);
+  PERFORM public.calc_revancha_points(ghost_id);
 
-  SELECT * INTO rep_row FROM public.repechaje_picks WHERE participant_id = ghost_id;
+  SELECT * INTO rep_row FROM public.revancha_picks WHERE participant_id = ghost_id;
   ghost_puntos := rep_row.puntos;
   IF NOT (rep_row.puntos = 9 AND rep_row.aciertos_5 = 1 AND rep_row.aciertos_3 = 1 AND rep_row.aciertos_2 = 0) THEN
     RAISE EXCEPTION 'E2E_FAIL caso2: puntos del fantasma no cuadran (puntos=%, c5=%, c3=%, c2=%)',
@@ -185,8 +167,8 @@ BEGIN
   IF EXISTS (SELECT 1 FROM public.get_polla_leaderboard() WHERE participant_id = ghost_id) THEN
     RAISE EXCEPTION 'E2E_FAIL caso2: el fantasma SI aparece en get_polla_leaderboard()';
   END IF;
-  IF NOT EXISTS (SELECT 1 FROM public.get_repechaje_leaderboard() WHERE participant_id = ghost_id AND puntos = 9) THEN
-    RAISE EXCEPTION 'E2E_FAIL caso2: el fantasma NO aparece (o con puntos incorrectos) en get_repechaje_leaderboard()';
+  IF NOT EXISTS (SELECT 1 FROM public.get_revancha_leaderboard() WHERE participant_id = ghost_id AND puntos = 9) THEN
+    RAISE EXCEPTION 'E2E_FAIL caso2: el fantasma NO aparece (o con puntos incorrectos) en get_revancha_leaderboard()';
   END IF;
 
   -- ===== CASO 3: el error humano — aprueban por error el pago PRINCIPAL del fantasma =====
@@ -200,12 +182,12 @@ BEGIN
       (SELECT count(*) FROM public.get_polla_leaderboard());
   END IF;
 
-  -- ===== CASO 4: participante REAL (La Floresta) que ADEMÁS paga repechaje =====
-  UPDATE public.participants SET estado_pago_repechaje = 'aprobado' WHERE id = '${LA_FLORESTA_ID}';
+  -- ===== CASO 4: participante REAL (La Floresta) que ADEMÁS paga revancha =====
+  UPDATE public.participants SET estado_pago_revancha = 'aprobado' WHERE id = '${LA_FLORESTA_ID}';
 
   -- m101 FRA 0-2 ESP -> predicho 1-1 (0). m102 ENG 1-2 ARG -> predicho 2-2 (1, pa=oa).
   -- m104 ESP 0-0 ARG -> predicho 0-1 (1, ph=oh). Esperado: 2 pts, sin aciertos_5/3.
-  INSERT INTO public.repechaje_picks (participant_id, extra_matches)
+  INSERT INTO public.revancha_picks (participant_id, extra_matches)
   VALUES (
     '${LA_FLORESTA_ID}',
     jsonb_build_object(
@@ -214,81 +196,71 @@ BEGIN
       'm104', jsonb_build_object('gh', 0, 'ga', 1)
     )
   );
-  PERFORM public.calc_repechaje_points('${LA_FLORESTA_ID}');
+  PERFORM public.calc_revancha_points('${LA_FLORESTA_ID}');
 
-  SELECT * INTO rep_row FROM public.repechaje_picks WHERE participant_id = '${LA_FLORESTA_ID}';
+  SELECT * INTO rep_row FROM public.revancha_picks WHERE participant_id = '${LA_FLORESTA_ID}';
   IF NOT (rep_row.puntos = 2 AND rep_row.aciertos_5 = 0 AND rep_row.aciertos_3 = 0 AND rep_row.aciertos_2 = 0) THEN
-    RAISE EXCEPTION 'E2E_FAIL caso4: puntos de repechaje de La Floresta no cuadran (puntos=%, c5=%, c3=%, c2=%)',
+    RAISE EXCEPTION 'E2E_FAIL caso4: puntos de revancha de La Floresta no cuadran (puntos=%, c5=%, c3=%, c2=%)',
       rep_row.puntos, rep_row.aciertos_5, rep_row.aciertos_3, rep_row.aciertos_2;
   END IF;
   IF NOT EXISTS (SELECT 1 FROM public.get_polla_leaderboard() WHERE participant_id = '${LA_FLORESTA_ID}') THEN
     RAISE EXCEPTION 'E2E_FAIL caso4: La Floresta desaparecio de get_polla_leaderboard()';
   END IF;
-  IF NOT EXISTS (SELECT 1 FROM public.get_repechaje_leaderboard() WHERE participant_id = '${LA_FLORESTA_ID}' AND puntos = 2) THEN
-    RAISE EXCEPTION 'E2E_FAIL caso4: La Floresta no aparece (o con puntos incorrectos) en get_repechaje_leaderboard()';
+  IF NOT EXISTS (SELECT 1 FROM public.get_revancha_leaderboard() WHERE participant_id = '${LA_FLORESTA_ID}' AND puntos = 2) THEN
+    RAISE EXCEPTION 'E2E_FAIL caso4: La Floresta no aparece (o con puntos incorrectos) en get_revancha_leaderboard()';
   END IF;
-  -- Su puntaje de la polla PRINCIPAL no se movio ni un punto.
   IF EXISTS (
     SELECT 1 FROM public.picks p, _pre_floresta_picks pre
     WHERE p.participant_id = '${LA_FLORESTA_ID}'
       AND (p.puntos_grupos, p.puntos_partidos, p.puntos_especiales, p.puntos_total)
           IS DISTINCT FROM (pre.puntos_grupos, pre.puntos_partidos, pre.puntos_especiales, pre.puntos_total)
   ) THEN
-    RAISE EXCEPTION 'E2E_FAIL caso4: los puntos PRINCIPALES de La Floresta se movieron al tocar repechaje';
+    RAISE EXCEPTION 'E2E_FAIL caso4: los puntos PRINCIPALES de La Floresta se movieron al tocar revancha';
   END IF;
 
-  -- ===== HALLAZGO #20 aplicado desde el día uno: BEFORE UPDATE OF extra_matches, no
-  -- BEFORE UPDATE a secas. Se prueba sin sesión (auth.uid() = NULL, ni admin ni participante
-  -- dueño) con repechaje_abierto TODAVÍA en false (nunca se tocó): =====
+  -- ===== HALLAZGO #20, con los nombres nuevos: sin sesión, revancha cerrada =====
   PERFORM set_config('request.jwt.claim.sub', '', true); -- sin sesión
 
-  -- 1) Un UPDATE que SOLO toca puntaje (lo que hace calc_repechaje_points) debe PASAR
-  --    igual, aunque el repechaje esté cerrado -- exactamente el bug que ya se arregló
-  --    para picks, reproducido aquí ANTES de que exista, no después.
-  puntos_antes := (SELECT puntos FROM public.repechaje_picks WHERE participant_id = ghost_id);
+  puntos_antes := (SELECT puntos FROM public.revancha_picks WHERE participant_id = ghost_id);
   caught := false;
   BEGIN
-    UPDATE public.repechaje_picks SET puntos = puntos_antes + 1 WHERE participant_id = ghost_id;
+    UPDATE public.revancha_picks SET puntos = puntos_antes + 1 WHERE participant_id = ghost_id;
   EXCEPTION WHEN OTHERS THEN
     caught := true; errmsg := SQLERRM;
   END;
   IF caught THEN
-    RAISE EXCEPTION 'E2E_FAIL hallazgo20 (caso A): un UPDATE de SOLO puntaje sin sesion fue rechazado (%) -- el candado no deberia mirar esta columna', errmsg;
+    RAISE EXCEPTION 'E2E_FAIL hallazgo20 (caso A): un UPDATE de SOLO puntaje sin sesion fue rechazado (%) -- el candado renombrado no deberia mirar esta columna', errmsg;
   END IF;
-  -- Revertir el +1 de prueba (no debe afectar el resto de asserts).
-  UPDATE public.repechaje_picks SET puntos = puntos_antes WHERE participant_id = ghost_id;
+  UPDATE public.revancha_picks SET puntos = puntos_antes WHERE participant_id = ghost_id;
 
-  -- 2) Un UPDATE que SÍ toca extra_matches, sin sesión y con repechaje_abierto=false, debe
-  --    SEGUIR rechazado -- el candado no quedó roto por el fix del punto 1.
   caught := false;
   BEGIN
-    UPDATE public.repechaje_picks
+    UPDATE public.revancha_picks
        SET extra_matches = extra_matches || jsonb_build_object('m104', jsonb_build_object('gh', 2, 'ga', 2))
      WHERE participant_id = ghost_id;
   EXCEPTION WHEN OTHERS THEN
     caught := true; errmsg := SQLERRM;
   END;
   IF NOT caught THEN
-    RAISE EXCEPTION 'E2E_FAIL hallazgo20 (caso B): un cambio de PREDICCION sin sesion y con el repechaje cerrado PASO (debia rechazarse)';
+    RAISE EXCEPTION 'E2E_FAIL hallazgo20 (caso B): un cambio de PREDICCION sin sesion y con la revancha cerrada PASO (debia rechazarse)';
   END IF;
-  IF errmsg NOT LIKE '%todavía no está abierto%' THEN
+  IF errmsg NOT LIKE '%todavía no está abierta%' THEN
     RAISE EXCEPTION 'E2E_FAIL hallazgo20 (caso B): rechazado pero por otra razon: %', errmsg;
   END IF;
 
-  -- Volver a admin para el resto del setup (bonus de abajo).
   PERFORM set_config('request.jwt.claim.sub', admin_uuid::text, true);
 
-  -- ===== Bonus: repechaje_picks_validate rechaza un partido que no es semis/final =====
+  -- ===== Bonus: revancha_picks_validate rechaza un partido que no es semis/final =====
   caught := false;
   BEGIN
-    UPDATE public.repechaje_picks
+    UPDATE public.revancha_picks
        SET extra_matches = extra_matches || jsonb_build_object('m103', jsonb_build_object('gh', 1, 'ga', 1))
      WHERE participant_id = ghost_id;
   EXCEPTION WHEN OTHERS THEN
     caught := true; errmsg := SQLERRM;
   END;
   IF NOT caught THEN
-    RAISE EXCEPTION 'E2E_FAIL bonus: se pudo guardar un marcador de tercer puesto (m103) en repechaje_picks';
+    RAISE EXCEPTION 'E2E_FAIL bonus: se pudo guardar un marcador de tercer puesto (m103) en revancha_picks';
   END IF;
   IF errmsg NOT LIKE '%no es de semis ni de la final%' THEN
     RAISE EXCEPTION 'E2E_FAIL bonus: rechazado pero por otra razon: %', errmsg;
@@ -296,9 +268,9 @@ BEGIN
 
   RAISE EXCEPTION 'E2E_OK %', jsonb_build_object(
     'caso1_37_identicos', 'paso, sumas 1285/2381/180/3846',
-    'caso2_fantasma_solo_repechaje', jsonb_build_object('puntos', ghost_puntos, 'en_principal', false, 'en_repechaje', true),
+    'caso2_fantasma_solo_revancha', jsonb_build_object('puntos', ghost_puntos, 'en_principal', false, 'en_revancha', true),
     'caso3_error_humano_estado_pago', 'paso, sigue sin aparecer en la principal',
-    'caso4_la_floresta_ambos', jsonb_build_object('puntos_repechaje', 2, 'en_ambos', true, 'principal_intacto', true),
+    'caso4_la_floresta_ambos', jsonb_build_object('puntos_revancha', 2, 'en_ambos', true, 'principal_intacto', true),
     'hallazgo20_solo_puntaje_pasa_sin_sesion', 'paso',
     'hallazgo20_prediccion_sigue_rechazada', 'paso',
     'bonus_m103_rechazado', 'paso'
@@ -308,27 +280,27 @@ END $e2e$;
 
 const run = await mgmtQuery(TEST_SQL);
 if (run.text.includes("E2E_OK")) {
-  console.log("✅ E2E OK — los 5 casos verificados y transacción revertida (ROLLBACK):");
+  console.log("✅ E2E OK — los 6 casos verificados y transacción revertida (ROLLBACK):");
   const m = run.text.match(/E2E_OK\s*(\{.*?\})\s*(?:\\n|\n)CONTEXT/s);
   if (m) {
     try {
       const p = JSON.parse(m[1].replace(/\\"/g, '"'));
       console.log(`   · caso 1 (37 idénticos): ${p.caso1_37_identicos}`);
       console.log(
-        `   · caso 2 (fantasma solo-repechaje): ${JSON.stringify(p.caso2_fantasma_solo_repechaje)}`,
+        `   · caso 2 (fantasma solo-revancha): ${JSON.stringify(p.caso2_fantasma_solo_revancha)}`,
       );
       console.log(`   · caso 3 (error humano de estado_pago): ${p.caso3_error_humano_estado_pago}`);
       console.log(
         `   · caso 4 (La Floresta en ambos): ${JSON.stringify(p.caso4_la_floresta_ambos)}`,
       );
       console.log(
-        `   · hallazgo #20 (solo-puntaje pasa sin sesión, cerrado): ${p.hallazgo20_solo_puntaje_pasa_sin_sesion}`,
+        `   · hallazgo #20 (solo-puntaje pasa sin sesión, cerrada): ${p.hallazgo20_solo_puntaje_pasa_sin_sesion}`,
       );
       console.log(
-        `   · hallazgo #20 (predicción sigue rechazada, cerrado): ${p.hallazgo20_prediccion_sigue_rechazada}`,
+        `   · hallazgo #20 (predicción sigue rechazada, cerrada): ${p.hallazgo20_prediccion_sigue_rechazada}`,
       );
       console.log(
-        `   · bonus (m103 rechazado por repechaje_picks_validate): ${p.bonus_m103_rechazado}`,
+        `   · bonus (m103 rechazado por revancha_picks_validate): ${p.bonus_m103_rechazado}`,
       );
     } catch {
       console.log("   payload: " + run.text.slice(0, 1200));
@@ -342,7 +314,6 @@ if (run.text.includes("E2E_OK")) {
   fail(`Respuesta inesperada (status ${run.status}):\n` + run.text.slice(0, 1500));
 }
 
-// Post-check 1: sumas de picks intactas.
 const after = await sums();
 if (JSON.stringify(before) !== JSON.stringify(after)) {
   fail(
@@ -351,20 +322,21 @@ if (JSON.stringify(before) !== JSON.stringify(after)) {
 }
 console.log("\n✅ Post-check 1: sumas de picks intactas (ROLLBACK confirmado).");
 
-// Post-check 2: la migración NO quedó aplicada (la tabla/columnas no existen).
 const check = await mgmtQuery(
-  "SELECT to_regclass('public.repechaje_picks') AS tabla, " +
-    "(SELECT count(*) FROM information_schema.columns WHERE table_name='participants' AND column_name IN ('en_polla_original','estado_pago_repechaje')) AS cols_participants, " +
-    "(SELECT count(*) FROM information_schema.columns WHERE table_name='tournament_state' AND column_name IN ('repechaje_abierto','repechaje_locked_at')) AS cols_ts;",
+  "SELECT to_regclass('public.repechaje_picks') AS tabla_vieja, to_regclass('public.revancha_picks') AS tabla_nueva, " +
+    "(SELECT count(*) FROM pg_proc WHERE proname LIKE '%repechaje%') AS funcs_viejas, " +
+    "(SELECT count(*) FROM pg_proc WHERE proname LIKE '%revancha%') AS funcs_nuevas;",
 );
-console.log("Post-check 2 (¿quedó algo aplicado?): " + check.text);
+console.log("Post-check 2 (¿el rename quedó aplicado por accidente?): " + check.text);
 if (
-  !check.text.includes('"tabla":null') ||
-  !check.text.includes('"cols_participants":0') ||
-  !check.text.includes('"cols_ts":0')
+  !check.text.includes('"tabla_vieja":"repechaje_picks"') ||
+  !check.text.includes('"tabla_nueva":null') ||
+  !check.text.includes('"funcs_nuevas":0')
 ) {
-  fail("¡La migración quedó aplicada parcial o totalmente! No debía — revisar antes de nada.");
+  fail(
+    "¡El rename quedó aplicado parcial o totalmente! No debía en este E2E — revisar antes de nada.",
+  );
 }
 console.log(
-  "✅ Post-check 2: la migración NO quedó aplicada (repechaje_picks no existe, columnas nuevas no existen).",
+  "✅ Post-check 2: el rename NO quedó aplicado (repechaje_picks sigue existiendo, revancha_picks no).",
 );
