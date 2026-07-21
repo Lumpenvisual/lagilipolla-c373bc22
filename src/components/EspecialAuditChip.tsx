@@ -1,6 +1,6 @@
 import { especialMatchMotivo, parseSpecial } from "@/lib/polla";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n";
 
 const STYLES: Record<string, string> = {
@@ -86,11 +86,18 @@ export function EspecialAuditChip({
   );
 
   if (!tooltip) return badge;
+  // TooltipProvider local: este es el único uso de Tooltip fuera de sidebar.tsx (que
+  // trae el suyo propio) y no hay ninguno global en __root.tsx — sin este wrapper,
+  // Radix lanza "`Tooltip` must be used within `TooltipProvider`" en cuanto se
+  // renderiza un chip con motivo (typo/apellido/ambiguo/selección distinta), lo que
+  // tira toda la página al error boundary raíz.
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>{badge}</TooltipTrigger>
-      <TooltipContent>{tooltip}</TooltipContent>
-    </Tooltip>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{badge}</TooltipTrigger>
+        <TooltipContent>{tooltip}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
