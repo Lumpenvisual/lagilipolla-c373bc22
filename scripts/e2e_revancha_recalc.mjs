@@ -1,7 +1,20 @@
 /**
- * E2E de la migración PROPUESTA (no aplicada) — supabase/migrations_propuestas/
- * 20260727000000_revancha_recalc_y_cuota_propuesta.sql — recálculo automático de La
- * Revancha + cuota configurable.
+ * E2E de supabase/migrations/20260727000000_revancha_recalc_y_cuota.sql — recálculo
+ * automático de La Revancha + cuota configurable.
+ *
+ * Escrito originalmente para probar la migración ANTES de aplicarla (transaccional, con
+ * ROLLBACK, la migración completa embebida como DDL). Ya está aplicada en producción
+ * (confirmado contra pg_trigger/pg_proc/information_schema por separado) — este script se
+ * reutiliza tal cual para reconfirmar el comportamiento post-aplicación, con dos ajustes
+ * necesarios porque el significado de "¿existe el objeto?" cambió:
+ *   1. El ALTER TABLE ... ADD COLUMN del archivo real no tiene IF NOT EXISTS a propósito
+ *      (una migración nueva no debe fingir que la columna podría ya existir) — se le agrega
+ *      SOLO en la copia en memoria de este script para poder seguir re-aplicando el resto
+ *      (CREATE OR REPLACE FUNCTION / DROP+CREATE TRIGGER, ambos ya idempotentes) dentro de
+ *      la transacción de prueba.
+ *   2. El post-check final ya NO espera que los objetos NO existan tras el ROLLBACK —
+ *      ahora SÍ deben existir (son la migración real, aplicada en una transacción aparte) y
+ *      lo que se confirma es que el ROLLBACK de esta prueba no los afectó.
  *
  * Transaccional, con ROLLBACK garantizado (patrón de siempre): el archivo de la migración
  * entero viaja como DDL de nivel superior en el MISMO request que el DO final que fuerza el
@@ -31,7 +44,8 @@
  *   8. CASO 5 — get_polla_leaderboard() sigue con las mismas 37 filas que el snapshot PRE.
  *   9. RAISE EXCEPTION 'E2E_OK {...}' → ROLLBACK de TODO.
  * Post-check por REST: sumas de picks intactas. Post-check por Management API: los objetos
- * nuevos (trigger, funciones, columna) NO quedaron aplicados.
+ * de la migración YA APLICADA (trigger, funciones, columna) siguen existiendo tras el
+ * ROLLBACK de esta prueba.
  *
  * Uso: SUPABASE_PAT=sbp_... node scripts/e2e_revancha_recalc.mjs
  * (o con SUPABASE_ACCESS_TOKEN en .env)
@@ -86,15 +100,28 @@ async function sums() {
   };
 }
 
-console.log("== E2E migración propuesta: recálculo + cuota de La Revancha (ROLLBACK) ==\n");
+console.log("== E2E post-aplicación: recálculo + cuota de La Revancha (ROLLBACK) ==\n");
 const before = await sums();
 console.log(
   `✓ Sumas reales antes: grupos=${before.grupos} partidos=${before.partidos} especiales=${before.especiales} total=${before.total} (${before.filas} filas)\n`,
 );
 
-const migrationSql = readFileSync(
-  join(root, "supabase/migrations_propuestas/20260727000000_revancha_recalc_y_cuota_propuesta.sql"),
+// AJUSTE post-aplicación (la migración ya corrió de verdad en producción, ver
+// commit siguiente a cuando se escribió este E2E): CREATE OR REPLACE FUNCTION y
+// DROP TRIGGER IF EXISTS + CREATE TRIGGER son idempotentes, así que re-aplicar la
+// migración dentro de esta transacción sigue funcionando igual para el trigger y las
+// dos funciones. La ÚNICA parte no-idempotente es el ALTER TABLE ... ADD COLUMN (sin
+// IF NOT EXISTS a propósito en el archivo real: una migración recién escrita para un
+// apply nuevo no debe fingir que la columna podría ya existir). Para poder seguir
+// re-corriendo este E2E contra producción YA migrada, se le agrega "IF NOT EXISTS"
+// SOLO en esta copia en memoria — el archivo real en supabase/migrations/ no se toca.
+let migrationSql = readFileSync(
+  join(root, "supabase/migrations/20260727000000_revancha_recalc_y_cuota.sql"),
   "utf8",
+);
+migrationSql = migrationSql.replace(
+  "ADD COLUMN revancha_cuota_cop integer NOT NULL DEFAULT 50000;",
+  "ADD COLUMN IF NOT EXISTS revancha_cuota_cop integer NOT NULL DEFAULT 50000;",
 );
 
 const TEST_SQL = `
@@ -328,18 +355,32 @@ if (JSON.stringify(before) !== JSON.stringify(after)) {
 }
 console.log("\n✅ Post-check 1: sumas de picks intactas (ROLLBACK confirmado).");
 
+// AJUSTE post-aplicación: antes de aplicar, este post-check confirmaba que el E2E no
+// dejara nada aplicado por accidente (funcs_nuevas=0, trig_nuevo=0, col_nueva=0). Ahora
+// que la migración está aplicada DE VERDAD (en una transacción separada, ya confirmada
+// y comprometida antes de correr este E2E), lo correcto es lo contrario: estos objetos
+// DEBEN existir permanentemente, y el ROLLBACK de esta transacción de prueba no debe
+// haberlos afectado. El chequeo cambia de "= 0" a "= la cantidad esperada".
 const check = await mgmtQuery(
   "SELECT " +
     "(SELECT count(*) FROM pg_proc WHERE proname IN ('ts_recalc_revancha_on_official_change','recalc_revancha_report')) AS funcs_nuevas, " +
     "(SELECT count(*) FROM pg_trigger WHERE tgname = 'ts_recalc_revancha_on_official_change') AS trig_nuevo, " +
-    "(SELECT count(*) FROM information_schema.columns WHERE table_name='tournament_state' AND column_name='revancha_cuota_cop') AS col_nueva;",
+    "(SELECT count(*) FROM information_schema.columns WHERE table_name='tournament_state' AND column_name='revancha_cuota_cop') AS col_nueva, " +
+    "(SELECT column_default FROM information_schema.columns WHERE table_name='tournament_state' AND column_name='revancha_cuota_cop') AS col_default;",
 );
-console.log("Post-check 2 (¿quedó algo aplicado?): " + check.text);
+console.log(
+  "Post-check 2 (¿los objetos aplicados siguen ahí tras el ROLLBACK de prueba?): " + check.text,
+);
 if (
-  !check.text.includes('"funcs_nuevas":0') ||
-  !check.text.includes('"trig_nuevo":0') ||
-  !check.text.includes('"col_nueva":0')
+  !check.text.includes('"funcs_nuevas":2') ||
+  !check.text.includes('"trig_nuevo":1') ||
+  !check.text.includes('"col_nueva":1') ||
+  !check.text.includes('"col_default":"50000"')
 ) {
-  fail("¡Algo quedó aplicado por accidente! No debía en este E2E — revisar antes de nada.");
+  fail(
+    "¡Los objetos aplicados NO están todos ahí! El ROLLBACK de prueba pudo haber afectado la migración real — revisar antes de nada.",
+  );
 }
-console.log("✅ Post-check 2: nada quedó aplicado (trigger/funciones/columna nuevos no existen).");
+console.log(
+  "✅ Post-check 2: los objetos de la migración YA APLICADA siguen intactos (trigger, 2 funciones, columna con default 50000) — el ROLLBACK de prueba no los tocó.",
+);

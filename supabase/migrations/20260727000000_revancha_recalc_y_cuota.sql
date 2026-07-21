@@ -1,5 +1,5 @@
--- PROPUESTA — NO APLICADA. Cierra el esquema de La Revancha: recálculo automático + cuota
--- configurable. Sin UI (viene en la tarea siguiente) — solo esquema.
+-- Cierra el esquema de La Revancha: recálculo automático + cuota configurable. Sin UI
+-- (viene en la tarea siguiente) — solo esquema.
 --
 -- ============================================================================
 -- 1) CANDADO — verificado, no se toca.
@@ -29,6 +29,14 @@
 -- < "ts_recalc_revancha_on_official_change" (la 'o' de "on" ordena antes que la 'r' de
 -- "revancha") — el recálculo de la polla principal SIEMPRE corre primero. La polla
 -- original manda.
+--
+-- OJO: ese orden es DEFENSIVO, no lo que PROTEGE a la polla principal — es solo una
+-- garantía extra de secuencia, no el mecanismo de aislamiento. Lo que de verdad impide
+-- que un fallo en Revancha contamine a la polla principal es el BEGIN/EXCEPTION de más
+-- abajo: aunque este trigger corriera ANTES por cualquier motivo (alguien lo renombra
+-- mañana y el orden alfabético cambia en silencio), un fallo ahí seguiría sin poder
+-- abortar nada fuera de su propio bloque. No confiar en el orden como si fuera la
+-- protección — confiar en el BEGIN/EXCEPTION.
 --
 -- Alcance del trigger: solo extra_matches (Revancha no depende de groups/
 -- group_k_matches/goleador_id/arquero_id — calc_revancha_points ya filtra fase IN
