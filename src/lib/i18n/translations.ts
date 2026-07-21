@@ -736,9 +736,9 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pin.cta": "Resetear PIN",
     "admin.t.pin.ok": "PIN actualizado para {name}",
     "admin.t.pin.invalid": "El PIN debe ser de 4 dígitos.",
-    "admin.t.res.repechajes": "Repesca de clasificación",
+    "admin.t.res.repechajes": "Repechajes",
     "admin.t.res.repechajesHint":
-      "Cuando se resuelva una repesca de clasificación, edita el nombre del equipo ganador en el grupo correspondiente. Si en un partido de eliminatorias hay alargue o penales, solo se tendrá en cuenta el marcador de los primeros 90 minutos.",
+      'Cuando se resuelva un repechaje, edita el nombre del equipo "Ganador Repechaje X". Si en un partido de eliminatorias hay repechaje (alargue o penales), solo se tendrá en cuenta el marcador de los primeros 90 minutos, no el del repechaje.',
     "admin.t.res.groups": "Resultados de grupos · 1° y 2°",
     "admin.t.res.grupoK": "Grupo K",
     "admin.t.res.markK": "Marcadores Grupo K",
@@ -1600,7 +1600,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pin.invalid": "PIN must be 4 digits.",
     "admin.t.res.repechajes": "Play-offs",
     "admin.t.res.repechajesHint":
-      "Once a qualification play-off is resolved, edit the winning team's name in the matching group. In knockout matches with extra time or a penalty shoot-out, only the 90-minute score counts.",
+      'Once a play-off is resolved, edit the "Play-off X Winner" team name. In knockout matches with a tie-breaker (extra time or penalty shoot-out), only the 90-minute score counts — not the shoot-out result.',
     "admin.t.res.groups": "Group results · 1st and 2nd",
     "admin.t.res.grupoK": "Group K",
     "admin.t.res.markK": "Group K scores",
