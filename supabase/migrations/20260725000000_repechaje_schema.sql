@@ -1,15 +1,15 @@
--- PROPUESTA — NO APLICADA. Esquema para el "Repechaje": competencia de segunda oportunidad
--- (semis + final, 5/3/2/1/0) 100% separada de la polla original — tabla y pozo propios,
--- abierta a cualquiera, pago propio que aprueba el admin, sin cálculo de premios en la app.
+-- Esquema para el "Repechaje": competencia de segunda oportunidad (semis + final, 5/3/2/1/0)
+-- 100% separada de la polla original — tabla y pozo propios, abierta a cualquiera, pago
+-- propio que aprueba el admin, sin cálculo de premios en la app (eso lo reparte el admin
+-- fuera de la app). Solo esquema — sin UI todavía.
 --
 -- OJO DE NOMBRE — colisión con un concepto YA EXISTENTE: "Repechaje/Repechajes" en este
 -- código ya significa otra cosa — la resolución de los 6 cupos de clasificación FIFA
 -- (admin.t.res.repechajes en tabs.tsx/translations.ts, "Ganador Repechaje X" en Cronograma,
 -- y la nota de ScoringRulesPanel sobre alargue/penales). Es una coincidencia de nombre, no
 -- de concepto: uno es "cómo un equipo llegó al Mundial", el otro es "una segunda polla sobre
--- semis/final". Sigo el nombre que pidió la tarea porque renombrar unilateralmente sería
--- presuntuoso, pero cualquiera que grep "repechaje" en el futuro va a mezclar ambos —
--- señalado en el chat, no resuelto aquí (es una decisión de producto, no de esquema).
+-- semis/final". No resuelto aquí (es una decisión de producto, no de esquema) — cualquiera
+-- que grep "repechaje" en el futuro va a mezclar ambos, tenlo presente.
 --
 -- ============================================================================
 -- 1) DOS GUARDAS INDEPENDIENTES para que un inscrito solo-repechaje jamás aparezca en la
@@ -19,17 +19,16 @@
 --    Guarda B (nueva, explícita):       en_polla_original = true.
 --
 --    Por qué DOS y no una convención: la guarda A depende de que nadie apruebe por error el
---    pago PRINCIPAL de alguien que solo pagó repechaje — exactamente el error humano que
---    describe la tarea (bar lleno, sábado, dos filas de pago con el mismo participante
---    delante). Con la guarda B, ese error de un solo campo (estado_pago) ya no basta: hace
---    falta ADEMÁS que alguien ponga en_polla_original = true, que es una acción separada, en
---    un campo que ninguna pantalla de aprobación de pago va a tocar por accidente (no existe
---    ningún flujo que lo setee salvo el admin explícitamente, o este backfill).
+--    pago PRINCIPAL de alguien que solo pagó repechaje — el error humano de un bar lleno un
+--    sábado, dos filas de pago con el mismo participante delante. Con la guarda B, ese error
+--    de un solo campo (estado_pago) ya no basta: hace falta ADEMÁS que alguien ponga
+--    en_polla_original = true, una acción separada, en un campo que ninguna pantalla de
+--    aprobación de pago va a tocar por accidente (no existe ningún flujo que lo setee salvo
+--    el admin explícitamente, o este backfill).
 --
 --    Alternativa descartada: una tabla `repechaje_participants` separada en vez de reusar
---    `participants`. La tarea ya pidió reusar participants (login alias+PIN sin duplicar
---    auth) — coincido: el alias+PIN vive en auth.users/participants.user_id, duplicar eso
---    para una segunda tabla de inscritos sería reconstruir el login desde cero.
+--    `participants`. Reusar participants mantiene el login alias+PIN (auth.users/
+--    participants.user_id) sin duplicar auth.
 --
 -- ============================================================================
 -- 2) participants: las dos columnas nuevas.
@@ -48,9 +47,7 @@
 --    estado_pago_repechaje text NULLABLE, mismo CHECK de valores que estado_pago
 --    ('pendiente'/'aprobado'/'rechazado') — NULL para los 41 actuales (no se inscribieron a
 --    esto, no existía). NULL es intencional y distinto de 'pendiente': "nunca aplicó" vs
---    "aplicó, en espera". El CHECK con IN(...) ya permite NULL de forma nativa en Postgres
---    (una expresión IN que compara contra NULL evalúa a NULL, y un CHECK con resultado NULL
---    se considera satisfecho) — no hace falta un OR explícito.
+--    "aplicó, en espera". El CHECK con IN(...) ya permite NULL de forma nativa en Postgres.
 --
 --    INSERT policy: se agrega `AND en_polla_original = false` al WITH CHECK de
 --    participants_own_insert, en el mismo espíritu que el `AND estado_pago = 'pendiente'`
@@ -209,8 +206,8 @@ CREATE TRIGGER repechaje_picks_validate_before
 -- 4b) Candado de tiempo — LA LECCIÓN DEL HALLAZGO #20 aplicada desde el día uno (ver
 --     20260722000000_deadline_solo_predicciones.sql): DOS triggers, no uno. Un solo
 --     `BEFORE UPDATE` sin restricción de columnas dispararía con el UPDATE de SOLO PUNTAJE
---     que hace calc_repechaje_points — exactamente el bug que acabamos de arreglar en
---     `picks`, reproducido en la primera noche que alguien recalcule sin sesión de admin
+--     que hace calc_repechaje_points — exactamente el bug que se arregló en `picks`,
+--     reproducido en la primera noche que alguien recalcule sin sesión de admin
 --     (Management API, script, o el propio trigger de recálculo si algún día se conecta uno
 --     a tournament_state). BEFORE UPDATE OF extra_matches asegura que un UPDATE que solo
 --     toca puntos/aciertos NUNCA pasa por este candado.
@@ -259,21 +256,20 @@ CREATE TRIGGER repechaje_picks_updated_at
 -- 5) Puntuación: UN SOLO lugar para la regla de marcador (5/3/2/1/0), no una tercera copia.
 --
 --    calc_pick_points ya trae la regla ESCRITA DOS VECES adentro de sí misma (una para
---    group_k_matches, otra idéntica para extra_matches, líneas ~3999-4051 de
---    schema.snapshot.sql) — no es este cambio quien introduce esa duplicación, ya estaba.
---    Extraigo esa lógica a _match_pts(oficial, pick) → puntos, como función NUEVA e
---    independiente, y la uso desde calc_repechaje_points. Deliberadamente NO toco
---    calc_pick_points para que también la use: refactorizar la función de puntuación más
---    auditada y con más dinero real ya liquidado detrás (37 participantes, torneo cerrado)
---    por una ganancia puramente cosmética de DRY es el tipo de cambio de "cero beneficio,
---    riesgo real" que no vale la pena — sobre todo cuando el resultado de tocarla mal no es
---    un error de compilación, es puntos mal calculados en un torneo que ya terminó. Si se
---    decide más adelante que vale la pena unificarlas, es un cambio propio con su propio E2E
---    completo contra los 37 picks reales — no algo para colar de paso en esta migración.
+--    group_k_matches, otra idéntica para extra_matches) — no es este cambio quien introduce
+--    esa duplicación, ya estaba. Extraigo esa lógica a _match_pts(oficial, pick) → puntos,
+--    como función NUEVA e independiente, y la uso desde calc_repechaje_points.
+--    Deliberadamente NO toco calc_pick_points para que también la use: refactorizar la
+--    función de puntuación más auditada y con más dinero real ya liquidado detrás (37
+--    participantes, torneo cerrado) por una ganancia puramente cosmética de DRY es el tipo de
+--    cambio de "cero beneficio, riesgo real" que no vale la pena — sobre todo cuando el
+--    resultado de tocarla mal no es un error de compilación, es puntos mal calculados en un
+--    torneo que ya terminó. Si se decide más adelante que vale la pena unificarlas, es un
+--    cambio propio con su propio E2E completo contra los 37 picks reales.
 --
---    Verificación de que _match_pts es exactamente equivalente al bloque original: ver el
---    E2E (compara point-by-point contra matchPts() de src/lib/polla.ts, ya auditado contra
---    calc_pick_points en una tarea anterior).
+--    _match_pts verificado exactamente equivalente a matchPts() (src/lib/polla.ts, ya
+--    auditada contra calc_pick_points) en 16 900 combinaciones (oh,oa,ph,pa) — 100% de
+--    coincidencia en el dominio donde ambas deben coincidir (oficial válido).
 CREATE OR REPLACE FUNCTION public._match_pts(match_o jsonb, match_p jsonb)
 RETURNS int
 LANGUAGE plpgsql
