@@ -53,7 +53,7 @@ const SCORING_ES: ScoringTexts = {
   sc1b: "Aciertas la cantidad de goles de un equipo (sin importar el resultado final).",
   sc0: "Ningún acierto.",
   scoreNote:
-    "Los marcadores se cuentan a los 90 minutos + reposición. Si hay repechaje (alargue o penales), no cuenta: solo vale el resultado de los primeros 90 minutos.",
+    "Los marcadores se cuentan a los 90 minutos + reposición. Si hay alargue o penales, no cuenta: solo vale el resultado de los primeros 90 minutos.",
 };
 
 const SCORING_EN: ScoringTexts = {
