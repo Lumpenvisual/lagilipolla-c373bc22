@@ -252,6 +252,46 @@ export function isRevanchaLocked(ts: TournamentState, nowMs: number = Date.now()
   return nowMs >= new Date(ts.revancha_locked_at).getTime();
 }
 
+/** Forma mínima que necesitan las reglas de visibilidad de abajo — no importa Tables<...>
+ *  de Supabase acá para no acoplar este archivo a ese módulo. */
+export type ParticipantVisibility = {
+  en_polla_original: boolean;
+  estado_pago_revancha: string | null;
+};
+
+/**
+ * Reglas de VISIBILIDAD EN LA NAVEGACIÓN de las tablas de posiciones — no de seguridad. Esto
+ * decide qué LINKS se muestran (Navbar, dashboard) según el tipo de inscripción; NO protege
+ * las rutas. `/leaderboard` y `/revancha/leaderboard` siguen siendo públicas por URL — quien
+ * pegue la URL directamente carga la página igual, con o sin estas funciones. Si algún día se
+ * quiere bloqueo real (guard de servidor o `beforeLoad`), es una tarea aparte con su propio
+ * diseño de seguridad; no asumas que ocultar el link protege nada.
+ *
+ * Tabla de la regla (ver tarea de visibilidad de La Revancha):
+ *   solo polla        → ve polla, no Revancha (solo el CTA /revancha para unirse)
+ *   solo Revancha     → NO ve polla, ve Revancha
+ *   en ambas          → ve las dos
+ *   admin             → ve las dos (bypass explícito, se pasa aparte porque no viene de participant)
+ *   no logueado       → ve polla (como siempre lo vio), no ve el link de Revancha
+ */
+export function puedeVerTablaPolla(
+  participant: ParticipantVisibility | null | undefined,
+  isAdmin: boolean,
+): boolean {
+  if (isAdmin) return true;
+  if (!participant) return true; // no logueado: comportamiento actual, sin cambios
+  return participant.en_polla_original === true;
+}
+
+export function puedeVerTablaRevancha(
+  participant: ParticipantVisibility | null | undefined,
+  isAdmin: boolean,
+): boolean {
+  if (isAdmin) return true;
+  if (!participant) return false;
+  return participant.estado_pago_revancha === "aprobado";
+}
+
 /**
  * Privacidad: una ronda KO se REVELA en la tabla pública recién cuando INICIA su primer
  * partido (`now >= MIN(fecha de la fase)`). Si la fase no tiene fechas válidas, no se

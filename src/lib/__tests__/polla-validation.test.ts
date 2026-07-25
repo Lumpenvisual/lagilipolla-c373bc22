@@ -15,6 +15,8 @@ import {
   tournamentCompletion,
   marcadoresOficialesInvalidos,
   teamNameByCode,
+  puedeVerTablaPolla,
+  puedeVerTablaRevancha,
   GROUP_KEYS,
   MAX_GOLES,
   type ExtraMatch,
@@ -613,5 +615,51 @@ describe("especialMatchMotivo — diferencial contra los 74 pares reales de prod
       const motivo = especialMatchMotivo(pick, ARQ_OFICIAL);
       expect(especialMatches(pick, ARQ_OFICIAL)).toBe(motivo.tipo !== "sin-acierto");
     }
+  });
+});
+
+describe("puedeVerTablaPolla / puedeVerTablaRevancha — visibilidad de tablas en la navegación", () => {
+  const soloPollaPendiente = { en_polla_original: true, estado_pago_revancha: null };
+  const soloRevancha = { en_polla_original: false, estado_pago_revancha: "aprobado" };
+  const enAmbas = { en_polla_original: true, estado_pago_revancha: "aprobado" };
+  const soloPollaRevanchaPendiente = { en_polla_original: true, estado_pago_revancha: "pendiente" };
+
+  it("solo polla (sin unirse a Revancha): ve la tabla de la polla, no la de Revancha", () => {
+    expect(puedeVerTablaPolla(soloPollaPendiente, false)).toBe(true);
+    expect(puedeVerTablaRevancha(soloPollaPendiente, false)).toBe(false);
+  });
+
+  it("solo polla con Revancha pendiente (no aprobada aún): tampoco ve la tabla de Revancha", () => {
+    expect(puedeVerTablaRevancha(soloPollaRevanchaPendiente, false)).toBe(false);
+  });
+
+  it("solo Revancha: NO ve la tabla de la polla, sí la de Revancha — el caso que motiva la tarea", () => {
+    expect(puedeVerTablaPolla(soloRevancha, false)).toBe(false);
+    expect(puedeVerTablaRevancha(soloRevancha, false)).toBe(true);
+  });
+
+  it("en ambas: ve las dos tablas", () => {
+    expect(puedeVerTablaPolla(enAmbas, false)).toBe(true);
+    expect(puedeVerTablaRevancha(enAmbas, false)).toBe(true);
+  });
+
+  it("admin: ve las dos tablas sin importar su fila de participant (o sin ella)", () => {
+    expect(puedeVerTablaPolla(null, true)).toBe(true);
+    expect(puedeVerTablaRevancha(null, true)).toBe(true);
+    expect(puedeVerTablaPolla(soloRevancha, true)).toBe(true);
+    expect(puedeVerTablaRevancha(soloPollaPendiente, true)).toBe(true);
+  });
+
+  it("no logueado (sin participant): ve la tabla de la polla como siempre, no la de Revancha", () => {
+    expect(puedeVerTablaPolla(null, false)).toBe(true);
+    expect(puedeVerTablaPolla(undefined, false)).toBe(true);
+    expect(puedeVerTablaRevancha(null, false)).toBe(false);
+    expect(puedeVerTablaRevancha(undefined, false)).toBe(false);
+  });
+
+  it("rechazado en Revancha: no ve su tabla", () => {
+    expect(
+      puedeVerTablaRevancha({ en_polla_original: true, estado_pago_revancha: "rechazado" }, false),
+    ).toBe(false);
   });
 });

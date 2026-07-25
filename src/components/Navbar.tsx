@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { ChangePinDialog } from "@/components/ChangePinDialog";
+import { puedeVerTablaPolla, puedeVerTablaRevancha } from "@/lib/polla";
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const { user, isAdmin, participant } = useAuth();
@@ -30,12 +31,20 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
           {t("nav.pronosticos")}
         </Link>
       )}
-      <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>
-        {t("nav.tabla")}
-      </Link>
+      {puedeVerTablaPolla(participant, isAdmin) && (
+        <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>
+          {t("nav.tabla")}
+        </Link>
+      )}
+      {/* /revancha es el hub/CTA de inscripción, no la tabla — se queda visible para todos. */}
       <Link to="/revancha" className={linkCls} onClick={onNavigate}>
         {t("nav.revancha")}
       </Link>
+      {puedeVerTablaRevancha(participant, isAdmin) && (
+        <Link to="/revancha/leaderboard" className={linkCls} onClick={onNavigate}>
+          {t("nav.revanchaTabla")}
+        </Link>
+      )}
       <Link to="/cronograma" className={linkCls} onClick={onNavigate}>
         {t("nav.concursos")}
       </Link>

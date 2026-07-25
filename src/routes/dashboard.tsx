@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMyPick, usePollaLeaderboard, useTournamentState } from "@/hooks/usePolla";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { POLLA, fmtCOP } from "@/lib/polla";
+import { POLLA, fmtCOP, puedeVerTablaPolla, puedeVerTablaRevancha } from "@/lib/polla";
 import { DownloadButton } from "@/components/DownloadButton";
 import { generateComprobantePDF } from "@/lib/reports.functions";
 import { useT } from "@/lib/i18n";
@@ -64,10 +64,19 @@ function Dashboard() {
     );
   }
 
+  // Regla de visibilidad de tablas (una sola fuente de verdad en src/lib/polla.ts, no
+  // repetida en cada vista): quién ve el link a CADA tabla según su tipo de inscripción.
+  const canViewRevanchaTable = puedeVerTablaRevancha(participant, isAdmin);
+
   // Solo-revancha: nunca pasó por la polla principal, así que su estado_pago es NULL —
   // no "pendiente" de nada. Rama aparte para no mostrarle el mensaje de pago de la polla.
   if (participant && !participant.en_polla_original) {
-    return <SoloRevanchaDashboard nombre={participant.nombre} />;
+    return (
+      <SoloRevanchaDashboard
+        nombre={participant.nombre}
+        canViewRevanchaTable={canViewRevanchaTable}
+      />
+    );
   }
 
   const estado = participant?.estado_pago ?? "pendiente";
@@ -120,6 +129,8 @@ function Dashboard() {
       participantId={participant!.id}
       nombre={participant!.nombre}
       estadoRevancha={participant!.estado_pago_revancha}
+      canViewRevanchaTable={canViewRevanchaTable}
+      canViewPollaTable={puedeVerTablaPolla(participant, isAdmin)}
     />
   );
 }
@@ -128,10 +139,14 @@ function Approved({
   participantId,
   nombre,
   estadoRevancha,
+  canViewRevanchaTable,
+  canViewPollaTable,
 }: {
   participantId: string;
   nombre: string;
   estadoRevancha: string | null;
+  canViewRevanchaTable: boolean;
+  canViewPollaTable: boolean;
 }) {
   const { data: pick } = useMyPick(participantId);
   const { data: lb = [] } = usePollaLeaderboard();
@@ -187,15 +202,20 @@ function Approved({
         </Button>
       </Card>
 
-      <div className="mt-6 flex justify-center">
-        <Button asChild variant="secondary">
-          <Link to="/leaderboard">
-            Ver la tabla <ArrowRight className="size-4" />
-          </Link>
-        </Button>
-      </div>
+      {canViewPollaTable && (
+        <div className="mt-6 flex justify-center">
+          <Button asChild variant="secondary">
+            <Link to="/leaderboard">
+              Ver la tabla <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        </div>
+      )}
 
-      <RevanchaPromoCard estadoRevancha={estadoRevancha} />
+      <RevanchaPromoCard
+        estadoRevancha={estadoRevancha}
+        canViewRevanchaTable={canViewRevanchaTable}
+      />
 
       {!!pick && (
         <Card className="mt-6 border-info/30 bg-card p-5 card-shadow">
@@ -220,7 +240,13 @@ function Approved({
 }
 
 /** Promo de La Revancha en el dashboard principal — competencia aparte, nunca cambia lo de arriba. */
-function RevanchaPromoCard({ estadoRevancha }: { estadoRevancha: string | null }) {
+function RevanchaPromoCard({
+  estadoRevancha,
+  canViewRevanchaTable,
+}: {
+  estadoRevancha: string | null;
+  canViewRevanchaTable: boolean;
+}) {
   const t = useT();
   if (estadoRevancha === "rechazado") return null;
 
@@ -237,17 +263,30 @@ function RevanchaPromoCard({ estadoRevancha }: { estadoRevancha: string | null }
         <p className="font-display text-lg">🔄 {t("revancha.promo.title")}</p>
         <p className="mt-1 text-sm text-muted-foreground">{t("revancha.promo.subtitle")}</p>
       </div>
-      <Button asChild variant="secondary">
-        <Link to="/revancha">
-          {label} <ArrowRight className="size-4" />
-        </Link>
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        {canViewRevanchaTable && (
+          <Button asChild variant="ghost">
+            <Link to="/revancha/leaderboard">{t("nav.revanchaTabla")}</Link>
+          </Button>
+        )}
+        <Button asChild variant="secondary">
+          <Link to="/revancha">
+            {label} <ArrowRight className="size-4" />
+          </Link>
+        </Button>
+      </div>
     </Card>
   );
 }
 
 /** Dashboard de quien está SOLO en La Revancha (nunca pasó por la polla principal). */
-function SoloRevanchaDashboard({ nombre }: { nombre: string }) {
+function SoloRevanchaDashboard({
+  nombre,
+  canViewRevanchaTable,
+}: {
+  nombre: string;
+  canViewRevanchaTable: boolean;
+}) {
   const router = useRouter();
   const { signOut } = useAuth();
   const t = useT();
@@ -262,6 +301,11 @@ function SoloRevanchaDashboard({ nombre }: { nombre: string }) {
             {t("revancha.hub.title")} <ArrowRight className="ml-2 size-4" />
           </Link>
         </Button>
+        {canViewRevanchaTable && (
+          <Button asChild variant="secondary" className="mt-3 w-full">
+            <Link to="/revancha/leaderboard">{t("nav.revanchaTabla")}</Link>
+          </Button>
+        )}
         <Button
           variant="secondary"
           className="mt-3 w-full"
