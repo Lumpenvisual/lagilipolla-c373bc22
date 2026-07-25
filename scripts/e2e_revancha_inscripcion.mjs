@@ -1,9 +1,19 @@
 /**
- * E2E de supabase/migrations_propuestas/20260728000000_revancha_inscripcion_propuesta.sql
- * (estado_pago nullable + participants_own_insert reforzado + participants_own_update nueva,
- * con guard de inmutabilidad de campos). Transaccional, con ROLLBACK garantizado: la
- * migración entera (leída del disco) viaja en el MISMO request que el DO final que fuerza
- * el rollback vía RAISE EXCEPTION.
+ * E2E de supabase/migrations/20260728000000_revancha_inscripcion.sql (estado_pago nullable +
+ * participants_own_insert reforzado + participants_own_update nueva, con guard de
+ * inmutabilidad de campos). Transaccional, con ROLLBACK garantizado: la migración entera
+ * (leída del disco) viaja en el MISMO request que el DO final que fuerza el rollback vía
+ * RAISE EXCEPTION.
+ *
+ * Reejecutado 28-jul-2026 contra producción YA MIGRADA (mismo criterio que
+ * e2e_revancha_recalc.mjs): dos ajustes respecto de la corrida pre-aplicación —
+ *   1) Se antepone un `DROP POLICY IF EXISTS "participants_own_update"` antes del cuerpo de
+ *      la migración, porque esa policy (a diferencia de participants_own_insert, que sí se
+ *      DROPea a sí misma) no traía guarda de idempotencia y ya existe en prod — sin este
+ *      DROP, el segundo CREATE POLICY del mismo nombre abortaría la transacción antes de
+ *      llegar a los 8 casos de prueba.
+ *   2) El post-check final ahora espera que policy/trigger SÍ existan y que estado_pago YA
+ *      sea nullable (antes esperaba lo contrario).
  *
  * A diferencia de los E2E anteriores de este proyecto, este SÍ ejercita RLS de verdad para
  * los casos de INSERT/UPDATE propio: Management API corre como `postgres` (superusuario,
@@ -92,10 +102,9 @@ console.log(
   `✓ Sumas reales antes: grupos=${before.grupos} partidos=${before.partidos} especiales=${before.especiales} total=${before.total} (${before.filas} filas)\n`,
 );
 
-const migrationSql = readFileSync(
-  join(root, "supabase/migrations_propuestas/20260728000000_revancha_inscripcion_propuesta.sql"),
-  "utf8",
-);
+const migrationSql =
+  'DROP POLICY IF EXISTS "participants_own_update" ON public.participants;\n' +
+  readFileSync(join(root, "supabase/migrations/20260728000000_revancha_inscripcion.sql"), "utf8");
 
 const ADMIN_UUID = "1e1fc0d6-c5c3-4a5f-90b1-9771538faab3";
 
@@ -307,16 +316,16 @@ const check = await mgmtQuery(
     "(SELECT count(*) FROM pg_trigger WHERE tgname='participants_own_update_guard_before') AS trigger_nuevo, " +
     "(SELECT attnotnull FROM pg_attribute WHERE attrelid='public.participants'::regclass AND attname='estado_pago') AS estado_pago_not_null;",
 );
-console.log("Post-check 2 (¿quedó aplicado por accidente?): " + check.text);
+console.log("Post-check 2 (objetos reales ya instalados en prod): " + check.text);
 if (
-  !check.text.includes('"policy_nueva":0') ||
-  !check.text.includes('"trigger_nuevo":0') ||
-  !check.text.includes('"estado_pago_not_null":true')
+  !check.text.includes('"policy_nueva":1') ||
+  !check.text.includes('"trigger_nuevo":1') ||
+  !check.text.includes('"estado_pago_not_null":false')
 ) {
   fail(
-    "¡La migración quedó aplicada parcial o totalmente! No debía en este E2E — revisar antes de nada.",
+    "¡Los objetos de la migración NO están instalados como se esperaba! Revisar antes de nada.",
   );
 }
 console.log(
-  "✅ Post-check 2: la migración NO quedó aplicada (participants_own_update no existe, estado_pago sigue NOT NULL).",
+  "✅ Post-check 2: participants_own_update + trigger existen en prod, estado_pago es nullable.",
 );
