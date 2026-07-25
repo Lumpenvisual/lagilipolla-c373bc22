@@ -300,6 +300,9 @@ export const translations: Record<Lang, Dict> = {
     "revancha.promo.cta": "Conocer La Revancha",
     "revancha.promo.pending": "Pago pendiente",
     "revancha.promo.approved": "Llenar planilla",
+    "revancha.promo.rejectedTitle": "Tu solicitud a La Revancha fue rechazada",
+    "revancha.promo.rejectedBody":
+      "No puedes volver a pedirla por tu cuenta. Habla con el admin en {sede} o paga tu cuota para que te la apruebe directamente.",
 
     // ---------- Dashboard · solo-revancha ----------
     "dashboard.solorevancha.hi": "Hola, {nombre}",
@@ -1307,6 +1310,9 @@ export const translations: Record<Lang, Dict> = {
     "revancha.promo.cta": "Learn about The Rematch",
     "revancha.promo.pending": "Payment pending",
     "revancha.promo.approved": "Fill in picks",
+    "revancha.promo.rejectedTitle": "Your Rematch request was rejected",
+    "revancha.promo.rejectedBody":
+      "You can't request it again yourself. Talk to the admin at {sede} or pay your entry fee so they can approve you directly.",
 
     // ---------- Dashboard · Rematch-only ----------
     "dashboard.solorevancha.hi": "Hi, {nombre}",

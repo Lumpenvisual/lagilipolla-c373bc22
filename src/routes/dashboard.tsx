@@ -248,7 +248,22 @@ function RevanchaPromoCard({
   canViewRevanchaTable: boolean;
 }) {
   const t = useT();
-  if (estadoRevancha === "rechazado") return null;
+
+  // Rechazado: el trigger participants_own_update_guard bloquea que la persona vuelva a
+  // pedir Revancha por su cuenta (solo NULL->'pendiente' está permitido) — si esta tarjeta
+  // desapareciera sin más, quedaría atascada sin saber por qué. Dice qué pasó y qué hacer;
+  // no ofrece un botón de "pedir de nuevo" porque no existe (lo bloquea el mismo trigger que
+  // impide auto-aprobarse).
+  if (estadoRevancha === "rechazado") {
+    return (
+      <Card className="mt-6 border-destructive/40 bg-destructive/5 p-5 card-shadow">
+        <p className="font-display text-lg">🔄 {t("revancha.promo.rejectedTitle")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t("revancha.promo.rejectedBody", { sede: POLLA.sede })}
+        </p>
+      </Card>
+    );
+  }
 
   const label =
     estadoRevancha === "aprobado"
