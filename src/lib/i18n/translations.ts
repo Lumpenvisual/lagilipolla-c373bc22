@@ -214,7 +214,10 @@ export const translations: Record<Lang, Dict> = {
     "reg.err.accept": "Debes aceptar las reglas del torneo.",
     "reg.err.noAccount": "No se pudo crear la cuenta.",
     "reg.err.generic": "Error en el registro.",
-    "reg.err.aliasTaken": "Ese alias ya está en uso. Elige otro.",
+    "reg.err.aliasTaken":
+      "Ese alias ya está registrado. Si es tuyo, inicia sesión. Si no, elige otro alias.",
+    "reg.err.aliasTakenRevancha":
+      "Ese alias ya está registrado. Si es tuyo, inicia sesión y entra a La Revancha desde tu panel. Si no, elige otro alias.",
     "reg.success": "¡Registro recibido!",
 
     // ---------- Selector de inscripción (elegir Polla o La Revancha) ----------
@@ -1225,7 +1228,10 @@ export const translations: Record<Lang, Dict> = {
     "reg.err.accept": "You must accept the tournament rules.",
     "reg.err.noAccount": "We couldn't create your account.",
     "reg.err.generic": "Registration error.",
-    "reg.err.aliasTaken": "That alias is taken. Pick another.",
+    "reg.err.aliasTaken":
+      "That alias is already registered. If it's yours, log in. If not, pick another alias.",
+    "reg.err.aliasTakenRevancha":
+      "That alias is already registered. If it's yours, log in and join The Rematch from your dashboard. If not, pick another alias.",
     "reg.success": "Registration received!",
 
     // ---------- Sign-up selector (choose Polla or The Rematch) ----------

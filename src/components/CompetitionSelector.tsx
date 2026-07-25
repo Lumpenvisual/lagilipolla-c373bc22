@@ -12,6 +12,12 @@ import { useT } from "@/lib/i18n";
  * (antes de mostrar el formulario) y se enlaza desde /revancha/registro para quien llegó al
  * formulario equivocado. No construye ningún alta nueva: solo decide a cuál de los dos
  * caminos YA existentes (RegistrationForm mode="polla" | "revancha") mandar a la persona.
+ *
+ * La tarjeta de Revancha manda a /revancha (el hub), NO directo a /revancha/registro: el hub
+ * ya bifurca "ya tengo cuenta → login" / "soy nuevo → registro" para quien no está logueado,
+ * y si YA está logueado con una fila de participants, el hub le muestra su estado real de
+ * una vez — evitando que alguien que ya está en la polla choque con "alias ya en uso" al
+ * intentar crear una segunda cuenta solo para sumarse a Revancha.
  */
 export function CompetitionSelector({ onChoosePolla }: { onChoosePolla: () => void }) {
   const t = useT();
@@ -43,7 +49,7 @@ export function CompetitionSelector({ onChoosePolla }: { onChoosePolla: () => vo
           <Coins className="size-5" /> {fmtCOP(cuotaRevancha)} COP
         </p>
         <Button asChild variant="secondary" className="mt-4">
-          <Link to="/revancha/registro">{t("selector.revancha.cta")}</Link>
+          <Link to="/revancha">{t("selector.revancha.cta")}</Link>
         </Button>
       </Card>
 

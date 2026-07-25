@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "@tanstack/react-router";
+import { useRouter, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +29,11 @@ export function RegistrationForm({ mode = "polla" }: { mode?: "polla" | "revanch
   const [accepted, setAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  // Alias ya registrado (por CUALQUIERA — no sabemos si es de quien está viendo esto). El
+  // mensaje no debe insinuar que la cuenta existente es suya ni mostrar ningún dato de ella
+  // (nombre, email, estado): solo que el alias está tomado, con un enlace a login para quien
+  // sí sea su cuenta. Ver tarea "mensaje y prevención cuando el alias ya existe".
+  const [aliasTaken, setAliasTaken] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,11 +91,13 @@ export function RegistrationForm({ mode = "polla" }: { mode?: "polla" | "revanch
       toast.success(mode === "revancha" ? t("reg.revancha.success") : t("reg.success"));
     } catch (err) {
       const msg = err instanceof Error ? err.message : t("reg.err.generic");
-      toast.error(
-        msg.includes("already registered") || msg.includes("already been registered")
-          ? t("reg.err.aliasTaken")
-          : msg,
-      );
+      if (msg.includes("already registered") || msg.includes("already been registered")) {
+        // Mensaje persistente (no un toast que desaparece) con el enlace a login justo al
+        // lado — es lo que la persona necesita hacer si la cuenta es suya.
+        setAliasTaken(true);
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -137,10 +144,23 @@ export function RegistrationForm({ mode = "polla" }: { mode?: "polla" | "revanch
           <Input
             id="alias"
             value={alias}
-            onChange={(e) => setAlias(e.target.value)}
+            onChange={(e) => {
+              setAlias(e.target.value);
+              setAliasTaken(false);
+            }}
             placeholder={t("reg.aliasPh")}
             maxLength={24}
           />
+          {aliasTaken && (
+            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+              <p>
+                {mode === "revancha" ? t("reg.err.aliasTakenRevancha") : t("reg.err.aliasTaken")}
+              </p>
+              <Link to="/login" className="mt-1 inline-block font-medium underline">
+                {t("nav.login")}
+              </Link>
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
