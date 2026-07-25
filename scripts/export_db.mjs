@@ -38,6 +38,7 @@ const TABLES = [
   "participants",
   "picks",
   "pick_history",
+  "revancha_picks",
   "admin_audit",
   "tournament_state",
 ];

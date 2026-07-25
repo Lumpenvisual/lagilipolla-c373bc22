@@ -6,16 +6,32 @@ reglamento y mantiene una tabla de posiciones en vivo.
 
 **Producción:** https://lagilipolla-c373bc22.vercel.app
 
+📘 **¿Buscas cómo usar la app (inscribirse, llenar la planilla, el panel de admin)?** Ver
+[`MANUAL.md`](MANUAL.md) — este README es la documentación técnica del proyecto.
+
 ---
 
 ## ✨ Funcionalidades
 
 - **Inscripción y acceso** con **alias + PIN de 4 dígitos** (el usuario puede cambiar su PIN desde el menú).
+- **Selector de inscripción:** al registrarse, se elige explícitamente entre la **Polla del Mundial**
+  (competencia completa) y **La Revancha** (segunda oportunidad de solo semis + final) — dos
+  competencias, dos pozos, cero cruce entre sus datos.
 - **Planilla de pronósticos:** 12 grupos (1º y 2º), marcadores del Grupo K (Colombia) y eliminatorias, goleador y arquero.
-- **Puntuación automática en SQL** y **tabla de posiciones** en tiempo real con desempates.
-- **Resultados oficiales** que carga el admin; el cálculo de puntos se actualiza solo.
+- **La Revancha:** competencia aparte y opcional sobre semis+final, con inscripción, aprobación de pago y
+  tabla de posiciones propias (`revancha_picks`, `get_revancha_leaderboard`) — quien ya está en la polla
+  puede sumarse con la misma cuenta; la aprobación de cada pago vive en pestañas separadas del admin para
+  que nunca se confundan.
+- **Puntuación automática en SQL** y **tabla de posiciones** en tiempo real con desempates (una tabla por
+  competencia — ver arriba).
+- **Visibilidad por tipo de inscripción:** la navegación solo muestra el link a cada tabla a quien está
+  inscrito en esa competencia (regla de experiencia, no de seguridad: las URLs siguen siendo públicas —
+  ver `puedeVerTablaPolla`/`puedeVerTablaRevancha` en `src/lib/polla.ts`).
+- **Resultados oficiales** que carga el admin; el cálculo de puntos se actualiza solo (polla y Revancha,
+  cada una con su propio motor de cálculo).
 - **Comprobante oficial en PDF** con **código QR** verificable en `/verificar/<código>`.
-- **Panel de administración:** pagos, resultados, cronograma/fases, especiales y reportes (Excel + backups en la nube).
+- **Panel de administración:** pagos (polla y Revancha por separado), resultados, cronograma/fases,
+  especiales y reportes (Excel + backups en la nube).
 - **i18n** en español (el catálogo en inglés existe pero el selector está apagado hasta completarlo — ver `ENGLISH_ENABLED` en `src/lib/i18n/index.tsx`).
 
 ## 🧱 Stack
@@ -108,13 +124,18 @@ export de BD y aplicación de datos oficiales.
 ```
 src/
   routes/        # páginas: index, login, registro, dashboard, planilla,
-                 #          leaderboard, cronograma, reglas, verificar, admin/*
+                 #          leaderboard, cronograma, reglas, verificar, admin/*,
+                 #          revancha (hub), revancha.registro, revancha.leaderboard
   components/    # UI + componentes de dominio (Navbar, Footer, paneles…)
-  hooks/         # useAuth, usePolla (datos de torneo/leaderboard)
-  lib/           # polla.ts (tipos + puntuación), auth.ts, i18n, reports.functions.ts
+                 #   CompetitionSelector, LeaderboardTable, ParticipantPickDetail y
+                 #   RevanchaPlanillaEditor son compartidos entre la polla y La Revancha
+  hooks/         # useAuth, usePolla (datos de torneo/leaderboard de ambas competencias)
+  lib/           # polla.ts (tipos + puntuación + reglas de visibilidad), auth.ts, i18n,
+                 #   reports.functions.ts
   integrations/  # cliente Supabase
 supabase/
   migrations/    # migraciones SQL (fuente de verdad del esquema)
+  migrations_propuestas/  # migraciones evaluadas, no aplicadas (ver su README)
   schema.snapshot.sql  # snapshot autogenerado (no editar)
 public/          # assets estáticos (logo, banderas…)
 reglas/          # reglamento oficial (PDF/XLSX + texto extraído)
