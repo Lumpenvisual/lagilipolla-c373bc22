@@ -217,6 +217,23 @@ export const translations: Record<Lang, Dict> = {
     "reg.err.aliasTaken": "Ese alias ya está en uso. Elige otro.",
     "reg.success": "¡Registro recibido!",
 
+    // ---------- Selector de inscripción (elegir Polla o La Revancha) ----------
+    "selector.meta.title": "Inscríbete · LA GILIPOLLA 2026",
+    "selector.meta.desc":
+      "Elige tu competencia: la Polla del Mundial completa, o La Revancha de semis y final.",
+    "selector.heading": "¿A cuál te anotas?",
+    "selector.polla.title": "Polla del Mundial",
+    "selector.polla.desc":
+      "La competencia completa: grupos, Grupo K, y todas las eliminatorias hasta la final. Un pozo, una tabla.",
+    "selector.polla.cta": "Inscribirme a la Polla",
+    "selector.revancha.title": "La Revancha",
+    "selector.revancha.desc":
+      "Competencia APARTE, con su propio pozo: solo se pronostican los marcadores de semifinales y final. No afecta ni suma a la tabla principal.",
+    "selector.revancha.cta": "Anotarme a La Revancha",
+    "selector.footnote":
+      "Son dos competencias separadas, con pozos separados. Puedes sumarte a la otra más adelante desde tu panel.",
+    "selector.wrongForm": "¿Buscabas la otra competencia?",
+
     // ---------- Registration · La Revancha (alta solo-revancha) ----------
     "reg.revancha.title": "Anótate a La Revancha",
     "reg.revancha.subtitle":
@@ -1207,6 +1224,23 @@ export const translations: Record<Lang, Dict> = {
     "reg.err.generic": "Registration error.",
     "reg.err.aliasTaken": "That alias is taken. Pick another.",
     "reg.success": "Registration received!",
+
+    // ---------- Sign-up selector (choose Polla or The Rematch) ----------
+    "selector.meta.title": "Sign up · LA GILIPOLLA 2026",
+    "selector.meta.desc":
+      "Choose your competition: the full World Cup polla, or The Rematch (semis and final).",
+    "selector.heading": "Which one are you signing up for?",
+    "selector.polla.title": "World Cup Polla",
+    "selector.polla.desc":
+      "The full competition: groups, Group K, and every knockout round through the final. One prize pool, one standings.",
+    "selector.polla.cta": "Sign up for the Polla",
+    "selector.revancha.title": "The Rematch",
+    "selector.revancha.desc":
+      "A SEPARATE competition, with its own prize pool: only semifinal and final scores are predicted. It doesn't affect or add to the main standings.",
+    "selector.revancha.cta": "Sign up for The Rematch",
+    "selector.footnote":
+      "These are two separate competitions with separate prize pools. You can join the other one later from your dashboard.",
+    "selector.wrongForm": "Looking for the other competition?",
 
     // ---------- Registration · The Rematch (rematch-only signup) ----------
     "reg.revancha.title": "Sign up for The Rematch",

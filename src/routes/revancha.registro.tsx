@@ -29,7 +29,14 @@ function RevanchaRegistroPage() {
 
       <RegistrationForm mode="revancha" />
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-4 text-center text-sm text-muted-foreground">
+        {t("selector.wrongForm")}{" "}
+        <Link to="/registro" className="text-primary hover:underline">
+          {t("selector.polla.title")}
+        </Link>
+      </p>
+
+      <p className="mt-2 text-center text-sm text-muted-foreground">
         {t("login.haveAccount")}{" "}
         <Link to="/login" className="text-primary hover:underline">
           {t("nav.login")}
