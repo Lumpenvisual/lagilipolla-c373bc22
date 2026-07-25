@@ -322,9 +322,7 @@ if (
   !check.text.includes('"trigger_nuevo":1') ||
   !check.text.includes('"estado_pago_not_null":false')
 ) {
-  fail(
-    "¡Los objetos de la migración NO están instalados como se esperaba! Revisar antes de nada.",
-  );
+  fail("¡Los objetos de la migración NO están instalados como se esperaba! Revisar antes de nada.");
 }
 console.log(
   "✅ Post-check 2: participants_own_update + trigger existen en prod, estado_pago es nullable.",
