@@ -158,3 +158,27 @@ export function usePollaLeaderboard() {
     refetchOnWindowFocus: false,
   });
 }
+
+export type RevanchaLbRow = {
+  participant_id: string;
+  nombre: string;
+  puntos: number;
+  aciertos_5: number;
+  aciertos_3: number;
+  aciertos_2: number;
+  posicion: number;
+};
+
+export function useRevanchaLeaderboard() {
+  return useQuery({
+    queryKey: ["revancha-leaderboard"],
+    queryFn: async (): Promise<RevanchaLbRow[]> => {
+      const { data, error } = await supabase.rpc("get_revancha_leaderboard");
+      if (error) throw error;
+      return ((data ?? []) as RevanchaLbRow[]).sort((a, b) => a.posicion - b.posicion);
+    },
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+}

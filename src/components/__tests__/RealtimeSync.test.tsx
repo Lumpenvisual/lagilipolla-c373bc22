@@ -117,6 +117,92 @@ describe("RealtimeSync — invalidación de public-pick por id concreto", () => 
   });
 });
 
+describe("RealtimeSync — La Revancha, aislada de la polla principal", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("un evento de revancha_picks invalida SOLO public-revancha-pick de ese id, no el de otro", () => {
+    const qc = mkClient();
+    qc.setQueryData(["public-revancha-pick", "p1"], { puntos: 5 });
+    qc.setQueryData(["public-revancha-pick", "p2"], { puntos: 9 });
+    renderSync(qc);
+
+    handlers.revancha_picks({ new: { participant_id: "p1" }, old: null });
+
+    expect(qc.getQueryState(["public-revancha-pick", "p1"])?.isInvalidated).toBe(true);
+    expect(qc.getQueryState(["public-revancha-pick", "p2"])?.isInvalidated ?? false).toBe(false);
+  });
+
+  it("un evento de revancha_picks NO invalida polla-leaderboard ni public-pick (tabla principal intacta)", () => {
+    vi.useFakeTimers();
+    const qc = mkClient();
+    qc.setQueryData(["polla-leaderboard"], []);
+    qc.setQueryData(["public-pick", "p1"], {});
+    renderSync(qc);
+
+    handlers.revancha_picks({ new: { participant_id: "p1" }, old: null });
+    vi.advanceTimersByTime(2000);
+
+    expect(qc.getQueryState(["polla-leaderboard"])?.isInvalidated ?? false).toBe(false);
+    expect(qc.getQueryState(["public-pick", "p1"])?.isInvalidated ?? false).toBe(false);
+  });
+
+  it("un evento de picks (polla) NO invalida revancha-leaderboard ni public-revancha-pick", () => {
+    vi.useFakeTimers();
+    const qc = mkClient();
+    qc.setQueryData(["revancha-leaderboard"], []);
+    qc.setQueryData(["public-revancha-pick", "p1"], {});
+    renderSync(qc);
+
+    handlers.picks({ new: { participant_id: "p1" }, old: null });
+    vi.advanceTimersByTime(2000);
+
+    expect(qc.getQueryState(["revancha-leaderboard"])?.isInvalidated ?? false).toBe(false);
+    expect(qc.getQueryState(["public-revancha-pick", "p1"])?.isInvalidated ?? false).toBe(false);
+  });
+
+  it("revancha-leaderboard se debounce (una sola invalidación tras varios eventos seguidos)", () => {
+    vi.useFakeTimers();
+    const qc = mkClient();
+    const invalidateSpy = vi.spyOn(qc, "invalidateQueries");
+    renderSync(qc);
+
+    for (let i = 0; i < 5; i++) {
+      handlers.revancha_picks({ new: { participant_id: `p${i}` }, old: null });
+    }
+
+    const countFor = (key: string) =>
+      invalidateSpy.mock.calls.filter(
+        (c) => JSON.stringify((c[0] as { queryKey?: unknown })?.queryKey) === JSON.stringify([key]),
+      ).length;
+
+    expect(countFor("revancha-leaderboard")).toBe(0);
+    vi.advanceTimersByTime(1500);
+    expect(countFor("revancha-leaderboard")).toBe(1);
+  });
+
+  it("invalida revancha-pick (propio) solo cuando el evento es del propio participante autenticado", () => {
+    authMock.mockReturnValue({ participant: { id: "yo" } });
+    const qc = mkClient();
+    qc.setQueryData(["revancha-pick", "yo"], {});
+    renderSync(qc);
+
+    handlers.revancha_picks({ new: { participant_id: "otro" }, old: null });
+    expect(qc.getQueryState(["revancha-pick", "yo"])?.isInvalidated ?? false).toBe(false);
+
+    handlers.revancha_picks({ new: { participant_id: "yo" }, old: null });
+    expect(qc.getQueryState(["revancha-pick", "yo"])?.isInvalidated).toBe(true);
+  });
+
+  it("un evento de revancha_picks sin participant_id no revienta", () => {
+    const qc = mkClient();
+    renderSync(qc);
+    expect(() => handlers.revancha_picks({ new: {}, old: null })).not.toThrow();
+    expect(() => handlers.revancha_picks({})).not.toThrow();
+  });
+});
+
 describe("RealtimeSync — debounce de admin-specials-picks", () => {
   afterEach(() => {
     vi.useRealTimers();

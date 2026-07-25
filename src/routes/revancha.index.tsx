@@ -167,6 +167,12 @@ function RevanchaHub() {
         {t("revancha.hub.title")}
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">{t("revancha.hub.intro")}</p>
+      <Link
+        to="/revancha/leaderboard"
+        className="mt-2 inline-block text-sm text-primary hover:underline"
+      >
+        {t("revancha.hub.viewLeaderboard")}
+      </Link>
       <div className="mt-6">
         <RevanchaPlanillaEditor participantId={participant.id} />
       </div>

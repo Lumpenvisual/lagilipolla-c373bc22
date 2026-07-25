@@ -340,6 +340,28 @@ export type Database = {
           updated_at: string;
         }[];
       };
+      get_public_revancha_pick: {
+        Args: { _participant_id: string };
+        Returns: {
+          extra_matches: Json;
+          nombre: string;
+          participant_id: string;
+          puntos: number;
+          updated_at: string;
+        }[];
+      };
+      get_revancha_leaderboard: {
+        Args: never;
+        Returns: {
+          aciertos_2: number;
+          aciertos_3: number;
+          aciertos_5: number;
+          nombre: string;
+          participant_id: string;
+          posicion: number;
+          puntos: number;
+        }[];
+      };
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"];

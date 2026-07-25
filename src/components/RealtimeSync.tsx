@@ -6,11 +6,15 @@ import { useAuth } from "@/hooks/useAuth";
 /**
  * Suscripción Realtime global con debounce para soportar 50+ usuarios
  * concurrentes sin saturar el RPC `get_polla_leaderboard`.
- * - tournament_state: invalida estado + leaderboard (poco frecuente).
+ * - tournament_state: invalida estado + AMBOS leaderboards (poco frecuente; La Revancha
+ *   también depende de tournament_state para los resultados oficiales de semis/final).
  * - picks: agrupa invalidaciones en una ventana de 1.5s. Sólo invalida
  *   `my-pick` cuando el cambio es del propio participante; invalida
  *   `public-pick` del participante concreto (nunca el prefijo, o un
  *   recálculo de 37 picks marcaría las 37 queries stale 37 veces).
+ * - revancha_picks: mismo criterio que picks, pero apunta a `revancha-leaderboard`/
+ *   `public-revancha-pick`/`revancha-pick` — competencia separada, invalidaciones separadas
+ *   (un recálculo de Revancha no debe marcar stale la tabla principal, y viceversa).
  */
 export function RealtimeSync() {
   const qc = useQueryClient();
@@ -37,12 +41,14 @@ export function RealtimeSync() {
       );
     };
     const scheduleLb = () => scheduleInvalidate("polla-leaderboard");
+    const scheduleRevanchaLb = () => scheduleInvalidate("revancha-leaderboard");
 
     const channel = supabase
       .channel("polla-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "tournament_state" }, () => {
         qc.invalidateQueries({ queryKey: ["tournament-state"] });
         scheduleLb();
+        scheduleRevanchaLb();
       })
       .on("postgres_changes", { event: "*", schema: "public", table: "picks" }, (payload) => {
         scheduleLb();
@@ -58,6 +64,20 @@ export function RealtimeSync() {
       })
       .on(
         "postgres_changes",
+        { event: "*", schema: "public", table: "revancha_picks" },
+        (payload) => {
+          scheduleRevanchaLb();
+          const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
+          if (row?.participant_id) {
+            qc.invalidateQueries({ queryKey: ["public-revancha-pick", row.participant_id] });
+          }
+          if (myId && row?.participant_id === myId) {
+            qc.invalidateQueries({ queryKey: ["revancha-pick", myId] });
+          }
+        },
+      )
+      .on(
+        "postgres_changes",
         { event: "*", schema: "public", table: "pick_history" },
         (payload) => {
           const row = (payload.new ?? payload.old) as { participant_id?: string } | null;
@@ -71,6 +91,7 @@ export function RealtimeSync() {
         qc.invalidateQueries({ queryKey: ["admin-participants"] });
         qc.invalidateQueries({ queryKey: ["history-participants"] });
         scheduleLb();
+        scheduleRevanchaLb();
       })
       .subscribe();
 

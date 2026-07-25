@@ -24,6 +24,7 @@ import { Route as RevanchaIndexRouteImport } from './routes/revancha.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerificarCodigoRouteImport } from './routes/verificar.$codigo'
 import { Route as RevanchaRegistroRouteImport } from './routes/revancha.registro'
+import { Route as RevanchaLeaderboardRouteImport } from './routes/revancha.leaderboard'
 import { Route as AdminRevanchaRouteImport } from './routes/admin.revancha'
 import { Route as AdminResultadosRouteImport } from './routes/admin.resultados'
 import { Route as AdminReportesRouteImport } from './routes/admin.reportes'
@@ -104,6 +105,11 @@ const RevanchaRegistroRoute = RevanchaRegistroRouteImport.update({
   path: '/registro',
   getParentRoute: () => RevanchaRoute,
 } as any)
+const RevanchaLeaderboardRoute = RevanchaLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => RevanchaRoute,
+} as any)
 const AdminRevanchaRoute = AdminRevanchaRouteImport.update({
   id: '/revancha',
   path: '/revancha',
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/admin/revancha': typeof AdminRevanchaRoute
+  '/revancha/leaderboard': typeof RevanchaLeaderboardRoute
   '/revancha/registro': typeof RevanchaRegistroRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
   '/admin/': typeof AdminIndexRoute
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/admin/revancha': typeof AdminRevanchaRoute
+  '/revancha/leaderboard': typeof RevanchaLeaderboardRoute
   '/revancha/registro': typeof RevanchaRegistroRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
   '/admin': typeof AdminIndexRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
   '/admin/revancha': typeof AdminRevanchaRoute
+  '/revancha/leaderboard': typeof RevanchaLeaderboardRoute
   '/revancha/registro': typeof RevanchaRegistroRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
   '/admin/': typeof AdminIndexRoute
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
     | '/admin/reportes'
     | '/admin/resultados'
     | '/admin/revancha'
+    | '/revancha/leaderboard'
     | '/revancha/registro'
     | '/verificar/$codigo'
     | '/admin/'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/admin/reportes'
     | '/admin/resultados'
     | '/admin/revancha'
+    | '/revancha/leaderboard'
     | '/revancha/registro'
     | '/verificar/$codigo'
     | '/admin'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/admin/reportes'
     | '/admin/resultados'
     | '/admin/revancha'
+    | '/revancha/leaderboard'
     | '/revancha/registro'
     | '/verificar/$codigo'
     | '/admin/'
@@ -373,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RevanchaRegistroRouteImport
       parentRoute: typeof RevanchaRoute
     }
+    '/revancha/leaderboard': {
+      id: '/revancha/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/revancha/leaderboard'
+      preLoaderRoute: typeof RevanchaLeaderboardRouteImport
+      parentRoute: typeof RevanchaRoute
+    }
     '/admin/revancha': {
       id: '/admin/revancha'
       path: '/revancha'
@@ -423,11 +442,13 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface RevanchaRouteChildren {
+  RevanchaLeaderboardRoute: typeof RevanchaLeaderboardRoute
   RevanchaRegistroRoute: typeof RevanchaRegistroRoute
   RevanchaIndexRoute: typeof RevanchaIndexRoute
 }
 
 const RevanchaRouteChildren: RevanchaRouteChildren = {
+  RevanchaLeaderboardRoute: RevanchaLeaderboardRoute,
   RevanchaRegistroRoute: RevanchaRegistroRoute,
   RevanchaIndexRoute: RevanchaIndexRoute,
 }

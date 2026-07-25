@@ -21,7 +21,9 @@ import {
   KeyRound,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useTournamentState } from "@/hooks/usePolla";
+import { useTournamentState, useRevanchaLeaderboard } from "@/hooks/usePolla";
+import { LeaderboardTable, type LeaderboardRow } from "@/components/LeaderboardTable";
+import { ParticipantPickDetail } from "@/components/ParticipantPickDetail";
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
@@ -574,6 +576,51 @@ export function RevanchaTab() {
           </table>
         </div>
       </Card>
+
+      <RevanchaTablaAdmin />
+    </div>
+  );
+}
+
+/**
+ * Tabla de posiciones de La Revancha, embebida en el propio panel de admin (hallazgo UX
+ * #29: el admin no debería salir del panel para ver una tabla). Reutiliza el mismo
+ * LeaderboardTable/ParticipantPickDetail que la página pública — ninguna lógica nueva, solo
+ * el mismo componente en un contenedor distinto.
+ */
+function RevanchaTablaAdmin() {
+  const t = useT();
+  const { data: rows = [], isLoading } = useRevanchaLeaderboard();
+
+  const tableRows: LeaderboardRow[] = rows.map((r) => ({
+    participant_id: r.participant_id,
+    nombre: r.nombre,
+    posicion: r.posicion,
+    total: r.puntos,
+  }));
+
+  return (
+    <div className="mt-8">
+      <h3 className="font-display text-lg text-info">🔄 {t("admin.t.revancha.lbTitle")}</h3>
+      {isLoading ? (
+        <LoadingSpinner label={t("admin.t.pagos.loading")} />
+      ) : rows.length === 0 ? (
+        <p className="mt-2 text-sm text-muted-foreground">{t("revancha.lb.empty")}</p>
+      ) : (
+        <div className="mt-3">
+          <LeaderboardTable
+            rows={tableRows}
+            renderDetail={(participantId) => (
+              <ParticipantPickDetail
+                participantId={participantId}
+                rpc="get_public_revancha_pick"
+                phases={["semis", "final"]}
+                emptyLabel={t("revancha.lb.detailEmpty")}
+              />
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 }

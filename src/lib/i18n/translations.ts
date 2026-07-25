@@ -248,6 +248,21 @@ export const translations: Record<Lang, Dict> = {
       "Acércate a {sede} y paga tu cuota de La Revancha ({amount} COP). Cuando el admin marque tu pago, podrás llenar tu planilla de semis y final.",
     "revancha.hub.rejectedTitle": "Pago rechazado — La Revancha",
     "revancha.hub.rejectedBody": "Habla con el admin en {sede}.",
+    "revancha.hub.viewLeaderboard": "Ver tabla de posiciones de La Revancha →",
+
+    // ---------- La Revancha · tabla de posiciones ----------
+    "revancha.lb.title": "Tabla de La Revancha",
+    "revancha.lb.subtitle":
+      "Tabla en vivo de La Revancha: ranking de semis y final, separado de LA GILIPOLLA.",
+    "revancha.lb.badge": "Competencia aparte",
+    "revancha.lb.distinctBanner":
+      "🔄 Esta es la tabla de La Revancha, NO la de LA GILIPOLLA. Tiene su propio pozo y no afecta tu posición en la tabla principal.",
+    "revancha.lb.count": "{n} participantes · La Revancha",
+    "revancha.lb.hint":
+      "Toca el nombre de un participante para ver su planilla de semis y final. Desempates: aciertos de 5, luego 3, luego 2.",
+    "revancha.lb.empty": "Aún no hay nadie aprobado en La Revancha.",
+    "revancha.lb.detailEmpty": "Sin planilla de La Revancha guardada todavía.",
+    "revancha.lb.backToHub": "← Volver a La Revancha",
 
     // ---------- La Revancha · planilla reducida ----------
     "revancha.planilla.banner":
@@ -787,6 +802,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.revancha.col.estado": "Estado Revancha",
     "admin.t.revancha.enPollaSi": "Sí",
     "admin.t.revancha.enPollaNo": "No (solo Revancha)",
+    "admin.t.revancha.lbTitle": "Tabla de posiciones de La Revancha",
     "admin.t.pagos.deleteTitle": "Mover a la papelera (eliminar)",
     "admin.t.pagos.downloadPlanilla": "Planilla",
     "admin.t.edit.btn": "Editar planilla",
@@ -1221,6 +1237,21 @@ export const translations: Record<Lang, Dict> = {
       "Head to {sede} and pay your Rematch entry fee ({amount} COP). Once the admin marks your payment, you'll be able to fill in your semis/final picks.",
     "revancha.hub.rejectedTitle": "Payment rejected — The Rematch",
     "revancha.hub.rejectedBody": "Talk to the admin at {sede}.",
+    "revancha.hub.viewLeaderboard": "View The Rematch standings →",
+
+    // ---------- The Rematch · standings ----------
+    "revancha.lb.title": "The Rematch standings",
+    "revancha.lb.subtitle":
+      "Live standings for The Rematch: semis and final ranking, separate from LA GILIPOLLA.",
+    "revancha.lb.badge": "Separate competition",
+    "revancha.lb.distinctBanner":
+      "🔄 This is The Rematch standings, NOT LA GILIPOLLA's. It has its own prize pool and does not affect your position on the main standings.",
+    "revancha.lb.count": "{n} participants · The Rematch",
+    "revancha.lb.hint":
+      "Tap a participant's name to see their semis/final picks. Tiebreakers: 5-point hits, then 3-point, then 2-point.",
+    "revancha.lb.empty": "No one has been approved for The Rematch yet.",
+    "revancha.lb.detailEmpty": "No Rematch picks saved yet.",
+    "revancha.lb.backToHub": "← Back to The Rematch",
 
     // ---------- The Rematch · reduced picks form ----------
     "revancha.planilla.banner":
@@ -1717,6 +1748,7 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.revancha.col.estado": "Rematch status",
     "admin.t.revancha.enPollaSi": "Yes",
     "admin.t.revancha.enPollaNo": "No (Rematch only)",
+    "admin.t.revancha.lbTitle": "The Rematch standings",
     "admin.t.edit.btn": "Edit ballot",
     "admin.t.edit.title": "Edit ballot (admin)",
     "admin.t.edit.banner":
