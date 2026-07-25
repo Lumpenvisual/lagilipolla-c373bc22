@@ -9,13 +9,18 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
+import { useTournamentState } from "@/hooks/usePolla";
 import { useT } from "@/lib/i18n";
 import { ALIAS_RE, PIN_RE, aliasToEmail, pinToPassword } from "@/lib/auth";
+import { POLLA, fmtCOP } from "@/lib/polla";
 
-export function RegistrationForm() {
+export function RegistrationForm({ mode = "polla" }: { mode?: "polla" | "revancha" }) {
   const router = useRouter();
   const t = useT();
   const { refresh } = useAuth();
+  const { data: ts } = useTournamentState();
+  const cuota =
+    mode === "revancha" ? (ts?.revancha_cuota_cop ?? 50_000) : (ts?.cuota_cop ?? POLLA.cuotaCOP);
   const [alias, setAlias] = useState("");
   const [pin, setPin] = useState("");
   const [pin2, setPin2] = useState("");
@@ -56,16 +61,29 @@ export function RegistrationForm() {
       const user = signUp.user;
       if (!user) throw new Error(t("reg.err.noAccount"));
 
-      const { error: insErr } = await supabase.from("participants").insert({
-        user_id: user.id,
-        nombre: name,
-        email,
-      });
+      const { error: insErr } = await supabase.from("participants").insert(
+        mode === "revancha"
+          ? {
+              user_id: user.id,
+              nombre: name,
+              email,
+              en_polla_original: false,
+              estado_pago: null,
+              estado_pago_revancha: "pendiente",
+            }
+          : {
+              user_id: user.id,
+              nombre: name,
+              email,
+              en_polla_original: true,
+              estado_pago: "pendiente",
+            },
+      );
       if (insErr) throw insErr;
 
       await refresh();
       setDone(true);
-      toast.success(t("reg.success"));
+      toast.success(mode === "revancha" ? t("reg.revancha.success") : t("reg.success"));
     } catch (err) {
       const msg = err instanceof Error ? err.message : t("reg.err.generic");
       toast.error(
@@ -84,10 +102,17 @@ export function RegistrationForm() {
         <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-primary/15 text-3xl">
           ✅
         </div>
-        <h3 className="font-display text-2xl text-foreground">{t("reg.done.title")}</h3>
-        <p className="mt-3 text-sm text-muted-foreground">{t("reg.done.body")}</p>
-        <Button className="mt-6" onClick={() => router.navigate({ to: "/dashboard" })}>
-          {t("reg.done.cta")}
+        <h3 className="font-display text-2xl text-foreground">
+          {mode === "revancha" ? t("reg.revancha.done.title") : t("reg.done.title")}
+        </h3>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {mode === "revancha" ? t("reg.revancha.done.body") : t("reg.done.body")}
+        </p>
+        <Button
+          className="mt-6"
+          onClick={() => router.navigate({ to: mode === "revancha" ? "/revancha" : "/dashboard" })}
+        >
+          {mode === "revancha" ? t("reg.revancha.done.cta") : t("reg.done.cta")}
         </Button>
       </Card>
     );
@@ -95,8 +120,17 @@ export function RegistrationForm() {
 
   return (
     <Card className="mx-auto max-w-lg border-border bg-card p-6 card-shadow sm:p-8">
-      <h3 className="font-display text-2xl tracking-wide text-foreground">{t("reg.title")}</h3>
-      <p className="mt-1 text-sm text-muted-foreground">{t("reg.subtitle")}</p>
+      <h3 className="font-display text-2xl tracking-wide text-foreground">
+        {mode === "revancha" ? t("reg.revancha.title") : t("reg.title")}
+      </h3>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {mode === "revancha" ? t("reg.revancha.subtitle") : t("reg.subtitle")}
+      </p>
+      {mode === "revancha" && (
+        <div className="mt-4 rounded-lg border border-gold/40 bg-gold/10 p-3 text-sm text-gold">
+          {t("reg.revancha.banner")}
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div className="space-y-2">
           <Label htmlFor="alias">{t("reg.alias")}</Label>
@@ -166,7 +200,9 @@ export function RegistrationForm() {
 
         <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
           {submitting ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
-          {t("reg.submit")}
+          {mode === "revancha"
+            ? t("reg.revancha.submit", { amount: fmtCOP(cuota) })
+            : t("reg.submit", { amount: fmtCOP(cuota) })}
         </Button>
       </form>
     </Card>

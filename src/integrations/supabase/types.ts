@@ -36,7 +36,9 @@ export type Database = {
         Row: {
           celular: string | null;
           email: string | null;
-          estado_pago: string;
+          en_polla_original: boolean;
+          estado_pago: string | null;
+          estado_pago_revancha: string | null;
           id: string;
           inscripcion_at: string;
           nombre: string;
@@ -45,7 +47,9 @@ export type Database = {
         Insert: {
           celular?: string | null;
           email?: string | null;
-          estado_pago?: string;
+          en_polla_original: boolean;
+          estado_pago?: string | null;
+          estado_pago_revancha?: string | null;
           id?: string;
           inscripcion_at?: string;
           nombre: string;
@@ -54,7 +58,9 @@ export type Database = {
         Update: {
           celular?: string | null;
           email?: string | null;
-          estado_pago?: string;
+          en_polla_original?: boolean;
+          estado_pago?: string | null;
+          estado_pago_revancha?: string | null;
           id?: string;
           inscripcion_at?: string;
           nombre?: string;
@@ -168,6 +174,44 @@ export type Database = {
           },
         ];
       };
+      revancha_picks: {
+        Row: {
+          aciertos_2: number;
+          aciertos_3: number;
+          aciertos_5: number;
+          extra_matches: Json;
+          participant_id: string;
+          puntos: number;
+          updated_at: string;
+        };
+        Insert: {
+          aciertos_2?: number;
+          aciertos_3?: number;
+          aciertos_5?: number;
+          extra_matches?: Json;
+          participant_id: string;
+          puntos?: number;
+          updated_at?: string;
+        };
+        Update: {
+          aciertos_2?: number;
+          aciertos_3?: number;
+          aciertos_5?: number;
+          extra_matches?: Json;
+          participant_id?: string;
+          puntos?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "repechaje_picks_participant_id_fkey";
+            columns: ["participant_id"];
+            isOneToOne: true;
+            referencedRelation: "participants";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       tournament_state: {
         Row: {
           arquero_id: string | null;
@@ -182,6 +226,9 @@ export type Database = {
           id: number;
           phases: Json;
           picks_locked_at: string;
+          revancha_abierta: boolean;
+          revancha_cuota_cop: number;
+          revancha_locked_at: string;
           updated_at: string;
           visibility: Json;
         };
@@ -198,6 +245,9 @@ export type Database = {
           id?: number;
           phases?: Json;
           picks_locked_at?: string;
+          revancha_abierta?: boolean;
+          revancha_cuota_cop?: number;
+          revancha_locked_at?: string;
           updated_at?: string;
           visibility?: Json;
         };
@@ -214,6 +264,9 @@ export type Database = {
           id?: number;
           phases?: Json;
           picks_locked_at?: string;
+          revancha_abierta?: boolean;
+          revancha_cuota_cop?: number;
+          revancha_locked_at?: string;
           updated_at?: string;
           visibility?: Json;
         };

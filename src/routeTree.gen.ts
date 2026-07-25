@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RevanchaRouteImport } from './routes/revancha'
 import { Route as ReglasRouteImport } from './routes/reglas'
 import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as PlanillaRouteImport } from './routes/planilla'
@@ -19,8 +20,11 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CronogramaRouteImport } from './routes/cronograma'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RevanchaIndexRouteImport } from './routes/revancha.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as VerificarCodigoRouteImport } from './routes/verificar.$codigo'
+import { Route as RevanchaRegistroRouteImport } from './routes/revancha.registro'
+import { Route as AdminRevanchaRouteImport } from './routes/admin.revancha'
 import { Route as AdminResultadosRouteImport } from './routes/admin.resultados'
 import { Route as AdminReportesRouteImport } from './routes/admin.reportes'
 import { Route as AdminCronogramaRouteImport } from './routes/admin.cronograma'
@@ -28,6 +32,11 @@ import { Route as AdminCronogramaRouteImport } from './routes/admin.cronograma'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RevanchaRoute = RevanchaRouteImport.update({
+  id: '/revancha',
+  path: '/revancha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReglasRoute = ReglasRouteImport.update({
@@ -75,6 +84,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RevanchaIndexRoute = RevanchaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RevanchaRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -84,6 +98,16 @@ const VerificarCodigoRoute = VerificarCodigoRouteImport.update({
   id: '/verificar/$codigo',
   path: '/verificar/$codigo',
   getParentRoute: () => rootRouteImport,
+} as any)
+const RevanchaRegistroRoute = RevanchaRegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
+  getParentRoute: () => RevanchaRoute,
+} as any)
+const AdminRevanchaRoute = AdminRevanchaRouteImport.update({
+  id: '/revancha',
+  path: '/revancha',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminResultadosRoute = AdminResultadosRouteImport.update({
   id: '/resultados',
@@ -111,12 +135,16 @@ export interface FileRoutesByFullPath {
   '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
+  '/revancha': typeof RevanchaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
+  '/admin/revancha': typeof AdminRevanchaRoute
+  '/revancha/registro': typeof RevanchaRegistroRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
   '/admin/': typeof AdminIndexRoute
+  '/revancha/': typeof RevanchaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -131,8 +159,11 @@ export interface FileRoutesByTo {
   '/admin/cronograma': typeof AdminCronogramaRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
+  '/admin/revancha': typeof AdminRevanchaRoute
+  '/revancha/registro': typeof RevanchaRegistroRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
   '/admin': typeof AdminIndexRoute
+  '/revancha': typeof RevanchaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -145,12 +176,16 @@ export interface FileRoutesById {
   '/planilla': typeof PlanillaRoute
   '/registro': typeof RegistroRoute
   '/reglas': typeof ReglasRoute
+  '/revancha': typeof RevanchaRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/cronograma': typeof AdminCronogramaRoute
   '/admin/reportes': typeof AdminReportesRoute
   '/admin/resultados': typeof AdminResultadosRoute
+  '/admin/revancha': typeof AdminRevanchaRoute
+  '/revancha/registro': typeof RevanchaRegistroRoute
   '/verificar/$codigo': typeof VerificarCodigoRoute
   '/admin/': typeof AdminIndexRoute
+  '/revancha/': typeof RevanchaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -164,12 +199,16 @@ export interface FileRouteTypes {
     | '/planilla'
     | '/registro'
     | '/reglas'
+    | '/revancha'
     | '/sitemap.xml'
     | '/admin/cronograma'
     | '/admin/reportes'
     | '/admin/resultados'
+    | '/admin/revancha'
+    | '/revancha/registro'
     | '/verificar/$codigo'
     | '/admin/'
+    | '/revancha/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,8 +223,11 @@ export interface FileRouteTypes {
     | '/admin/cronograma'
     | '/admin/reportes'
     | '/admin/resultados'
+    | '/admin/revancha'
+    | '/revancha/registro'
     | '/verificar/$codigo'
     | '/admin'
+    | '/revancha'
   id:
     | '__root__'
     | '/'
@@ -197,12 +239,16 @@ export interface FileRouteTypes {
     | '/planilla'
     | '/registro'
     | '/reglas'
+    | '/revancha'
     | '/sitemap.xml'
     | '/admin/cronograma'
     | '/admin/reportes'
     | '/admin/resultados'
+    | '/admin/revancha'
+    | '/revancha/registro'
     | '/verificar/$codigo'
     | '/admin/'
+    | '/revancha/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -215,6 +261,7 @@ export interface RootRouteChildren {
   PlanillaRoute: typeof PlanillaRoute
   RegistroRoute: typeof RegistroRoute
   ReglasRoute: typeof ReglasRoute
+  RevanchaRoute: typeof RevanchaRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VerificarCodigoRoute: typeof VerificarCodigoRoute
 }
@@ -226,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/revancha': {
+      id: '/revancha'
+      path: '/revancha'
+      fullPath: '/revancha'
+      preLoaderRoute: typeof RevanchaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reglas': {
@@ -291,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/revancha/': {
+      id: '/revancha/'
+      path: '/'
+      fullPath: '/revancha/'
+      preLoaderRoute: typeof RevanchaIndexRouteImport
+      parentRoute: typeof RevanchaRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -304,6 +365,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/verificar/$codigo'
       preLoaderRoute: typeof VerificarCodigoRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/revancha/registro': {
+      id: '/revancha/registro'
+      path: '/registro'
+      fullPath: '/revancha/registro'
+      preLoaderRoute: typeof RevanchaRegistroRouteImport
+      parentRoute: typeof RevanchaRoute
+    }
+    '/admin/revancha': {
+      id: '/admin/revancha'
+      path: '/revancha'
+      fullPath: '/admin/revancha'
+      preLoaderRoute: typeof AdminRevanchaRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/resultados': {
       id: '/admin/resultados'
@@ -333,6 +408,7 @@ interface AdminRouteChildren {
   AdminCronogramaRoute: typeof AdminCronogramaRoute
   AdminReportesRoute: typeof AdminReportesRoute
   AdminResultadosRoute: typeof AdminResultadosRoute
+  AdminRevanchaRoute: typeof AdminRevanchaRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -340,10 +416,25 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCronogramaRoute: AdminCronogramaRoute,
   AdminReportesRoute: AdminReportesRoute,
   AdminResultadosRoute: AdminResultadosRoute,
+  AdminRevanchaRoute: AdminRevanchaRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface RevanchaRouteChildren {
+  RevanchaRegistroRoute: typeof RevanchaRegistroRoute
+  RevanchaIndexRoute: typeof RevanchaIndexRoute
+}
+
+const RevanchaRouteChildren: RevanchaRouteChildren = {
+  RevanchaRegistroRoute: RevanchaRegistroRoute,
+  RevanchaIndexRoute: RevanchaIndexRoute,
+}
+
+const RevanchaRouteWithChildren = RevanchaRoute._addFileChildren(
+  RevanchaRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -355,6 +446,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanillaRoute: PlanillaRoute,
   RegistroRoute: RegistroRoute,
   ReglasRoute: ReglasRoute,
+  RevanchaRoute: RevanchaRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VerificarCodigoRoute: VerificarCodigoRoute,
 }

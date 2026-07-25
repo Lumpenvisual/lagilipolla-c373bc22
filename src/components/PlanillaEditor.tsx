@@ -5,6 +5,7 @@ import { useTournamentState, useMyPick, useSavePick } from "@/hooks/usePolla";
 import { useT } from "@/lib/i18n";
 import { TeamWithFlag } from "@/components/TeamWithFlag";
 import { getFlagCode } from "@/utils/countryFlags";
+import { MatchScoreRow } from "@/components/MatchScoreRow";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +30,6 @@ import {
   parseSpecial,
   isMatchLocked,
   isExtraPhaseLocked,
-  teamNameByCode,
   isSectionVisible,
   lastGol,
   scoreState,
@@ -668,71 +668,20 @@ export function PlanillaEditor({
               <Card className="mt-4 border-border bg-card card-shadow divide-y divide-border">
                 {list.map((m) => {
                   const p = extra[m.id] ?? { gh: null, ga: null };
-                  const lName = teamNameByCode(ts.groups, m.local);
-                  const vName = teamNameByCode(ts.groups, m.visitante);
                   const ghDisabled = locked || phaseLocked || isExtraFieldLocked(m.id, "gh");
                   const gaDisabled = locked || phaseLocked || isExtraFieldLocked(m.id, "ga");
-                  const [stadium, city] = m.sede.split(" · ");
                   return (
-                    <div
+                    <MatchScoreRow
                       key={m.id}
-                      className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-                    >
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:max-w-[45%]">
-                        <span className="inline-flex items-center gap-1.5">
-                          <Calendar className="size-3" /> {fmtFecha(m.fecha)}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <MapPin className="size-3" />
-                          <span className="text-foreground/80">{stadium}</span>
-                          {city && <span className="text-muted-foreground">· {city}</span>}
-                        </span>
-                        {phaseLocked && (
-                          <span className="inline-flex items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
-                            <Lock className="size-3" /> {t("planilla.extra.roundClosed")}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex w-full items-center justify-center gap-2 sm:w-auto sm:shrink-0">
-                        <div className="flex min-w-0 flex-1 justify-center sm:w-[180px] sm:flex-none">
-                          <TeamWithFlag
-                            teamName={lName}
-                            flagCode={getFlagCode(lName)}
-                            size="sm"
-                            wrap
-                            className="min-w-0 justify-center text-center"
-                          />
-                        </div>
-                        <Input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]"
-                          disabled={ghDisabled}
-                          value={p.gh ?? ""}
-                          onChange={(e) => setExtraScore(m.id, "gh", e.target.value)}
-                          className="h-9 w-14 shrink-0 text-center"
-                        />
-                        <span className="text-muted-foreground">–</span>
-                        <Input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]"
-                          disabled={gaDisabled}
-                          value={p.ga ?? ""}
-                          onChange={(e) => setExtraScore(m.id, "ga", e.target.value)}
-                          className="h-9 w-14 shrink-0 text-center"
-                        />
-                        <div className="flex min-w-0 flex-1 justify-center sm:w-[180px] sm:flex-none">
-                          <TeamWithFlag
-                            teamName={vName}
-                            flagCode={getFlagCode(vName)}
-                            size="sm"
-                            wrap
-                            className="min-w-0 justify-center text-center"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                      match={m}
+                      groups={ts.groups}
+                      value={p}
+                      ghDisabled={ghDisabled}
+                      gaDisabled={gaDisabled}
+                      onChange={(field, raw) => setExtraScore(m.id, field, raw)}
+                      locked={phaseLocked}
+                      lockLabel={t("planilla.extra.roundClosed")}
+                    />
                   );
                 })}
               </Card>

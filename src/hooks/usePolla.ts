@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { TournamentState, PickRow } from "@/lib/polla";
+import type { TournamentState, PickRow, RevanchaPickRow, PickMatches } from "@/lib/polla";
 
 export function useTournamentState() {
   return useQuery({
@@ -80,6 +80,54 @@ export function useSavePick(participantId: string | null | undefined) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["my-pick", participantId] });
       qc.invalidateQueries({ queryKey: ["polla-leaderboard"] });
+    },
+  });
+}
+
+export function useRevanchaPick(participantId: string | null | undefined) {
+  return useQuery({
+    queryKey: ["revancha-pick", participantId],
+    enabled: !!participantId,
+    queryFn: async (): Promise<RevanchaPickRow | null> => {
+      const { data, error } = await supabase
+        .from("revancha_picks")
+        .select("*")
+        .eq("participant_id", participantId!)
+        .maybeSingle();
+      if (error) throw error;
+      return (data as unknown as RevanchaPickRow) ?? null;
+    },
+  });
+}
+
+export function useSaveRevanchaPick(participantId: string | null | undefined) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (extra_matches: PickMatches) => {
+      if (!participantId) throw new Error("Sin participante");
+      // Mismo criterio que useSavePick: SELECT-then-INSERT-or-UPDATE en vez de upsert,
+      // para no disparar el BEFORE INSERT del candado de Revancha en un UPDATE real.
+      const { data: existing, error: selErr } = await supabase
+        .from("revancha_picks")
+        .select("participant_id")
+        .eq("participant_id", participantId)
+        .maybeSingle();
+      if (selErr) throw new Error(selErr.message);
+      if (existing) {
+        const { error } = await supabase
+          .from("revancha_picks")
+          .update({ extra_matches })
+          .eq("participant_id", participantId);
+        if (error) throw new Error(error.message);
+      } else {
+        const { error } = await supabase
+          .from("revancha_picks")
+          .insert({ participant_id: participantId, extra_matches });
+        if (error) throw new Error(error.message);
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["revancha-pick", participantId] });
     },
   });
 }

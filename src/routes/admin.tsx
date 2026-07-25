@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useRouter } from "@tanstack/react-router";
-import { ClipboardList, FileSpreadsheet, Users } from "lucide-react";
+import { ClipboardList, FileSpreadsheet, Users, RefreshCw } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/admin")({
 });
 
 type AdminTab = {
-  to: "/admin" | "/admin/resultados" | "/admin/cronograma" | "/admin/reportes";
+  to: "/admin" | "/admin/resultados" | "/admin/cronograma" | "/admin/reportes" | "/admin/revancha";
   label: string;
   icon: typeof Users;
   exact?: boolean;
@@ -27,6 +27,7 @@ const TABS: AdminTab[] = [
   { to: "/admin/resultados", label: "Resultados", icon: ClipboardList },
   { to: "/admin/cronograma", label: "Cronograma", icon: ClipboardList },
   { to: "/admin/reportes", label: "Reportes", icon: FileSpreadsheet },
+  { to: "/admin/revancha", label: "La Revancha", icon: RefreshCw },
 ];
 
 function AdminLayout() {

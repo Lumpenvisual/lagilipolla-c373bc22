@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import { useLanguage } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
+import { useTournamentState } from "@/hooks/usePolla";
 import { ScoringRulesPanel, PtsRow } from "@/components/ScoringRulesPanel";
 
 export const Route = createFileRoute("/reglas")({
@@ -31,7 +32,9 @@ export const Route = createFileRoute("/reglas")({
 function ReglasPage() {
   const { lang } = useLanguage();
   const { user } = useAuth();
+  const { data: ts } = useTournamentState();
   const L = lang === "en" ? RULES_EN : RULES_ES;
+  const cuota = ts?.cuota_cop ?? POLLA.cuotaCOP;
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
       {/* Hero / membrete */}
@@ -51,7 +54,7 @@ function ReglasPage() {
       <section className="mt-10 grid gap-4 sm:grid-cols-3">
         <Card className="border-gold/40 bg-gold/5 p-5 text-center card-shadow">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">{L.entryFee}</p>
-          <p className="mt-1 font-display text-3xl text-gold">{fmtCOP(POLLA.cuotaCOP)}</p>
+          <p className="mt-1 font-display text-3xl text-gold">{fmtCOP(cuota)}</p>
           <p className="text-xs text-muted-foreground">COP · "$100 Lukas"</p>
         </Card>
         <Card className="border-info/40 bg-info/5 p-5 text-center card-shadow">

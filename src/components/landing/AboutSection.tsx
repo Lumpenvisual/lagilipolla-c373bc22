@@ -20,7 +20,7 @@ const HIGHLIGHTS: Array<{
 ];
 
 /** Sección "Sobre LA GILIPOLLA": qué es la polla y el bar que la organiza. */
-export function AboutSection() {
+export function AboutSection({ cuotaCOP = POLLA.cuotaCOP }: { cuotaCOP?: number }) {
   return (
     <section className="mx-auto max-w-5xl px-4 py-16">
       <div className="grid items-center gap-10 lg:grid-cols-2">
@@ -36,11 +36,11 @@ export function AboutSection() {
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             LA GILIPOLLA es la polla oficial del Mundial 2026 del bar. Por{" "}
-            <span className="font-semibold text-gold">{fmtCOP(POLLA.cuotaCOP)} COP</span> tienes
-            derecho a apostar en <strong className="text-foreground">todas las rondas</strong>: en
-            la primera, los marcadores del Grupo K (Colombia) y los dos primeros de cada grupo; en
-            las siguientes, todos los partidos hasta la final. Cada acierto suma y la tabla se
-            actualiza partido a partido.
+            <span className="font-semibold text-gold">{fmtCOP(cuotaCOP)} COP</span> tienes derecho a
+            apostar en <strong className="text-foreground">todas las rondas</strong>: en la primera,
+            los marcadores del Grupo K (Colombia) y los dos primeros de cada grupo; en las
+            siguientes, todos los partidos hasta la final. Cada acierto suma y la tabla se actualiza
+            partido a partido.
           </p>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             Es una competencia que acumula puntos a lo largo de todo el Mundial: gana quien logre el

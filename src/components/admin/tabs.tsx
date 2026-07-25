@@ -116,7 +116,8 @@ export function PagosTab() {
   const [pinValue, setPinValue] = useState("");
   const [pinBusy, setPinBusy] = useState(false);
   const runResetPin = useServerFn(adminResetPin);
-  const { data: parts = [], isLoading } = useQuery({
+  const { data: ts } = useTournamentState();
+  const { data: allParts = [], isLoading } = useQuery({
     queryKey: ["admin-participants"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -127,6 +128,11 @@ export function PagosTab() {
       return data ?? [];
     },
   });
+  // Pagos es EXCLUSIVAMENTE la polla principal — la gente solo-revancha vive en la pestaña
+  // "La Revancha" (admin.revancha.tsx), separada a propósito para que ningún botón de acá
+  // pueda tocar su estado_pago_revancha ni viceversa (ver esa pestaña para la aprobación
+  // de Revancha).
+  const parts = allParts.filter((p) => p.en_polla_original);
 
   const setEstado = async (id: string, estado: "aprobado" | "rechazado" | "pendiente") => {
     const { error } = await supabase
@@ -178,7 +184,7 @@ export function PagosTab() {
     aprobado: parts.filter((p) => p.estado_pago === "aprobado").length,
     rechazado: parts.filter((p) => p.estado_pago === "rechazado").length,
   };
-  const recaudado = counts.aprobado * POLLA.cuotaCOP;
+  const recaudado = counts.aprobado * (ts?.cuota_cop ?? POLLA.cuotaCOP);
 
   if (isLoading) return <LoadingSpinner label={t("admin.t.pagos.loading")} />;
 
@@ -421,6 +427,153 @@ export function PagosTab() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+/* ---------------- La Revancha (pagos) ----------------
+ * Pestaña SEPARADA de Pagos a propósito (ver tarea): comparten pantalla → tarde o
+ * temprano alguien aprueba la casilla equivocada, y aprobar por error el pago de la polla
+ * a quien pagó la cuota de Revancha es plata mal contada. Acá los botones de
+ * aprobar/rechazar tocan ÚNICAMENTE estado_pago_revancha — nunca estado_pago. La lista
+ * incluye a CUALQUIERA que haya aplicado a Revancha, esté o no en la polla principal, con
+ * un badge de solo lectura para que se vea de un vistazo si también está en la polla. */
+export function RevanchaTab() {
+  const t = useT();
+  const qc = useQueryClient();
+  const { data: ts } = useTournamentState();
+  const { data: allParts = [], isLoading } = useQuery({
+    queryKey: ["admin-participants"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("participants")
+        .select("*")
+        .order("inscripcion_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const parts = allParts.filter((p) => p.estado_pago_revancha != null);
+
+  const setEstadoRevancha = async (id: string, estado: "aprobado" | "rechazado" | "pendiente") => {
+    const { error } = await supabase
+      .from("participants")
+      .update({ estado_pago_revancha: estado })
+      .eq("id", id);
+    if (error) toast.error(error.message);
+    else {
+      toast.success(t("admin.t.toast.updated"));
+      qc.invalidateQueries({ queryKey: ["admin-participants"] });
+    }
+  };
+
+  const counts = {
+    pendiente: parts.filter((p) => p.estado_pago_revancha === "pendiente").length,
+    aprobado: parts.filter((p) => p.estado_pago_revancha === "aprobado").length,
+    rechazado: parts.filter((p) => p.estado_pago_revancha === "rechazado").length,
+  };
+  const cuotaRevancha = ts?.revancha_cuota_cop ?? 50_000;
+  const recaudado = counts.aprobado * cuotaRevancha;
+
+  if (isLoading) return <LoadingSpinner label={t("admin.t.pagos.loading")} />;
+
+  if (parts.length === 0) {
+    return (
+      <EmptyState
+        icon={<Users className="size-8" />}
+        title={t("admin.t.revancha.emptyTitle")}
+        description={t("admin.t.revancha.emptyDesc")}
+      />
+    );
+  }
+
+  return (
+    <div>
+      <Card className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 border-gold/40 bg-gold/5 p-4 text-sm card-shadow">
+        <span className="font-display text-base text-gold">🔄 {t("admin.t.revancha.title")}</span>
+        <span className="text-muted-foreground">·</span>
+        <span className="text-gold">{t("admin.t.pagos.pending", { n: counts.pendiente })}</span>
+        <span className="text-muted-foreground">·</span>
+        <span className="text-success">{t("admin.t.pagos.approved", { n: counts.aprobado })}</span>
+        <span className="text-muted-foreground">·</span>
+        <span className="text-gold">
+          {t("admin.t.pagos.collected", { amount: fmtCOP(recaudado) })}
+        </span>
+      </Card>
+      <Card className="overflow-hidden border-border bg-card card-shadow">
+        <div className="max-h-[70vh] overflow-auto">
+          <table className="w-full min-w-[520px] text-sm">
+            <thead className="sticky top-0 z-10 bg-card/95 backdrop-blur">
+              <tr className="border-b border-border text-left text-xs uppercase text-muted-foreground">
+                <th className="p-2 sm:p-3">{t("admin.t.pagos.col.name")}</th>
+                <th className="p-2 sm:p-3">{t("admin.t.revancha.col.enPolla")}</th>
+                <th className="p-2 sm:p-3">{t("admin.t.revancha.col.estado")}</th>
+                <th className="p-2 sm:p-3 text-right">{t("admin.t.pagos.col.actions")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {parts.map((p) => (
+                <tr
+                  key={p.id}
+                  className="border-b border-border/60 transition-colors odd:bg-muted/20 hover:bg-muted/40"
+                >
+                  <td className="p-2 sm:p-3 font-medium">
+                    {p.nombre}
+                    <br />
+                    <span className="text-xs text-muted-foreground break-all">{p.email}</span>
+                  </td>
+                  <td className="p-2 sm:p-3">
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-xs ${
+                        p.en_polla_original
+                          ? "border-success/40 bg-success/10 text-success"
+                          : "border-border bg-muted/30 text-muted-foreground"
+                      }`}
+                    >
+                      {p.en_polla_original
+                        ? t("admin.t.revancha.enPollaSi")
+                        : t("admin.t.revancha.enPollaNo")}
+                    </span>
+                  </td>
+                  <td className="p-2 sm:p-3">
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-xs ${
+                        p.estado_pago_revancha === "aprobado"
+                          ? "border-success/40 bg-success/10 text-success"
+                          : p.estado_pago_revancha === "rechazado"
+                            ? "border-destructive/40 bg-destructive/10 text-destructive"
+                            : "border-gold/40 bg-gold/10 text-gold"
+                      }`}
+                    >
+                      {p.estado_pago_revancha}
+                    </span>
+                  </td>
+                  <td className="p-2 sm:p-3 text-right">
+                    <div className="flex flex-wrap justify-end gap-1">
+                      <Button
+                        size="sm"
+                        variant="hero"
+                        disabled={p.estado_pago_revancha === "aprobado"}
+                        onClick={() => setEstadoRevancha(p.id, "aprobado")}
+                      >
+                        ✅
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        disabled={p.estado_pago_revancha === "rechazado"}
+                        onClick={() => setEstadoRevancha(p.id, "rechazado")}
+                      >
+                        ❌
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </div>
   );
 }

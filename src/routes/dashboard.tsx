@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { Loader2, ArrowRight, Trophy, FileText } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useMyPick, usePollaLeaderboard } from "@/hooks/usePolla";
+import { useMyPick, usePollaLeaderboard, useTournamentState } from "@/hooks/usePolla";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { POLLA, fmtCOP } from "@/lib/polla";
 import { DownloadButton } from "@/components/DownloadButton";
 import { generateComprobantePDF } from "@/lib/reports.functions";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -25,6 +26,7 @@ function Centered({ children }: { children: React.ReactNode }) {
 function Dashboard() {
   const router = useRouter();
   const { user, participant, isAdmin, loading, signOut } = useAuth();
+  const { data: ts } = useTournamentState();
 
   if (loading) {
     return (
@@ -62,7 +64,14 @@ function Dashboard() {
     );
   }
 
+  // Solo-revancha: nunca pasó por la polla principal, así que su estado_pago es NULL —
+  // no "pendiente" de nada. Rama aparte para no mostrarle el mensaje de pago de la polla.
+  if (participant && !participant.en_polla_original) {
+    return <SoloRevanchaDashboard nombre={participant.nombre} />;
+  }
+
   const estado = participant?.estado_pago ?? "pendiente";
+  const cuota = ts?.cuota_cop ?? POLLA.cuotaCOP;
 
   if (estado === "pendiente") {
     return (
@@ -72,8 +81,8 @@ function Dashboard() {
           <h1 className="mt-3 font-display text-2xl">Pago pendiente</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Acércate a {POLLA.sede} y paga tu cuota de{" "}
-            <span className="text-gold font-semibold">{fmtCOP(POLLA.cuotaCOP)} COP</span>. Cuando el
-            admin marque tu pago, podrás llenar tu planilla.
+            <span className="text-gold font-semibold">{fmtCOP(cuota)} COP</span>. Cuando el admin
+            marque tu pago, podrás llenar tu planilla.
           </p>
           <Button
             variant="secondary"
@@ -106,10 +115,24 @@ function Dashboard() {
     );
   }
 
-  return <Approved participantId={participant!.id} nombre={participant!.nombre} />;
+  return (
+    <Approved
+      participantId={participant!.id}
+      nombre={participant!.nombre}
+      estadoRevancha={participant!.estado_pago_revancha}
+    />
+  );
 }
 
-function Approved({ participantId, nombre }: { participantId: string; nombre: string }) {
+function Approved({
+  participantId,
+  nombre,
+  estadoRevancha,
+}: {
+  participantId: string;
+  nombre: string;
+  estadoRevancha: string | null;
+}) {
   const { data: pick } = useMyPick(participantId);
   const { data: lb = [] } = usePollaLeaderboard();
   const myRow = lb.find((r) => r.participant_id === participantId);
@@ -172,6 +195,8 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
         </Button>
       </div>
 
+      <RevanchaPromoCard estadoRevancha={estadoRevancha} />
+
       {!!pick && (
         <Card className="mt-6 border-info/30 bg-card p-5 card-shadow">
           <p className="font-display text-lg">📄 Comprobante oficial</p>
@@ -191,5 +216,60 @@ function Approved({ participantId, nombre }: { participantId: string; nombre: st
         </Card>
       )}
     </main>
+  );
+}
+
+/** Promo de La Revancha en el dashboard principal — competencia aparte, nunca cambia lo de arriba. */
+function RevanchaPromoCard({ estadoRevancha }: { estadoRevancha: string | null }) {
+  const t = useT();
+  if (estadoRevancha === "rechazado") return null;
+
+  const label =
+    estadoRevancha === "aprobado"
+      ? t("revancha.promo.approved")
+      : estadoRevancha === "pendiente"
+        ? t("revancha.promo.pending")
+        : t("revancha.promo.cta");
+
+  return (
+    <Card className="mt-6 flex flex-wrap items-center justify-between gap-4 border-gold/30 bg-gold/5 p-5 card-shadow">
+      <div>
+        <p className="font-display text-lg">🔄 {t("revancha.promo.title")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{t("revancha.promo.subtitle")}</p>
+      </div>
+      <Button asChild variant="secondary">
+        <Link to="/revancha">
+          {label} <ArrowRight className="size-4" />
+        </Link>
+      </Button>
+    </Card>
+  );
+}
+
+/** Dashboard de quien está SOLO en La Revancha (nunca pasó por la polla principal). */
+function SoloRevanchaDashboard({ nombre }: { nombre: string }) {
+  const router = useRouter();
+  const { signOut } = useAuth();
+  const t = useT();
+  return (
+    <Centered>
+      <Card className="w-full border-gold/40 bg-gold/5 p-8 text-center card-shadow">
+        <div className="text-4xl">🔄</div>
+        <h1 className="mt-3 font-display text-2xl">{t("dashboard.solorevancha.hi", { nombre })}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t("dashboard.solorevancha.body")}</p>
+        <Button asChild variant="hero" className="mt-6">
+          <Link to="/revancha">
+            {t("revancha.hub.title")} <ArrowRight className="ml-2 size-4" />
+          </Link>
+        </Button>
+        <Button
+          variant="secondary"
+          className="mt-3 w-full"
+          onClick={() => signOut().then(() => router.navigate({ to: "/" }))}
+        >
+          Cerrar sesión
+        </Button>
+      </Card>
+    </Centered>
   );
 }

@@ -33,6 +33,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
       <Link to="/leaderboard" className={linkCls} onClick={onNavigate}>
         {t("nav.tabla")}
       </Link>
+      <Link to="/revancha" className={linkCls} onClick={onNavigate}>
+        {t("nav.revancha")}
+      </Link>
       <Link to="/cronograma" className={linkCls} onClick={onNavigate}>
         {t("nav.concursos")}
       </Link>

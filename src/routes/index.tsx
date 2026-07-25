@@ -9,6 +9,9 @@ import { useTournamentState } from "@/hooks/usePolla";
 import { AboutSection } from "@/components/landing";
 import { FinalPodium } from "@/components/FinalPodium";
 
+// head() es estático (sin acceso a hooks/react-query) — el meta de SEO usa el valor de
+// referencia de POLLA.cuotaCOP, no tournament_state.cuota_cop. La UI real (abajo) sí lee la
+// columna; solo esta descripción para buscadores/redes queda con el valor de referencia.
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -68,6 +71,7 @@ function Landing() {
   const { user, participant } = useAuth();
   const { data: ts } = useTournamentState();
   const approved = participant?.estado_pago === "aprobado";
+  const cuota = ts?.cuota_cop ?? POLLA.cuotaCOP;
 
   // Podio final: se publica SOLO cuando todos los datos oficiales están ingresados
   // (grupos, Grupo K, las 32 llaves KO con la final, goleador y arquero).
@@ -127,7 +131,7 @@ function Landing() {
             </span>
             <span className="text-border">·</span>
             <span className="inline-flex items-center gap-1.5 font-semibold text-gold">
-              <Coins className="size-4" /> {fmtCOP(POLLA.cuotaCOP)} COP
+              <Coins className="size-4" /> {fmtCOP(cuota)} COP
             </span>
           </p>
 
@@ -213,7 +217,7 @@ function Landing() {
         </div>
       </section>
 
-      <AboutSection />
+      <AboutSection cuotaCOP={cuota} />
 
       <section className="mx-auto max-w-5xl px-4 pb-16">
         <h2 className="text-center font-display text-3xl tracking-wide sm:text-4xl">
@@ -224,7 +228,7 @@ function Landing() {
             <div className="text-3xl">1️⃣</div>
             <h3 className="mt-3 font-display text-xl">Pagas tu cuota</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              {fmtCOP(POLLA.cuotaCOP)} COP en el bar. El admin aprueba tu inscripción.
+              {fmtCOP(cuota)} COP en el bar. El admin aprueba tu inscripción.
             </p>
           </Card>
           <Card className="border-border bg-card p-6 card-shadow">

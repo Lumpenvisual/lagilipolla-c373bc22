@@ -18,6 +18,7 @@ export const translations: Record<Lang, Dict> = {
     "footer.devBy": "Desarrollado por",
     "nav.home": "Inicio",
     "nav.tabla": "Tabla",
+    "nav.revancha": "La Revancha",
     "nav.reglas": "Reglas",
     "nav.dashboard": "Panel",
     "nav.pronosticos": "Pronósticos",
@@ -201,7 +202,7 @@ export const translations: Record<Lang, Dict> = {
     "reg.pin": "PIN (4 dígitos)",
     "reg.pin2": "Repite el PIN",
     "reg.accept": "Acepto las reglas del torneo",
-    "reg.submit": "INSCRIBIRME — $100.000 COP",
+    "reg.submit": "INSCRIBIRME — {amount} COP",
     "reg.done.title": "Registro recibido",
     "reg.done.body":
       "Tu inscripción quedó pendiente de aprobación. El organizador te activará una vez confirmado tu pago. Guarda tu alias y PIN para entrar.",
@@ -214,6 +215,63 @@ export const translations: Record<Lang, Dict> = {
     "reg.err.generic": "Error en el registro.",
     "reg.err.aliasTaken": "Ese alias ya está en uso. Elige otro.",
     "reg.success": "¡Registro recibido!",
+
+    // ---------- Registration · La Revancha (alta solo-revancha) ----------
+    "reg.revancha.title": "Anótate a La Revancha",
+    "reg.revancha.subtitle":
+      "Elige un alias y un PIN de 4 dígitos. Con eso entras a tus pronósticos de La Revancha.",
+    "reg.revancha.banner":
+      "🔄 La Revancha es una competencia APARTE de LA GILIPOLLA, con su propio pozo. No afecta ni suma a la tabla principal.",
+    "reg.revancha.submit": "ANOTARME A LA REVANCHA — {amount} COP",
+    "reg.revancha.success": "¡Anotación a La Revancha recibida!",
+    "reg.revancha.done.title": "Anotación recibida",
+    "reg.revancha.done.body":
+      "Tu anotación a La Revancha quedó pendiente de aprobación. El admin la activará cuando confirmes tu pago en el bar. Guarda tu alias y PIN para entrar.",
+    "reg.revancha.done.cta": "Ir a La Revancha",
+
+    // ---------- La Revancha · hub (/revancha) ----------
+    "revancha.hub.title": "La Revancha",
+    "revancha.hub.subtitle": "La segunda oportunidad del Mundial: semifinales y final.",
+    "revancha.hub.intro":
+      "Competencia aparte de LA GILIPOLLA, con su propio pozo. Se pronostican solo los marcadores de semifinales y final. No afecta tu posición en la tabla principal.",
+    "revancha.hub.banner": "Cuota: {amount} COP (semis + final juntas). Se paga en el bar.",
+    "revancha.hub.haveAccount": "Ya tengo cuenta — iniciar sesión",
+    "revancha.hub.newSignup": "Soy nuevo — anotarme solo a La Revancha",
+    "revancha.hub.adminNote": "Estás logueado como admin. Gestiona La Revancha desde el panel.",
+    "revancha.hub.noParticipant": "No encontramos tu inscripción. Anótate a La Revancha:",
+    "revancha.hub.enter": "Entrar a La Revancha",
+    "revancha.hub.requested":
+      "¡Listo! Tu solicitud para La Revancha quedó pendiente de aprobación.",
+    "revancha.hub.requestFailed": "No se pudo enviar la solicitud.",
+    "revancha.hub.pendingTitle": "Pago pendiente — La Revancha",
+    "revancha.hub.pendingBody":
+      "Acércate a {sede} y paga tu cuota de La Revancha ({amount} COP). Cuando el admin marque tu pago, podrás llenar tu planilla de semis y final.",
+    "revancha.hub.rejectedTitle": "Pago rechazado — La Revancha",
+    "revancha.hub.rejectedBody": "Habla con el admin en {sede}.",
+
+    // ---------- La Revancha · planilla reducida ----------
+    "revancha.planilla.banner":
+      "🔄 Estás en la planilla de La Revancha: competencia aparte, con su propio pozo. Lo que pronostiques acá NO afecta tu posición en la tabla principal de LA GILIPOLLA.",
+    "revancha.planilla.noMatches": "Todavía no hay partidos de semis o final programados.",
+    "revancha.planilla.closed": "La Revancha ya cerró. Habla con el admin si necesitas un cambio.",
+    "revancha.planilla.notOpen": "La Revancha todavía no está abierta.",
+    "revancha.planilla.errInvalid": "Marcador inválido en: {matches}. Usa un solo dígito (0–9).",
+    "revancha.planilla.saved": "¡Planilla de La Revancha guardada!",
+    "revancha.planilla.saveFailed": "No se pudo guardar: {err}",
+    "revancha.planilla.progress": "{done} de {total} partidos pronosticados",
+    "revancha.planilla.save": "Guardar planilla de La Revancha",
+
+    // ---------- La Revancha · promo en el dashboard principal ----------
+    "revancha.promo.title": "La Revancha",
+    "revancha.promo.subtitle": "Segunda oportunidad en semis y final. Pozo aparte.",
+    "revancha.promo.cta": "Conocer La Revancha",
+    "revancha.promo.pending": "Pago pendiente",
+    "revancha.promo.approved": "Llenar planilla",
+
+    // ---------- Dashboard · solo-revancha ----------
+    "dashboard.solorevancha.hi": "Hola, {nombre}",
+    "dashboard.solorevancha.body":
+      "No estás inscrito en LA GILIPOLLA principal — solo en La Revancha. Gestiona tu inscripción y tu planilla de semis/final desde ahí.",
 
     // ---------- Dashboard ----------
     "dash.meta.title": "Mi panel — Polla Mundial 2026",
@@ -720,6 +778,15 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.name": "Nombre",
     "admin.t.pagos.col.state": "Estado",
     "admin.t.pagos.col.actions": "Acciones",
+
+    // ---------- Admin · La Revancha (pestaña separada de Pagos) ----------
+    "admin.t.revancha.title": "La Revancha",
+    "admin.t.revancha.emptyTitle": "Nadie se ha anotado a La Revancha todavía",
+    "admin.t.revancha.emptyDesc": "Cuando alguien pida entrar o se anote, aparece acá.",
+    "admin.t.revancha.col.enPolla": "En la polla",
+    "admin.t.revancha.col.estado": "Estado Revancha",
+    "admin.t.revancha.enPollaSi": "Sí",
+    "admin.t.revancha.enPollaNo": "No (solo Revancha)",
     "admin.t.pagos.deleteTitle": "Mover a la papelera (eliminar)",
     "admin.t.pagos.downloadPlanilla": "Planilla",
     "admin.t.edit.btn": "Editar planilla",
@@ -884,6 +951,7 @@ export const translations: Record<Lang, Dict> = {
     "footer.devBy": "Developed by",
     "nav.home": "Home",
     "nav.tabla": "Standings",
+    "nav.revancha": "The Rematch",
     "nav.reglas": "Rules",
     "nav.dashboard": "Dashboard",
     "nav.pronosticos": "Predictions",
@@ -1108,7 +1176,7 @@ export const translations: Record<Lang, Dict> = {
     "reg.pin": "PIN (4 digits)",
     "reg.pin2": "Repeat the PIN",
     "reg.accept": "I accept the tournament rules",
-    "reg.submit": "SIGN UP — $100,000 COP",
+    "reg.submit": "SIGN UP — {amount} COP",
     "reg.done.title": "Registration received",
     "reg.done.body":
       "Your sign-up is pending approval. The organizer will activate you once your payment is confirmed. Save your alias and PIN to sign in.",
@@ -1121,6 +1189,62 @@ export const translations: Record<Lang, Dict> = {
     "reg.err.generic": "Registration error.",
     "reg.err.aliasTaken": "That alias is taken. Pick another.",
     "reg.success": "Registration received!",
+
+    // ---------- Registration · The Rematch (rematch-only signup) ----------
+    "reg.revancha.title": "Sign up for The Rematch",
+    "reg.revancha.subtitle":
+      "Pick an alias and a 4-digit PIN. That's all you need to access your Rematch predictions.",
+    "reg.revancha.banner":
+      "🔄 The Rematch is a SEPARATE competition from LA GILIPOLLA, with its own prize pool. It does not affect or add to the main standings.",
+    "reg.revancha.submit": "SIGN UP FOR THE REMATCH — {amount} COP",
+    "reg.revancha.success": "Rematch sign-up received!",
+    "reg.revancha.done.title": "Sign-up received",
+    "reg.revancha.done.body":
+      "Your Rematch sign-up is pending approval. The admin will activate it once you confirm your payment at the bar. Save your alias and PIN to sign in.",
+    "reg.revancha.done.cta": "Go to The Rematch",
+
+    // ---------- The Rematch · hub (/revancha) ----------
+    "revancha.hub.title": "The Rematch",
+    "revancha.hub.subtitle": "The World Cup's second chance: semifinals and final.",
+    "revancha.hub.intro":
+      "A separate competition from LA GILIPOLLA, with its own prize pool. Only semifinal and final scores are predicted. It does not affect your position on the main standings.",
+    "revancha.hub.banner": "Entry fee: {amount} COP (semis + final together). Pay at the bar.",
+    "revancha.hub.haveAccount": "I already have an account — sign in",
+    "revancha.hub.newSignup": "I'm new — sign up for The Rematch only",
+    "revancha.hub.adminNote": "You're signed in as admin. Manage The Rematch from the panel.",
+    "revancha.hub.noParticipant": "We couldn't find your sign-up. Join The Rematch:",
+    "revancha.hub.enter": "Join The Rematch",
+    "revancha.hub.requested": "Done! Your Rematch request is pending approval.",
+    "revancha.hub.requestFailed": "Couldn't send the request.",
+    "revancha.hub.pendingTitle": "Payment pending — The Rematch",
+    "revancha.hub.pendingBody":
+      "Head to {sede} and pay your Rematch entry fee ({amount} COP). Once the admin marks your payment, you'll be able to fill in your semis/final picks.",
+    "revancha.hub.rejectedTitle": "Payment rejected — The Rematch",
+    "revancha.hub.rejectedBody": "Talk to the admin at {sede}.",
+
+    // ---------- The Rematch · reduced picks form ----------
+    "revancha.planilla.banner":
+      "🔄 You're in The Rematch picks form: a separate competition, with its own prize pool. What you predict here does NOT affect your position on LA GILIPOLLA's main standings.",
+    "revancha.planilla.noMatches": "No semifinal or final matches scheduled yet.",
+    "revancha.planilla.closed": "The Rematch is closed. Talk to the admin if you need a change.",
+    "revancha.planilla.notOpen": "The Rematch isn't open yet.",
+    "revancha.planilla.errInvalid": "Invalid score in: {matches}. Use a single digit (0–9).",
+    "revancha.planilla.saved": "Rematch picks saved!",
+    "revancha.planilla.saveFailed": "Couldn't save: {err}",
+    "revancha.planilla.progress": "{done} of {total} matches predicted",
+    "revancha.planilla.save": "Save Rematch picks",
+
+    // ---------- The Rematch · promo on the main dashboard ----------
+    "revancha.promo.title": "The Rematch",
+    "revancha.promo.subtitle": "A second chance in the semis and final. Separate prize pool.",
+    "revancha.promo.cta": "Learn about The Rematch",
+    "revancha.promo.pending": "Payment pending",
+    "revancha.promo.approved": "Fill in picks",
+
+    // ---------- Dashboard · Rematch-only ----------
+    "dashboard.solorevancha.hi": "Hi, {nombre}",
+    "dashboard.solorevancha.body":
+      "You're not signed up for the main LA GILIPOLLA — only for The Rematch. Manage your sign-up and your semis/final picks from there.",
 
     // ---------- Dashboard ----------
     "dash.meta.title": "My dashboard — World Cup Polla 2026",
@@ -1584,6 +1708,15 @@ export const translations: Record<Lang, Dict> = {
     "admin.t.pagos.col.actions": "Actions",
     "admin.t.pagos.deleteTitle": "Move to trash (delete)",
     "admin.t.pagos.downloadPlanilla": "Ballot",
+
+    // ---------- Admin · The Rematch (tab separate from Payments) ----------
+    "admin.t.revancha.title": "The Rematch",
+    "admin.t.revancha.emptyTitle": "No one has signed up for The Rematch yet",
+    "admin.t.revancha.emptyDesc": "Once someone requests or signs up, they'll appear here.",
+    "admin.t.revancha.col.enPolla": "In the polla",
+    "admin.t.revancha.col.estado": "Rematch status",
+    "admin.t.revancha.enPollaSi": "Yes",
+    "admin.t.revancha.enPollaNo": "No (Rematch only)",
     "admin.t.edit.btn": "Edit ballot",
     "admin.t.edit.title": "Edit ballot (admin)",
     "admin.t.edit.banner":

@@ -108,6 +108,9 @@ export type TournamentState = {
   cuota_cop: number;
   updated_at: string;
   picks_locked_at?: string | null;
+  revancha_abierta?: boolean;
+  revancha_locked_at?: string | null;
+  revancha_cuota_cop?: number;
 };
 
 export const FASE_LABEL: Record<Fase, string> = {
@@ -134,6 +137,17 @@ export type PickRow = {
   puntos_partidos: number;
   puntos_especiales: number;
   puntos_total: number;
+};
+
+/** Fila de `revancha_picks`: solo semis+final, sin grupos/especiales (esa competencia no los tiene). */
+export type RevanchaPickRow = {
+  participant_id: string;
+  extra_matches: PickMatches;
+  puntos: number;
+  aciertos_5: number;
+  aciertos_3: number;
+  aciertos_2: number;
+  updated_at: string;
 };
 
 /** Find the display label of a "team slot" given the user's chosen candidate (if any). */
@@ -215,6 +229,27 @@ export function isExtraPhaseLocked(
     .filter((tms) => !Number.isNaN(tms));
   if (times.length === 0) return false;
   return nowMs >= Math.min(...times) - KNOCKOUT_LOCK_BEFORE_MS;
+}
+
+/**
+ * Partidos de La Revancha: solo semis + final de `tournament_state.extra_matches`
+ * (competencia separada de la polla principal, mismo origen de datos). Fuente única
+ * para la planilla reducida y el candado de Revancha.
+ */
+export function revanchaMatches(ts: TournamentState): ExtraMatch[] {
+  return (ts.extra_matches ?? []).filter((m) => m.fase === "semis" || m.fase === "final");
+}
+
+/**
+ * Candado de La Revancha: a diferencia de las eliminatorias de la polla principal (candado
+ * por-ronda basado en fechas de partido), Revancha usa un flag manual (`revancha_abierta`)
+ * más una fecha límite única (`revancha_locked_at`) — no hay candado por-partido ni por-fase,
+ * cubre semis+final juntas. Espejo TS de `revancha_picks_enforce_deadline_*` en SQL.
+ */
+export function isRevanchaLocked(ts: TournamentState, nowMs: number = Date.now()): boolean {
+  if (!ts.revancha_abierta) return true;
+  if (!ts.revancha_locked_at) return false;
+  return nowMs >= new Date(ts.revancha_locked_at).getTime();
 }
 
 /**
