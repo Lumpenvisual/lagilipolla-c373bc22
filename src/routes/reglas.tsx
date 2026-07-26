@@ -35,6 +35,7 @@ function ReglasPage() {
   const { data: ts } = useTournamentState();
   const L = lang === "en" ? RULES_EN : RULES_ES;
   const cuota = ts?.cuota_cop ?? POLLA.cuotaCOP;
+  const cuotaRevancha = ts?.revancha_cuota_cop ?? 50_000;
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
       {/* Hero / membrete */}
@@ -123,6 +124,22 @@ function ReglasPage() {
         </Card>
       </div>
 
+      {/* La Revancha — competencia aparte, pozo aparte */}
+      <Card className="mt-6 border-info/40 bg-info/5 p-6 card-shadow">
+        <h2 className="font-display text-2xl text-info">🔄 {L.revanchaTitle}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {L.revanchaDesc.replace("{amount}", `${fmtCOP(cuotaRevancha)} COP`)}
+        </p>
+        <ul className="mt-4 ml-5 list-disc space-y-2 text-sm text-muted-foreground">
+          {L.revanchaList.map((p, i) => (
+            <li key={i}>{p}</li>
+          ))}
+        </ul>
+        <p className="mt-4 rounded-lg border border-info/30 bg-info/10 p-3 text-sm font-medium text-info">
+          {L.revanchaSeparateNote}
+        </p>
+      </Card>
+
       {/* Premios */}
       <Card className="mt-10 border-gold/40 bg-gold/5 p-6 card-shadow">
         <h2 className="font-display text-2xl text-gold">🏆 {L.prizesTitle}</h2>
@@ -203,6 +220,10 @@ type Rules = {
   topKeeper: string;
   specialHow: string;
   specialHowAnswer: string;
+  revanchaTitle: string;
+  revanchaDesc: string;
+  revanchaList: string[];
+  revanchaSeparateNote: string;
   prizesTitle: string;
   prizesList: string[];
   prizesCeremony: string;
@@ -253,6 +274,18 @@ const RULES_ES: Rules = {
   specialHow: "¿Y si escribiste el nombre distinto al oficial?",
   specialHowAnswer:
     'Vale igual. Si pusiste el equipo correcto, aceptamos errores pequeños de escritura ("Mbape", "Kyllan Mbappé") y también que hayas puesto solo el apellido ("Mbappé" a secas). Lo que no vale es un jugador de otro equipo: ahí el equipo manda.',
+  revanchaTitle: "La Revancha — segunda oportunidad",
+  revanchaDesc:
+    "Competencia APARTE de LA GILIPOLLA, con su propio pozo. Pensada para quien ya no puede ganar la polla por puntos, y también para gente nueva que nunca se inscribió. Cuota: {amount} (cubre semifinales y final juntas).",
+  revanchaList: [
+    "Se pronostica solo el marcador de semifinales y final — mismas reglas de siempre: 5 exacto · 3 ganador + goles de un equipo · 2 solo ganador · 1 empate o goles de un equipo · 0 sin acierto.",
+    "Se paga en el bar y el admin la aprueba por separado del pago de la polla principal — son dos pagos distintos, dos aprobaciones distintas.",
+    "Si ya estás inscrito en la polla principal, te sumas con la MISMA cuenta (alias y PIN) desde tu panel — no hace falta crear otra.",
+    "Los marcadores ajenos se revelan cuando arranca cada fase (kickoff de semis, luego de la final), igual que en la polla principal.",
+    "El dinero lo reparte el admin fuera de la app — no hay cálculo automático de premios para esta competencia.",
+  ],
+  revanchaSeparateNote:
+    "No afecta ni suma a la tabla principal de LA GILIPOLLA, y la polla no afecta ni suma a la de La Revancha. Son dos competencias, dos tablas, dos pozos.",
   prizesTitle: "Premios y reparto del pozo",
   prizesList: [
     "60% para el puntaje más alto.",
@@ -321,6 +354,18 @@ const RULES_EN: Rules = {
   specialHow: "What if you wrote the name differently from the official one?",
   specialHowAnswer:
     'It still counts. If you got the team right, we accept small spelling mistakes ("Mbape", "Kyllan Mbappé") and also just the last name on its own ("Mbappé"). What doesn\'t count is a player from another team — there, the team decides.',
+  revanchaTitle: "The Rematch — a second chance",
+  revanchaDesc:
+    "A SEPARATE competition from LA GILIPOLLA, with its own prize pool. Meant for anyone who can no longer win the main polla on points, and also for new people who never signed up. Entry fee: {amount} (covers semis and final together).",
+  revanchaList: [
+    "Only semifinal and final scores are predicted — same rules as always: 5 exact · 3 winner + one team's goals · 2 winner only · 1 draw or one team's goals · 0 no hit.",
+    "Paid at the bar, and the admin approves it separately from the main polla payment — two different payments, two different approvals.",
+    "If you're already signed up for the main polla, join with the SAME account (alias and PIN) from your dashboard — no need to create another one.",
+    "Other players' scores are revealed once each phase kicks off (semis first, then the final), same as the main polla.",
+    "The admin splits the prize money outside the app — there's no automatic prize calculation for this competition.",
+  ],
+  revanchaSeparateNote:
+    "It doesn't affect or add to LA GILIPOLLA's main standings, and the main polla doesn't affect or add to The Rematch's. Two competitions, two standings, two prize pools.",
   prizesTitle: "Prizes and pot split",
   prizesList: [
     "60% for the highest score.",
